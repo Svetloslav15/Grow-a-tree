@@ -46,7 +46,7 @@ Following this format will result in a workable document that can be used to und
 requirements that will lead to a winning solution. 
 
 ## 💡 Idea / Solution <a name = "idea"></a>
-This section is used to describe potential solutions. 
+This section is used to describe potential solutions
 
 Once the ideal, reality, and consequences sections have been 
 completed, and understood, it becomes easier to provide a solution for solving the problem.
