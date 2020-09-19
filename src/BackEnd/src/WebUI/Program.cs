@@ -1,3 +1,4 @@
+using GrowATree.Domain.Entities;
 using GrowATree.Infrastructure.Identity;
 using GrowATree.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
@@ -30,10 +31,10 @@ namespace GrowATree.WebUI
                         context.Database.Migrate();
                     }                   
 
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userManager = services.GetRequiredService<UserManager<User>>();
 
-                    await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
-                    await ApplicationDbContextSeed.SeedSampleDataAsync(context);
+                    //await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
+                    //await ApplicationDbContextSeed.SeedSampleDataAsync(context);
                 }
                 catch (Exception ex)
                 {

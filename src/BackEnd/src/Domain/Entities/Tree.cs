@@ -10,14 +10,14 @@ namespace GrowATree.Domain.Entities
         public string Id { get; set; }
 
         public string NickName { get; set; }
-
+        
         public string Type { get; set; }
 
         public string PlantedAt { get; set; }
 
-        public string LocationId { get; set; }
+        public string Latitude { get; set; }
 
-        public Location Location { get; set; }
+        public string Longitude { get; set; }
 
         public TreeStatus Status { get; set; }
 
@@ -32,5 +32,7 @@ namespace GrowATree.Domain.Entities
         public ICollection<TreeReport> Reports { get; set; } = new List<TreeReport>();
         
         public ICollection<TreeWatering> Waterings { get; set; } = new List<TreeWatering>();
+
+        public ICollection<TreePost> Posts { get; set; } = new List<TreePost>();
     }
 }

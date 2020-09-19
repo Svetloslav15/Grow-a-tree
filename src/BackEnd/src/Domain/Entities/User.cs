@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GrowATree.Domain.Entities
 {
-    public class User : IdentityUser<string>
+    public class User : IdentityUser
     {
         public string FirstName { get; set; }
 

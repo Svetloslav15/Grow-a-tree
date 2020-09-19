@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using GrowATree.Application.Common.Mappings;
-using GrowATree.Application.TodoLists.Queries.GetTodos;
 using GrowATree.Domain.Entities;
 using NUnit.Framework;
 using System;
@@ -29,8 +28,6 @@ namespace GrowATree.Application.UnitTests.Common.Mappings
         }
         
         [Test]
-        [TestCase(typeof(TodoList), typeof(TodoListDto))]
-        [TestCase(typeof(TodoItem), typeof(TodoItemDto))]
         public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
         {
             var instance = Activator.CreateInstance(source);

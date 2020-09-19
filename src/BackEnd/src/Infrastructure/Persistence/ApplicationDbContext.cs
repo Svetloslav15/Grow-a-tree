@@ -1,7 +1,6 @@
 ﻿using GrowATree.Application.Common.Interfaces;
 using GrowATree.Domain.Common;
 using GrowATree.Domain.Entities;
-using GrowATree.Infrastructure.Identity;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +13,33 @@ using System.Threading.Tasks;
 
 namespace GrowATree.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : ApiAuthorizationDbContext<User>, IApplicationDbContext
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
         private IDbContextTransaction _currentTransaction;
+
+        public DbSet<Image> Images { get; set; }
+
+        public DbSet<Reaction> Reactions { get; set; }
+
+        public DbSet<ReactionImage> ReactionImages { get; set; }
+
+        public DbSet<Tree> Trees { get; set; }
+
+        public DbSet<TreePost> TreePosts { get; set; }
+
+        public DbSet<TreePostReaction> TreePostReactions { get; set; }
+
+        public DbSet<TreeReport> TreeReports { get; set; }
+
+        public DbSet<TreeWatering> TreeWaterings { get; set; }
+
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<PromoCode> PromoCodes { get; set; }
+
+        public DbSet<Store> Stores { get; set; }
 
         public ApplicationDbContext(
             DbContextOptions options,
@@ -29,10 +50,6 @@ namespace GrowATree.Infrastructure.Persistence
             _currentUserService = currentUserService;
             _dateTime = dateTime;
         }
-
-        public DbSet<TodoList> TodoLists { get; set; }
-
-        public DbSet<TodoItem> TodoItems { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

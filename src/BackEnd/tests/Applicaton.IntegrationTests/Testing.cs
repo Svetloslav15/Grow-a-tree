@@ -1,4 +1,5 @@
 ﻿using GrowATree.Application.Common.Interfaces;
+using GrowATree.Domain.Entities;
 using GrowATree.Infrastructure.Identity;
 using GrowATree.Infrastructure.Persistence;
 using GrowATree.WebUI;
@@ -93,9 +94,9 @@ public class Testing
     {
         using var scope = _scopeFactory.CreateScope();
 
-        var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+        var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
 
-        var user = new ApplicationUser { UserName = userName, Email = userName };
+        var user = new User { UserName = userName, Email = userName };
 
         var result = await userManager.CreateAsync(user, password);
 

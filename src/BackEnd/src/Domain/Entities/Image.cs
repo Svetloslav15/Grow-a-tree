@@ -12,5 +12,9 @@ namespace GrowATree.Domain.Entities
         public string TreeId { get; set; }
 
         public Tree Tree { get; set; }
+
+        public string ProductId { get; set; }
+
+        public Product Product { get; set; }
     }
 }
