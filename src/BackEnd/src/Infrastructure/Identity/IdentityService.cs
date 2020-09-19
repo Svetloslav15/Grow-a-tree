@@ -1,5 +1,6 @@
 ﻿using GrowATree.Application.Common.Interfaces;
 using GrowATree.Application.Common.Models;
+using GrowATree.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace GrowATree.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
         public IdentityService(UserManager<ApplicationUser> userManager)
         {
