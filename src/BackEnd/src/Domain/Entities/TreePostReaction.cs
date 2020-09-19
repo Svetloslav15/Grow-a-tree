@@ -1,4 +1,5 @@
 ﻿using GrowATree.Domain.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace GrowATree.Domain.Entities
@@ -6,7 +7,7 @@ namespace GrowATree.Domain.Entities
     public class TreePostReaction
     {
         [Key]
-        public string Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         public ReactionType Type { get; set; }
 
