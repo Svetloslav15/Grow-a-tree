@@ -1,22 +1,24 @@
-using GrowATree.Application;
-using GrowATree.Application.Common.Interfaces;
-using GrowATree.Infrastructure;
-using GrowATree.Infrastructure.Persistence;
-using GrowATree.WebUI.Filters;
-using GrowATree.WebUI.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using NSwag;
-using NSwag.Generation.Processors.Security;
-using System.Linq;
-
 namespace GrowATree.WebUI
 {
+    using System.Linq;
+
+    using GrowATree.Application;
+    using GrowATree.Application.Common.Interfaces;
+    using GrowATree.Infrastructure;
+    using GrowATree.Infrastructure.Persistence;
+    using GrowATree.WebUI.Filters;
+    using GrowATree.WebUI.Services;
+
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+
+    using NSwag;
+    using NSwag.Generation.Processors.Security;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -48,12 +50,6 @@ namespace GrowATree.WebUI
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
-            });
-
-            // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
             });
 
             services.AddOpenApiDocument(configure =>
@@ -89,10 +85,6 @@ namespace GrowATree.WebUI
             app.UseHealthChecks("/health");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            if (!env.IsDevelopment())
-            {
-                app.UseSpaStaticFiles();
-            }
 
             app.UseSwaggerUi3(settings =>
             {
