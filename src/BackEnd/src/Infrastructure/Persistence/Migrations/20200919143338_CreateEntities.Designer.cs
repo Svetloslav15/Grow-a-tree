@@ -4,14 +4,16 @@ using GrowATree.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrowATree.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200919143338_CreateEntities")]
+    partial class CreateEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,9 +26,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("TreeId")
                         .HasColumnType("nvarchar(450)");
 
@@ -35,71 +34,9 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
                     b.HasIndex("TreeId");
 
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.Product", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(38, 20)");
-
-                    b.Property<string>("StoreId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.PromoCode", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("DiscountValue")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("StoreId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsesLeft")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StoreId");
-
-                    b.ToTable("PromoCodes");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.Reaction", b =>
@@ -136,37 +73,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ReactionImages");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.Store", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Latitude")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Longitude")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WorkingTime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Stores");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.Tree", b =>
@@ -582,27 +488,9 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("GrowATree.Domain.Entities.Image", b =>
                 {
-                    b.HasOne("GrowATree.Domain.Entities.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId");
-
                     b.HasOne("GrowATree.Domain.Entities.Tree", "Tree")
                         .WithMany("Images")
                         .HasForeignKey("TreeId");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.Product", b =>
-                {
-                    b.HasOne("GrowATree.Domain.Entities.Store", "Store")
-                        .WithMany("Products")
-                        .HasForeignKey("StoreId");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.PromoCode", b =>
-                {
-                    b.HasOne("GrowATree.Domain.Entities.Store", "Store")
-                        .WithMany("PromoCodes")
-                        .HasForeignKey("StoreId");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.Reaction", b =>
@@ -626,7 +514,7 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("GrowATree.Domain.Entities.TreePost", b =>
                 {
                     b.HasOne("GrowATree.Domain.Entities.Tree", "Tree")
-                        .WithMany("Posts")
+                        .WithMany()
                         .HasForeignKey("TreeId");
                 });
 

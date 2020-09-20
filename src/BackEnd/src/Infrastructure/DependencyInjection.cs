@@ -1,5 +1,5 @@
 ﻿using GrowATree.Application.Common.Interfaces;
-using GrowATree.Infrastructure.Files;
+using GrowATree.Domain.Entities;
 using GrowATree.Infrastructure.Identity;
 using GrowATree.Infrastructure.Persistence;
 using GrowATree.Infrastructure.Services;
@@ -29,15 +29,14 @@ namespace GrowATree.Infrastructure
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
-                services.AddDefaultIdentity<ApplicationUser>()
+                services.AddDefaultIdentity<User>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
             
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<User, ApplicationDbContext>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.AddTransient<ICsvFileBuilder, CsvFileBuilder>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
