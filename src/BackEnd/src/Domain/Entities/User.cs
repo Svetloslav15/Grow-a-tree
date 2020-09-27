@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
-
-namespace GrowATree.Domain.Entities
+﻿namespace GrowATree.Domain.Entities
 {
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Identity;
+
     public class User : IdentityUser
     {
         public string FirstName { get; set; }

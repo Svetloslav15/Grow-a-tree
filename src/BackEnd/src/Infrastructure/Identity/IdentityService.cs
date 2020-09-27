@@ -1,58 +1,114 @@
-﻿using GrowATree.Application.Common.Interfaces;
-using GrowATree.Application.Common.Models;
-using GrowATree.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace GrowATree.Infrastructure.Identity
+﻿namespace GrowATree.Infrastructure.Identity
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Common.Messages;
+    using global::Application.Models.Auth.ViewModels;
+    using GrowATree.Application.Common.Interfaces;
+    using GrowATree.Application.Common.Models;
+    using GrowATree.Domain.Entities;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.IdentityModel.Tokens;
+
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> userManager;
+        private readonly IConfiguration configuration;
 
-        public IdentityService(UserManager<User> userManager)
+        public IdentityService(UserManager<User> userManager, IConfiguration configuration)
         {
-            _userManager = userManager;
+            this.userManager = userManager;
+            this.configuration = configuration;
         }
 
         public async Task<string> GetUserNameAsync(string userId)
         {
-            var user = await _userManager.Users.FirstAsync(u => u.Id == userId);
+            var user = await this.userManager.Users.FirstAsync(u => u.Id == userId);
 
             return user.UserName;
         }
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+
+        public async Task<Result<TokenModel>> LoginAsync(string email, string password)
         {
-            var user = new User
+            var user = await this.userManager.FindByEmailAsync(email);
+            if (user != null && await this.userManager.CheckPasswordAsync(user, password))
             {
-                UserName = userName,
-                Email = userName,
-            };
+                if (!user.EmailConfirmed)
+                {
+                    return Result<TokenModel>.Failure(ErrorMessages.EmailNotConfirmedErrorMessage);
+                }
 
-            var result = await _userManager.CreateAsync(user, password);
+                var userRoles = await this.userManager.GetRolesAsync(user);
 
-            return (result.ToApplicationResult(), user.Id);
-        }
+                var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
 
-        public async Task<Result> DeleteUserAsync(string userId)
-        {
-            var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
 
-            if (user != null)
-            {
-                return await DeleteUserAsync(user);
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"]));
+
+                var token = new JwtSecurityToken(
+                    expires: DateTime.UtcNow.AddHours(5),
+                    claims: authClaims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
+
+                var result = new TokenModel
+                {
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    Expires = token.ValidTo,
+                    Id = user.Id,
+                };
+
+                return Result<TokenModel>.Success(result);
             }
-
-            return Result.Success();
+            else
+            {
+                return Result<TokenModel>.Failure(ErrorMessages.LoginFailureErrorMessage);
+            }
         }
 
-        public async Task<Result> DeleteUserAsync(User user)
-        {
-            var result = await _userManager.DeleteAsync(user);
+        //public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        //{
+        //    var user = new User
+        //    {
+        //        UserName = userName,
+        //        Email = userName,
+        //    };
 
-            return result.ToApplicationResult();
-        }
+        //    var result = await _userManager.CreateAsync(user, password);
+
+        //    return (result.ToApplicationResult(), user.Id);
+        //}
+
+        //public async Task<Result> DeleteUserAsync(string userId)
+        //{
+        //    var user = _userManager.Users.SingleOrDefault(u => u.Id == userId);
+
+        //    if (user != null)
+        //    {
+        //        return await DeleteUserAsync(user);
+        //    }
+
+        //    return Result.Success();
+        //}
+
+        //public async Task<Result> DeleteUserAsync(User user)
+        //{
+        //    var result = await _userManager.DeleteAsync(user);
+
+        //    return result.ToApplicationResult();
+        //}
     }
 }
