@@ -6,6 +6,7 @@
     using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
+    using Common.Constants;
     using Common.Messages;
     using global::Application.Models.Auth.ViewModels;
     using GrowATree.Application.Common.Interfaces;
@@ -60,7 +61,7 @@
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
-                    expires: DateTime.UtcNow.AddHours(5),
+                    expires: DateTime.UtcNow.AddHours(Constants.JwtExpirationTimeInHours),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
 

@@ -134,14 +134,19 @@
       "RegisterCommand": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "email",
+          "username"
+        ],
         "properties": {
           "email": {
             "type": "string",
-            "nullable": true
+            "format": "email",
+            "minLength": 1
           },
           "username": {
             "type": "string",
-            "nullable": true
+            "minLength": 3
           },
           "password": {
             "type": "string",

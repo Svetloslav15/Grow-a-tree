@@ -300,8 +300,8 @@ export interface ITokenModel {
 }
 
 export class RegisterCommand implements IRegisterCommand {
-    email?: string | undefined;
-    username?: string | undefined;
+    email!: string;
+    username!: string;
     password?: string | undefined;
     city?: string | undefined;
 
@@ -341,8 +341,8 @@ export class RegisterCommand implements IRegisterCommand {
 }
 
 export interface IRegisterCommand {
-    email?: string | undefined;
-    username?: string | undefined;
+    email: string;
+    username: string;
     password?: string | undefined;
     city?: string | undefined;
 }
