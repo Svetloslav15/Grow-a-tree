@@ -1,21 +1,22 @@
 namespace GrowATree.WebUI
 {
     using System.Linq;
-
+    using System.Text;
     using GrowATree.Application;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Infrastructure;
     using GrowATree.Infrastructure.Persistence;
     using GrowATree.WebUI.Filters;
     using GrowATree.WebUI.Services;
-
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-
+    using Microsoft.IdentityModel.Tokens;
     using NSwag;
     using NSwag.Generation.Processors.Security;
 
@@ -32,7 +33,7 @@ namespace GrowATree.WebUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplication();
-            services.AddInfrastructure(Configuration);
+            services.AddInfrastructure(this.Configuration);
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
@@ -41,7 +42,7 @@ namespace GrowATree.WebUI
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
 
-            services.AddControllersWithViews(options => 
+            services.AddControllersWithViews(options =>
                 options.Filters.Add(new ApiExceptionFilter()));
 
             services.AddRazorPages();
@@ -52,6 +53,16 @@ namespace GrowATree.WebUI
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            // Customise auth options
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredUniqueChars = 0;
+            });
+
             services.AddOpenApiDocument(configure =>
             {
                 configure.Title = "GrowATree API";
@@ -60,7 +71,7 @@ namespace GrowATree.WebUI
                     Type = OpenApiSecuritySchemeType.ApiKey,
                     Name = "Authorization",
                     In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
+                    Description = "Type into the textbox: Bearer {your JWT token}.",
                 });
 
                 configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));

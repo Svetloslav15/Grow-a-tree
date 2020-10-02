@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
-namespace GrowATree.WebUI.Controllers
+﻿namespace GrowATree.WebUI.Controllers
 {
+    using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+
     [ApiExplorerSettings(IgnoreApi = true)]
     public class OidcConfigurationController : Controller
     {

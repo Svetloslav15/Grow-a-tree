@@ -1,28 +1,40 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace GrowATree.Application.Common.Models
+﻿namespace GrowATree.Application.Common.Models
 {
-    public class Result
+    using System.Collections.Generic;
+    using System.Linq;
+
+    /// <summary>
+    /// A class that is used to return data to the front end.
+    /// </summary>
+    /// <typeparam name="T">Type of the entity that is returned.</typeparam>
+    public class Result<T>
     {
-        internal Result(bool succeeded, IEnumerable<string> errors)
+        public Result(bool succeeded, T data, IEnumerable<string> errors)
         {
-            Succeeded = succeeded;
-            Errors = errors.ToArray();
+            this.Succeeded = succeeded;
+            this.Errors = errors.ToArray();
+            this.Data = data;
         }
+
+        public T Data { get; set; }
 
         public bool Succeeded { get; set; }
 
         public string[] Errors { get; set; }
 
-        public static Result Success()
+        public static Result<T> Success(T data)
         {
-            return new Result(true, new string[] { });
+            return new Result<T>(true, data, new string[] { });
         }
 
-        public static Result Failure(IEnumerable<string> errors)
+        public static Result<T> Failure(IEnumerable<string> errors)
         {
-            return new Result(false, errors);
+            return new Result<T>(false, default(T), errors);
+        }
+
+        public static Result<T> Failure(string error)
+        {
+            return new Result<T>(false, default(T), new string[] { error });
         }
     }
 }
