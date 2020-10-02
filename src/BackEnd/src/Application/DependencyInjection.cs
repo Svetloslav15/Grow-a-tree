@@ -1,12 +1,12 @@
-﻿using AutoMapper;
-using GrowATree.Application.Common.Behaviours;
-using FluentValidation;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-
-namespace GrowATree.Application
+﻿namespace GrowATree.Application
 {
+    using System.Reflection;
+    using AutoMapper;
+    using FluentValidation;
+    using GrowATree.Application.Common.Behaviours;
+    using MediatR;
+    using Microsoft.Extensions.DependencyInjection;
+
     public static class DependencyInjection
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)

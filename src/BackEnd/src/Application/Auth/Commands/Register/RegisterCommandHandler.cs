@@ -3,13 +3,16 @@
     using System.Threading;
     using System.Threading.Tasks;
     using global::Application.Models.Auth.ViewModels;
-    using global::Common.Messages;
+    using global::Common.Constants;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
 
+    /// <summary>
+    /// Hadler that implement register logic
+    /// </summary>
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<TokenModel>>
     {
         private readonly UserManager<User> userManager;

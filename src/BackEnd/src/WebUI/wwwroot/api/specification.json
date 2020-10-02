@@ -62,29 +62,6 @@
           }
         ]
       }
-    },
-    "/api/WeatherForecast": {
-      "get": {
-        "tags": [
-          "WeatherForecast"
-        ],
-        "operationId": "WeatherForecast_Get",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -136,7 +113,9 @@
         "additionalProperties": false,
         "required": [
           "email",
-          "username"
+          "username",
+          "password",
+          "city"
         ],
         "properties": {
           "email": {
@@ -146,37 +125,17 @@
           },
           "username": {
             "type": "string",
+            "maxLength": 15,
             "minLength": 3
           },
           "password": {
             "type": "string",
-            "nullable": true
+            "maxLength": 20,
+            "minLength": 5
           },
           "city": {
             "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "WeatherForecast": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "temperatureC": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "summary": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1
           }
         }
       }

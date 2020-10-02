@@ -4,7 +4,7 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
-    using Common.Messages;
+    using Common.Constants;
     using global::Application.Models.Auth.ViewModels;
     using GrowATree.Application.Auth.Commands.Register;
     using GrowATree.Application.Common.Models;
