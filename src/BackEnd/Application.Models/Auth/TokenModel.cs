@@ -1,4 +1,4 @@
-﻿namespace Application.Models.Auth.ViewModels
+﻿namespace Application.Models.Auth
 {
     using System;
 

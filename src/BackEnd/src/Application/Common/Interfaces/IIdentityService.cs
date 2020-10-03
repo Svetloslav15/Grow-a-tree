@@ -1,7 +1,7 @@
 ﻿namespace GrowATree.Application.Common.Interfaces
 {
     using System.Threading.Tasks;
-    using global::Application.Models.Auth.ViewModels;
+    using global::Application.Models.Auth;
     using GrowATree.Application.Common.Models;
 
     public interface IIdentityService

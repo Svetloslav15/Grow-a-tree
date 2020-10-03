@@ -5,7 +5,8 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Common.Constants;
-    using global::Application.Models.Auth.ViewModels;
+    using global::Application.Models.Auth;
+    using GrowATree.Application.Auth.Commands;
     using GrowATree.Application.Auth.Commands.Register;
     using GrowATree.Application.Common.Models;
     using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,7 @@
         /// <summary>
         /// Add user into db bt its credentials.
         /// </summary>
-        /// <param name="registerCommand">Model with user's data</param>
+        /// <param name="registerCommand">Model with user's data.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpPost("register")]
         public async Task<Result<TokenModel>> Register([FromBody] RegisterCommand registerCommand)
@@ -47,11 +48,25 @@
             }
         }
 
-        [HttpGet("test")]
-        [Authorize]
-        public async Task<string> Test()
+        /// <summary>
+        /// Returns token when credentials are
+        /// valid and error message when not.
+        /// </summary>
+        /// <param name="loginCommand">Model with credentials.</param>
+        /// <returns>Result Models with error or success.</returns>
+        [HttpPost("login")]
+        public async Task<Result<TokenModel>> Login([FromBody] LoginCommand loginCommand)
         {
-            return "I am authorized";
+            try
+            {
+                return await this.Mediator.Send(loginCommand);
+            }
+            catch (Exception ex)
+            {
+                // TODO: add exception logger
+                Debug.WriteLine(ex.Message);
+                return Result<TokenModel>.Failure(ErrorMessages.AccountFailureErrorMessage);
+            }
         }
     }
 }

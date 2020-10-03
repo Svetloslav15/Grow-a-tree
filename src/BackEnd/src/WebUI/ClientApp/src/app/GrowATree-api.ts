@@ -16,7 +16,7 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IAuthClient {
     register(registerCommand: RegisterCommand): Observable<ResultOfTokenModel>;
-    test(): Observable<string>;
+    login(loginCommand: LoginCommand): Observable<ResultOfTokenModel>;
 }
 
 @Injectable({
@@ -84,33 +84,37 @@ export class AuthClient implements IAuthClient {
         return _observableOf<ResultOfTokenModel>(<any>null);
     }
 
-    test(): Observable<string> {
-        let url_ = this.baseUrl + "/api/Auth/test";
+    login(loginCommand: LoginCommand): Observable<ResultOfTokenModel> {
+        let url_ = this.baseUrl + "/api/Auth/login";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(loginCommand);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",			
             headers: new HttpHeaders({
+                "Content-Type": "application/json", 
                 "Accept": "application/json"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processTest(response_);
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLogin(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processTest(<any>response_);
+                    return this.processLogin(<any>response_);
                 } catch (e) {
-                    return <Observable<string>><any>_observableThrow(e);
+                    return <Observable<ResultOfTokenModel>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<string>><any>_observableThrow(response_);
+                return <Observable<ResultOfTokenModel>><any>_observableThrow(response_);
         }));
     }
 
-    protected processTest(response: HttpResponseBase): Observable<string> {
+    protected processLogin(response: HttpResponseBase): Observable<ResultOfTokenModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -121,7 +125,7 @@ export class AuthClient implements IAuthClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            result200 = ResultOfTokenModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -129,7 +133,7 @@ export class AuthClient implements IAuthClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<string>(<any>null);
+        return _observableOf<ResultOfTokenModel>(<any>null);
     }
 }
 
@@ -275,6 +279,46 @@ export interface IRegisterCommand {
     username: string;
     password: string;
     city: string;
+}
+
+export class LoginCommand implements ILoginCommand {
+    email?: string | undefined;
+    password?: string | undefined;
+
+    constructor(data?: ILoginCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any): LoginCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new LoginCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["password"] = this.password;
+        return data; 
+    }
+}
+
+export interface ILoginCommand {
+    email?: string | undefined;
+    password?: string | undefined;
 }
 
 export class SwaggerException extends Error {
