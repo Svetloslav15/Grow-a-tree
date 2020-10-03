@@ -2,7 +2,7 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using global::Application.Models.Auth.ViewModels;
+    using global::Application.Models.Auth;
     using global::Common.Constants;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
