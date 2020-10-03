@@ -21,7 +21,7 @@
         /// <summary>
         /// Add user into db bt its credentials.
         /// </summary>
-        /// <param name="registerCommand">Model with user's data</param>
+        /// <param name="registerCommand">Model with user's data.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpPost("register")]
         public async Task<Result<TokenModel>> Register([FromBody] RegisterCommand registerCommand)
@@ -48,6 +48,12 @@
             }
         }
 
+        /// <summary>
+        /// Returns token when credentials are
+        /// valid and error message when not.
+        /// </summary>
+        /// <param name="loginCommand">Model with credentials.</param>
+        /// <returns>Result Models with error or success.</returns>
         [HttpPost("login")]
         public async Task<Result<TokenModel>> Login([FromBody] LoginCommand loginCommand)
         {
