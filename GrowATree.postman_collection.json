@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"real@email.com\",\r\n    \"password\": \"PlamenESieln3211\",\r\n    \"username\": \"PlamenMichev\",\r\n    \"city\": \"Petrich\"\r\n}",
+							"raw": "{\r\n    \"email\": \"Plamen@silov11.com\",\r\n    \"password\": \"PlamenESieln3211\",\r\n    \"username\": \"PlamenMichev\",\r\n    \"city\": \"Petrich\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -39,22 +39,21 @@
 					"response": []
 				},
 				{
-					"name": "Register Test(Delete it)",
+					"name": "Login",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"Plamen@silov11.com\",\r\n    \"password\": \"PlamenESieln3211\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "https://localhost:44312/api/auth/test",
+							"raw": "https://localhost:44312/api/auth/login",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -63,7 +62,7 @@
 							"path": [
 								"api",
 								"auth",
-								"test"
+								"login"
 							]
 						}
 					},
