@@ -1,21 +1,21 @@
 {
 	"info": {
-		"_postman_id": "4eae6e4c-f71b-4ef2-b21e-8a89ef6f5d6d",
+		"_postman_id": "4638d8c6-eeac-4ecd-aa2a-e264228c99d6",
 		"name": "GrowATree",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Auth",
+			"name": "Stores",
 			"item": [
 				{
-					"name": "Login",
+					"name": "Upsert",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"Plamen@silov11.com\",\r\n    \"password\": \"PlamenESieln3211\"\r\n}",
+							"raw": "{\r\n    \"email\": \"Store@email.com\",\r\n    \"password\": \"store123\",\r\n    \"name\": \"Test Store\",\r\n    \"latitude\": \"24.12341254125\",\r\n    \"longitute\": \"24.15623612361\",\r\n    \"city\": \"Petrich\",\r\n    \"workingHours\": \"Ot 8 do 5 chasa\",\r\n    \"description\": \"Nai dobrite dyrveta v petri4\",\r\n    \"phoneNumber\": \"0898700133\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -23,14 +23,57 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44312/api/auth/login",
-							"protocol": "https",
+							"raw": "{{LocalUrl}}/stores/upsert",
 							"host": [
-								"localhost"
+								"{{LocalUrl}}"
 							],
-							"port": "44312",
 							"path": [
-								"api",
+								"stores",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8847654a-805a-45c3-9069-bf35d7f4e39e",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user1@trees.com\",\r\n    \"password\": \"user1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/login",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
 								"auth",
 								"login"
 							]
@@ -45,7 +88,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"real@email.com\",\r\n    \"password\": \"PlamenESieln3211\",\r\n    \"username\": \"PlamenMichev\",\r\n    \"city\": \"Petrich\"\r\n}",
+							"raw": "{\r\n    \"email\": \"krustytheclown947@abv.bg\",\r\n    \"password\": \"PlamenESieln3211\",\r\n    \"username\": \"PlamenGmail\",\r\n    \"city\": \"Petrich\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -53,14 +96,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44312/api/auth/register",
-							"protocol": "https",
+							"raw": "{{LocalUrl}}/auth/register",
 							"host": [
-								"localhost"
+								"{{LocalUrl}}"
 							],
-							"port": "44312",
 							"path": [
-								"api",
 								"auth",
 								"register"
 							]
@@ -83,15 +123,53 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44312/api/Auth",
-							"protocol": "https",
+							"raw": "{{LocalUrl}}/auth/confirm-email",
 							"host": [
-								"localhost"
+								"{{LocalUrl}}"
 							],
-							"port": "44312",
 							"path": [
-								"api",
-								"Auth"
+								"auth",
+								"confirm-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a12aa915-2b02-4e26-ba47-4cabc592e6dd",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"storeUser1@trees.com\",\r\n    \"password\": \"storeUser1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/login",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
 							]
 						}
 					},
