@@ -46,6 +46,8 @@
 
         public const string PasswordMaxLengthErrorMessage = "Паролата трябва да е поне 15 символа";
 
+        public const string PasswordResetErrorMessage = "Грешка при смяна на паролата";
+
         #endregion
 
         #region City

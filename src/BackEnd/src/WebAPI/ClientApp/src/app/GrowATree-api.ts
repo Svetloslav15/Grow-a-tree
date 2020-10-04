@@ -14,11 +14,83 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IStoresClient {
+    upsert(upsertCommand: UpsertCommand): Observable<ResultOfBoolean>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class StoresClient implements IStoresClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    upsert(upsertCommand: UpsertCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Stores/upsert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(upsertCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpsert(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpsert(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpsert(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+}
+
 export interface IAuthClient {
     register(registerCommand: RegisterCommand): Observable<ResultOfBoolean>;
     login(loginCommand: LoginCommand): Observable<ResultOfTokenModel>;
     confirmEmail(confirmEmailCommand: ConfirmEmailCommand): Observable<ResultOfBoolean>;
     resendLinkConfirmEmail(confirmEmailCommand: ResendConfirmationLinkCommand): Observable<ResultOfBoolean>;
+    forgottenPassword(command: ForgottenPasswordCommand): Observable<ResultOfBoolean>;
+    resetPassword(command: ResetPasswordCommand): Observable<ResultOfBoolean>;
 }
 
 @Injectable({
@@ -241,6 +313,110 @@ export class AuthClient implements IAuthClient {
         }
         return _observableOf<ResultOfBoolean>(<any>null);
     }
+
+    forgottenPassword(command: ForgottenPasswordCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Auth/forgotten-password";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processForgottenPassword(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processForgottenPassword(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processForgottenPassword(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+
+    resetPassword(command: ResetPasswordCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Auth/reset-password";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processResetPassword(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processResetPassword(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processResetPassword(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
 }
 
 export class ResultOfBoolean implements IResultOfBoolean {
@@ -295,6 +471,78 @@ export interface IResultOfBoolean {
     errors?: string[] | undefined;
 }
 
+export class UpsertCommand implements IUpsertCommand {
+    id?: string | undefined;
+    email!: string;
+    password!: string;
+    name!: string;
+    latitude!: string;
+    longitute!: string;
+    city!: string;
+    workingHours!: string;
+    description!: string;
+    phoneNumber!: string;
+
+    constructor(data?: IUpsertCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.email = _data["email"];
+            this.password = _data["password"];
+            this.name = _data["name"];
+            this.latitude = _data["latitude"];
+            this.longitute = _data["longitute"];
+            this.city = _data["city"];
+            this.workingHours = _data["workingHours"];
+            this.description = _data["description"];
+            this.phoneNumber = _data["phoneNumber"];
+        }
+    }
+
+    static fromJS(data: any): UpsertCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpsertCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["email"] = this.email;
+        data["password"] = this.password;
+        data["name"] = this.name;
+        data["latitude"] = this.latitude;
+        data["longitute"] = this.longitute;
+        data["city"] = this.city;
+        data["workingHours"] = this.workingHours;
+        data["description"] = this.description;
+        data["phoneNumber"] = this.phoneNumber;
+        return data; 
+    }
+}
+
+export interface IUpsertCommand {
+    id?: string | undefined;
+    email: string;
+    password: string;
+    name: string;
+    latitude: string;
+    longitute: string;
+    city: string;
+    workingHours: string;
+    description: string;
+    phoneNumber: string;
+}
+
 export class RegisterCommand implements IRegisterCommand {
     email!: string;
     username!: string;
@@ -341,76 +589,6 @@ export interface IRegisterCommand {
     username: string;
     password: string;
     city: string;
-}
-
-export interface IStoresClient {
-    upsert(upsertCommand: UpsertCommand): Observable<ResultOfBoolean>;
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class StoresClient implements IStoresClient {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    upsert(upsertCommand: UpsertCommand): Observable<ResultOfBoolean> {
-        let url_ = this.baseUrl + "/api/Stores/upsert";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(upsertCommand);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processUpsert(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processUpsert(<any>response_);
-                } catch (e) {
-                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processUpsert(response: HttpResponseBase): Observable<ResultOfBoolean> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ResultOfBoolean.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ResultOfBoolean>(<any>null);
-    }
 }
 
 export class ResultOfTokenModel implements IResultOfTokenModel {
@@ -629,12 +807,10 @@ export interface IResendConfirmationLinkCommand {
     email?: string | undefined;
 }
 
-export class ResultOfBoolean implements IResultOfBoolean {
-    data?: boolean;
-    succeeded?: boolean;
-    errors?: string[] | undefined;
+export class ForgottenPasswordCommand implements IForgottenPasswordCommand {
+    email?: string | undefined;
 
-    constructor(data?: IResultOfBoolean) {
+    constructor(data?: IForgottenPasswordCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -645,112 +821,70 @@ export class ResultOfBoolean implements IResultOfBoolean {
 
     init(_data?: any) {
         if (_data) {
-            this.data = _data["data"];
-            this.succeeded = _data["succeeded"];
-            if (Array.isArray(_data["errors"])) {
-                this.errors = [] as any;
-                for (let item of _data["errors"])
-                    this.errors!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): ResultOfBoolean {
-        data = typeof data === 'object' ? data : {};
-        let result = new ResultOfBoolean();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["data"] = this.data;
-        data["succeeded"] = this.succeeded;
-        if (Array.isArray(this.errors)) {
-            data["errors"] = [];
-            for (let item of this.errors)
-                data["errors"].push(item);
-        }
-        return data; 
-    }
-}
-
-export interface IResultOfBoolean {
-    data?: boolean;
-    succeeded?: boolean;
-    errors?: string[] | undefined;
-}
-
-export class UpsertCommand implements IUpsertCommand {
-    id?: string | undefined;
-    email!: string;
-    password!: string;
-    name!: string;
-    latitude!: string;
-    longitute!: string;
-    city!: string;
-    workingHours!: string;
-    description!: string;
-    phoneNumber!: string;
-
-    constructor(data?: IUpsertCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
             this.email = _data["email"];
-            this.password = _data["password"];
-            this.name = _data["name"];
-            this.latitude = _data["latitude"];
-            this.longitute = _data["longitute"];
-            this.city = _data["city"];
-            this.workingHours = _data["workingHours"];
-            this.description = _data["description"];
-            this.phoneNumber = _data["phoneNumber"];
         }
     }
 
-    static fromJS(data: any): UpsertCommand {
+    static fromJS(data: any): ForgottenPasswordCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new UpsertCommand();
+        let result = new ForgottenPasswordCommand();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
         data["email"] = this.email;
-        data["password"] = this.password;
-        data["name"] = this.name;
-        data["latitude"] = this.latitude;
-        data["longitute"] = this.longitute;
-        data["city"] = this.city;
-        data["workingHours"] = this.workingHours;
-        data["description"] = this.description;
-        data["phoneNumber"] = this.phoneNumber;
         return data; 
     }
 }
 
-export interface IUpsertCommand {
-    id?: string | undefined;
-    email: string;
-    password: string;
-    name: string;
-    latitude: string;
-    longitute: string;
-    city: string;
-    workingHours: string;
-    description: string;
-    phoneNumber: string;
+export interface IForgottenPasswordCommand {
+    email?: string | undefined;
+}
+
+export class ResetPasswordCommand implements IResetPasswordCommand {
+    email?: string | undefined;
+    token?: string | undefined;
+    password?: string | undefined;
+
+    constructor(data?: IResetPasswordCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.token = _data["token"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any): ResetPasswordCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResetPasswordCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["token"] = this.token;
+        data["password"] = this.password;
+        return data; 
+    }
+}
+
+export interface IResetPasswordCommand {
+    email?: string | undefined;
+    token?: string | undefined;
+    password?: string | undefined;
 }
 
 export class SwaggerException extends Error {

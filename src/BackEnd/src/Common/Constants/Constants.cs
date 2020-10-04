@@ -22,6 +22,8 @@
 
         public const string AdminLastName = "Tree";
 
-        public const string ConfirmEmailLink = "https://localhost:44312/api/Auth/";
+        public const string ConfirmEmailLink = "https://localhost:44312/api/auth/confirm/";
+
+        public const string ResetPasswordLink = "https://localhost:44312/api/auth/reset-password/";
     }
 }
