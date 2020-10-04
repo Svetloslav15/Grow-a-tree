@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f8e0fa62-17de-443a-a87a-d752ab875594",
+		"_postman_id": "4eae6e4c-f71b-4ef2-b21e-8a89ef6f5d6d",
 		"name": "GrowATree",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -83,7 +83,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:44312/api/auth/confirm-email",
+							"raw": "https://localhost:44312/api/Auth",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -91,8 +91,28 @@
 							"port": "44312",
 							"path": [
 								"api",
-								"auth",
-								"confirm-email"
+								"Auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Email Confirmation Link",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:44312/api/Auth/resend-link-confirm-email",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44312",
+							"path": [
+								"api",
+								"Auth",
+								"resend-link-confirm-email"
 							]
 						}
 					},
