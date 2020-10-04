@@ -219,11 +219,6 @@
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "applicationUserId": {
             "type": "string",
             "nullable": true
           },

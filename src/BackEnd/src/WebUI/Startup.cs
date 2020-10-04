@@ -2,6 +2,7 @@ namespace GrowATree.WebUI
 {
     using System.Linq;
     using System.Text;
+    using Common.Constants;
     using GrowATree.Application;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Infrastructure;
@@ -57,7 +58,7 @@ namespace GrowATree.WebUI
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = Constants.PasswordMinLength;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredUniqueChars = 0;

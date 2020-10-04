@@ -448,8 +448,7 @@ export interface IResultOfBoolean {
 }
 
 export class UpsertCommand implements IUpsertCommand {
-    id?: number | undefined;
-    applicationUserId?: string | undefined;
+    id?: string | undefined;
     email?: string | undefined;
     password?: string | undefined;
     name?: string | undefined;
@@ -472,7 +471,6 @@ export class UpsertCommand implements IUpsertCommand {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.applicationUserId = _data["applicationUserId"];
             this.email = _data["email"];
             this.password = _data["password"];
             this.name = _data["name"];
@@ -495,7 +493,6 @@ export class UpsertCommand implements IUpsertCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["applicationUserId"] = this.applicationUserId;
         data["email"] = this.email;
         data["password"] = this.password;
         data["name"] = this.name;
@@ -510,8 +507,7 @@ export class UpsertCommand implements IUpsertCommand {
 }
 
 export interface IUpsertCommand {
-    id?: number | undefined;
-    applicationUserId?: string | undefined;
+    id?: string | undefined;
     email?: string | undefined;
     password?: string | undefined;
     name?: string | undefined;

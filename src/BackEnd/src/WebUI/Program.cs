@@ -35,7 +35,8 @@ namespace GrowATree.WebUI
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
                     await ApplicationDbContextSeed.SeedRolesAsync(roleManager);
-                    //await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
+                    await ApplicationDbContextSeed.SeedDefaultUsersAsync(userManager);
+                    await ApplicationDbContextSeed.SeedDefaultStoresAsync(userManager, context);
                     //await ApplicationDbContextSeed.SeedSampleDataAsync(context);
                 }
                 catch (Exception ex)

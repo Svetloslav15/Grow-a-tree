@@ -23,10 +23,10 @@
         public async Task<Result<bool>> Handle(UpsertCommand request, CancellationToken cancellationToken)
         {
             Store entity;
-            if (request.Id.HasValue && request.ApplicationUserId != null)
+            if (request.Id != null)
             {
-                var store = await this.dbContext.Stores.FindAsync(request.Id.Value);
-                var storeUser = await this.userManager.FindByIdAsync(request.ApplicationUserId);
+                var store = await this.dbContext.Stores.FindAsync(request.Id);
+                var storeUser = await this.userManager.FindByIdAsync(store.ApplicationUserId);
                 if (store != null && storeUser != null)
                 {
                     // Update properties for store
@@ -64,8 +64,7 @@
                 };
 
                 var user = await this.userManager.CreateAsync(appUser, request.Password);
-                var createdUser = await this.userManager.FindByEmailAsync(request.Email);
-                await this.userManager.AddToRoleAsync(createdUser, Constants.StoreRoleName);
+                await this.userManager.AddToRoleAsync(appUser, Constants.StoreRoleName);
 
                 if (user.Succeeded == true)
                 {
@@ -75,8 +74,8 @@
                         Longitude = request.Longitute,
                         Description = request.Description,
                         WorkingHours = request.WorkingHours,
-                        ApplicationUserId = request.ApplicationUserId,
-                        ApplicationUser = createdUser,
+                        ApplicationUserId = appUser.Id,
+                        ApplicationUser = appUser,
                     };
 
                     this.dbContext.Stores.Add(entity);

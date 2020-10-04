@@ -5,9 +5,7 @@
 
     public class UpsertCommand : IRequest<Result<bool>>
     {
-        public int? Id { get; set; }
-
-        public string ApplicationUserId { get; set; }
+        public string Id { get; set; }
 
         public string Email { get; set; }
 
