@@ -15,5 +15,7 @@
         public const int UsernameMinLength = 3;
 
         public const int UsernameMaxLength = 15;
+
+        public const string GeneralEmail = "svetli.novoselski@gmail.com";
     }
 }
