@@ -32,6 +32,11 @@
                 return Result<bool>.Failure(ErrorMessages.EmailInvalidErrorMessage);
             }
 
+            if (!user.EmailConfirmed)
+            {
+                return Result<bool>.Failure(ErrorMessages.EmailNotConfirmedErrorMessage);
+            }
+
             if (request.NewEmail == request.OldEmail)
             {
                 return Result<bool>.Failure(ErrorMessages.ChangeEmailDifferentEmailsErrorMessage);
