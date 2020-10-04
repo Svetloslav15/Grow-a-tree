@@ -217,6 +217,17 @@
       "UpsertCommand": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "email",
+          "password",
+          "name",
+          "latitude",
+          "longitute",
+          "city",
+          "workingHours",
+          "description",
+          "phoneNumber"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -224,39 +235,42 @@
           },
           "email": {
             "type": "string",
-            "nullable": true
+            "format": "email",
+            "minLength": 1
           },
           "password": {
             "type": "string",
-            "nullable": true
+            "maxLength": 20,
+            "minLength": 5
           },
           "name": {
             "type": "string",
-            "nullable": true
+            "maxLength": 15,
+            "minLength": 3
           },
           "latitude": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           },
           "longitute": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           },
           "city": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           },
           "workingHours": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           },
           "description": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           },
           "phoneNumber": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           }
         }
       }

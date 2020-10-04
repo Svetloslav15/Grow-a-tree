@@ -449,15 +449,15 @@ export interface IResultOfBoolean {
 
 export class UpsertCommand implements IUpsertCommand {
     id?: string | undefined;
-    email?: string | undefined;
-    password?: string | undefined;
-    name?: string | undefined;
-    latitude?: string | undefined;
-    longitute?: string | undefined;
-    city?: string | undefined;
-    workingHours?: string | undefined;
-    description?: string | undefined;
-    phoneNumber?: string | undefined;
+    email!: string;
+    password!: string;
+    name!: string;
+    latitude!: string;
+    longitute!: string;
+    city!: string;
+    workingHours!: string;
+    description!: string;
+    phoneNumber!: string;
 
     constructor(data?: IUpsertCommand) {
         if (data) {
@@ -508,15 +508,15 @@ export class UpsertCommand implements IUpsertCommand {
 
 export interface IUpsertCommand {
     id?: string | undefined;
-    email?: string | undefined;
-    password?: string | undefined;
-    name?: string | undefined;
-    latitude?: string | undefined;
-    longitute?: string | undefined;
-    city?: string | undefined;
-    workingHours?: string | undefined;
-    description?: string | undefined;
-    phoneNumber?: string | undefined;
+    email: string;
+    password: string;
+    name: string;
+    latitude: string;
+    longitute: string;
+    city: string;
+    workingHours: string;
+    description: string;
+    phoneNumber: string;
 }
 
 export class SwaggerException extends Error {
