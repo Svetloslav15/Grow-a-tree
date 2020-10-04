@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace GrowATree.Application.Common.Interfaces
+﻿namespace GrowATree.Application.Common.Interfaces
 {
+    using System;
+
     public interface IDateTime
     {
         DateTime Now { get; }
