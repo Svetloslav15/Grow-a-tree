@@ -16,8 +16,6 @@
 
         public const int UsernameMaxLength = 15;
 
-        public const string GeneralEmail = "svetli.novoselski@gmail.com";
-
         public const string AdminFirstName = "Grow";
 
         public const string AdminLastName = "Tree";

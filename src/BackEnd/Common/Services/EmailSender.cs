@@ -17,25 +17,22 @@
         {
             try
             {
-                MailMessage mailMsg = new MailMessage();
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient(Settings.GmailServerName);
 
-                mailMsg.To.Add(new MailAddress(receiver.Email, receiver.FirstName + " " + receiver.LastName));
-                mailMsg.From = new MailAddress(Constants.GeneralEmail, subject);
+                mail.From = new MailAddress(Settings.GmailEmail);
+                mail.To.Add(receiver.Email);
+                mail.Subject = subject;
+                mail.Body = mailDescription;
 
-                mailMsg.Subject = subject;
-                string text = mailDescription;
-                mailMsg.Body = text;
+                SmtpServer.Port = Settings.SendGridPortNotSecured;
+                SmtpServer.Credentials = new NetworkCredential(Settings.GmailEmail, Settings.GmailPassword);
+                SmtpServer.EnableSsl = true;
 
-                SmtpClient smtpClient = new SmtpClient(Settings.SendGridServerName, Convert.ToInt32(Settings.SendGridPortNotSecured));
-                string username = Settings.SendGridUsername;
-                string password = Settings.SendGridAPIKEY;
-                NetworkCredential credentials = new NetworkCredential(username, password);
-                smtpClient.Credentials = credentials;
-
-                smtpClient.Send(mailMsg);
+                SmtpServer.Send(mail);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
