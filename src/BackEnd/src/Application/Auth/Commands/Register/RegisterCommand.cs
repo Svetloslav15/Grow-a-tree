@@ -1,7 +1,7 @@
 ﻿namespace GrowATree.Application.Auth.Commands.Register
 {
     using System.ComponentModel.DataAnnotations;
-    using global::Application.Models.Auth.ViewModels;
+    using global::Application.Models.Auth;
     using global::Common.Constants;
     using GrowATree.Application.Common.Models;
     using MediatR;
