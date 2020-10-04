@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4d549971-1b1a-477a-8ea1-d0c5e045b62f",
+		"_postman_id": "4eae6e4c-f71b-4ef2-b21e-8a89ef6f5d6d",
 		"name": "GrowATree",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"Plamen@silov11.com\",\r\n    \"password\": \"PlamenESieln3211\",\r\n    \"username\": \"PlamenMichev\",\r\n    \"city\": \"Petrich\"\r\n}",
+							"raw": "{\r\n    \"email\": \"real@email.com\",\r\n    \"password\": \"PlamenESieln3211\",\r\n    \"username\": \"PlamenMichev\",\r\n    \"city\": \"Petrich\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -39,21 +39,22 @@
 					"response": []
 				},
 				{
-					"name": "Login",
+					"name": "Register Test(Delete it)",
 					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"Plamen@silov11.com\",\r\n    \"password\": \"PlamenESieln3211\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
 								}
-							}
+							]
 						},
+						"method": "GET",
+						"header": [],
 						"url": {
-							"raw": "https://localhost:44312/api/auth/login",
+							"raw": "https://localhost:44312/api/auth/test",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -62,7 +63,36 @@
 							"path": [
 								"api",
 								"auth",
-								"login"
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Token\": \"CfDJ8AzeSyxcYVVJm+2zwiSh6ZoDKx9tbZTM0R+bsMGwGcYhejHZgJfYrs9jdm7fuEJPjFVF0hLVxBKYl+umJkaOK98wAqxP3gNgD8PUil1YB1m6E4CCw5konG/M1DSKiKde3EZ5V8Bh5yGHsuD9qATN/urJLg5HjamzWbM4t3rEzAh8dErgQiJLvo4trTfHABcgmI9qyq3CjuYzD//DOyUS1m2CusAHeENH46NEdjgU1sEol/viNrbLh/72Z8+Z7qMv8g==\",\r\n    \"Email\": \"svetli@novoselski.net\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44312/api/Auth",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44312",
+							"path": [
+								"api",
+								"Auth"
 							]
 						}
 					},
