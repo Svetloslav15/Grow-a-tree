@@ -49,5 +49,17 @@
         public const string CityRequiredErrorMessage = "Градът е задължително поле";
 
         #endregion
+
+        #region Common
+
+        public const string CommonErrorMessage = "Възникна грешка. Моля опитайте отново!";
+
+        #endregion
+
+        #region Store
+
+        public const string StoreNotFound = "Магазинът не беше намерен";
+
+        #endregion
     }
 }

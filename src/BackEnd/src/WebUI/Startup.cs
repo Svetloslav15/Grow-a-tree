@@ -61,6 +61,7 @@ namespace GrowATree.WebUI
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredUniqueChars = 0;
+                options.User.AllowedUserNameCharacters = options.User.AllowedUserNameCharacters + " ";
             });
 
             services.AddOpenApiDocument(configure =>

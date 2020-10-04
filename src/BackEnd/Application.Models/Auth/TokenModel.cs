@@ -9,5 +9,7 @@
         public DateTime Expires { get; set; }
 
         public string Id { get; set; }
+
+        public bool IsStore { get; set; }
     }
 }

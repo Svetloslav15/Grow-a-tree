@@ -29,10 +29,12 @@ namespace GrowATree.WebUI
                     if (context.Database.IsSqlServer())
                     {
                         context.Database.Migrate();
-                    }                   
+                    }
 
                     var userManager = services.GetRequiredService<UserManager<User>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
+                    await ApplicationDbContextSeed.SeedRolesAsync(roleManager);
                     //await ApplicationDbContextSeed.SeedDefaultUserAsync(userManager);
                     //await ApplicationDbContextSeed.SeedSampleDataAsync(context);
                 }
