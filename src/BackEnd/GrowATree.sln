@@ -21,9 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.UnitTests", "tests\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.IntegrationTests", "tests\Applicaton.IntegrationTests\Application.IntegrationTests.csproj", "{4FF7E541-E4BA-4FF4-BE25-EC907D92BDA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Models", "Application.Models\Application.Models.csproj", "{B024C486-19EA-40EE-B072-0335D74F6242}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Models", "src\Application.Models\Application.Models.csproj", "{B024C486-19EA-40EE-B072-0335D74F6242}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{54B83B8A-607C-47F7-BE04-01132A92E005}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "src\Common\Common.csproj", "{54B83B8A-607C-47F7-BE04-01132A92E005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
