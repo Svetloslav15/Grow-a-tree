@@ -9,6 +9,36 @@
 			"name": "Auth",
 			"item": [
 				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"Plamen@silov11.com\",\r\n    \"password\": \"PlamenESieln3211\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:44312/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44312",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Register",
 					"request": {
 						"method": "POST",
@@ -33,37 +63,6 @@
 								"api",
 								"auth",
 								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Register Test(Delete it)",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://localhost:44312/api/auth/test",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "44312",
-							"path": [
-								"api",
-								"auth",
-								"test"
 							]
 						}
 					},
