@@ -7,6 +7,7 @@
     using Common.Constants;
     using global::Application.Models.Auth;
     using GrowATree.Application.Auth.Commands;
+    using GrowATree.Application.Auth.Commands.ChangeEmail;
     using GrowATree.Application.Auth.Commands.ConfirmEmail;
     using GrowATree.Application.Auth.Commands.Register;
     using GrowATree.Application.Common.Models;
@@ -86,6 +87,21 @@
 
         [HttpPost("resend-link-confirm-email")]
         public async Task<Result<bool>> ResendLinkConfirmEmail([FromBody] ResendConfirmationLinkCommand confirmEmailCommand)
+        {
+            try
+            {
+                return await this.Mediator.Send(confirmEmailCommand);
+            }
+            catch (Exception ex)
+            {
+                // TODO: add exception logger
+                Debug.WriteLine(ex.Message);
+                return Result<bool>.Failure(ErrorMessages.ConfirmEmailError);
+            }
+        }
+
+        [HttpPost("change-email")]
+        public async Task<Result<bool>> ChangeEmail([FromBody] ChangeEmailCommand confirmEmailCommand)
         {
             try
             {
