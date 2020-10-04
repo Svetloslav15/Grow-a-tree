@@ -1,44 +1,57 @@
-﻿using GrowATree.Application.Common.Exceptions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Collections.Generic;
-
-namespace GrowATree.WebUI.Filters
+﻿namespace GrowATree.WebUI.Filters
 {
+    using System;
+    using System.Collections.Generic;
+    using GrowATree.Application.Common.Exceptions;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Filters;
+
+    /// <summary>
+    /// Middleware that handle Exceptions.
+    /// </summary>
     public class ApiExceptionFilter : ExceptionFilterAttribute
     {
+        private readonly IDictionary<Type, Action<ExceptionContext>> exceptionHandlers;
 
-        private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiExceptionFilter"/> class.
+        /// </summary>
         public ApiExceptionFilter()
         {
             // Register known exception types and handlers.
-            _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
+            this.exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
             {
-                { typeof(ValidationException), HandleValidationException },
-                { typeof(NotFoundException), HandleNotFoundException },
+                { typeof(ValidationException), this.HandleValidationException },
+                { typeof(NotFoundException), this.HandleNotFoundException },
             };
         }
 
+        /// <summary>
+        /// Method that handles when there is an exception.
+        /// </summary>
+        /// <param name="context">ExceptionContext.</param>
         public override void OnException(ExceptionContext context)
         {
-            HandleException(context);
+            this.HandleException(context);
 
             base.OnException(context);
         }
 
+        /// <summary>
+        /// Method that handles when there is an exception.
+        /// </summary>
+        /// <param name="context">ExceptionContext.</param>
         private void HandleException(ExceptionContext context)
         {
             Type type = context.Exception.GetType();
-            if (_exceptionHandlers.ContainsKey(type))
+            if (this.exceptionHandlers.ContainsKey(type))
             {
-                _exceptionHandlers[type].Invoke(context);
+                this.exceptionHandlers[type].Invoke(context);
                 return;
             }
 
-            HandleUnknownException(context);
+            this.HandleUnknownException(context);
         }
 
         private void HandleUnknownException(ExceptionContext context)
@@ -47,12 +60,12 @@ namespace GrowATree.WebUI.Filters
             {
                 Status = StatusCodes.Status500InternalServerError,
                 Title = "An error occurred while processing your request.",
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
             };
 
             context.Result = new ObjectResult(details)
             {
-                StatusCode = StatusCodes.Status500InternalServerError
+                StatusCode = StatusCodes.Status500InternalServerError,
             };
 
             context.ExceptionHandled = true;
@@ -64,7 +77,7 @@ namespace GrowATree.WebUI.Filters
 
             var details = new ValidationProblemDetails(exception.Errors)
             {
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
             };
 
             context.Result = new BadRequestObjectResult(details);
@@ -80,7 +93,7 @@ namespace GrowATree.WebUI.Filters
             {
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
                 Title = "The specified resource was not found.",
-                Detail = exception.Message
+                Detail = exception.Message,
             };
 
             context.Result = new NotFoundObjectResult(details);

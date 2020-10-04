@@ -17,7 +17,6 @@
     {
         private readonly UserManager<User> userManager;
         private readonly IIdentityService identityService;
-
         public RegisterCommandHandler(UserManager<User> userManager, IIdentityService identityService)
         {
             this.userManager = userManager;
@@ -53,7 +52,6 @@
             }
 
             var result = await this.identityService.LoginAsync(user.Email, request.Password);
-
             return result;
         }
     }
