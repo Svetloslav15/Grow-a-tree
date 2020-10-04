@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Auth\Commands\ConfirmEmail\" />
     <Folder Include="Auth\Queries\" />
     <Folder Include="Common\Mappings\" />
   </ItemGroup>

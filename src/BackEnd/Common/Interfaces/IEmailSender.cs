@@ -1,9 +1,10 @@
 ﻿namespace Common.Interfaces
 {
     using GrowATree.Domain.Entities;
+    using System.Threading.Tasks;
 
     public interface IEmailSender
     {
-        void SendEmail(User receiver, string mailDescription, string subject);
+        Task<bool> SendEmail(User receiver, string mailDescription, string subject);
     }
 }

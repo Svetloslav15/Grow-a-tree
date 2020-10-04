@@ -30,7 +30,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultOfTokenModel"
+                  "$ref": "#/components/schemas/ResultOfBoolean"
                 }
               }
             }
@@ -69,10 +69,92 @@
           }
         }
       }
+    },
+    "/api/Auth": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_ConfirmEmail",
+        "requestBody": {
+          "x-name": "confirmEmailCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmEmailCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "ResultOfBoolean": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "boolean"
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RegisterCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "email",
+          "username",
+          "password",
+          "city"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "username": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 3
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 5
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "ResultOfTokenModel": {
         "type": "object",
         "additionalProperties": false,
@@ -115,37 +197,6 @@
           }
         }
       },
-      "RegisterCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "email",
-          "username",
-          "password",
-          "city"
-        ],
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "minLength": 1
-          },
-          "username": {
-            "type": "string",
-            "maxLength": 15,
-            "minLength": 3
-          },
-          "password": {
-            "type": "string",
-            "maxLength": 20,
-            "minLength": 5
-          },
-          "city": {
-            "type": "string",
-            "minLength": 1
-          }
-        }
-      },
       "LoginCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -155,6 +206,20 @@
             "nullable": true
           },
           "password": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ConfirmEmailCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "token": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
             "type": "string",
             "nullable": true
           }

@@ -7,9 +7,9 @@
     using Common.Constants;
     using global::Application.Models.Auth;
     using GrowATree.Application.Auth.Commands;
+    using GrowATree.Application.Auth.Commands.ConfirmEmail;
     using GrowATree.Application.Auth.Commands.Register;
     using GrowATree.Application.Common.Models;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
@@ -24,7 +24,7 @@
         /// <param name="registerCommand">Model with user's data.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpPost("register")]
-        public async Task<Result<TokenModel>> Register([FromBody] RegisterCommand registerCommand)
+        public async Task<Result<bool>> Register([FromBody] RegisterCommand registerCommand)
         {
             try
             {
@@ -35,7 +35,7 @@
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
 
-                    return Result<TokenModel>.Failure(errorMessage);
+                    return Result<bool>.Failure(errorMessage);
                 }
 
                 return await this.Mediator.Send(registerCommand);
@@ -44,7 +44,7 @@
             {
                 // TODO: add exception logger
                 Debug.WriteLine(ex.Message);
-                return Result<TokenModel>.Failure(ErrorMessages.AccountFailureErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.AccountFailureErrorMessage);
             }
         }
 
@@ -66,6 +66,21 @@
                 // TODO: add exception logger
                 Debug.WriteLine(ex.Message);
                 return Result<TokenModel>.Failure(ErrorMessages.AccountFailureErrorMessage);
+            }
+        }
+
+        [HttpPost]
+        public async Task<Result<bool>> ConfirmEmail([FromBody] ConfirmEmailCommand confirmEmailCommand)
+        {
+            try
+            {
+                return await this.Mediator.Send(confirmEmailCommand);
+            }
+            catch (Exception ex)
+            {
+                // TODO: add exception logger
+                Debug.WriteLine(ex.Message);
+                return Result<bool>.Failure(ErrorMessages.ConfirmEmailError);
             }
         }
     }

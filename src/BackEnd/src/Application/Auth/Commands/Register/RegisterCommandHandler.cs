@@ -2,7 +2,6 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using global::Application.Models.Auth;
     using global::Common.Constants;
     using global::Common.Interfaces;
     using GrowATree.Application.Common.Interfaces;
@@ -17,13 +16,11 @@
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<bool>>
     {
         private readonly UserManager<User> userManager;
-        private readonly IIdentityService identityService;
         private readonly IEmailSender emailSender;
 
-        public RegisterCommandHandler(UserManager<User> userManager, IIdentityService identityService, IEmailSender emailSender)
+        public RegisterCommandHandler(UserManager<User> userManager, IEmailSender emailSender)
         {
             this.userManager = userManager;
-            this.identityService = identityService;
             this.emailSender = emailSender;
         }
 
@@ -43,7 +40,7 @@
             {
                 UserName = request.Username,
                 Email = request.Email,
-                EmailConfirmed = true,
+                EmailConfirmed = false,
                 LockoutEnabled = false,
                 City = request.City,
             };
@@ -57,7 +54,12 @@
 
             string token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
             string confirmationLink = $"https://localhost:44312/api/Auth/{token}";
-            this.emailSender.SendEmail(user, confirmationLink, "Grow A Tree: Confirm email");
+            bool result = await this.emailSender.SendEmail(user, confirmationLink, "Grow A Tree: Confirm email");
+
+            if (!result)
+            {
+                return Result<bool>.Failure(ErrorMessages.EmailSendingErrorMessage);
+            }
 
             return Result<bool>.Success(true);
         }

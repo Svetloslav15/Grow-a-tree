@@ -15,8 +15,9 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export interface IAuthClient {
-    register(registerCommand: RegisterCommand): Observable<ResultOfTokenModel>;
+    register(registerCommand: RegisterCommand): Observable<ResultOfBoolean>;
     login(loginCommand: LoginCommand): Observable<ResultOfTokenModel>;
+    confirmEmail(confirmEmailCommand: ConfirmEmailCommand): Observable<ResultOfBoolean>;
 }
 
 @Injectable({
@@ -32,7 +33,7 @@ export class AuthClient implements IAuthClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    register(registerCommand: RegisterCommand): Observable<ResultOfTokenModel> {
+    register(registerCommand: RegisterCommand): Observable<ResultOfBoolean> {
         let url_ = this.baseUrl + "/api/Auth/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -55,14 +56,14 @@ export class AuthClient implements IAuthClient {
                 try {
                     return this.processRegister(<any>response_);
                 } catch (e) {
-                    return <Observable<ResultOfTokenModel>><any>_observableThrow(e);
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ResultOfTokenModel>><any>_observableThrow(response_);
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
         }));
     }
 
-    protected processRegister(response: HttpResponseBase): Observable<ResultOfTokenModel> {
+    protected processRegister(response: HttpResponseBase): Observable<ResultOfBoolean> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -73,7 +74,7 @@ export class AuthClient implements IAuthClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ResultOfTokenModel.fromJS(resultData200);
+            result200 = ResultOfBoolean.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -81,7 +82,7 @@ export class AuthClient implements IAuthClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<ResultOfTokenModel>(<any>null);
+        return _observableOf<ResultOfBoolean>(<any>null);
     }
 
     login(loginCommand: LoginCommand): Observable<ResultOfTokenModel> {
@@ -135,6 +136,158 @@ export class AuthClient implements IAuthClient {
         }
         return _observableOf<ResultOfTokenModel>(<any>null);
     }
+
+    confirmEmail(confirmEmailCommand: ConfirmEmailCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Auth";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(confirmEmailCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processConfirmEmail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processConfirmEmail(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processConfirmEmail(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+}
+
+export class ResultOfBoolean implements IResultOfBoolean {
+    data?: boolean;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfBoolean) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"];
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfBoolean {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfBoolean();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfBoolean {
+    data?: boolean;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class RegisterCommand implements IRegisterCommand {
+    email!: string;
+    username!: string;
+    password!: string;
+    city!: string;
+
+    constructor(data?: IRegisterCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.username = _data["username"];
+            this.password = _data["password"];
+            this.city = _data["city"];
+        }
+    }
+
+    static fromJS(data: any): RegisterCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["username"] = this.username;
+        data["password"] = this.password;
+        data["city"] = this.city;
+        return data; 
+    }
+}
+
+export interface IRegisterCommand {
+    email: string;
+    username: string;
+    password: string;
+    city: string;
 }
 
 export class ResultOfTokenModel implements IResultOfTokenModel {
@@ -233,54 +386,6 @@ export interface ITokenModel {
     id?: string | undefined;
 }
 
-export class RegisterCommand implements IRegisterCommand {
-    email!: string;
-    username!: string;
-    password!: string;
-    city!: string;
-
-    constructor(data?: IRegisterCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.email = _data["email"];
-            this.username = _data["username"];
-            this.password = _data["password"];
-            this.city = _data["city"];
-        }
-    }
-
-    static fromJS(data: any): RegisterCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new RegisterCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["email"] = this.email;
-        data["username"] = this.username;
-        data["password"] = this.password;
-        data["city"] = this.city;
-        return data; 
-    }
-}
-
-export interface IRegisterCommand {
-    email: string;
-    username: string;
-    password: string;
-    city: string;
-}
-
 export class LoginCommand implements ILoginCommand {
     email?: string | undefined;
     password?: string | undefined;
@@ -319,6 +424,46 @@ export class LoginCommand implements ILoginCommand {
 export interface ILoginCommand {
     email?: string | undefined;
     password?: string | undefined;
+}
+
+export class ConfirmEmailCommand implements IConfirmEmailCommand {
+    token?: string | undefined;
+    email?: string | undefined;
+
+    constructor(data?: IConfirmEmailCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.token = _data["token"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): ConfirmEmailCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ConfirmEmailCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["token"] = this.token;
+        data["email"] = this.email;
+        return data; 
+    }
+}
+
+export interface IConfirmEmailCommand {
+    token?: string | undefined;
+    email?: string | undefined;
 }
 
 export class SwaggerException extends Error {

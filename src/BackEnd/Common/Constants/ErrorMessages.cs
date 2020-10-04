@@ -14,11 +14,15 @@
 
         public const string EmailNotConfirmedErrorMessage = "Невалиден имейл или парола";
 
+        public const string EmailAlreadyConfirmedErrorMessage = "Имейлът вече е потвърден";
+
         public const string EmailInUseErrorMessage = "Имейлът вече се използва";
 
         public const string EmailInvalidErrorMessage = "Имейлът е невалиден";
 
         public const string EmailRequiredErrorMessage = "Имейлът е задължително поле";
+
+        public const string EmailSendingErrorMessage = "Грешка при изпращането на имейл за потвърждение";
 
         #endregion
 
@@ -47,6 +51,18 @@
         #region City
 
         public const string CityRequiredErrorMessage = "Градът е задължително поле";
+
+        #endregion
+
+        #region General
+
+        public const string GeneralSomethingWentWrong = "Нещо се обърка";
+
+        #endregion
+
+        #region ConfirmEmail
+
+        public const string ConfirmEmailError = "Нещо се обърка, при потвърждаването на имейла.";
 
         #endregion
     }

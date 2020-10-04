@@ -1,6 +1,8 @@
 namespace GrowATree.WebUI
 {
     using System.Linq;
+    using Common.Interfaces;
+    using Common.Services;
     using GrowATree.Application;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Infrastructure;
@@ -69,7 +71,8 @@ namespace GrowATree.WebUI
                 });
 
                 configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-            });
+            })
+            .AddScoped<IEmailSender, EmailSender>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
