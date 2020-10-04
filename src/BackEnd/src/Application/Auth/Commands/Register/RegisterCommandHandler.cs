@@ -53,7 +53,7 @@
             }
 
             string token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-            string confirmationLink = $"https://localhost:44312/api/Auth/{token}";
+            string confirmationLink = Constants.ConfirmEmailLink + token;
             bool result = await this.emailSender.SendEmail(user, confirmationLink, "Grow A Tree: Confirm email");
 
             if (!result)

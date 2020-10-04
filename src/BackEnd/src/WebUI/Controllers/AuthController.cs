@@ -83,5 +83,20 @@
                 return Result<bool>.Failure(ErrorMessages.ConfirmEmailError);
             }
         }
+
+        [HttpPost("resend-link-confirm-email")]
+        public async Task<Result<bool>> ResendLinkConfirmEmail([FromBody] ResendConfirmationLinkCommand confirmEmailCommand)
+        {
+            try
+            {
+                return await this.Mediator.Send(confirmEmailCommand);
+            }
+            catch (Exception ex)
+            {
+                // TODO: add exception logger
+                Debug.WriteLine(ex.Message);
+                return Result<bool>.Failure(ErrorMessages.ConfirmEmailError);
+            }
+        }
     }
 }

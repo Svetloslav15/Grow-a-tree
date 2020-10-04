@@ -21,5 +21,7 @@
         public const string AdminFirstName = "Grow";
 
         public const string AdminLastName = "Tree";
+
+        public const string ConfirmEmailLink = "https://localhost:44312/api/Auth/";
     }
 }

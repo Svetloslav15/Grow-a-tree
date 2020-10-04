@@ -18,6 +18,7 @@ export interface IAuthClient {
     register(registerCommand: RegisterCommand): Observable<ResultOfBoolean>;
     login(loginCommand: LoginCommand): Observable<ResultOfTokenModel>;
     confirmEmail(confirmEmailCommand: ConfirmEmailCommand): Observable<ResultOfBoolean>;
+    resendLinkConfirmEmail(confirmEmailCommand: ResendConfirmationLinkCommand): Observable<ResultOfBoolean>;
 }
 
 @Injectable({
@@ -168,6 +169,58 @@ export class AuthClient implements IAuthClient {
     }
 
     protected processConfirmEmail(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+
+    resendLinkConfirmEmail(confirmEmailCommand: ResendConfirmationLinkCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Auth/resend-link-confirm-email";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(confirmEmailCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processResendLinkConfirmEmail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processResendLinkConfirmEmail(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processResendLinkConfirmEmail(response: HttpResponseBase): Observable<ResultOfBoolean> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -463,6 +516,42 @@ export class ConfirmEmailCommand implements IConfirmEmailCommand {
 
 export interface IConfirmEmailCommand {
     token?: string | undefined;
+    email?: string | undefined;
+}
+
+export class ResendConfirmationLinkCommand implements IResendConfirmationLinkCommand {
+    email?: string | undefined;
+
+    constructor(data?: IResendConfirmationLinkCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): ResendConfirmationLinkCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResendConfirmationLinkCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        return data; 
+    }
+}
+
+export interface IResendConfirmationLinkCommand {
     email?: string | undefined;
 }
 

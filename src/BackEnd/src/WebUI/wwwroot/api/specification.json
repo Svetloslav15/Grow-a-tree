@@ -101,6 +101,38 @@
           }
         }
       }
+    },
+    "/api/Auth/resend-link-confirm-email": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_ResendLinkConfirmEmail",
+        "requestBody": {
+          "x-name": "confirmEmailCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendConfirmationLinkCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -219,6 +251,16 @@
             "type": "string",
             "nullable": true
           },
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ResendConfirmationLinkCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
           "email": {
             "type": "string",
             "nullable": true
