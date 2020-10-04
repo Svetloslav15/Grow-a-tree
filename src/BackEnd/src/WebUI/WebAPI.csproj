@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>GrowATree.WebUI</RootNamespace>
-    <AssemblyName>GrowATree.WebUI</AssemblyName>
+    <RootNamespace>GrowATree.WebAPI</RootNamespace>
+    <AssemblyName>GrowATree.WebAPI</AssemblyName>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>true</IsPackable>
