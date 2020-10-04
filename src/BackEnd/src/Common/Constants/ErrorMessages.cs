@@ -50,7 +50,43 @@
 
         #region City
 
-        public const string CityRequiredErrorMessage = "Градът е задължително поле";
+        public const string CityRequiredErrorMessage = "Населеното място е задължително поле";
+
+        #endregion
+
+        #region Common
+
+        public const string CommonErrorMessage = "Възникна грешка. Моля опитайте отново!";
+
+        #endregion
+
+        #region Store
+
+        public const string StoreNotFound = "Магазинът не беше намерен";
+
+        #endregion
+
+        #region Coordinates
+
+        public const string CoordinatesRequiredErrorMessage = "Координате са задължително поле";
+
+        #endregion
+
+        #region WorkingHours
+
+        public const string WorkingHoursRequiredErrorMessage = "Работното време е задължително поле";
+
+        #endregion
+
+        #region Description
+
+        public const string DescriptionRequiredErrorMessage = "Описанието е задължително поле";
+
+        #endregion
+
+        #region PhoneNumber
+
+        public const string PhoneNumberRequiredErrorMessage = "Телефонният номер е задължително поле";
 
         #endregion
 

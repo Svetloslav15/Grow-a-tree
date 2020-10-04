@@ -1,9 +1,9 @@
-﻿using GrowATree.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace GrowATree.Infrastructure.Persistence.Configurations
+﻿namespace GrowATree.Infrastructure.Persistence.Configurations
 {
+    using GrowATree.Domain.Entities;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
     public class StoreConfiguration : IEntityTypeConfiguration<Store>
     {
         public void Configure(EntityTypeBuilder<Store> builder)

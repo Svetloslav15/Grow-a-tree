@@ -1,6 +1,7 @@
 namespace GrowATree.WebAPI
 {
     using System.Linq;
+    using Common.Constants;
     using Common.Interfaces;
     using Common.Services;
     using GrowATree.Application;
@@ -52,11 +53,11 @@ namespace GrowATree.WebAPI
                 .Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = Constants.PasswordMinLength;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredUniqueChars = 0;
-
+                options.User.AllowedUserNameCharacters += " ";
                 options.SignIn.RequireConfirmedEmail = true;
             })
             .AddOpenApiDocument(configure =>

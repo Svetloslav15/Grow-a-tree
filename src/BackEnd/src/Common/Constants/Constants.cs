@@ -16,6 +16,8 @@
 
         public const int UsernameMaxLength = 15;
 
+        public const string StoreRoleName = "Store";
+
         public const string AdminFirstName = "Grow";
 
         public const string AdminLastName = "Tree";

@@ -65,11 +65,18 @@
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
 
+                bool isStore = false;
+                if (userRoles.Contains(Constants.StoreRoleName))
+                {
+                    isStore = true;
+                }
+
                 var result = new TokenModel
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     Expires = token.ValidTo,
                     Id = user.Id,
+                    IsStore = isStore,
                 };
 
                 return Result<TokenModel>.Success(result);

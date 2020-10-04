@@ -343,6 +343,76 @@ export interface IRegisterCommand {
     city: string;
 }
 
+export interface IStoresClient {
+    upsert(upsertCommand: UpsertCommand): Observable<ResultOfBoolean>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class StoresClient implements IStoresClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    upsert(upsertCommand: UpsertCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Stores/upsert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(upsertCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpsert(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpsert(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpsert(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+}
+
 export class ResultOfTokenModel implements IResultOfTokenModel {
     data?: TokenModel | undefined;
     succeeded?: boolean;
@@ -399,6 +469,7 @@ export class TokenModel implements ITokenModel {
     token?: string | undefined;
     expires?: Date;
     id?: string | undefined;
+    isStore?: boolean;
 
     constructor(data?: ITokenModel) {
         if (data) {
@@ -414,6 +485,7 @@ export class TokenModel implements ITokenModel {
             this.token = _data["token"];
             this.expires = _data["expires"] ? new Date(_data["expires"].toString()) : <any>undefined;
             this.id = _data["id"];
+            this.isStore = _data["isStore"];
         }
     }
 
@@ -429,6 +501,7 @@ export class TokenModel implements ITokenModel {
         data["token"] = this.token;
         data["expires"] = this.expires ? this.expires.toISOString() : <any>undefined;
         data["id"] = this.id;
+        data["isStore"] = this.isStore;
         return data; 
     }
 }
@@ -437,6 +510,7 @@ export interface ITokenModel {
     token?: string | undefined;
     expires?: Date;
     id?: string | undefined;
+    isStore?: boolean;
 }
 
 export class LoginCommand implements ILoginCommand {
@@ -553,6 +627,130 @@ export class ResendConfirmationLinkCommand implements IResendConfirmationLinkCom
 
 export interface IResendConfirmationLinkCommand {
     email?: string | undefined;
+}
+
+export class ResultOfBoolean implements IResultOfBoolean {
+    data?: boolean;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfBoolean) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"];
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfBoolean {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfBoolean();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfBoolean {
+    data?: boolean;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class UpsertCommand implements IUpsertCommand {
+    id?: string | undefined;
+    email!: string;
+    password!: string;
+    name!: string;
+    latitude!: string;
+    longitute!: string;
+    city!: string;
+    workingHours!: string;
+    description!: string;
+    phoneNumber!: string;
+
+    constructor(data?: IUpsertCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.email = _data["email"];
+            this.password = _data["password"];
+            this.name = _data["name"];
+            this.latitude = _data["latitude"];
+            this.longitute = _data["longitute"];
+            this.city = _data["city"];
+            this.workingHours = _data["workingHours"];
+            this.description = _data["description"];
+            this.phoneNumber = _data["phoneNumber"];
+        }
+    }
+
+    static fromJS(data: any): UpsertCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpsertCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["email"] = this.email;
+        data["password"] = this.password;
+        data["name"] = this.name;
+        data["latitude"] = this.latitude;
+        data["longitute"] = this.longitute;
+        data["city"] = this.city;
+        data["workingHours"] = this.workingHours;
+        data["description"] = this.description;
+        data["phoneNumber"] = this.phoneNumber;
+        return data; 
+    }
+}
+
+export interface IUpsertCommand {
+    id?: string | undefined;
+    email: string;
+    password: string;
+    name: string;
+    latitude: string;
+    longitute: string;
+    city: string;
+    workingHours: string;
+    description: string;
+    phoneNumber: string;
 }
 
 export class SwaggerException extends Error {
