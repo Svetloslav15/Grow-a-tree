@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GrowATree.WebUI.Controllers
+namespace GrowATree.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -138,7 +138,7 @@ export class AuthClient implements IAuthClient {
     }
 
     confirmEmail(confirmEmailCommand: ConfirmEmailCommand): Observable<ResultOfBoolean> {
-        let url_ = this.baseUrl + "/api/Auth";
+        let url_ = this.baseUrl + "/api/Auth/confirm-email";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(confirmEmailCommand);

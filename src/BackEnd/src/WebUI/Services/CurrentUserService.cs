@@ -1,4 +1,4 @@
-﻿namespace GrowATree.WebUI.Services
+﻿namespace GrowATree.WebAPI.Services
 {
     using System.Security.Claims;
     using GrowATree.Application.Common.Interfaces;

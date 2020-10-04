@@ -1,4 +1,4 @@
-﻿namespace GrowATree.WebUI.Controllers
+﻿namespace GrowATree.WebAPI.Controllers
 {
     using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
     using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,4 @@
-﻿namespace GrowATree.WebUI.Filters
+﻿namespace GrowATree.WebAPI.Filters
 {
     using System;
     using System.Collections.Generic;

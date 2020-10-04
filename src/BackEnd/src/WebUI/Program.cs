@@ -1,4 +1,4 @@
-namespace GrowATree.WebUI
+namespace GrowATree.WebAPI
 {
     using System;
     using System.Threading.Tasks;

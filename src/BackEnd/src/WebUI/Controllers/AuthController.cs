@@ -1,4 +1,4 @@
-﻿namespace GrowATree.WebUI.Controllers
+﻿namespace GrowATree.WebAPI.Controllers
 {
     using System;
     using System.Diagnostics;
@@ -69,7 +69,7 @@
             }
         }
 
-        [HttpPost]
+        [HttpPost("confirm-email")]
         public async Task<Result<bool>> ConfirmEmail([FromBody] ConfirmEmailCommand confirmEmailCommand)
         {
             try

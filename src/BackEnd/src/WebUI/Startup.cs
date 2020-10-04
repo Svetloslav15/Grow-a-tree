@@ -1,4 +1,4 @@
-namespace GrowATree.WebUI
+namespace GrowATree.WebAPI
 {
     using System.Linq;
     using Common.Interfaces;
@@ -7,8 +7,8 @@ namespace GrowATree.WebUI
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Infrastructure;
     using GrowATree.Infrastructure.Persistence;
-    using GrowATree.WebUI.Filters;
-    using GrowATree.WebUI.Services;
+    using GrowATree.WebAPI.Filters;
+    using GrowATree.WebAPI.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
