@@ -1,18 +1,18 @@
-﻿using GrowATree.Application.Common.Interfaces;
-using GrowATree.Domain.Common;
-using GrowATree.Domain.Entities;
-using IdentityServer4.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Options;
-using System.Data;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace GrowATree.Infrastructure.Persistence
+﻿namespace GrowATree.Infrastructure.Persistence
 {
+    using System.Data;
+    using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GrowATree.Application.Common.Interfaces;
+    using GrowATree.Domain.Common;
+    using GrowATree.Domain.Entities;
+    using IdentityServer4.EntityFramework.Options;
+    using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Storage;
+    using Microsoft.Extensions.Options;
+
     public class ApplicationDbContext : ApiAuthorizationDbContext<User>, IApplicationDbContext
     {
         private readonly ICurrentUserService _currentUserService;
