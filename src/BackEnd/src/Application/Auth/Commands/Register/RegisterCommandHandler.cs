@@ -2,45 +2,44 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using global::Application.Models.Auth;
     using global::Common.Constants;
-    using GrowATree.Application.Common.Interfaces;
+    using global::Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
 
     /// <summary>
-    /// Hadler that implement register logic
+    /// Hadler that implement register logic.
     /// </summary>
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<TokenModel>>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<bool>>
     {
         private readonly UserManager<User> userManager;
-        private readonly IIdentityService identityService;
+        private readonly IEmailSender emailSender;
 
-        public RegisterCommandHandler(UserManager<User> userManager, IIdentityService identityService)
+        public RegisterCommandHandler(UserManager<User> userManager, IEmailSender emailSender)
         {
             this.userManager = userManager;
-            this.identityService = identityService;
+            this.emailSender = emailSender;
         }
 
-        public async Task<Result<TokenModel>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
             if (await this.userManager.FindByEmailAsync(request.Email) != null)
             {
-                return Result<TokenModel>.Failure(ErrorMessages.EmailInUseErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.EmailInUseErrorMessage);
             }
 
             if (await this.userManager.FindByNameAsync(request.Username) != null)
             {
-                return Result<TokenModel>.Failure(ErrorMessages.UsernameInUseErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.UsernameInUseErrorMessage);
             }
 
             var user = new User()
             {
                 UserName = request.Username,
                 Email = request.Email,
-                EmailConfirmed = true,
+                EmailConfirmed = false,
                 LockoutEnabled = false,
                 City = request.City,
             };
@@ -49,12 +48,19 @@
 
             if (!identityResult.Succeeded)
             {
-                return Result<TokenModel>.Failure(ErrorMessages.AccountFailureErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.AccountFailureErrorMessage);
             }
 
-            var result = await this.identityService.LoginAsync(user.Email, request.Password);
+            string token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+            string confirmationLink = Constants.ConfirmEmailLink + token;
+            bool result = await this.emailSender.SendEmail(user, confirmationLink, "Grow A Tree: Confirm email");
 
-            return result;
+            if (!result)
+            {
+                return Result<bool>.Failure(ErrorMessages.EmailSendingErrorMessage);
+            }
+
+            return Result<bool>.Success(true);
         }
     }
 }
