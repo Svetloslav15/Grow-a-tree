@@ -1,7 +1,6 @@
 ﻿namespace GrowATree.Application.Auth.Commands.Register
 {
     using System.ComponentModel.DataAnnotations;
-    using global::Application.Models.Auth;
     using global::Common.Constants;
     using GrowATree.Application.Common.Models;
     using MediatR;
@@ -9,7 +8,7 @@
     /// <summary>
     /// Model for register user input.
     /// </summary>
-    public class RegisterCommand : IRequest<Result<TokenModel>>
+    public class RegisterCommand : IRequest<Result<bool>>
     {
         [Required(ErrorMessage = ErrorMessages.EmailRequiredErrorMessage)]
         [EmailAddress(ErrorMessage = ErrorMessages.EmailInvalidErrorMessage)]

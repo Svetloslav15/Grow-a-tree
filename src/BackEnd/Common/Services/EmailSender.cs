@@ -17,7 +17,7 @@
         /// Send email to a user.
         /// </summary>
         /// <param name="receiver">User.</param>
-        /// <param name="mailDescription">Content of the email</param>
+        /// <param name="mailDescription">Content of the email.</param>
         /// <param name="subject">Title of the email.</param>
         public void SendEmail(User receiver, string mailDescription, string subject)
         {
