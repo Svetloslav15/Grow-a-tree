@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "4638d8c6-eeac-4ecd-aa2a-e264228c99d6",
-		"name": "GrowATree",
+		"_postman_id": "0a882328-b90f-4bd2-bbbe-41b3616f497a",
+		"name": "GrowATree Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -47,7 +47,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8847654a-805a-45c3-9069-bf35d7f4e39e",
+								"id": "8537f1e4-52dc-4ce2-9f3b-9fa0f8f9f8b5",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -141,7 +141,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "a12aa915-2b02-4e26-ba47-4cabc592e6dd",
+								"id": "f1531b30-fb05-4e95-bff9-18a95d2f59f0",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -181,15 +181,12 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:44312/api/Auth/resend-link-confirm-email",
-							"protocol": "https",
+							"raw": "{{LocalUrl}}/auth/resend-link-confirm-email",
 							"host": [
-								"localhost"
+								"{{LocalUrl}}"
 							],
-							"port": "44312",
 							"path": [
-								"api",
-								"Auth",
+								"auth",
 								"resend-link-confirm-email"
 							]
 						}

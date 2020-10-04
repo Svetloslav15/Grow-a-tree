@@ -1,7 +1,7 @@
 ﻿namespace Common.Interfaces
 {
-    using GrowATree.Domain.Entities;
     using System.Threading.Tasks;
+    using GrowATree.Domain.Entities;
 
     public interface IEmailSender
     {

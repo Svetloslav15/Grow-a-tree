@@ -12,7 +12,7 @@
 
         #region Email
 
-        public const string EmailNotConfirmedErrorMessage = "Невалиден имейл или парола";
+        public const string EmailNotConfirmedErrorMessage = "Имейлът не е потвърден";
 
         public const string EmailAlreadyConfirmedErrorMessage = "Имейлът вече е потвърден";
 

@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using global::Application.Models.Auth;
+    using global::Common.Interfaces;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;

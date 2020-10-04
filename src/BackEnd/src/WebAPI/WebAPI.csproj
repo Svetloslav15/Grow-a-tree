@@ -45,7 +45,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application.Models\Application.Models.csproj" />
     <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,7 @@
 ﻿namespace Common.Services
 {
     using System;
+    using System.Diagnostics;
     using System.Net;
     using System.Net.Mail;
     using System.Threading.Tasks;
@@ -34,6 +35,7 @@
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
                 return false;
             }
         }

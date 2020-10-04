@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using global::Common.Constants;
     using global::Common.Interfaces;
-    using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
     using MediatR;
