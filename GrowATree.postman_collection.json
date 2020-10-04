@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "0a882328-b90f-4bd2-bbbe-41b3616f497a",
-		"name": "GrowATree Copy",
+		"_postman_id": "0e9ae700-338d-45bf-b5a8-1902715bd3eb",
+		"name": "GrowATree",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -47,7 +47,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8537f1e4-52dc-4ce2-9f3b-9fa0f8f9f8b5",
+								"id": "cc261bf0-a6f6-453e-8734-83cf019ced2d",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -141,7 +141,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "f1531b30-fb05-4e95-bff9-18a95d2f59f0",
+								"id": "c05d9937-0647-4fd4-9ebd-d1e188fbe453",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -188,6 +188,55 @@
 							"path": [
 								"auth",
 								"resend-link-confirm-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgotten Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Email\": \"svetli.novoselski@gmail.comm\"\r\n}"
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/forgotten-password",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"forgotten-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Token\": \"CfDJ8AzeSyxcYVVJm+2zwiSh6Zpi9Smok/3164bTCRgx8VuWesmCwyabDC5ItLVfUsk+AXb/pzWtsnepnRzAaiSSPEESr8JkgtVSsMe3dDnGG8W8kmixlFMcK+e20rUGhL6moApLHiKGq3wdoM4ctXOHFcaGS9HHp510hx6zyxyd1TD+gCTyt7nkIuBkF4NP4EY4eUoLMOjTxqG24wpvy7sJXMmi2PsvzYuSHHEqMWbARqNH\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/reset-password",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"reset-password"
 							]
 						}
 					},
