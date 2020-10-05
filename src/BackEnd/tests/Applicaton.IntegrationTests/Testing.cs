@@ -1,12 +1,8 @@
 ﻿using GrowATree.Application.Common.Interfaces;
 using GrowATree.Domain.Entities;
-using GrowATree.Infrastructure.Identity;
 using GrowATree.Infrastructure.Persistence;
-using GrowATree.WebUI;
 using MediatR;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
