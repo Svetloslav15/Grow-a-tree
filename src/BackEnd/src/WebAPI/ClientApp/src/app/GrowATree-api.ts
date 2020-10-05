@@ -344,6 +344,36 @@ export class AuthClient implements IAuthClient {
         }));
     }
 
+    changeEmail(confirmEmailCommand: ChangeEmailCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Auth/change-email";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(confirmEmailCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processChangeEmail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processChangeEmail(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
     protected processForgottenPassword(response: HttpResponseBase): Observable<ResultOfBoolean> {
         const status = response.status;
         const responseBlob = 
@@ -542,6 +572,12 @@ export interface IUpsertCommand {
     description: string;
     phoneNumber: string;
 }
+
+export class RegisterCommand implements IRegisterCommand {
+    email!: string;
+    username!: string;
+    password!: string;
+    city!: string;
 
 export class RegisterCommand implements IRegisterCommand {
     email!: string;
@@ -849,6 +885,7 @@ export class ResetPasswordCommand implements IResetPasswordCommand {
     password?: string | undefined;
 
     constructor(data?: IResetPasswordCommand) {
+    constructor(data?: IChangeEmailCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -859,15 +896,16 @@ export class ResetPasswordCommand implements IResetPasswordCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.email = _data["email"];
-            this.token = _data["token"];
-            this.password = _data["password"];
+            this.oldEmail = _data["oldEmail"];
+            this.newEmail = _data["newEmail"];
         }
     }
 
     static fromJS(data: any): ResetPasswordCommand {
+    static fromJS(data: any): ChangeEmailCommand {
         data = typeof data === 'object' ? data : {};
         let result = new ResetPasswordCommand();
+        let result = new ChangeEmailCommand();
         result.init(data);
         return result;
     }
@@ -877,6 +915,8 @@ export class ResetPasswordCommand implements IResetPasswordCommand {
         data["email"] = this.email;
         data["token"] = this.token;
         data["password"] = this.password;
+        data["oldEmail"] = this.oldEmail;
+        data["newEmail"] = this.newEmail;
         return data; 
     }
 }
@@ -885,6 +925,9 @@ export interface IResetPasswordCommand {
     email?: string | undefined;
     token?: string | undefined;
     password?: string | undefined;
+export interface IChangeEmailCommand {
+    oldEmail?: string | undefined;
+    newEmail?: string | undefined;
 }
 
 export class SwaggerException extends Error {

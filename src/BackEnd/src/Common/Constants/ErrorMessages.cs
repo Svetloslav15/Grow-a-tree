@@ -103,5 +103,12 @@
         public const string ConfirmEmailError = "Нещо се обърка, при потвърждаването на имейла.";
 
         #endregion
+
+        #region ChangeEmail
+
+        public const string ChangeEmailErrorMessage = "Нещо се обърка, при смяна на имейла.";
+        public const string ChangeEmailDifferentEmailsErrorMessage = "Новият имейл трябва да е различен от стария";
+
+        #endregion
     }
 }

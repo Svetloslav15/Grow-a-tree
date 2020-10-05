@@ -7,6 +7,7 @@
     using Common.Constants;
     using global::Application.Models.Auth;
     using GrowATree.Application.Auth.Commands;
+    using GrowATree.Application.Auth.Commands.ChangeEmail;
     using GrowATree.Application.Auth.Commands.ConfirmEmail;
     using GrowATree.Application.Auth.Commands.ForgottenPassword;
     using GrowATree.Application.Auth.Commands.Register;

@@ -241,6 +241,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Change Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newEmail\": \"svetli@novoselski.net\",\r\n    \"OldEmail\": \"svetli.novoselski@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/change-email",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"change-email"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
