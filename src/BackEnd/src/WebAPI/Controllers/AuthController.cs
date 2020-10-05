@@ -9,7 +9,9 @@
     using GrowATree.Application.Auth.Commands;
     using GrowATree.Application.Auth.Commands.ChangeEmail;
     using GrowATree.Application.Auth.Commands.ConfirmEmail;
+    using GrowATree.Application.Auth.Commands.ForgottenPassword;
     using GrowATree.Application.Auth.Commands.Register;
+    using GrowATree.Application.Auth.Commands.ResetPassword;
     using GrowATree.Application.Common.Models;
     using Microsoft.AspNetCore.Mvc;
 
@@ -100,18 +102,43 @@
             }
         }
 
-        [HttpPost("change-email")]
-        public async Task<Result<bool>> ChangeEmail([FromBody] ChangeEmailCommand confirmEmailCommand)
+        [HttpPost("forgotten-password")]
+        public async Task<Result<bool>> ForgottenPassword([FromBody] ForgottenPasswordCommand command)
         {
             try
             {
-                return await this.Mediator.Send(confirmEmailCommand);
+                return await this.Mediator.Send(command);
             }
             catch (Exception ex)
             {
                 // TODO: add exception logger
                 Debug.WriteLine(ex.Message);
-                return Result<bool>.Failure(ErrorMessages.ConfirmEmailError);
+                return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<Result<bool>> ResetPassword([FromBody] ResetPasswordCommand command)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<bool>.Failure(errorMessage);
+                }
+
+                return await this.Mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                // TODO: add exception logger
+                Debug.WriteLine(ex.Message);
+                return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }

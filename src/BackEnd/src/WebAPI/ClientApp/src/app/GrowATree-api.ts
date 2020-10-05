@@ -89,7 +89,8 @@ export interface IAuthClient {
     login(loginCommand: LoginCommand): Observable<ResultOfTokenModel>;
     confirmEmail(confirmEmailCommand: ConfirmEmailCommand): Observable<ResultOfBoolean>;
     resendLinkConfirmEmail(confirmEmailCommand: ResendConfirmationLinkCommand): Observable<ResultOfBoolean>;
-    changeEmail(confirmEmailCommand: ChangeEmailCommand): Observable<ResultOfBoolean>;
+    forgottenPassword(command: ForgottenPasswordCommand): Observable<ResultOfBoolean>;
+    resetPassword(command: ResetPasswordCommand): Observable<ResultOfBoolean>;
 }
 
 @Injectable({
@@ -313,6 +314,36 @@ export class AuthClient implements IAuthClient {
         return _observableOf<ResultOfBoolean>(<any>null);
     }
 
+    forgottenPassword(command: ForgottenPasswordCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Auth/forgotten-password";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processForgottenPassword(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processForgottenPassword(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
     changeEmail(confirmEmailCommand: ChangeEmailCommand): Observable<ResultOfBoolean> {
         let url_ = this.baseUrl + "/api/Auth/change-email";
         url_ = url_.replace(/[?&]$/, "");
@@ -343,7 +374,59 @@ export class AuthClient implements IAuthClient {
         }));
     }
 
-    protected processChangeEmail(response: HttpResponseBase): Observable<ResultOfBoolean> {
+    protected processForgottenPassword(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+
+    resetPassword(command: ResetPasswordCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Auth/reset-password";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processResetPassword(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processResetPassword(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processResetPassword(response: HttpResponseBase): Observable<ResultOfBoolean> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -489,6 +572,12 @@ export interface IUpsertCommand {
     description: string;
     phoneNumber: string;
 }
+
+export class RegisterCommand implements IRegisterCommand {
+    email!: string;
+    username!: string;
+    password!: string;
+    city!: string;
 
 export class RegisterCommand implements IRegisterCommand {
     email!: string;
@@ -754,10 +843,48 @@ export interface IResendConfirmationLinkCommand {
     email?: string | undefined;
 }
 
-export class ChangeEmailCommand implements IChangeEmailCommand {
-    oldEmail?: string | undefined;
-    newEmail?: string | undefined;
+export class ForgottenPasswordCommand implements IForgottenPasswordCommand {
+    email?: string | undefined;
 
+    constructor(data?: IForgottenPasswordCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): ForgottenPasswordCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ForgottenPasswordCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        return data; 
+    }
+}
+
+export interface IForgottenPasswordCommand {
+    email?: string | undefined;
+}
+
+export class ResetPasswordCommand implements IResetPasswordCommand {
+    email?: string | undefined;
+    token?: string | undefined;
+    password?: string | undefined;
+
+    constructor(data?: IResetPasswordCommand) {
     constructor(data?: IChangeEmailCommand) {
         if (data) {
             for (var property in data) {
@@ -774,8 +901,10 @@ export class ChangeEmailCommand implements IChangeEmailCommand {
         }
     }
 
+    static fromJS(data: any): ResetPasswordCommand {
     static fromJS(data: any): ChangeEmailCommand {
         data = typeof data === 'object' ? data : {};
+        let result = new ResetPasswordCommand();
         let result = new ChangeEmailCommand();
         result.init(data);
         return result;
@@ -783,12 +912,19 @@ export class ChangeEmailCommand implements IChangeEmailCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["token"] = this.token;
+        data["password"] = this.password;
         data["oldEmail"] = this.oldEmail;
         data["newEmail"] = this.newEmail;
         return data; 
     }
 }
 
+export interface IResetPasswordCommand {
+    email?: string | undefined;
+    token?: string | undefined;
+    password?: string | undefined;
 export interface IChangeEmailCommand {
     oldEmail?: string | undefined;
     newEmail?: string | undefined;
