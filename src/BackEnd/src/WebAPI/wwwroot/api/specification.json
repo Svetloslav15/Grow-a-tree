@@ -231,40 +231,6 @@
       }
     }
   },
-    },
-    "/api/Auth/change-email": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "operationId": "Auth_ChangeEmail",
-        "requestBody": {
-          "x-name": "confirmEmailCommand",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChangeEmailCommand"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResultOfBoolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "components": {
     "schemas": {
       "ResultOfBoolean": {
