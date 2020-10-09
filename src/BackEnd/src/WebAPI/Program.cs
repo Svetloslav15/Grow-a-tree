@@ -10,11 +10,24 @@ namespace GrowATree.WebAPI
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
+    using Serilog;
+    using Serilog.Events;
 
     public class Program
     {
         public static async Task Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Error)
+             .WriteTo.File(
+                 "logs/log.txt",
+                 restrictedToMinimumLevel: LogEventLevel.Error,
+                 rollingInterval: RollingInterval.Day,
+                 fileSizeLimitBytes: 268435456,
+                 rollOnFileSizeLimit: true)
+             .CreateLogger();
+
             var host = CreateHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())

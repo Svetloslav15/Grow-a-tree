@@ -9,6 +9,7 @@
     using GrowATree.Application.Stores.Commands.Upsert;
     using GrowATree.WebAPI.Controllers;
     using Microsoft.AspNetCore.Mvc;
+    using Serilog;
 
     public class StoresController : ApiController
     {
@@ -31,7 +32,7 @@
             }
             catch (Exception ex)
             {
-                // TODO: add exception logger
+                Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<bool>.Failure(ErrorMessages.AccountFailureErrorMessage);
             }

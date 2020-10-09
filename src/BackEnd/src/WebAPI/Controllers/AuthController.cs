@@ -7,13 +7,13 @@
     using Common.Constants;
     using global::Application.Models.Auth;
     using GrowATree.Application.Auth.Commands;
-    using GrowATree.Application.Auth.Commands.ChangeEmail;
     using GrowATree.Application.Auth.Commands.ConfirmEmail;
     using GrowATree.Application.Auth.Commands.ForgottenPassword;
     using GrowATree.Application.Auth.Commands.Register;
     using GrowATree.Application.Auth.Commands.ResetPassword;
     using GrowATree.Application.Common.Models;
     using Microsoft.AspNetCore.Mvc;
+    using Serilog;
 
     /// <summary>
     ///  Controller that handles
@@ -45,7 +45,7 @@
             }
             catch (Exception ex)
             {
-                // TODO: add exception logger
+                Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<bool>.Failure(ErrorMessages.AccountFailureErrorMessage);
             }
@@ -66,7 +66,7 @@
             }
             catch (Exception ex)
             {
-                // TODO: add exception logger
+                Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<TokenModel>.Failure(ErrorMessages.AccountFailureErrorMessage);
             }
@@ -81,7 +81,7 @@
             }
             catch (Exception ex)
             {
-                // TODO: add exception logger
+                Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<bool>.Failure(ErrorMessages.ConfirmEmailError);
             }
@@ -96,7 +96,7 @@
             }
             catch (Exception ex)
             {
-                // TODO: add exception logger
+                Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<bool>.Failure(ErrorMessages.ConfirmEmailError);
             }
@@ -111,7 +111,7 @@
             }
             catch (Exception ex)
             {
-                // TODO: add exception logger
+                Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
@@ -136,7 +136,7 @@
             }
             catch (Exception ex)
             {
-                // TODO: add exception logger
+                Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
