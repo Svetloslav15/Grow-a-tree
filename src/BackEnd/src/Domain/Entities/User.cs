@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
-
-namespace GrowATree.Domain.Entities
+﻿namespace GrowATree.Domain.Entities
 {
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Identity;
+
     public class User : IdentityUser
     {
         public string FirstName { get; set; }
@@ -12,6 +13,10 @@ namespace GrowATree.Domain.Entities
         public string ImageUrl { get; set; }
 
         public string City { get; set; }
+
+        public string RefreshToken { get; set; }
+
+        public DateTime RefreshTokenExpiryTime { get; set; }
 
         public ICollection<Tree> Trees { get; set; } = new List<Tree>();
 

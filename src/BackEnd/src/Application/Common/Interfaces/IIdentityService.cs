@@ -1,14 +1,21 @@
-﻿using GrowATree.Application.Common.Models;
-using System.Threading.Tasks;
-
-namespace GrowATree.Application.Common.Interfaces
+﻿namespace GrowATree.Application.Common.Interfaces
 {
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using global::Application.Models.Auth;
+    using GrowATree.Application.Common.Models;
+    using GrowATree.Domain.Entities;
+
     public interface IIdentityService
     {
         Task<string> GetUserNameAsync(string userId);
 
-        Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password);
+        Task<Result<TokenModel>> LoginAsync(string email, string password);
 
-        Task<Result> DeleteUserAsync(string userId);
+        Task<TokenModel> GenerateTokenModel(User user);
+
+        string GenerateRefreshToken();
+
+        ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }
 }

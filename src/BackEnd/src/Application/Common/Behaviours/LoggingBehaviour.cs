@@ -1,11 +1,11 @@
-﻿using GrowATree.Application.Common.Interfaces;
-using MediatR.Pipeline;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace GrowATree.Application.Common.Behaviours
+﻿namespace GrowATree.Application.Common.Behaviours
 {
+    using GrowATree.Application.Common.Interfaces;
+    using MediatR.Pipeline;
+    using Microsoft.Extensions.Logging;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest>
     {
         private readonly ILogger _logger;

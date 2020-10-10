@@ -1,15 +1,19 @@
-﻿using GrowATree.Application.Common.Interfaces;
-using GrowATree.Domain.Entities;
-using GrowATree.Infrastructure.Identity;
-using GrowATree.Infrastructure.Persistence;
-using GrowATree.Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace GrowATree.Infrastructure
+﻿namespace GrowATree.Infrastructure
 {
+    using GrowATree.Application.Common.Interfaces;
+    using GrowATree.Domain.Entities;
+    using GrowATree.Infrastructure.Identity;
+    using GrowATree.Infrastructure.Persistence;
+    using GrowATree.Infrastructure.Services;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Tokens;
+    using System.Text;
+
     public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
@@ -29,17 +33,35 @@ namespace GrowATree.Infrastructure
 
             services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
-                services.AddDefaultIdentity<User>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
-            
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddIdentityServer()
                 .AddApiAuthorization<User, ApplicationDbContext>();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
+            services.AddScoped<RoleManager<IdentityRole>>();
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddIdentityServerJwt()
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                    };
+                });
 
             return services;
         }

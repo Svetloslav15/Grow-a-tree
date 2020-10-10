@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace GrowATree.Domain.Entities
+﻿namespace GrowATree.Domain.Entities
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class Image
     {
         [Key]
