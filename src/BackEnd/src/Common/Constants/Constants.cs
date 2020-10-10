@@ -6,7 +6,9 @@
     /// </summary>
     public static class Constants
     {
-        public const int JwtExpirationTimeInHours = 12;
+        public const int JwtExpirationTimeInMinutes = 10;
+
+        public const int JwtExpirationTimeInDays = 7;
 
         public const int PasswordMinLength = 5;
 

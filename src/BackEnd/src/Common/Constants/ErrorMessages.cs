@@ -1,4 +1,6 @@
-﻿namespace Common.Constants
+﻿using System.Collections.Generic;
+
+namespace Common.Constants
 {
     public static class ErrorMessages
     {
@@ -108,6 +110,12 @@
 
         public const string ChangeEmailErrorMessage = "Нещо се обърка, при смяна на имейла.";
         public const string ChangeEmailDifferentEmailsErrorMessage = "Новият имейл трябва да е различен от стария";
+
+        #endregion
+
+        #region Token
+
+        public const string AccessTokenInvalidErrorMessage = "Невалидна сесия";
 
         #endregion
     }
