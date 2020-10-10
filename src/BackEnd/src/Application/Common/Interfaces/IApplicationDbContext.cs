@@ -7,6 +7,8 @@
 
     public interface IApplicationDbContext
     {
+        public DbSet<User> Users { get; set; }
+
         public DbSet<Image> Images { get; set; }
 
         public DbSet<Reaction> Reactions { get; set; }

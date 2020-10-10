@@ -59,6 +59,7 @@
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
                         ValidateIssuer = false,
                         ValidateAudience = false,
+                        ValidateLifetime = true,
                     };
                 });
 

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
+    using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
     using Common.Constants;
@@ -45,46 +46,93 @@
                     return Result<TokenModel>.Failure(ErrorMessages.EmailNotConfirmedErrorMessage);
                 }
 
-                var userRoles = await this.userManager.GetRolesAsync(user);
+                var tokenModel = await this.GenerateTokenModel(user);
 
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
+                user.RefreshToken = tokenModel.RefreshToken;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Constants.JwtExpirationTimeInMinutes);
 
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
+                await this.userManager.UpdateAsync(user);
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"]));
-
-                var token = new JwtSecurityToken(
-                    expires: DateTime.UtcNow.AddHours(Constants.JwtExpirationTimeInHours),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
-
-                bool isStore = false;
-                if (userRoles.Contains(Constants.StoreRoleName))
-                {
-                    isStore = true;
-                }
-
-                var result = new TokenModel
-                {
-                    Token = new JwtSecurityTokenHandler().WriteToken(token),
-                    Expires = token.ValidTo,
-                    Id = user.Id,
-                    IsStore = isStore,
-                };
-
-                return Result<TokenModel>.Success(result);
+                return Result<TokenModel>.Success(tokenModel);
             }
             else
             {
                 return Result<TokenModel>.Failure(ErrorMessages.LoginFailureErrorMessage);
             }
+        }
+
+        public async Task<TokenModel> GenerateTokenModel(User user)
+        {
+            var userRoles = await this.userManager.GetRolesAsync(user);
+
+            var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+            foreach (var userRole in userRoles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"]));
+
+            var token = new JwtSecurityToken(
+                expires: DateTime.UtcNow.AddDays(Constants.JwtExpirationTimeInDays),
+                claims: authClaims,
+                issuer: this.configuration["JWT:ValidIssuer"],
+                audience: this.configuration["JWT:ValidAudience"],
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
+
+            bool isStore = false;
+            if (userRoles.Contains(Constants.StoreRoleName))
+            {
+                isStore = true;
+            }
+
+            var result = new TokenModel
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
+                RefreshToken = this.GenerateRefreshToken(),
+                Expires = token.ValidTo,
+                Id = user.Id,
+                IsStore = isStore,
+            };
+
+            return result;
+        }
+
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"])),
+                ValidateLifetime = false,
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return null;
+            }
+
+            return principal;
         }
     }
 }

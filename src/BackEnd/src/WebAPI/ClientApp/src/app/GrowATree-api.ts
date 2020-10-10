@@ -91,6 +91,7 @@ export interface IAuthClient {
     resendLinkConfirmEmail(confirmEmailCommand: ResendConfirmationLinkCommand): Observable<ResultOfBoolean>;
     forgottenPassword(command: ForgottenPasswordCommand): Observable<ResultOfBoolean>;
     resetPassword(command: ResetPasswordCommand): Observable<ResultOfBoolean>;
+    refreshToken(command: RefreshTokenCommand): Observable<ResultOfTokenModel>;
 }
 
 @Injectable({
@@ -417,6 +418,58 @@ export class AuthClient implements IAuthClient {
         }
         return _observableOf<ResultOfBoolean>(<any>null);
     }
+
+    refreshToken(command: RefreshTokenCommand): Observable<ResultOfTokenModel> {
+        let url_ = this.baseUrl + "/api/Auth/refresh-token";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRefreshToken(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRefreshToken(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfTokenModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfTokenModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRefreshToken(response: HttpResponseBase): Observable<ResultOfTokenModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfTokenModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfTokenModel>(<any>null);
+    }
 }
 
 export class ResultOfBoolean implements IResultOfBoolean {
@@ -644,7 +697,8 @@ export interface IResultOfTokenModel {
 }
 
 export class TokenModel implements ITokenModel {
-    token?: string | undefined;
+    accessToken?: string | undefined;
+    refreshToken?: string | undefined;
     expires?: Date;
     id?: string | undefined;
     isStore?: boolean;
@@ -660,7 +714,8 @@ export class TokenModel implements ITokenModel {
 
     init(_data?: any) {
         if (_data) {
-            this.token = _data["token"];
+            this.accessToken = _data["accessToken"];
+            this.refreshToken = _data["refreshToken"];
             this.expires = _data["expires"] ? new Date(_data["expires"].toString()) : <any>undefined;
             this.id = _data["id"];
             this.isStore = _data["isStore"];
@@ -676,7 +731,8 @@ export class TokenModel implements ITokenModel {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["token"] = this.token;
+        data["accessToken"] = this.accessToken;
+        data["refreshToken"] = this.refreshToken;
         data["expires"] = this.expires ? this.expires.toISOString() : <any>undefined;
         data["id"] = this.id;
         data["isStore"] = this.isStore;
@@ -685,7 +741,8 @@ export class TokenModel implements ITokenModel {
 }
 
 export interface ITokenModel {
-    token?: string | undefined;
+    accessToken?: string | undefined;
+    refreshToken?: string | undefined;
     expires?: Date;
     id?: string | undefined;
     isStore?: boolean;
@@ -885,6 +942,46 @@ export interface IResetPasswordCommand {
     email?: string | undefined;
     token?: string | undefined;
     password?: string | undefined;
+}
+
+export class RefreshTokenCommand implements IRefreshTokenCommand {
+    accessToken!: string;
+    refreshToken!: string;
+
+    constructor(data?: IRefreshTokenCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.accessToken = _data["accessToken"];
+            this.refreshToken = _data["refreshToken"];
+        }
+    }
+
+    static fromJS(data: any): RefreshTokenCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new RefreshTokenCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["accessToken"] = this.accessToken;
+        data["refreshToken"] = this.refreshToken;
+        return data; 
+    }
+}
+
+export interface IRefreshTokenCommand {
+    accessToken: string;
+    refreshToken: string;
 }
 
 export class SwaggerException extends Error {
