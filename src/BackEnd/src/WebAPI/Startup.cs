@@ -73,7 +73,8 @@ namespace GrowATree.WebAPI
 
                 configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             })
-            .AddScoped<IEmailSender, EmailSender>();
+            .AddScoped<IEmailSender, EmailSender>()
+            .AddScoped<ICloudinaryService, CloudinaryService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
