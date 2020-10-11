@@ -10,6 +10,10 @@
     /// <typeparam name="TMeta">Type of the meta that is returned.</typeparam>
     public class MetaResult<TData, TMeta>
     {
+        public MetaResult()
+        {
+        }
+
         public MetaResult(bool succeeded, TData data, TMeta meta, IEnumerable<string> errors)
         {
             this.Succeeded = succeeded;
