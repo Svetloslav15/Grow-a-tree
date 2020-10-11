@@ -1,11 +1,13 @@
 ﻿namespace Common.Services
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Common.Interfaces;
     using Microsoft.AspNetCore.Http;
-    using System.IO;
-    using System.Threading.Tasks;
 
     public class CloudinaryService : ICloudinaryService
     {
@@ -31,10 +33,11 @@
                 var uploadParams = new ImageUploadParams()
                 {
                     File = new FileDescription(file.FileName, uploadStream),
+                    PublicId = $"GrowATree/{Guid.NewGuid().ToString()}",
                 };
                 var result = await this.cloudinary.UploadAsync(uploadParams);
 
-                url = result.Uri.AbsoluteUri;
+                url = result.Url.AbsoluteUri;
             }
 
             return url;
@@ -52,7 +55,7 @@
                 "image/x-png", "image/gif", "image/jpeg", "image/jpg", "image/png", "image/gif", "image/svg", "video/x-msvideo", "video/mp4",
             };
 
-            if (validTypes.Contains(photoFile.ContentType) == false)
+            if (!validTypes.Contains(photoFile.ContentType))
             {
                 return false;
             }

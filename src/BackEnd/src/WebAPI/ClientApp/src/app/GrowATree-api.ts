@@ -474,7 +474,8 @@ export class AuthClient implements IAuthClient {
 
 export interface IUsersClient {
     getById(id: string | null): Observable<ResultOfUserModel>;
-    getAll(page: number | null | undefined, perPage: number | null | undefined): Observable<ResultOfUsersListModel>;
+    getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel>;
+    edit(id: string | null | undefined, firstName: string | null | undefined, lastName: string | null | undefined, username: string | null | undefined, city: string | null | undefined, phoneNumber: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfUserModel>;
 }
 
 @Injectable({
@@ -541,11 +542,15 @@ export class UsersClient implements IUsersClient {
         return _observableOf<ResultOfUserModel>(<any>null);
     }
 
-    getAll(page: number | null | undefined, perPage: number | null | undefined): Observable<ResultOfUsersListModel> {
+    getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel> {
         let url_ = this.baseUrl + "/api/Users/all?";
-        if (page !== undefined)
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
             url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
-        if (perPage !== undefined)
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
             url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
@@ -591,6 +596,71 @@ export class UsersClient implements IUsersClient {
             }));
         }
         return _observableOf<ResultOfUsersListModel>(<any>null);
+    }
+
+    edit(id: string | null | undefined, firstName: string | null | undefined, lastName: string | null | undefined, username: string | null | undefined, city: string | null | undefined, phoneNumber: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfUserModel> {
+        let url_ = this.baseUrl + "/api/Users/edit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (id !== null && id !== undefined)
+            content_.append("Id", id.toString());
+        if (firstName !== null && firstName !== undefined)
+            content_.append("FirstName", firstName.toString());
+        if (lastName !== null && lastName !== undefined)
+            content_.append("LastName", lastName.toString());
+        if (username !== null && username !== undefined)
+            content_.append("Username", username.toString());
+        if (city !== null && city !== undefined)
+            content_.append("City", city.toString());
+        if (phoneNumber !== null && phoneNumber !== undefined)
+            content_.append("PhoneNumber", phoneNumber.toString());
+        if (profilePictureFile !== null && profilePictureFile !== undefined)
+            content_.append("ProfilePictureFile", profilePictureFile.data, profilePictureFile.fileName ? profilePictureFile.fileName : "ProfilePictureFile");
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfUserModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfUserModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processEdit(response: HttpResponseBase): Observable<ResultOfUserModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfUserModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfUserModel>(<any>null);
     }
 }
 
@@ -722,7 +792,7 @@ export class RegisterCommand implements IRegisterCommand {
     email!: string;
     username!: string;
     password!: string;
-    city!: string;
+    city?: string | undefined;
 
     constructor(data?: IRegisterCommand) {
         if (data) {
@@ -763,7 +833,7 @@ export interface IRegisterCommand {
     email: string;
     username: string;
     password: string;
-    city: string;
+    city?: string | undefined;
 }
 
 export class ResultOfTokenModel implements IResultOfTokenModel {
@@ -1439,6 +1509,11 @@ export interface IPagination {
     totalPages?: number;
     currentPage?: number;
     perPage?: number;
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class SwaggerException extends Error {

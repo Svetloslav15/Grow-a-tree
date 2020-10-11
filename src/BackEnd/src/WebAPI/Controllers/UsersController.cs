@@ -7,6 +7,7 @@
     using Common.Constants;
     using GrowATree.Application.Common.Models;
     using GrowATree.Application.Models.Users;
+    using GrowATree.Application.Users.Commands.Edit;
     using GrowATree.Application.Users.Queries.GetAll;
     using GrowATree.Application.Users.Queries.GetById;
     using Microsoft.AspNetCore.Mvc;
@@ -69,6 +70,31 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<UsersListModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpPost("edit")]
+        public async Task<Result<UserModel>> Edit([FromForm] EditUserCommand command)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<UserModel>.Failure(errorMessage);
+                }
+
+                return await this.Mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<UserModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }

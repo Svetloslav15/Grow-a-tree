@@ -306,8 +306,7 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32",
-              "nullable": true
+              "format": "int32"
             },
             "x-position": 1
           },
@@ -316,8 +315,7 @@
             "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32",
-              "nullable": true
+              "format": "int32"
             },
             "x-position": 2
           }
@@ -329,6 +327,100 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ResultOfUsersListModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/edit": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_Edit",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "FirstName",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "maxLength": 30,
+              "minLength": 3,
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "LastName",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "maxLength": 30,
+              "minLength": 3,
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "Username",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "maxLength": 15,
+              "minLength": 3,
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "City",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 5
+          },
+          {
+            "name": "PhoneNumber",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "pattern": "/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/",
+              "nullable": true
+            },
+            "x-position": 6
+          },
+          {
+            "type": "file",
+            "name": "ProfilePictureFile",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "nullable": true
+            },
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfUserModel"
                 }
               }
             }
@@ -424,8 +516,7 @@
         "required": [
           "email",
           "username",
-          "password",
-          "city"
+          "password"
         ],
         "properties": {
           "email": {
@@ -445,7 +536,7 @@
           },
           "city": {
             "type": "string",
-            "minLength": 1
+            "nullable": true
           }
         }
       },
