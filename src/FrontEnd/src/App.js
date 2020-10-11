@@ -1,4 +1,5 @@
 import React from 'react';
+import 'mdbreact/dist/css/mdb.css';
 import './App.scss';
 import HomePage from './components/pages/HomePage/HomePage';
 

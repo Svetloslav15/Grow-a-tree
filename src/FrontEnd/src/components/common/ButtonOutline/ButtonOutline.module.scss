@@ -1,8 +1,8 @@
 .btn {
-  background-color: white;
-  border: 2px solid #002F3E;
+  background-color: white !important;
+  border: 2px solid #002F3E !important;
   padding: 0.8em 4em;
-  color: #002F3E;
+  color: #002F3E !important;
   border-radius: 0 20px;
   cursor: pointer;
   outline: none;
@@ -11,6 +11,6 @@
 }
 
 .btn:hover {
-  background-color: #002F3E;
-  color: white;
+  color: #002F3E !important;
+  border: 2px solid #002F3E !important;
 }

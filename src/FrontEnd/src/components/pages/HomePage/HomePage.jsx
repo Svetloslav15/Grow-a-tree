@@ -7,7 +7,6 @@ const HomePage = () => {
   return (
       <div>
           <h1 className={h1}>Home Page</h1>
-          <ButtonFill>Вход</ButtonFill>
           <ButtonOutline>Вход</ButtonOutline>
       </div>
   );

@@ -1,9 +1,10 @@
 import React from 'react';
+import { MDBBtn } from 'mdbreact';
 import {btn} from './ButtonOutline.module.scss';
 
 const ButtonOutline = ({children}) => {
     return (
-        <button className={btn}>{children}</button>
+        <MDBBtn className={btn} outline>{children}</MDBBtn>
     );
 };
 
