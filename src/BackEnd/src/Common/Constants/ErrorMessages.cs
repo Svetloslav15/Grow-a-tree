@@ -118,5 +118,11 @@ namespace Common.Constants
         public const string AccessTokenInvalidErrorMessage = "Невалидна сесия";
 
         #endregion
+
+        #region User
+
+        public const string UserNotFoundErrorMessage = "Потребителят не беше намерен";
+
+        #endregion
     }
 }
