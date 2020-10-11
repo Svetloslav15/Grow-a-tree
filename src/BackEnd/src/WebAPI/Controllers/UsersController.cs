@@ -42,7 +42,7 @@
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<UserModel>.Failure(ErrorMessages.AccountFailureErrorMessage);
+                return Result<UserModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
@@ -68,7 +68,7 @@
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<UsersListModel>.Failure(ErrorMessages.AccountFailureErrorMessage);
+                return Result<UsersListModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }

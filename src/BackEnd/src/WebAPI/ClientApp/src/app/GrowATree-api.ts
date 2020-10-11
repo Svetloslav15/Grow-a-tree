@@ -474,7 +474,7 @@ export class AuthClient implements IAuthClient {
 
 export interface IUsersClient {
     getById(id: string | null): Observable<ResultOfUserModel>;
-    getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel>;
+    getAll(page: number | null | undefined, perPage: number | null | undefined): Observable<ResultOfUsersListModel>;
 }
 
 @Injectable({
@@ -541,15 +541,11 @@ export class UsersClient implements IUsersClient {
         return _observableOf<ResultOfUserModel>(<any>null);
     }
 
-    getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel> {
+    getAll(page: number | null | undefined, perPage: number | null | undefined): Observable<ResultOfUsersListModel> {
         let url_ = this.baseUrl + "/api/Users/all?";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
+        if (page !== undefined)
             url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
-        if (perPage === null)
-            throw new Error("The parameter 'perPage' cannot be null.");
-        else if (perPage !== undefined)
+        if (perPage !== undefined)
             url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
