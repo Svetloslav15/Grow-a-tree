@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Mappings\" />
+    <Folder Include="Users\Queries\GetById\" />
   </ItemGroup>
 
 </Project>
