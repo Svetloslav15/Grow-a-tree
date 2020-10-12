@@ -5,7 +5,6 @@
     using GrowATree.Application.Common.Models;
     using GrowATree.Application.Models.Users;
     using MediatR;
-    using Microsoft.AspNetCore.Http;
 
     public class EditUserCommand : IRequest<Result<UserModel>>
     {
@@ -29,7 +28,5 @@
 
         [RegularExpression(Constants.PhoneNumberRegEx, ErrorMessage = ErrorMessages.PhoneNumberFormatErrorMessage)]
         public string PhoneNumber { get; set; }
-
-        public IFormFile ProfilePictureFile { get; set; }
     }
 }

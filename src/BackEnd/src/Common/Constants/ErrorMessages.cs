@@ -141,6 +141,8 @@ namespace Common.Constants
 
         public const string InvalidProfilePictureFormatErrorMessage = "Профилната снимка е в невалиден формат";
 
+        public const string ProfilePictureRequiredErrorMessage = "Липсва профилна снимка";
+
         #endregion
     }
 }

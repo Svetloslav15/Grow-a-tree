@@ -40,23 +40,11 @@
                     return Result<UserModel>.Failure(ErrorMessages.UsernameInUseErrorMessage);
                 }
 
-                if (!this.cloudinaryService.IsFileValid(request.ProfilePictureFile))
-                {
-                    return Result<UserModel>.Failure(ErrorMessages.InvalidProfilePictureFormatErrorMessage);
-                }
-
-                string uploadedImageUrl = null;
-                if (request.ProfilePictureFile != null)
-                {
-                    uploadedImageUrl = await this.cloudinaryService.UploudAsync(request.ProfilePictureFile);
-                }
-
                 currentUser.City = request.City;
                 currentUser.FirstName = request.FirstName;
                 currentUser.LastName = request.LastName;
                 currentUser.PhoneNumber = request.PhoneNumber;
                 currentUser.UserName = request.Username;
-                currentUser.ProfilePictureUrl = uploadedImageUrl == null ? currentUser.ProfilePictureUrl : uploadedImageUrl;
 
                 var result = await this.userManager.UpdateAsync(currentUser);
 

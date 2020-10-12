@@ -335,6 +335,44 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "ChangeProfilePicture",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Id",
+									"value": "42619fbb-fb36-4c25-863f-1fed2d1e7843",
+									"type": "text"
+								},
+								{
+									"key": "ProfilePictureFile",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/121306493_3850763454953528_7204199188898699717_n.jpg"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/users/change-profile-picture",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"change-profile-picture"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
