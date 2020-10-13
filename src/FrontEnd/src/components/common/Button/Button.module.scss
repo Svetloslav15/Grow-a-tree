@@ -1,0 +1,80 @@
+.BaseButton {
+  padding: 0.8em 4em;
+  border-radius: 0 20px;
+  cursor: pointer;
+  outline: none;
+  text-align: center;
+  transition: all .2s ease-in-out;
+}
+
+.GreenOutline {
+  background-color: white !important;
+  color: #4CA771 !important;
+  border: 2px solid #4CA771 !important;
+}
+
+.GreenOutline:hover {
+  background-color: #4CA771 !important;
+  color: white !important;
+  border: 2px solid white !important;
+}
+
+.Green {
+  background-color: #4CA771 !important;
+  color: white;
+  border: 2px solid white;
+}
+
+.Green:hover {
+  background-color: white !important;
+  color: #4CA771;
+  border: 2px solid #4CA771;
+}
+
+.DarkOutline {
+  background-color: white !important;
+  border: 2px solid #002F3E !important;
+  color: #002F3E !important;
+}
+
+.DarkOutline:hover {
+  color: white !important;
+  background-color: #002F3E !important;
+  border: 2px solid white !important;
+}
+
+.Dark {
+  background-color: #002F3E !important;
+  border: 2px solid white !important;
+  color: white !important;
+}
+
+.Dark:hover {
+  color: #002F3E !important;
+  background-color: white !important;
+  border: 2px solid #002F3E !important;
+}
+
+.Red {
+  background-color: #EF325A !important;
+  border: 2px solid white !important;
+  color: white !important;
+}
+
+.Red:hover {
+  color: #EF325A !important;
+  background-color: white !important;
+  border: 2px solid #EF325A !important;
+}
+
+.Yellow {
+  background-color: #F0B241 !important;
+  border: 2px solid white !important;
+  color: white !important;
+}
+
+.Yellow:hover {
+  color: #F0B241 !important;
+  background-color: white !important;
+  border: 2px solid #F0B241 !important;
+}

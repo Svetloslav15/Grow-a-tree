@@ -1,15 +1,19 @@
 import React from 'react';
 import {h1} from './HomePage.module.scss';
-import ButtonOutline from "../../common/ButtonOutline/ButtonOutline";
-import ButtonFill from "../../common/ButtonFill/ButtonFill";
+import Button from '../../common/Button/Button'
 
 const HomePage = () => {
-  return (
-      <div>
-          <h1 className={h1}>Home Page</h1>
-          <ButtonOutline>Вход</ButtonOutline>
-      </div>
-  );
+    return (
+        <div>
+            <h1 className={h1}>Home Page</h1>
+            <Button type='Green'>Green</Button>
+            <Button type='GreenOutline'>GreenOutline</Button>
+            <Button type='Dark'>Dark</Button>
+            <Button type='DarkOutline'>DarkOutline</Button>
+            <Button type='Red'>Red</Button>
+            <Button type='Yellow'>Yellow</Button>
+        </div>
+    );
 };
 
 export default HomePage;
