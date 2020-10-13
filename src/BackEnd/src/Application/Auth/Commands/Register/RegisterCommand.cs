@@ -24,7 +24,6 @@
         [MaxLength(Constants.PasswordMaxLength, ErrorMessage = ErrorMessages.PasswordMaxLengthErrorMessage)]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = ErrorMessages.CityRequiredErrorMessage)]
         public string City { get; set; }
     }
 }

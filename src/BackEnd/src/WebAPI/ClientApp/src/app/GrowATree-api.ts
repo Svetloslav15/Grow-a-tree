@@ -472,6 +472,241 @@ export class AuthClient implements IAuthClient {
     }
 }
 
+export interface IUsersClient {
+    getById(id: string | null): Observable<ResultOfUserModel>;
+    getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel>;
+    edit(command: EditUserCommand): Observable<ResultOfUserModel>;
+    changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class UsersClient implements IUsersClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getById(id: string | null): Observable<ResultOfUserModel> {
+        let url_ = this.baseUrl + "/api/Users/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfUserModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfUserModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<ResultOfUserModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfUserModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfUserModel>(<any>null);
+    }
+
+    getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel> {
+        let url_ = this.baseUrl + "/api/Users/all?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfUsersListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfUsersListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<ResultOfUsersListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfUsersListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfUsersListModel>(<any>null);
+    }
+
+    edit(command: EditUserCommand): Observable<ResultOfUserModel> {
+        let url_ = this.baseUrl + "/api/Users/edit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processEdit(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfUserModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfUserModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processEdit(response: HttpResponseBase): Observable<ResultOfUserModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfUserModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfUserModel>(<any>null);
+    }
+
+    changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString> {
+        let url_ = this.baseUrl + "/api/Users/change-profile-picture";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (id !== null && id !== undefined)
+            content_.append("Id", id.toString());
+        if (profilePictureFile !== null && profilePictureFile !== undefined)
+            content_.append("ProfilePictureFile", profilePictureFile.data, profilePictureFile.fileName ? profilePictureFile.fileName : "ProfilePictureFile");
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processChangeProfilePicture(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processChangeProfilePicture(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfString>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfString>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processChangeProfilePicture(response: HttpResponseBase): Observable<ResultOfString> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfString.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfString>(<any>null);
+    }
+}
+
 export class ResultOfBoolean implements IResultOfBoolean {
     data?: boolean;
     succeeded?: boolean;
@@ -600,7 +835,7 @@ export class RegisterCommand implements IRegisterCommand {
     email!: string;
     username!: string;
     password!: string;
-    city!: string;
+    city?: string | undefined;
 
     constructor(data?: IRegisterCommand) {
         if (data) {
@@ -641,7 +876,7 @@ export interface IRegisterCommand {
     email: string;
     username: string;
     password: string;
-    city: string;
+    city?: string | undefined;
 }
 
 export class ResultOfTokenModel implements IResultOfTokenModel {
@@ -982,6 +1217,454 @@ export class RefreshTokenCommand implements IRefreshTokenCommand {
 export interface IRefreshTokenCommand {
     accessToken: string;
     refreshToken: string;
+}
+
+export class ResultOfUserModel implements IResultOfUserModel {
+    data?: UserModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfUserModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? UserModel.fromJS(_data["data"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfUserModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfUserModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfUserModel {
+    data?: UserModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class UserModel implements IUserModel {
+    id?: string | undefined;
+    email?: string | undefined;
+    userName?: string | undefined;
+    city?: string | undefined;
+    phoneNumber?: string | undefined;
+    profilePictureUrl?: string | undefined;
+
+    constructor(data?: IUserModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.email = _data["email"];
+            this.userName = _data["userName"];
+            this.city = _data["city"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.profilePictureUrl = _data["profilePictureUrl"];
+        }
+    }
+
+    static fromJS(data: any): UserModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["email"] = this.email;
+        data["userName"] = this.userName;
+        data["city"] = this.city;
+        data["phoneNumber"] = this.phoneNumber;
+        data["profilePictureUrl"] = this.profilePictureUrl;
+        return data; 
+    }
+}
+
+export interface IUserModel {
+    id?: string | undefined;
+    email?: string | undefined;
+    userName?: string | undefined;
+    city?: string | undefined;
+    phoneNumber?: string | undefined;
+    profilePictureUrl?: string | undefined;
+}
+
+export class ResultOfUsersListModel implements IResultOfUsersListModel {
+    data?: UsersListModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfUsersListModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? UsersListModel.fromJS(_data["data"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfUsersListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfUsersListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfUsersListModel {
+    data?: UsersListModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class MetaResultOfIListOfUserModelAndPaginationMeta implements IMetaResultOfIListOfUserModelAndPaginationMeta {
+    data?: UserModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfUserModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(UserModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfUserModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfUserModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfUserModelAndPaginationMeta {
+    data?: UserModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class UsersListModel extends MetaResultOfIListOfUserModelAndPaginationMeta implements IUsersListModel {
+
+    constructor(data?: IUsersListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): UsersListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UsersListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IUsersListModel extends IMetaResultOfIListOfUserModelAndPaginationMeta {
+}
+
+export class PaginationMeta implements IPaginationMeta {
+    pagination?: Pagination | undefined;
+
+    constructor(data?: IPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPaginationMeta {
+    pagination?: Pagination | undefined;
+}
+
+export class Pagination implements IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+
+    constructor(data?: IPagination) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalItems = _data["totalItems"];
+            this.totalPages = _data["totalPages"];
+            this.currentPage = _data["currentPage"];
+            this.perPage = _data["perPage"];
+        }
+    }
+
+    static fromJS(data: any): Pagination {
+        data = typeof data === 'object' ? data : {};
+        let result = new Pagination();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalItems"] = this.totalItems;
+        data["totalPages"] = this.totalPages;
+        data["currentPage"] = this.currentPage;
+        data["perPage"] = this.perPage;
+        return data; 
+    }
+}
+
+export interface IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+}
+
+export class EditUserCommand implements IEditUserCommand {
+    id?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    username!: string;
+    city!: string;
+    phoneNumber?: string | undefined;
+
+    constructor(data?: IEditUserCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.username = _data["username"];
+            this.city = _data["city"];
+            this.phoneNumber = _data["phoneNumber"];
+        }
+    }
+
+    static fromJS(data: any): EditUserCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new EditUserCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["username"] = this.username;
+        data["city"] = this.city;
+        data["phoneNumber"] = this.phoneNumber;
+        return data; 
+    }
+}
+
+export interface IEditUserCommand {
+    id?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    username: string;
+    city: string;
+    phoneNumber?: string | undefined;
+}
+
+export class ResultOfString implements IResultOfString {
+    data?: string | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfString) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"];
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfString {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfString();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfString {
+    data?: string | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class SwaggerException extends Error {

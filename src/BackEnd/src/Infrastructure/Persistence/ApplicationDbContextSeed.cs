@@ -12,9 +12,9 @@
     {
         public static async Task SeedDefaultUsersAsync(UserManager<User> userManager)
         {
-            var defaultUser = new User { UserName = "user1", Email = "user1@trees.com", City = "Благоевград", EmailConfirmed = true, };
-            var defaultUser1 = new User { UserName = "user2", Email = "user2@trees.com", City = "Благоевград", EmailConfirmed = true, };
-            var defaultUser2 = new User { UserName = "user3", Email = "user3@trees.com", City = "Благоевград", EmailConfirmed = true, };
+            var defaultUser = new User { UserName = "user1", Email = "user1@trees.com", City = "Благоевград", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
+            var defaultUser1 = new User { UserName = "user2", Email = "user2@trees.com", City = "Благоевград", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
+            var defaultUser2 = new User { UserName = "user3", Email = "user3@trees.com", City = "Благоевград", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
 
             if (!userManager.Users.Any(x => x.UserName == "user1"))
             {
@@ -39,9 +39,9 @@
 
         public static async Task SeedDefaultStoresAsync(UserManager<User> userManager, ApplicationDbContext context)
         {
-            var storeUser = new User { UserName = "storeUser1", Email = "storeUser1@trees.com", City = "Благоевград", PhoneNumber = "0898700133", EmailConfirmed = true, };
-            var storeUser1 = new User { UserName = "storeUser2", Email = "storeUser2@trees.com", City = "Благоевград", PhoneNumber = "0898700134", EmailConfirmed = true, };
-            var storeUser2 = new User { UserName = "storeUser3", Email = "storeUser3@trees.com", City = "Благоевград", PhoneNumber = "0898700135", EmailConfirmed = true, };
+            var storeUser = new User { UserName = "storeUser1", Email = "storeUser1@trees.com", City = "Благоевград", PhoneNumber = "0898700133", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
+            var storeUser1 = new User { UserName = "storeUser2", Email = "storeUser2@trees.com", City = "Благоевград", PhoneNumber = "0898700134", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
+            var storeUser2 = new User { UserName = "storeUser3", Email = "storeUser3@trees.com", City = "Благоевград", PhoneNumber = "0898700135", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
 
             if (!userManager.Users.Any(x => x.UserName == "storeUser1"))
             {

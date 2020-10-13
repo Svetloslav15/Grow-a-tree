@@ -261,6 +261,152 @@
           }
         }
       }
+    },
+    "/api/Users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfUserModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/all": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetAll",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfUsersListModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/edit": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_Edit",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditUserCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfUserModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/change-profile-picture": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_ChangeProfilePicture",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "type": "file",
+            "name": "ProfilePictureFile",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "nullable": true
+            },
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -350,8 +496,7 @@
         "required": [
           "email",
           "username",
-          "password",
-          "city"
+          "password"
         ],
         "properties": {
           "email": {
@@ -371,7 +516,7 @@
           },
           "city": {
             "type": "string",
-            "minLength": 1
+            "nullable": true
           }
         }
       },
@@ -508,6 +653,222 @@
           "refreshToken": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      },
+      "ResultOfUserModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserModel"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UserModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "profilePictureUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ResultOfUsersListModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UsersListModel"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UsersListModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MetaResultOfIListOfUserModelAndPaginationMeta"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "MetaResultOfIListOfUserModelAndPaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/UserModel"
+            }
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pagination": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Pagination"
+              }
+            ]
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perPage": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "EditUserCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "username",
+          "city"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "maxLength": 30,
+            "minLength": 3,
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "maxLength": 30,
+            "minLength": 3,
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 3
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phoneNumber": {
+            "type": "string",
+            "pattern": "/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/",
+            "nullable": true
+          }
+        }
+      },
+      "ResultOfString": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           }
         }
       }

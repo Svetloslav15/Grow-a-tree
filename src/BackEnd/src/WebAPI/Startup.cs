@@ -1,6 +1,7 @@
 namespace GrowATree.WebAPI
 {
     using System.Linq;
+    using CloudinaryDotNet;
     using Common.Constants;
     using Common.Interfaces;
     using Common.Services;
@@ -72,8 +73,7 @@ namespace GrowATree.WebAPI
                 });
 
                 configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-            })
-            .AddScoped<IEmailSender, EmailSender>();
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

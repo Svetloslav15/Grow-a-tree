@@ -58,12 +58,6 @@ namespace Common.Constants
 
         #endregion
 
-        #region Common
-
-        public const string CommonErrorMessage = "Възникна грешка. Моля опитайте отново!";
-
-        #endregion
-
         #region Store
 
         public const string StoreNotFound = "Магазинът не беше намерен";
@@ -92,6 +86,8 @@ namespace Common.Constants
 
         public const string PhoneNumberRequiredErrorMessage = "Телефонният номер е задължително поле";
 
+        public const string PhoneNumberFormatErrorMessage = "Телефонният номер е в невалиден формат";
+
         #endregion
 
         #region General
@@ -116,6 +112,36 @@ namespace Common.Constants
         #region Token
 
         public const string AccessTokenInvalidErrorMessage = "Невалидна сесия";
+
+        #endregion
+
+        #region User
+
+        public const string UserNotFoundErrorMessage = "Потребителят не беше намерен";
+
+        #endregion
+
+        #region FirstName
+
+        public const string FirstNameMinLengthErrorMessage = "Първото име трябва да е поне 3 символа";
+
+        public const string FirstNameMaxLengthErrorMessage = "Първото име трябва да е най-много 30 символа";
+
+        #endregion
+
+        #region LastName
+
+        public const string LastNameMinLengthErrorMessage = "Фамилията трябва да е поне 3 символа";
+
+        public const string LastNameMaxLengthErrorMessage = "Фамилията трябва да е най-много 30 символа";
+
+        #endregion
+
+        #region ProfilePicture
+
+        public const string InvalidProfilePictureFormatErrorMessage = "Профилната снимка е в невалиден формат";
+
+        public const string ProfilePictureRequiredErrorMessage = "Липсва профилна снимка";
 
         #endregion
     }

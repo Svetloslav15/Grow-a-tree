@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "0e9ae700-338d-45bf-b5a8-1902715bd3eb",
-		"name": "GrowATree",
+		"_postman_id": "0a882328-b90f-4bd2-bbbe-41b3616f497a",
+		"name": "GrowATree Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -47,7 +47,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "cc261bf0-a6f6-453e-8734-83cf019ced2d",
+								"id": "8537f1e4-52dc-4ce2-9f3b-9fa0f8f9f8b5",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -141,7 +141,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "c05d9937-0647-4fd4-9ebd-d1e188fbe453",
+								"id": "f1531b30-fb05-4e95-bff9-18a95d2f59f0",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -194,35 +194,13 @@
 					"response": []
 				},
 				{
-					"name": "Forgotten Password",
+					"name": "Refresh Token",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Email\": \"svetli.novoselski@gmail.comm\"\r\n}"
-						},
-						"url": {
-							"raw": "{{LocalUrl}}/auth/forgotten-password",
-							"host": [
-								"{{LocalUrl}}"
-							],
-							"path": [
-								"auth",
-								"forgotten-password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Reset Password",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"Token\": \"CfDJ8AzeSyxcYVVJm+2zwiSh6Zpi9Smok/3164bTCRgx8VuWesmCwyabDC5ItLVfUsk+AXb/pzWtsnepnRzAaiSSPEESr8JkgtVSsMe3dDnGG8W8kmixlFMcK+e20rUGhL6moApLHiKGq3wdoM4ctXOHFcaGS9HHp510hx6zyxyd1TD+gCTyt7nkIuBkF4NP4EY4eUoLMOjTxqG24wpvy7sJXMmi2PsvzYuSHHEqMWbARqNH\"\r\n}",
+							"raw": "{\r\n    \"accessToken\": \"\",\r\n    \"refreshToken\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -230,26 +208,115 @@
 							}
 						},
 						"url": {
-							"raw": "{{LocalUrl}}/auth/reset-password",
+							"raw": "{{LocalUrl}}/auth/refresh-token",
 							"host": [
 								"{{LocalUrl}}"
 							],
 							"path": [
 								"auth",
-								"reset-password"
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "GetById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/42619fbb-fb36-4c25-863f-1fed2d1e7843",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"42619fbb-fb36-4c25-863f-1fed2d1e7843"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Change Email",
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/all?perPage=3",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"all"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditUser",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"newEmail\": \"svetli@novoselski.net\",\r\n    \"OldEmail\": \"svetli.novoselski@gmail.com\"\r\n}",
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "City",
+									"value": "Velingrad20",
+									"type": "text"
+								},
+								{
+									"key": "FirstName",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "LastName",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "PhoneNumber",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "ProfilePictureFile",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "Id",
+									"value": "42619fbb-fb36-4c25-863f-1fed2d1e7843",
+									"type": "text"
+								},
+								{
+									"key": "Username",
+									"value": "user1123123",
+									"type": "text"
+								}
+							],
 							"options": {
 								"raw": {
 									"language": "json"
@@ -257,13 +324,51 @@
 							}
 						},
 						"url": {
-							"raw": "{{LocalUrl}}/auth/change-email",
+							"raw": "{{LocalUrl}}/users/edit",
 							"host": [
 								"{{LocalUrl}}"
 							],
 							"path": [
-								"auth",
-								"change-email"
+								"users",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ChangeProfilePicture",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Id",
+									"value": "42619fbb-fb36-4c25-863f-1fed2d1e7843",
+									"type": "text"
+								},
+								{
+									"key": "ProfilePictureFile",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/121306493_3850763454953528_7204199188898699717_n.jpg"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/users/change-profile-picture",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"change-profile-picture"
 							]
 						}
 					},
