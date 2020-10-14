@@ -4,20 +4,45 @@ using GrowATree.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrowATree.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201014185619_RefactorTreeModel")]
+    partial class RefactorTreeModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("GrowATree.Domain.Entities.Image", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProductId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TreeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("TreeId");
+
+                    b.ToTable("Images");
+                });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.Product", b =>
                 {
@@ -41,24 +66,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.HasIndex("StoreId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.ProductImage", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.PromoCode", b =>
@@ -171,6 +178,9 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Images")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
 
@@ -197,24 +207,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Trees");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.TreeImage", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TreeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TreeId");
-
-                    b.ToTable("TreeImages");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.TreePost", b =>
@@ -597,18 +589,22 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("GrowATree.Domain.Entities.Image", b =>
+                {
+                    b.HasOne("GrowATree.Domain.Entities.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("GrowATree.Domain.Entities.Tree", "Tree")
+                        .WithMany()
+                        .HasForeignKey("TreeId");
+                });
+
             modelBuilder.Entity("GrowATree.Domain.Entities.Product", b =>
                 {
                     b.HasOne("GrowATree.Domain.Entities.Store", "Store")
                         .WithMany("Products")
                         .HasForeignKey("StoreId");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.ProductImage", b =>
-                {
-                    b.HasOne("GrowATree.Domain.Entities.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.PromoCode", b =>
@@ -641,13 +637,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.HasOne("GrowATree.Domain.Entities.User", "Owner")
                         .WithMany("Trees")
                         .HasForeignKey("OwnerId");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.TreeImage", b =>
-                {
-                    b.HasOne("GrowATree.Domain.Entities.Tree", "Tree")
-                        .WithMany("Images")
-                        .HasForeignKey("TreeId");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.TreePost", b =>
