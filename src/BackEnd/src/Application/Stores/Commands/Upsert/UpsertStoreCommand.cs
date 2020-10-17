@@ -5,7 +5,7 @@
     using GrowATree.Application.Common.Models;
     using MediatR;
 
-    public class UpsertCommand : IRequest<Result<bool>>
+    public class UpsertStoreCommand : IRequest<Result<bool>>
     {
         public string Id { get; set; }
 

@@ -22,9 +22,9 @@
 
         public const int NameMaxLength = 30;
 
-        public const int NicknameMinLength = 3;
+        public const int TreeNicknameMinLength = 3;
 
-        public const int NicknameMaxLength = 20;
+        public const int TreeNicknameMaxLength = 20;
 
         public const string PhoneNumberRegEx = @"/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/";
 

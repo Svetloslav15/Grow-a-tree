@@ -153,13 +153,19 @@ namespace Common.Constants
 
         #region Tree
 
-        public const string NicknameRequiredErrorMessage = "Името на дървото е задължително";
+        public const string TreeNicknameRequiredErrorMessage = "Името на дървото е задължително";
 
-        public const string NicknameInUseErrorMessage = "Името на дървото е заето";
+        public const string TreeNicknameInUseErrorMessage = "Името на дървото е заето";
 
-        public const string NicknameMinLengthErrorMessage = "Името на дървото трябва да е поне 3 символа";
+        public const string TreeNicknameMinLengthErrorMessage = "Името на дървото трябва да е поне 3 символа";
 
-        public const string NicknameMaxLengthErrorMessage = "Името на дървото трябва да е максимум 20 символа";
+        public const string TreeNicknameMaxLengthErrorMessage = "Името на дървото трябва да е максимум 20 символа";
+
+        public const string TreeTypeRequiredErrorMessage = "Типът на дървото е задължителен";
+
+        public const string TreeCategoryRequiredErrorMessage = "Категорията на дървото е задължителна";
+
+        public const string TreeLocationRequiredErrorMessage = "Локацията на дървото е задължителна";
 
         #endregion
     }

@@ -376,6 +376,75 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Trees",
+			"item": [
+				{
+					"name": "{{LocalUrl}}/trees/upsert",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Nickname",
+									"value": "tree1",
+									"type": "text"
+								},
+								{
+									"key": "Type",
+									"value": "bor",
+									"type": "text"
+								},
+								{
+									"key": "Longitude",
+									"value": "42.125415",
+									"type": "text"
+								},
+								{
+									"key": "Latitude",
+									"value": "42.125415",
+									"type": "text"
+								},
+								{
+									"key": "City",
+									"value": "Blagoevgrad",
+									"type": "text"
+								},
+								{
+									"key": "Category",
+									"value": "Iglolistno",
+									"type": "text"
+								},
+								{
+									"key": "OwnerId",
+									"value": "42619fbb-fb36-4c25-863f-1fed2d1e7843",
+									"type": "text"
+								},
+								{
+									"key": "ImageFiles",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/640-420-najstaroto-dyrvo-v-sveta-navyrshva-4847-godini.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}
