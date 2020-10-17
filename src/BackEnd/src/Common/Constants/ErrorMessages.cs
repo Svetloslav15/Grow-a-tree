@@ -167,6 +167,8 @@ namespace Common.Constants
 
         public const string TreeLocationRequiredErrorMessage = "Локацията на дървото е задължителна";
 
+        public const string TreeNotFoundErrorMessage = "Не съществува такова дърво";
+
         #endregion
     }
 }

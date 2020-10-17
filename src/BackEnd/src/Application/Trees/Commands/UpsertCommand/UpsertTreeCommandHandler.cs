@@ -28,54 +28,83 @@
 
         public async Task<Result<string>> Handle(UpsertTreeCommand request, CancellationToken cancellationToken)
         {
-            var owner = await this.userManager.FindByIdAsync(request.OwnerId);
-
-            if (owner == null)
+            if (request.Id != null)
             {
-                return Result<string>.Failure(ErrorMessages.UserNotFoundErrorMessage);
-            }
+                var model = await this.context.Trees
+                    .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            if (request.ImageFiles == null || request.ImageFiles.Count == 0)
-            {
-                return Result<string>.Failure(ErrorMessages.TreeImageRequiredErrorMessage);
-            }
-
-            if (await this.context.Trees.AnyAsync(x => x.Nickname == request.Nickname))
-            {
-                return Result<string>.Failure(ErrorMessages.TreeNicknameInUseErrorMessage);
-            }
-
-            var treeModel = new Tree
-            {
-                Nickname = request.Nickname,
-                Latitude = request.Latitude.Value,
-                Longitude = request.Longitude.Value,
-                Type = request.Type,
-                City = request.City,
-                Owner = owner,
-                OwnerId = owner.Id,
-                Category = request.Category,
-                PlantedOn = DateTime.Now,
-                Status = TreeStatus.GoodCondition,
-            };
-
-            foreach (var file in request.ImageFiles)
-            {
-                var imageUrl = await this.cloudinaryService.UploudAsync(file);
-                var newImageModel = new TreeImage
+                if (model == null)
                 {
-                    Url = imageUrl,
-                    Tree = treeModel,
-                    TreeId = treeModel.Id,
+                    return Result<string>.Failure(ErrorMessages.TreeNotFoundErrorMessage);
+                }
+
+                var treeWithNickname = await this.context.Trees.FirstOrDefaultAsync(x => x.Nickname == request.Nickname);
+                if (treeWithNickname != null && treeWithNickname != model)
+                {
+                    return Result<string>.Failure(ErrorMessages.TreeNicknameInUseErrorMessage);
+                }
+
+                model.Nickname = request.Nickname;
+                model.Latitude = request.Latitude.Value;
+                model.Longitude = request.Longitude.Value;
+                model.Type = request.Type;
+                model.City = request.City;
+                model.Category = request.Category;
+
+                await this.context.SaveChangesAsync(cancellationToken);
+                return Result<string>.Success(model.Id);
+            }
+            else
+            {
+                var owner = await this.userManager.FindByIdAsync(request.OwnerId);
+
+                if (owner == null)
+                {
+                    return Result<string>.Failure(ErrorMessages.UserNotFoundErrorMessage);
+                }
+
+                if (request.ImageFiles == null || request.ImageFiles.Count == 0)
+                {
+                    return Result<string>.Failure(ErrorMessages.TreeImageRequiredErrorMessage);
+                }
+
+                if (await this.context.Trees.AnyAsync(x => x.Nickname == request.Nickname))
+                {
+                    return Result<string>.Failure(ErrorMessages.TreeNicknameInUseErrorMessage);
+                }
+
+                var treeModel = new Tree
+                {
+                    Nickname = request.Nickname,
+                    Latitude = request.Latitude.Value,
+                    Longitude = request.Longitude.Value,
+                    Type = request.Type,
+                    City = request.City,
+                    Owner = owner,
+                    OwnerId = owner.Id,
+                    Category = request.Category,
+                    PlantedOn = DateTime.Now,
+                    Status = TreeStatus.GoodCondition,
                 };
 
-                treeModel.Images.Add(newImageModel);
+                foreach (var file in request.ImageFiles)
+                {
+                    var imageUrl = await this.cloudinaryService.UploudAsync(file);
+                    var newImageModel = new TreeImage
+                    {
+                        Url = imageUrl,
+                        Tree = treeModel,
+                        TreeId = treeModel.Id,
+                    };
+
+                    treeModel.Images.Add(newImageModel);
+                }
+
+                var addedTree = await this.context.Trees.AddAsync(treeModel);
+                await this.context.SaveChangesAsync(cancellationToken);
+
+                return Result<string>.Success(addedTree.Entity.Id);
             }
-
-            var addedTree = await this.context.Trees.AddAsync(treeModel);
-            await this.context.SaveChangesAsync(cancellationToken);
-
-            return Result<string>.Success(addedTree.Entity.Id);
         }
     }
 }

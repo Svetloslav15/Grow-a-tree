@@ -473,7 +473,7 @@ export class AuthClient implements IAuthClient {
 }
 
 export interface ITreesClient {
-    upsert(nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString>;
+    upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString>;
 }
 
 @Injectable({
@@ -489,11 +489,13 @@ export class TreesClient implements ITreesClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    upsert(nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString> {
+    upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString> {
         let url_ = this.baseUrl + "/api/Trees/upsert";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = new FormData();
+        if (id !== null && id !== undefined)
+            content_.append("Id", id.toString());
         if (nickname !== null && nickname !== undefined)
             content_.append("Nickname", nickname.toString());
         if (type !== null && type !== undefined)

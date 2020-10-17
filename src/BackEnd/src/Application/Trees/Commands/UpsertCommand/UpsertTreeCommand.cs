@@ -9,6 +9,8 @@
 
     public class UpsertTreeCommand : IRequest<Result<string>>
     {
+        public string Id { get; set; }
+
         [Required(ErrorMessage = ErrorMessages.TreeNicknameRequiredErrorMessage)]
         [MinLength(Constants.TreeNicknameMinLength, ErrorMessage = ErrorMessages.TreeNicknameMinLengthErrorMessage)]
         [MaxLength(Constants.TreeNicknameMaxLength, ErrorMessage = ErrorMessages.TreeNicknameMaxLengthErrorMessage)]
