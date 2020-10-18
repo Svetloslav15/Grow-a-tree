@@ -474,6 +474,7 @@ export class AuthClient implements IAuthClient {
 
 export interface ITreesClient {
     upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString>;
+    editTreeImage(id: string | null | undefined, newImageFile: FileParameter | null | undefined): Observable<ResultOfString>;
 }
 
 @Injectable({
@@ -537,6 +538,61 @@ export class TreesClient implements ITreesClient {
     }
 
     protected processUpsert(response: HttpResponseBase): Observable<ResultOfString> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfString.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfString>(<any>null);
+    }
+
+    editTreeImage(id: string | null | undefined, newImageFile: FileParameter | null | undefined): Observable<ResultOfString> {
+        let url_ = this.baseUrl + "/api/Trees/update-tree-image";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (id !== null && id !== undefined)
+            content_.append("Id", id.toString());
+        if (newImageFile !== null && newImageFile !== undefined)
+            content_.append("newImageFile", newImageFile.data, newImageFile.fileName ? newImageFile.fileName : "newImageFile");
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processEditTreeImage(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processEditTreeImage(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfString>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfString>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processEditTreeImage(response: HttpResponseBase): Observable<ResultOfString> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 

@@ -377,6 +377,48 @@
         }
       }
     },
+    "/api/Trees/update-tree-image": {
+      "post": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_EditTreeImage",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "type": "file",
+            "name": "newImageFile",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "nullable": true
+            },
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/{id}": {
       "get": {
         "tags": [
