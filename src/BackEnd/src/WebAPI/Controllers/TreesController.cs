@@ -111,6 +111,11 @@
             }
         }
 
+        /// <summary>
+        /// Sets the isDeleted propertie in the db to true.
+        /// </summary>
+        /// <param name="deleteTreeImagesCommand">The id of the wanted to delete item.</param>
+        /// <returns>Returns the id of the deleted image.</returns>
         [HttpPost("delete-tree-image")]
         public async Task<Result<string>> DeleteTreeImages([FromBody] DeleteTreeImageCommand deleteTreeImagesCommand)
         {
@@ -137,6 +142,11 @@
             }
         }
 
+        /// <summary>
+        /// Sets the isDeleted propertie in the db to false.
+        /// </summary>
+        /// <param name="restoreTreeImagesCommand">The restored entity id.</param>
+        /// <returns>Returns the id of the restored entity.</returns>
         [HttpPost("restore-tree-image")]
         public async Task<Result<string>> RestoreTreeImages([FromBody] RestoreTreeImageCommand restoreTreeImagesCommand)
         {
