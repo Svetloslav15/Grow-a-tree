@@ -89,6 +89,11 @@
 
                 foreach (var file in request.ImageFiles)
                 {
+                    if (!this.cloudinaryService.IsFileValid(file))
+                    {
+                        return Result<string>.Failure(ErrorMessages.TreeImageInvalidFormatErrorMessage);
+                    }
+
                     var imageUrl = await this.cloudinaryService.UploudAsync(file);
                     var newImageModel = new TreeImage
                     {

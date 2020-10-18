@@ -1,11 +1,13 @@
 ﻿namespace GrowATree.WebAPI.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using Common.Constants;
     using GrowATree.Application.Common.Models;
+    using GrowATree.Application.Trees.Commands.AddImage;
     using GrowATree.Application.Trees.Commands.EditImage;
     using GrowATree.Application.Trees.Commands.UpsertCommand;
     using Microsoft.AspNetCore.Mvc;
@@ -68,6 +70,32 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpPost("add-tree-images")]
+        public async Task<Result<List<string>>> AddTreeImages([FromForm] AddTreeImagesCommand addTreeImagesCommand)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<List<string>>.Failure(errorMessage);
+                }
+
+                return await this.Mediator.Send(addTreeImagesCommand);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<List<string>>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }

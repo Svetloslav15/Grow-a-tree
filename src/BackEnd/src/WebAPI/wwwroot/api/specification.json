@@ -419,6 +419,54 @@
         }
       }
     },
+    "/api/Trees/add-tree-images": {
+      "post": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_AddTreeImages",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "type": "file",
+            "name": "ImagesFiles",
+            "in": "formData",
+            "style": "form",
+            "explode": true,
+            "collectionFormat": "multi",
+            "schema": {
+              "type": "array",
+              "nullable": true,
+              "items": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfListOfString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/{id}": {
       "get": {
         "tags": [
@@ -820,6 +868,29 @@
           "data": {
             "type": "string",
             "nullable": true
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ResultOfListOfString": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
           },
           "succeeded": {
             "type": "boolean"
