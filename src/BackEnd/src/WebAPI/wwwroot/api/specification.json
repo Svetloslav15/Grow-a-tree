@@ -467,6 +467,38 @@
         }
       }
     },
+    "/api/Trees/delete-tree-image": {
+      "post": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_DeleteTreeImages",
+        "requestBody": {
+          "x-name": "deleteTreeImagesCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTreeImageCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/{id}": {
       "get": {
         "tags": [
@@ -901,6 +933,16 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "DeleteTreeImageCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "imageId": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
