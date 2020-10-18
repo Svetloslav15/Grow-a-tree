@@ -14,6 +14,7 @@
     using GrowATree.Application.Auth.Commands.ResetPassword;
     using GrowATree.Application.Common.Models;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
 
     /// <summary>
@@ -126,6 +127,7 @@
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
@@ -151,6 +153,7 @@
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();

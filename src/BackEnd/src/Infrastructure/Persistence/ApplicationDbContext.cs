@@ -19,7 +19,9 @@
         private readonly IDateTime _dateTime;
         private IDbContextTransaction _currentTransaction;
 
-        public DbSet<Image> Images { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+
+        public DbSet<TreeImage> TreeImages { get; set; }
 
         public DbSet<Reaction> Reactions { get; set; }
 

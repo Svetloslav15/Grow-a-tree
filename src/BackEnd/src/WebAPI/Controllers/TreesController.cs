@@ -1,4 +1,4 @@
-﻿namespace GrowATree.WebUI.Controllers
+﻿namespace GrowATree.WebAPI.Controllers
 {
     using System;
     using System.Diagnostics;
@@ -6,16 +6,15 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using GrowATree.Application.Common.Models;
-    using GrowATree.Application.Stores.Commands.Upsert;
-    using GrowATree.WebAPI.Controllers;
+    using GrowATree.Application.Trees.Commands.UpsertCommand;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
 
-    public class StoresController : ApiController
+    public class TreesController : ApiController
     {
         [HttpPost("upsert")]
-        public async Task<Result<bool>> Upsert([FromBody] UpsertStoreCommand upsertCommand)
+        public async Task<Result<string>> Upsert([FromForm] UpsertTreeCommand upsertCommand)
         {
             try
             {
@@ -27,7 +26,7 @@
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
 
-                    return Result<bool>.Failure(errorMessage);
+                    return Result<string>.Failure(errorMessage);
                 }
 
                 return await this.Mediator.Send(upsertCommand);
@@ -36,7 +35,7 @@
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<bool>.Failure(ErrorMessages.AccountFailureErrorMessage);
+                return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }

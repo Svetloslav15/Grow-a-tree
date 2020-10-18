@@ -4,14 +4,16 @@ using GrowATree.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrowATree.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201014190805_RefactorImagesModels")]
+    partial class RefactorImagesModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +60,7 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.PromoCode", b =>
@@ -214,7 +216,7 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TreeId");
 
-                    b.ToTable("TreeImages");
+                    b.ToTable("TreeImage");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.TreePost", b =>

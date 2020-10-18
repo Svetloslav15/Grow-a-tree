@@ -9,18 +9,18 @@
     using MediatR;
     using Microsoft.AspNetCore.Identity;
 
-    public class UpsertCommandHandler : IRequestHandler<UpsertCommand, Result<bool>>
+    public class UpsertStoreCommandHandler : IRequestHandler<UpsertStoreCommand, Result<bool>>
     {
         private readonly IApplicationDbContext dbContext;
         private readonly UserManager<User> userManager;
 
-        public UpsertCommandHandler(IApplicationDbContext dbContext, UserManager<User> userManager)
+        public UpsertStoreCommandHandler(IApplicationDbContext dbContext, UserManager<User> userManager)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
         }
 
-        public async Task<Result<bool>> Handle(UpsertCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(UpsertStoreCommand request, CancellationToken cancellationToken)
         {
             Store entity;
             if (request.Id != null)

@@ -17,7 +17,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpsertCommand"
+                "$ref": "#/components/schemas/UpsertStoreCommand"
               }
             }
           },
@@ -262,6 +262,121 @@
         }
       }
     },
+    "/api/Trees/upsert": {
+      "post": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_Upsert",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Nickname",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "maxLength": 20,
+              "minLength": 3,
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Type",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "Latitude",
+            "in": "formData",
+            "schema": {
+              "type": "number",
+              "format": "double",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "Longitude",
+            "in": "formData",
+            "schema": {
+              "type": "number",
+              "format": "double",
+              "nullable": true
+            },
+            "x-position": 5
+          },
+          {
+            "name": "City",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 6
+          },
+          {
+            "name": "Category",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 7
+          },
+          {
+            "name": "OwnerId",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 8
+          },
+          {
+            "type": "file",
+            "name": "ImageFiles",
+            "in": "formData",
+            "style": "form",
+            "explode": true,
+            "collectionFormat": "multi",
+            "schema": {
+              "type": "array",
+              "nullable": true,
+              "items": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/{id}": {
       "get": {
         "tags": [
@@ -430,7 +545,7 @@
           }
         }
       },
-      "UpsertCommand": {
+      "UpsertStoreCommand": {
         "type": "object",
         "additionalProperties": false,
         "required": [
@@ -656,6 +771,26 @@
           }
         }
       },
+      "ResultOfString": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "ResultOfUserModel": {
         "type": "object",
         "additionalProperties": false,
@@ -849,26 +984,6 @@
             "type": "string",
             "pattern": "/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/",
             "nullable": true
-          }
-        }
-      },
-      "ResultOfString": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "data": {
-            "type": "string",
-            "nullable": true
-          },
-          "succeeded": {
-            "type": "boolean"
-          },
-          "errors": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
           }
         }
       }

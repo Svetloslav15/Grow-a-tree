@@ -12,6 +12,7 @@
     using GrowATree.Application.Users.Queries.GetAll;
     using GrowATree.Application.Users.Queries.GetById;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
 
     public class UsersController : ApiController
@@ -30,6 +31,7 @@
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
@@ -56,6 +58,7 @@
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
@@ -82,6 +85,7 @@
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
@@ -107,6 +111,7 @@
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();

@@ -144,5 +144,31 @@ namespace Common.Constants
         public const string ProfilePictureRequiredErrorMessage = "Липсва профилна снимка";
 
         #endregion
+
+        #region TreeImage
+
+        public const string TreeImageRequiredErrorMessage = "Въведете поне една снимка на дървото";
+
+        #endregion
+
+        #region Tree
+
+        public const string TreeNicknameRequiredErrorMessage = "Името на дървото е задължително";
+
+        public const string TreeNicknameInUseErrorMessage = "Името на дървото е заето";
+
+        public const string TreeNicknameMinLengthErrorMessage = "Името на дървото трябва да е поне 3 символа";
+
+        public const string TreeNicknameMaxLengthErrorMessage = "Името на дървото трябва да е максимум 20 символа";
+
+        public const string TreeTypeRequiredErrorMessage = "Типът на дървото е задължителен";
+
+        public const string TreeCategoryRequiredErrorMessage = "Категорията на дървото е задължителна";
+
+        public const string TreeLocationRequiredErrorMessage = "Локацията на дървото е задължителна";
+
+        public const string TreeNotFoundErrorMessage = "Не съществува такова дърво";
+
+        #endregion
     }
 }
