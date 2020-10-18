@@ -14,8 +14,8 @@
 
         public Tree Tree { get; set; }
 
-        public DateTime DeletedOn { get; set; }
+        public DateTime? DeletedOn { get; set; }
 
-        public bool? IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

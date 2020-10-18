@@ -10,6 +10,7 @@
     using GrowATree.Application.Trees.Commands.AddImage;
     using GrowATree.Application.Trees.Commands.DeleteImage;
     using GrowATree.Application.Trees.Commands.EditImage;
+    using GrowATree.Application.Trees.Commands.RestoreImage;
     using GrowATree.Application.Trees.Commands.UpsertCommand;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -135,5 +136,32 @@
                 return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
+
+        [HttpPost("restore-tree-image")]
+        public async Task<Result<string>> RestoreTreeImages([FromBody] RestoreTreeImageCommand restoreTreeImagesCommand)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<string>.Failure(errorMessage);
+                }
+
+                return await this.Mediator.Send(restoreTreeImagesCommand);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
     }
 }

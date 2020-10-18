@@ -499,6 +499,38 @@
         }
       }
     },
+    "/api/Trees/restore-tree-image": {
+      "post": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_RestoreTreeImages",
+        "requestBody": {
+          "x-name": "restoreTreeImagesCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RestoreTreeImageCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/{id}": {
       "get": {
         "tags": [
@@ -939,10 +971,26 @@
       "DeleteTreeImageCommand": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "imageId"
+        ],
         "properties": {
           "imageId": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
+          }
+        }
+      },
+      "RestoreTreeImageCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "imageId"
+        ],
+        "properties": {
+          "imageId": {
+            "type": "string",
+            "minLength": 1
           }
         }
       },

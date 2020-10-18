@@ -477,6 +477,7 @@ export interface ITreesClient {
     editTreeImage(id: string | null | undefined, newImageFile: FileParameter | null | undefined): Observable<ResultOfString>;
     addTreeImages(treeId: string | null | undefined, imagesFiles: string[] | null | undefined): Observable<ResultOfListOfString>;
     deleteTreeImages(deleteTreeImagesCommand: DeleteTreeImageCommand): Observable<ResultOfString>;
+    restoreTreeImages(restoreTreeImagesCommand: RestoreTreeImageCommand): Observable<ResultOfString>;
 }
 
 @Injectable({
@@ -702,6 +703,58 @@ export class TreesClient implements ITreesClient {
     }
 
     protected processDeleteTreeImages(response: HttpResponseBase): Observable<ResultOfString> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfString.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfString>(<any>null);
+    }
+
+    restoreTreeImages(restoreTreeImagesCommand: RestoreTreeImageCommand): Observable<ResultOfString> {
+        let url_ = this.baseUrl + "/api/Trees/restore-tree-image";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(restoreTreeImagesCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRestoreTreeImages(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRestoreTreeImages(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfString>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfString>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRestoreTreeImages(response: HttpResponseBase): Observable<ResultOfString> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -1584,7 +1637,7 @@ export interface IResultOfListOfString {
 }
 
 export class DeleteTreeImageCommand implements IDeleteTreeImageCommand {
-    imageId?: string | undefined;
+    imageId!: string;
 
     constructor(data?: IDeleteTreeImageCommand) {
         if (data) {
@@ -1616,7 +1669,43 @@ export class DeleteTreeImageCommand implements IDeleteTreeImageCommand {
 }
 
 export interface IDeleteTreeImageCommand {
-    imageId?: string | undefined;
+    imageId: string;
+}
+
+export class RestoreTreeImageCommand implements IRestoreTreeImageCommand {
+    imageId!: string;
+
+    constructor(data?: IRestoreTreeImageCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.imageId = _data["imageId"];
+        }
+    }
+
+    static fromJS(data: any): RestoreTreeImageCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new RestoreTreeImageCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["imageId"] = this.imageId;
+        return data; 
+    }
+}
+
+export interface IRestoreTreeImageCommand {
+    imageId: string;
 }
 
 export class ResultOfUserModel implements IResultOfUserModel {
