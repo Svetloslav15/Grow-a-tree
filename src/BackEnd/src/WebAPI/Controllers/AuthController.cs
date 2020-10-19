@@ -36,6 +36,7 @@
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();

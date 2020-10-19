@@ -149,6 +149,10 @@ namespace Common.Constants
 
         public const string TreeImageRequiredErrorMessage = "Въведете поне една снимка на дървото";
 
+        public const string TreeImageNotFoundErrorMessage = "Снимката не беше намерена";
+
+        public const string TreeImageInvalidFormatErrorMessage = "Снимката е в невалиден формат";
+
         #endregion
 
         #region Tree
