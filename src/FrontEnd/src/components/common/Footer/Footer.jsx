@@ -2,6 +2,7 @@ import React from 'react';
 import * as style from './Footer.module.scss';
 
 const LogoImage = require('../../../assets/logo.png');
+const FacebookImage = require('../../../assets/facebook.png');
 
 const Footer = () => (
   <div className={`${style.wrapper}`}>
@@ -13,6 +14,10 @@ const Footer = () => (
               <a href="#" className={`${style.link} col-md-12`}>За платформата</a>
               <a href="#" className={`${style.link} col-md-12`}>Често задавани въпроси</a>
               <a href="#" className={`${style.link} col-md-12`}>Екип</a>
+          </div>
+          <div className={`${style.iconsWrapper}`}>
+              <img className={`${style.icon}`} src={FacebookImage} alt='Grow A Tree Facebook'/>
+              <img className={`${style.icon}`} src={FacebookImage} alt='Grow A Tree Instagram'/>
           </div>
       </div>
       <p className='text-center mt-sm-1'>Copyright © Grow A Tree 2020-{new Date().getFullYear()}</p>
