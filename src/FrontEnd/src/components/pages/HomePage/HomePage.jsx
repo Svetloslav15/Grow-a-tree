@@ -14,7 +14,6 @@ const HomePage = () => {
             <Button type='DarkOutline'>DarkOutline</Button>
             <Button type='Red'>Red</Button>
             <Button type='Yellow'>Yellow</Button>
-            <Button type='Green'>Alexandrina</Button>
         </div>
     );
 };
