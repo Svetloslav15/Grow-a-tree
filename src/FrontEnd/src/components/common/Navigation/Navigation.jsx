@@ -1,13 +1,13 @@
 import React from 'react';
-import NavItem from './NavItem';
-import NavDropDownItem from './NavDropDownItem';
-import NavCollapseButton from './NavCollapseButton';
-import NavInputItem from './NavInputItem';
+import NavItem from './NavItem/NavItem';
+import NavDropDownItem from './NavDropDownItem/NavDropDownItem';
+import NavCollapseButton from './NavCollapseButton/NavCollapseButton';
+import NavInputItem from './NavInputItem/NavInputItem';
+import * as style from './Navigation.module.scss';
 
 const Navigation = () => {
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark primary-color">
-
+        <nav className={`${style.navigation} navbar navbar-expand-lg`}>
             <NavCollapseButton/>
             <div className="collapse navbar-collapse" id="basicExampleNav">
                 <ul className="navbar-nav mr-auto">

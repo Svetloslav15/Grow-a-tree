@@ -8,7 +8,7 @@ const NavCollapseButton = () => (
             aria-controls="basicExampleNav"
             aria-expanded="false"
             aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon"/>
+        <i class="fas fa-bars"></i>
     </button>
 );
 
