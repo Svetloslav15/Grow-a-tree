@@ -3,6 +3,7 @@ import * as style from './Footer.module.scss';
 
 const LogoImage = require('../../../assets/logo.png');
 const FacebookImage = require('../../../assets/facebook.png');
+const InstagramImage = require('../../../assets/instagram.png');
 
 const Footer = () => (
   <div className={`${style.wrapper}`}>
@@ -15,9 +16,9 @@ const Footer = () => (
               <a href="#" className={`${style.link} col-md-12`}>Често задавани въпроси</a>
               <a href="#" className={`${style.link} col-md-12`}>Екип</a>
           </div>
-          <div className={`${style.iconsWrapper}`}>
+          <div className={`${style.iconsWrapper} col-md-4`}>
               <img className={`${style.icon}`} src={FacebookImage} alt='Grow A Tree Facebook'/>
-              <img className={`${style.icon}`} src={FacebookImage} alt='Grow A Tree Instagram'/>
+              <img className={`${style.icon}`} src={InstagramImage} alt='Grow A Tree Instagram'/>
           </div>
       </div>
       <p className='text-center mt-sm-1'>Copyright © Grow A Tree 2020-{new Date().getFullYear()}</p>
