@@ -11,6 +11,7 @@
     using GrowATree.Application.Users.Commands.Edit;
     using GrowATree.Application.Users.Queries.GetAll;
     using GrowATree.Application.Users.Queries.GetById;
+    using GrowATree.Application.Users.Queries.GetShortInfoById;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
@@ -47,6 +48,33 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<UserModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("short-info/{id}")]
+        public async Task<Result<UserShortInfoModel>> GetShortInfoById(string id)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<UserShortInfoModel>.Failure(errorMessage);
+                }
+
+                var query = new GetUserShortInfoQuery { Id = id };
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<UserShortInfoModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
