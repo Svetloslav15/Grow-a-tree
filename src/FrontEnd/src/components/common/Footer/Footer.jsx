@@ -1,10 +1,24 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import * as style from './Footer.module.scss';
+import SocialMediaIcon from "./SocialMediaIcon/SocialMediaIcon";
 
 const LogoImage = require('../../../assets/logo.png');
 const FacebookImage = require('../../../assets/facebook.png');
 const InstagramImage = require('../../../assets/instagram.png');
+
+const data = {
+    facebook: {
+        src: FacebookImage,
+        link: 'https://www.facebook.com/',
+        alt: 'Grow A Tree Facebook'
+    },
+    instagram: {
+        src: InstagramImage,
+        link: 'https://www.instagram.com/',
+        alt: 'Grow A Tree Instagram'
+    }
+};
 
 const Footer = () => (
   <div className={`${style.wrapper}`}>
@@ -18,12 +32,8 @@ const Footer = () => (
               <Link to="/team" className={`${style.link} col-md-12`}>Екип</Link>
           </div>
           <div className={`${style.iconsWrapper} col-md-4`}>
-              <a href='https://www.facebook.com/' target='_blank'>
-                  <img className={`${style.icon}`} src={FacebookImage} alt='Grow A Tree Facebook'/>
-              </a>
-              <a href='https://www.instagram.com/' target='_blank'>
-                <img className={`${style.icon}`} src={InstagramImage} alt='Grow A Tree Instagram'/>
-              </a>
+              <SocialMediaIcon props={data.facebook}/>
+              <SocialMediaIcon props={data.instagram}/>
           </div>
       </div>
       <p className='text-center mt-sm-1'>Copyright © Grow A Tree 2020-{new Date().getFullYear()}</p>
