@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
-* {
+h1 {
   font-family: 'Raleway', sans-serif;
 }
 ::-webkit-scrollbar {
@@ -19,4 +19,29 @@
 
 .h1 {
   color: #428bdd;
+  max-width: 100vw;
+}
+
+
+.shape1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  max-width: 100vw;
+}
+
+.shape2 {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  max-width: 100vw;
+}
+
+.shape3 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
 }
