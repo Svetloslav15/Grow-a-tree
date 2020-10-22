@@ -1,7 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
-h1 {
+* {
   font-family: 'Raleway', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif;
 }
 ::-webkit-scrollbar {
   width: 15px;
