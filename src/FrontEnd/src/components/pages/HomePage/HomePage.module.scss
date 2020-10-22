@@ -4,3 +4,24 @@
   color: green;
   font-family: 'Montserrat', sans-serif;
 }
+
+.shape1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.shape2 {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+
+.shape3 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+}
