@@ -13,16 +13,16 @@ const RegisterPage = () => (
         <img src={BgShape1} className='shape1'/>
         <img src={BgShape2} className='shape2'/>
         <img src={BgShape3} className='shape3'/>
-        <div className={`px-0 mx-0 my-3 row`}>
+        <div className={`px-0 mx-0 my-5 row`}>
             <div className={`offset-md-1 col-md-5`}>
                 <h2 className={style.title}>Регистрация</h2>
                 <div className='row'>
                     <InputField type='text' label={'Имейл'} id='email'/>
-                    <InputField type='text' label={'Потребителско име'}/>
+                    <InputField type='text' label={'Потребителско име'} id='username'/>
                 </div>
                 <div className='row'>
-                    <InputField type='password' label={'Парола'}/>
-                    <InputField type='password' label={'Повторете паролата'}/>
+                    <InputField type='password' label={'Парола'} id='password'/>
+                    <InputField type='password' label={'Повторете паролата'} id='repeated-password'/>
                 </div>
                 <div className='text-center'>
                     <Button type='Green' className='w-75'>Вход</Button>
