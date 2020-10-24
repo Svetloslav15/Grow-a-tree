@@ -33,7 +33,6 @@ const RegisterPage = () => {
             return toast.error(ErrorMessages.passwordsShouldMatch);
         }
         const result = await AuthService.signUp(user);
-        console.log(result);
         return result.succeeded ? toast.success(SuccessMessages.successSignUp) : toast.error(result.errors[0]);
     };
 
