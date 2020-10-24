@@ -1,22 +1,20 @@
 import React from 'react';
-import * as style from './RegisterPage.module.scss';
-import InputField from "../../../common/InputField/InputField";
-import Button from "../../../common/Button/Button";
 import { toast } from 'react-toastify';
-import GoogleLogin from 'react-google-login';
+
+import * as style from './RegisterPage.module.scss';
+import InputField from '../../../common/InputField/InputField';
+import Button from '../../../common/Button/Button';
+import ExternalLoginSection from './ExternalLoginSection/ExternalLoginSection';
 
 const BgImage = require('../../../../assets/tree-for-bg.png');
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
 const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
-const clientId = process.env.REACT_APP_GOOGLE_ID;
 
 const RegisterPage = () => {
     const notify = () => toast.success("Wow so easy !");
-    const responseGoogle = (response) => {
-        console.log(response);
-    };
-    console.log(process.env);
+
+
     return (
         <React.Fragment>
             <img src={BgShape1} className='shape1'/>
@@ -25,13 +23,7 @@ const RegisterPage = () => {
             <div className={`px-0 mx-0 my-5 row`}>
                 <div className={`offset-md-1 col-md-5`}>
                     <h2 className={style.title}>Регистрация</h2>
-                    <GoogleLogin
-                        clientId={clientId}
-                        buttonText="Sign In with Google"
-                        onSuccess={responseGoogle}
-                        onFailure={responseGoogle}
-                        cookiePolicy={'single_host_origin'}
-                    />
+                    <ExternalLoginSection/>
                     <div className='row'>
                         <InputField type='text' label={'Имейл'} id='email'/>
                         <InputField type='text' label={'Потребителско име'} id='username'/>

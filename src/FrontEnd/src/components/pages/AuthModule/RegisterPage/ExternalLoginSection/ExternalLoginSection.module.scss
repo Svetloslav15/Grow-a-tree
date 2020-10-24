@@ -1,0 +1,14 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 2em 0;
+}
+@media all and (max-width: 480px) {
+  .wrapper {
+    flex-direction: column;
+  }
+  button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
