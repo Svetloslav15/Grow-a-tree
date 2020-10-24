@@ -8,6 +8,8 @@ import ExternalLoginSection from './ExternalLoginSection/ExternalLoginSection';
 import Icons from '../../../../static/icons';
 import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
 import Cities from '../../../../static/cities';
+import ErrorMessages from '../../../../static/errorMessages';
+import SuccessMessages from '../../../../static/successMessages';
 
 const BgImage = require('../../../../assets/tree-for-bg.png');
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
@@ -16,7 +18,6 @@ const BgShape3 = require('../../../../assets/bg-shape-3.png');
 
 const RegisterPage = () => {
     const [user, setUser] = useState({});
-    //const notify = () => toast.success("Wow so easy !");
 
     const handleChange = (event) => {
         user[event.target.id] = event.target.value;
@@ -24,7 +25,15 @@ const RegisterPage = () => {
     };
 
     const handleSubmit = () => {
-        console.log(user);
+        if (Object.values(user).includes('') || Object.keys(user).length < 5) {
+            return toast.error(ErrorMessages.allFieldsAreRequired);
+        }
+        if (user.password !== user['repeated-password']) {
+            return toast.error(ErrorMessages.passwordsShouldMatch);
+        }
+        else {
+            toast.success(SuccessMessages.successSignUp);
+        }
     };
 
     return (
