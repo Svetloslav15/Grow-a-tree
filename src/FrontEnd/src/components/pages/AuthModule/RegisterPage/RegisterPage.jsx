@@ -32,9 +32,9 @@ const RegisterPage = () => {
         if (user.password !== user['repeated-password']) {
             return toast.error(ErrorMessages.passwordsShouldMatch);
         }
-        console.log(user);
         const result = await AuthService.signUp(user);
-        return result.succeded ? toast.success(SuccessMessages.successSignUp) : toast.error(result.errors[0]);
+        console.log(result);
+        return result.succeeded ? toast.success(SuccessMessages.successSignUp) : toast.error(result.errors[0]);
     };
 
     return (
