@@ -1,7 +1,8 @@
 import React from 'react';
+import * as style from './NavCollapseButton.module.scss';
 
 const NavCollapseButton = () => (
-    <button className="navbar-toggler"
+    <button className={`${style.navCustom} navbar-toggler`}
             type="button"
             data-toggle="collapse"
             data-target="#basicExampleNav"
