@@ -7,6 +7,7 @@ import Button from '../../../common/Button/Button';
 import ExternalLoginSection from './ExternalLoginSection/ExternalLoginSection';
 import Icons from '../../../../static/icons';
 import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
+import Cities from '../../../../static/cities';
 
 const BgImage = require('../../../../assets/tree-for-bg.png');
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
@@ -34,7 +35,7 @@ const RegisterPage = () => {
                         <InputField type='password' label={'Повторете паролата'} id='repeated-password' icon={Icons.password}/>
                     </div>
                     <div className='row'>
-                        <InputAutoComplete label={'Град'} id='town' icon={Icons.password} data={['Благоевград', 'София', 'Перник', 'Бургас', 'Русе', 'Своге', 'Смолян']}/>
+                        <InputAutoComplete label={'Град'} id='town' icon={Icons.map} data={Cities}/>
                     </div>
                     <div className='text-center'>
                         <Button type='Green' className='w-75' onClick={notify}>Вход</Button>
