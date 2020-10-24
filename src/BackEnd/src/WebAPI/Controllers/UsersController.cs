@@ -11,6 +11,7 @@
     using GrowATree.Application.Users.Commands.Edit;
     using GrowATree.Application.Users.Queries.GetAll;
     using GrowATree.Application.Users.Queries.GetById;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
@@ -51,6 +52,7 @@
         }
 
         [HttpGet("all")]
+        [Authorize]
         public async Task<Result<UsersListModel>> GetAll([FromQuery] GetAllUsersQuery query)
         {
             try

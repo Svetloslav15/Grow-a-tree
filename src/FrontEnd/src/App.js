@@ -9,12 +9,12 @@ import Navigation from './components/common/Navigation/Navigation';
 import Footer from './components/common/Footer/Footer';
 
 const App = () => (
-    <div>
+    <>
         <ToastContainer/>
         <Navigation/>
         <RegisterPage/>
         <Footer/>
-    </div>
+    </>
 );
 
 export default App;

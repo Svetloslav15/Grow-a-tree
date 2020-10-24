@@ -10,6 +10,7 @@ import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComple
 import Cities from '../../../../static/cities';
 import ErrorMessages from '../../../../static/errorMessages';
 import SuccessMessages from '../../../../static/successMessages';
+import AuthService from '../../../../services/authService';
 
 const BgImage = require('../../../../assets/tree-for-bg.png');
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
@@ -24,16 +25,16 @@ const RegisterPage = () => {
         setUser(user);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (Object.values(user).includes('') || Object.keys(user).length < 5) {
             return toast.error(ErrorMessages.allFieldsAreRequired);
         }
         if (user.password !== user['repeated-password']) {
             return toast.error(ErrorMessages.passwordsShouldMatch);
         }
-        else {
-            toast.success(SuccessMessages.successSignUp);
-        }
+        console.log(user);
+        const result = await AuthService.signUp(user);
+        return result.succeded ? toast.success(SuccessMessages.successSignUp) : toast.error(result.errors[0]);
     };
 
     return (
@@ -41,8 +42,8 @@ const RegisterPage = () => {
             <img src={BgShape1} className='shape1'/>
             <img src={BgShape2} className='shape2'/>
             <img src={BgShape3} className='shape3'/>
-            <div className={`px-0 mx-0 my-5 row`}>
-                <div className={`offset-md-1 col-md-5`}>
+            <div className='px-0 mx-0 my-5 row'>
+                <div className='offset-md-1 col-md-5'>
                     <h2 className={style.title}>Регистрация</h2>
                     <ExternalLoginSection/>
                     <div className='row'>
@@ -71,7 +72,7 @@ const RegisterPage = () => {
                     </div>
                     <div className='row'>
                         <InputAutoComplete label={'Град'}
-                                           id='town'
+                                           id='city'
                                            icon={Icons.map}
                                            data={Cities}
                                            onChange={handleChange}/>

@@ -24,7 +24,6 @@ const ExternalLoginSection = () => {
             />
             <FacebookLogin
                 appId={process.env.REACT_APP_FACEBOOK_ID}
-                autoLoad
                 icon="fa-facebook"
                 cssClass={style.fbButton}
                 callback={responseFacebook}/>
