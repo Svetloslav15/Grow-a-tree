@@ -9,12 +9,14 @@ const BgImage = require('../../../../assets/tree-for-bg.png');
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
 const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
+const clientId = process.env.REACT_APP_GOOGLE_ID;
 
 const RegisterPage = () => {
     const notify = () => toast.success("Wow so easy !");
     const responseGoogle = (response) => {
         console.log(response);
     };
+    console.log(process.env);
     return (
         <React.Fragment>
             <img src={BgShape1} className='shape1'/>
@@ -24,7 +26,7 @@ const RegisterPage = () => {
                 <div className={`offset-md-1 col-md-5`}>
                     <h2 className={style.title}>Регистрация</h2>
                     <GoogleLogin
-                        clientId="284390856965-ldvufmenaouvj65rbhb8d4e004vr85td.apps.googleusercontent.com"
+                        clientId={clientId}
                         buttonText="Sign In with Google"
                         onSuccess={responseGoogle}
                         onFailure={responseGoogle}
