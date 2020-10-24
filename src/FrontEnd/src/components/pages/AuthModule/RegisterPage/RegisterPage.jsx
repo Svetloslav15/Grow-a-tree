@@ -6,6 +6,7 @@ import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
 import ExternalLoginSection from './ExternalLoginSection/ExternalLoginSection';
 import Icons from '../../../../static/icons';
+import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
 
 const BgImage = require('../../../../assets/tree-for-bg.png');
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
@@ -32,9 +33,12 @@ const RegisterPage = () => {
                         <InputField type='password' label={'Парола'} id='password' icon={Icons.password}/>
                         <InputField type='password' label={'Повторете паролата'} id='repeated-password' icon={Icons.password}/>
                     </div>
+                    <div className='row'>
+                        <InputAutoComplete label={'Град'} id='town' icon={Icons.password} data={['Благоевград', 'София', 'Перник', 'Бургас', 'Русе', 'Своге', 'Смолян']}/>
+                    </div>
                     <div className='text-center'>
-                        <Button type='Green' className='w-50' onClick={notify}>Вход</Button>
-                        <Button type='GreenOutline' className='w-50'>Имате акаунт?</Button>
+                        <Button type='Green' className='w-75' onClick={notify}>Вход</Button>
+                        <Button type='GreenOutline' className='w-75'>Имате акаунт?</Button>
                     </div>
                 </div>
                 <div className={`col-md-6`}>
