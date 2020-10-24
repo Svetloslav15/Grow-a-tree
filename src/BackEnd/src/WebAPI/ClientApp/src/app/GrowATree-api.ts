@@ -885,6 +885,7 @@ export interface IUsersClient {
     getById(id: string | null): Observable<ResultOfUserModel>;
     getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel>;
     getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel>;
+    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListShortInfoModel>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
 }
@@ -1058,6 +1059,62 @@ export class UsersClient implements IUsersClient {
             }));
         }
         return _observableOf<ResultOfUsersListModel>(<any>null);
+    }
+
+    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Users/all-short-info?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllShortInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllShortInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfUsersListShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfUsersListShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllShortInfo(response: HttpResponseBase): Observable<ResultOfUsersListShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfUsersListShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfUsersListShortInfoModel>(<any>null);
     }
 
     edit(command: EditUserCommand): Observable<ResultOfUserModel> {
@@ -2595,6 +2652,149 @@ export interface IPagination {
     totalPages?: number;
     currentPage?: number;
     perPage?: number;
+}
+
+export class ResultOfUsersListShortInfoModel implements IResultOfUsersListShortInfoModel {
+    data?: UsersListShortInfoModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfUsersListShortInfoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? UsersListShortInfoModel.fromJS(_data["data"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfUsersListShortInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfUsersListShortInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfUsersListShortInfoModel {
+    data?: UsersListShortInfoModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class MetaResultOfIListOfUserShortInfoModelAndPaginationMeta implements IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
+    data?: UserShortInfoModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(UserShortInfoModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfUserShortInfoModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
+    data?: UserShortInfoModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class UsersListShortInfoModel extends MetaResultOfIListOfUserShortInfoModelAndPaginationMeta implements IUsersListShortInfoModel {
+
+    constructor(data?: IUsersListShortInfoModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): UsersListShortInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UsersListShortInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IUsersListShortInfoModel extends IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
 }
 
 export class EditUserCommand implements IEditUserCommand {

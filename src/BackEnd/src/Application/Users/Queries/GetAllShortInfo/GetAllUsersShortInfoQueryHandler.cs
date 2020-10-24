@@ -1,4 +1,4 @@
-﻿namespace GrowATree.Application.Users.Queries.GetAll
+﻿namespace GrowATree.Application.Users.Queries.GetAllShortInfo
 {
     using System;
     using System.Linq;
@@ -12,23 +12,23 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, UsersListModel>
+    public class GetAllUsersShortInfoQueryHandler : IRequestHandler<GetAllUsersShortInfoQuery, UsersListShortInfoModel>
     {
         private readonly IApplicationDbContext context;
         private readonly IMapper mapper;
 
-        public GetAllUsersQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetAllUsersShortInfoQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        public async Task<UsersListModel> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<UsersListShortInfoModel> Handle(GetAllUsersShortInfoQuery request, CancellationToken cancellationToken)
         {
             var list = await this.context.Users
                 .Skip(request.PerPage * (request.Page - 1))
                 .Take(request.PerPage)
-                .ProjectTo<UserModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<UserShortInfoModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
             var totalUsers = await this.context.Users.CountAsync();
@@ -40,7 +40,7 @@
                 TotalPages = Convert.ToInt32(Math.Ceiling(totalUsers / Convert.ToDouble(request.PerPage))),
             };
 
-            var result = new UsersListModel
+            var result = new UsersListShortInfoModel
             {
                 Data = list,
                 Meta = new PaginationMeta
