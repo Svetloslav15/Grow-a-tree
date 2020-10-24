@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { toast } from 'react-toastify';
 
 import * as style from './RegisterPage.module.scss';
@@ -15,7 +15,17 @@ const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 
 const RegisterPage = () => {
-    const notify = () => toast.success("Wow so easy !");
+    const [user, setUser] = useState({});
+    //const notify = () => toast.success("Wow so easy !");
+
+    const handleChange = (event) => {
+        user[event.target.id] = event.target.value;
+        setUser(user);
+    };
+
+    const handleSubmit = () => {
+        console.log(user);
+    };
 
     return (
         <React.Fragment>
@@ -27,18 +37,38 @@ const RegisterPage = () => {
                     <h2 className={style.title}>Регистрация</h2>
                     <ExternalLoginSection/>
                     <div className='row'>
-                        <InputField type='email' label={'Имейл'} id='email' icon={Icons.email}/>
-                        <InputField type='text' label={'Потребителско име'} id='username' icon={Icons.user}/>
+                        <InputField type='email'
+                                    label={'Имейл'}
+                                    id='email'
+                                    icon={Icons.email}
+                                    onChange={handleChange}/>
+                        <InputField type='text'
+                                    label={'Потребителско име'}
+                                    id='username'
+                                    icon={Icons.user}
+                                    onChange={handleChange}/>
                     </div>
                     <div className='row'>
-                        <InputField type='password' label={'Парола'} id='password' icon={Icons.password}/>
-                        <InputField type='password' label={'Повторете паролата'} id='repeated-password' icon={Icons.password}/>
+                        <InputField type='password'
+                                    label={'Парола'}
+                                    id='password'
+                                    icon={Icons.password}
+                                    onChange={handleChange}/>
+                        <InputField type='password'
+                                    label={'Повторете паролата'}
+                                    id='repeated-password'
+                                    icon={Icons.password}
+                                    onChange={handleChange}/>
                     </div>
                     <div className='row'>
-                        <InputAutoComplete label={'Град'} id='town' icon={Icons.map} data={Cities}/>
+                        <InputAutoComplete label={'Град'}
+                                           id='town'
+                                           icon={Icons.map}
+                                           data={Cities}
+                                           onChange={handleChange}/>
                     </div>
                     <div className='text-center'>
-                        <Button type='Green' className='w-75' onClick={notify}>Вход</Button>
+                        <Button type='Green' className='w-75' onClick={handleSubmit}>Вход</Button>
                         <Button type='GreenOutline' className='w-75'>Имате акаунт?</Button>
                     </div>
                 </div>
