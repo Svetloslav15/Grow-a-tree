@@ -19,11 +19,14 @@ const ExternalLoginSection = () => {
                 buttonText="Sign In with Google"
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
-                cookiePolicy={'single_host_origin'}/>
+                cookiePolicy={'single_host_origin'}
+                className={style.googleButton}
+            />
             <FacebookLogin
                 appId={process.env.REACT_APP_FACEBOOK_ID}
                 autoLoad
                 icon="fa-facebook"
+                cssClass={style.fbButton}
                 callback={responseFacebook}/>
         </div>
     )
