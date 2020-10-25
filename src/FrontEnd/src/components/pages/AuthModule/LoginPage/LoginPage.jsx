@@ -26,17 +26,14 @@ const LoginPage = ({history}) => {
     };
 
     const handleSubmit = async () => {
-        if (Object.values(user).includes('') || Object.keys(user).length < 5) {
+        if (Object.values(user).includes('') || Object.keys(user).length < 2) {
             return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }
-        if (user.password !== user['repeated-password']) {
-            return AlertService.error(ErrorMessages.passwordsShouldMatch);
-        }
-        const result = await AuthService.signUp(user);
-
+        const result = await AuthService.login(user);
+        console.log(result);
         if (result.succeeded) {
-            AlertService.success(SuccessMessages.successSignUp);
-            history.push('/auth/resend-confirmation-link');
+            AlertService.success(SuccessMessages.successLogin);
+            history.push('/');
         }
         else {
             AlertService.error(result.errors[0]);
