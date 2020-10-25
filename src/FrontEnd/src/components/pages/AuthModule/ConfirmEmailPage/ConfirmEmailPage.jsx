@@ -1,16 +1,27 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import * as style from './ConfirmEmailPage.module.scss';
-import Icons from "../../../../static/icons";
+import Icons from '../../../../static/icons';
 import InputField from '../../../common/InputField/InputField';
-import Button from "../../../common/Button/Button";
+import Button from '../../../common/Button/Button';
+
+import AuthService from '../../../../services/authService';
+import SuccessMessages from "../../../../static/successMessages";
+import AlertService from "../../../../services/alertService";
 
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 const BgShape4 = require('../../../../assets/bg-shape-4.png');
 
-const ConfirmEmailPage = () => {
+const ConfirmEmailPage = (props) => {
+    const [token, setToken] = useState(props.location.search.slice(7));
+    const [email, setEmail] = useState('');
+    console.log(token);
+    const handleChange = (event) => {
+        setEmail(event.target.value);
+    };
 
-    const handleChange = () => {
-
+    const handleSubmit = async () => {
+        const result = await AuthService.confirmEmail({email, token});
+        return result.succeeded ? AlertService.success(SuccessMessages.successConfirmEmail) : AlertService.error(result.errors[0]);
     };
 
     return (
@@ -27,7 +38,7 @@ const ConfirmEmailPage = () => {
                                 icon={Icons.email}
                                 width={12}
                                 onChange={handleChange}/>
-                    <Button type={'DarkOutline'}>Потвърди</Button>
+                    <Button type={'DarkOutline'} onClick={handleSubmit}>Потвърди</Button>
                 </div>
             </div>
         </>

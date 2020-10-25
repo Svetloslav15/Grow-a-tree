@@ -16,7 +16,7 @@ const App = () => (
         <ToastContainer/>
         <Navigation/>
         <Switch>
-            <Route exact path='/' component={ConfirmEmailPage}/>
+            <Route exact path='/auth/confirm' component={ConfirmEmailPage}/>
             <Route exact path='/auth/register' component={RegisterPage}/>
         </Switch>
         <Footer/>

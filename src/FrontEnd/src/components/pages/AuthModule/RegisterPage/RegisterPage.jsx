@@ -1,6 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import { toast } from 'react-toastify';
-
 import * as style from './RegisterPage.module.scss';
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
@@ -11,6 +9,7 @@ import Cities from '../../../../static/cities';
 import ErrorMessages from '../../../../static/errorMessages';
 import SuccessMessages from '../../../../static/successMessages';
 import AuthService from '../../../../services/authService';
+import AlertService from '../../../../services/alertService';
 
 const BgImage = require('../../../../assets/tree-for-bg.png');
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
@@ -27,13 +26,13 @@ const RegisterPage = () => {
 
     const handleSubmit = async () => {
         if (Object.values(user).includes('') || Object.keys(user).length < 5) {
-            return toast.error(ErrorMessages.allFieldsAreRequired);
+            return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }
         if (user.password !== user['repeated-password']) {
-            return toast.error(ErrorMessages.passwordsShouldMatch);
+            return AlertService.error(ErrorMessages.passwordsShouldMatch);
         }
         const result = await AuthService.signUp(user);
-        return result.succeeded ? toast.success(SuccessMessages.successSignUp) : toast.error(result.errors[0]);
+        return result.succeeded ? AlertService.success(SuccessMessages.successSignUp) : AlertService.error(result.errors[0]);
     };
 
     return (
