@@ -1,20 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Marck+Script&display=swap');
 
+.wrapper {
+  position: relative;
+  height: 90vh;
+}
+
+.wrapperHeader {
+  position: absolute;
+  top: 10vh;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .h1 {
   color: green;
   font-family: 'Montserrat', sans-serif;
 }
 
 .treeBg {
-  width: 50%;
+  width: 38%;
   z-index: -1;
   margin: 0 auto;
 }
 
 .shape5 {
   position: relative;
-  top: 0;
+  top: -5vh;
   z-index: -2;
   width: 100%;
 }
@@ -24,12 +39,12 @@
   color: #002F3E;
   text-align: center;
   font-family: 'Marck Script', cursive;
-  top: 20%;
+  top: 10%;
   left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  font-size: calc(50px + (180 - 50) * ((100vw - 300px) / (1980 - 300)));
+  font-size: calc(50px + (100 - 50) * ((100vw - 300px) / (1980 - 300)));
 }
 
 .button {
@@ -41,16 +56,22 @@
   margin-right: auto;
 }
 
-.wrapper {
-  position: relative;
+@media all and (max-width: 1000px) {
+  .wrapper {
+    height: auto;
+  }
+  .shape5 {
+    width: 100vw;
+    top: 0;
+  }
 }
 
-.wrapperHeader {
-  position: absolute;
-  top: 10vh;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
+@media all and (max-width: 1000px) {
+  .title {
+    top: -10%;
+  }
+  .button {
+    bottom: 0;
+    width: 75%;
+  }
 }
