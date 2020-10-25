@@ -27,7 +27,11 @@
             if (user == null)
             {
                 return Result<bool>.Failure(ErrorMessages.EmailInvalidErrorMessage);
-            }   
+            }
+            if (user.EmailConfirmed)
+            {
+                return Result<bool>.Failure(ErrorMessages.EmailAlreadyConfirmedErrorMessage);
+            }
 
             string token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
             string confirmationLink = Constants.ConfirmEmailLink + "?token=" + token;
