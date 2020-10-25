@@ -7,11 +7,9 @@
 }
 
 .treeBg {
-  position: relative;
-  left: 25%;
-  bottom: -10vh;
   width: 50%;
   z-index: -1;
+  margin: 0 auto;
 }
 
 .shape5 {
@@ -22,7 +20,7 @@
 }
 
 .title {
-  position: absolute;
+  position: relative;
   color: #002F3E;
   text-align: center;
   font-family: 'Marck Script', cursive;
@@ -35,8 +33,8 @@
 }
 
 .button {
-  position: relative;
-  bottom: 20px;
+  position: absolute;
+  bottom: 10%;
   left: 0;
   right: 0;
   margin-left: auto;
@@ -45,4 +43,14 @@
 
 .wrapper {
   position: relative;
+}
+
+.wrapperHeader {
+  position: absolute;
+  top: 10vh;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
