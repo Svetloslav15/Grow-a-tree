@@ -93,9 +93,9 @@ until finished
 Add notes about how to use the system.
 
 ## ⛏️ Built With <a name = "tech_stack"></a>
+- [ASP NET Core 3](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1) - Back-End Framework
+- [ReactJS](https://reactjs.org/) - Front-End Framework
 - [MSSQL Server](https://www.microsoft.com/en-gb/sql-server/sql-server-downloads) - Database
-- [ASP NET Core 3](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1) - Server Framework
-- [ReactJS](https://reactjs.org/) - Web Framework
 
 ## ✍️ Authors <a name = "authors"></a>
 - [@Svetloslav Novoselski](https://github.com/Svetloslav15) - Idea & Front-End Development
