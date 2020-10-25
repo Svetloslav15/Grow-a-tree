@@ -19,7 +19,7 @@ const Navigation = () => {
                     <NavItem link='/shop'>Магазин</NavItem>
                     <NavItem link='/events'>Събития</NavItem>
                     <NavItem link='/forum'>Форум</NavItem>
-                    <NavItem link={'/login'}>
+                    <NavItem link={'/auth/login'}>
                         <Button type='GreenOutline'>Вход</Button>
                     </NavItem>
                 </ul>
