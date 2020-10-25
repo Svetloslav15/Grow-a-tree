@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import * as style from './HomePage.module.scss';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Button from '../../../common/Button/Button'
 
@@ -10,7 +10,8 @@ const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape5 = require('../../../../assets/bg-shape-5.png');
 const TreeBgImage = require('../../../../assets/tree-for-bg.png');
 
-const HomePage = ({currUser}) => {
+const HomePage = () => {
+    const currUser = useSelector(state => state.auth);
     useEffect(() => {
         console.log(currUser);
     });
@@ -31,10 +32,5 @@ const HomePage = ({currUser}) => {
         </div>
     );
 };
-const mapStateToProps = (state) => {
-    return {
-        currUser: state.auth
-    };
-};
 
-export default connect(mapStateToProps, null)(HomePage);
+export default HomePage;

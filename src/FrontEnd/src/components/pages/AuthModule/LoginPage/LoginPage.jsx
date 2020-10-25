@@ -19,21 +19,14 @@ const BgShape1 = require('../../../../assets/bg-shape-1.png');
 const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 
-const LoginPage = ({history, currUser, saveUser}) => {
+const LoginPage = ({history}) => {
     const [user, setUser] = useState({});
-    const dispatch = useDispatch();
-    useEffect(() => {
-        console.log(currUser);
-    });
+    const saveUserData = useDispatch();
+
     const handleChange = (event) => {
         user[event.target.id] = event.target.value;
         setUser(user);
     };
-
-    const saveUserData = useCallback(
-        () => dispatch({ type:  SAVE_CURRENT_USER}),
-        [dispatch]
-    );
 
     const handleSubmit = async () => {
         if (Object.values(user).includes('') || Object.keys(user).length < 2) {
@@ -42,7 +35,7 @@ const LoginPage = ({history, currUser, saveUser}) => {
         const result = await AuthService.login(user);
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successLogin);
-            saveUser(result.data);
+            saveUserData({ type:  SAVE_CURRENT_USER, data: result.data});
             history.push('/');
         }
         else {
@@ -92,15 +85,5 @@ const LoginPage = ({history, currUser, saveUser}) => {
         </>
     )
 };
-const mapStateToProps = (state) => {
-    return {
-        currUser: state.auth
-    };
-};
 
-const mapDispatchToProps = (dispatch) => ({
-    saveUser: (data) =>
-        dispatch({type: SAVE_CURRENT_USER, data: {...data}})
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginPage));
+export default withRouter(LoginPage);
