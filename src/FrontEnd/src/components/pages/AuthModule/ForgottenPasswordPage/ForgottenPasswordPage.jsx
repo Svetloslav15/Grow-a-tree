@@ -36,7 +36,7 @@ const ForgottenPasswordPage = () => {
                                 width={12}
                                 onChange={handleChange}/>
                     <Button type={'DarkOutline'} className={'mb-5'} onClick={handleSubmit}>
-                        <i class="fas fa-paper-plane mr-2"/>
+                        <i className="fas fa-paper-plane mr-2"/>
                         Изпрати линк
                     </Button>
                 </div>

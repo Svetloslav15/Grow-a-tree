@@ -27,10 +27,10 @@
             if (user == null)
             {
                 return Result<bool>.Failure(ErrorMessages.EmailInvalidErrorMessage);
-            }
+            }   
 
             string token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-            string confirmationLink = Constants.ConfirmEmailLink + token;
+            string confirmationLink = Constants.ConfirmEmailLink + "?token=" + token;
             bool result = await this.emailSender.SendEmail(user, confirmationLink, "Grow A Tree: Confirm email");
 
             if (!result)

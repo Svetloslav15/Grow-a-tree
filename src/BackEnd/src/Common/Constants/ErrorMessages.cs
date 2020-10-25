@@ -113,6 +113,8 @@ namespace Common.Constants
 
         public const string AccessTokenInvalidErrorMessage = "Невалидна сесия";
 
+        public const string ConfirmTokenInvalidErrorMessage = "Невалиден токен, изпратете нов линк за потвърждаване";
+
         #endregion
 
         #region User
