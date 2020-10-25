@@ -1,4 +1,5 @@
 export default {
     successSignUp: '✔ Успешно се регистрирахте!',
-    successConfirmEmail: '✔ Успешно потвърдихте вашия имейл!.'
+    successConfirmEmail: '✔ Успешно потвърдихте вашия имейл!',
+    successSendLinkForForgottenPassword: '✔ Успешно изпратихте линк за забравена парола!'
 }

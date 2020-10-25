@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as style from './InputAutoComplete.module.scss';
 
-const InputAutoComplete = ({label, id, icon, data, onChange}) => {
+const InputAutoComplete = ({label, id, icon, data, onChange, className}) => {
     const [isLabelHidden, setHidden] = useState(false);
     const [currVal, setCurrentValue] = useState('');
     const [dataElements, setData] = useState([]);
@@ -20,7 +20,7 @@ const InputAutoComplete = ({label, id, icon, data, onChange}) => {
     };
 
     return (
-        <div className="md-form col-md-12">
+        <div className='md-form col-md-12'>
             <i className={`${style.icon} ${icon} prefix`}/>
             <input list='data-list-items' id={id} className='form-control'
                    onSelect={() => setHidden(true)}

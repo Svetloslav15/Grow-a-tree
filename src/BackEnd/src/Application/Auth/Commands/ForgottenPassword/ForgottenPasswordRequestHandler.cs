@@ -30,7 +30,7 @@
             }
 
             string token = await this.userManager.GeneratePasswordResetTokenAsync(user);
-            string forgottenPasswordLink = Constants.ResetPasswordLink + token;
+            string forgottenPasswordLink = Constants.ResetPasswordLink + "?token=" + token;
             bool result = await this.emailSender.SendEmail(user, forgottenPasswordLink, "Grow A Tree: Forgotten Password");
 
             if (!result)

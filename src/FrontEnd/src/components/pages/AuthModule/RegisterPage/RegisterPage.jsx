@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import * as style from './RegisterPage.module.scss';
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
@@ -80,7 +81,8 @@ const RegisterPage = () => {
                                            onChange={handleChange}/>
                     </div>
                     <div className='text-center'>
-                        <Button type='Green' className='w-75' onClick={handleSubmit}>Вход</Button>
+                        <Link to='/auth/forgotten-password'><span className={'dark-text'}>Забравена парола?</span></Link>
+                        <Button type='Green' className='w-75' onClick={handleSubmit}>Регистрация</Button>
                         <Button type='GreenOutline' className='w-75'>Имате акаунт?</Button>
                     </div>
                 </div>
