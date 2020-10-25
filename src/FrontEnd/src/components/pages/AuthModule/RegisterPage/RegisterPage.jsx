@@ -37,7 +37,7 @@ const RegisterPage = () => {
     };
 
     return (
-        <React.Fragment>
+        <>
             <img src={BgShape1} className='shape1'/>
             <img src={BgShape2} className='shape2'/>
             <img src={BgShape3} className='shape3'/>
@@ -50,11 +50,13 @@ const RegisterPage = () => {
                                     label={'Имейл'}
                                     id='email'
                                     icon={Icons.email}
+                                    width={6}
                                     onChange={handleChange}/>
                         <InputField type='text'
                                     label={'Потребителско име'}
                                     id='username'
                                     icon={Icons.user}
+                                    width={6}
                                     onChange={handleChange}/>
                     </div>
                     <div className='row'>
@@ -62,6 +64,7 @@ const RegisterPage = () => {
                                     label={'Парола'}
                                     id='password'
                                     icon={Icons.password}
+                                    width={6}
                                     onChange={handleChange}/>
                         <InputField type='password'
                                     label={'Повторете паролата'}
@@ -74,6 +77,7 @@ const RegisterPage = () => {
                                            id='city'
                                            icon={Icons.map}
                                            data={Cities}
+                                           width={6}
                                            onChange={handleChange}/>
                     </div>
                     <div className='text-center'>
@@ -85,7 +89,7 @@ const RegisterPage = () => {
                     <img src={BgImage} className={style.imageBg}/>
                 </div>
             </div>
-        </React.Fragment>
+        </>
     )
 };
 
