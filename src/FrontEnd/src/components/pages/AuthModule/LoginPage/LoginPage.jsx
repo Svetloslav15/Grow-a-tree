@@ -1,7 +1,6 @@
 import React, {useState, useCallback, useEffect } from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import { useDispatch } from 'react-redux'
-import {connect} from 'react-redux';
 import * as style from './LoginPage.module.scss';
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
