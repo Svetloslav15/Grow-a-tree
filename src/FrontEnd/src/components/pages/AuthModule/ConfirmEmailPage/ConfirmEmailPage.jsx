@@ -14,7 +14,7 @@ const BgShape4 = require('../../../../assets/bg-shape-4.png');
 const ConfirmEmailPage = (props) => {
     const [token, setToken] = useState(props.location.search.slice(7));
     const [email, setEmail] = useState('');
-    console.log(token);
+
     const handleChange = (event) => {
         setEmail(event.target.value);
     };
