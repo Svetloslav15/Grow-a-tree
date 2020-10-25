@@ -10,6 +10,7 @@ import RegisterPage from './components/pages/AuthModule/RegisterPage/RegisterPag
 import Navigation from './components/common/Navigation/Navigation';
 import Footer from './components/common/Footer/Footer';
 import ConfirmEmailPage from "./components/pages/AuthModule/ConfirmEmailPage/ConfirmEmailPage";
+import PrivateRoute from "./components/common/PrivateRoute/PrivateRoute";
 
 const App = () => (
     <>
