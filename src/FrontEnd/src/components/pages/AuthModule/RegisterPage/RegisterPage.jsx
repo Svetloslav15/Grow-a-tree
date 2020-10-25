@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import * as style from './RegisterPage.module.scss';
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
@@ -17,7 +17,7 @@ const BgShape1 = require('../../../../assets/bg-shape-1.png');
 const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 
-const RegisterPage = () => {
+const RegisterPage = ({history}) => {
     const [user, setUser] = useState({});
 
     const handleChange = (event) => {
@@ -33,7 +33,14 @@ const RegisterPage = () => {
             return AlertService.error(ErrorMessages.passwordsShouldMatch);
         }
         const result = await AuthService.signUp(user);
-        return result.succeeded ? AlertService.success(SuccessMessages.successSignUp) : AlertService.error(result.errors[0]);
+
+        if (result.succeeded) {
+            AlertService.success(SuccessMessages.successSignUp);
+            history.push('/auth/resend-confirmation-link');
+        }
+        else {
+            AlertService.error(result.errors[0]);
+        }
     };
 
     return (
@@ -94,4 +101,4 @@ const RegisterPage = () => {
     )
 };
 
-export default RegisterPage;
+export default withRouter(RegisterPage);

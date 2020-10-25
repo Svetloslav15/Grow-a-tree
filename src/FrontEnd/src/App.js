@@ -12,6 +12,7 @@ import Footer from './components/common/Footer/Footer';
 import ConfirmEmailPage from './components/pages/AuthModule/ConfirmEmailPage/ConfirmEmailPage';
 import PrivateRoute from "./components/common/PrivateRoute/PrivateRoute";
 import ForgottenPassword from './components/pages/AuthModule/ForgottenPasswordPage/ForgottenPasswordPage';
+import ResendConfirmationLinkPage from './components/pages/AuthModule/ResendConfirmationLinkPage/ResendConfirmationLinkPage';
 
 const App = () => (
     <>
@@ -21,6 +22,7 @@ const App = () => (
             <Route exact path='/auth/confirm' component={ConfirmEmailPage}/>
             <Route exact path='/auth/register' component={RegisterPage}/>
             <Route exact path='/auth/forgotten-password' component={ForgottenPassword}/>
+            <Route exact path='/auth/resend-confirmation-link' component={ResendConfirmationLinkPage}/>
         </Switch>
         <Footer/>
     </>
