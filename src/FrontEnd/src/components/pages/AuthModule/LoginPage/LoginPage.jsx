@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useCallback, useEffect } from 'react';
 import {Link, withRouter} from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import {connect} from 'react-redux';
 import * as style from './LoginPage.module.scss';
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
 import ExternalLoginSection from '../RegisterPage/ExternalLoginSection/ExternalLoginSection';
 import Icons from '../../../../static/icons';
-import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
-import Cities from '../../../../static/cities';
+import {SAVE_CURRENT_USER} from '../../../../store/actions/actionTypes';
+
 import ErrorMessages from '../../../../static/errorMessages';
 import SuccessMessages from '../../../../static/successMessages';
 import AuthService from '../../../../services/authService';
@@ -17,22 +19,30 @@ const BgShape1 = require('../../../../assets/bg-shape-1.png');
 const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 
-const LoginPage = ({history}) => {
+const LoginPage = ({history, currUser, saveUser}) => {
     const [user, setUser] = useState({});
-
+    const dispatch = useDispatch();
+    useEffect(() => {
+        console.log(currUser);
+    });
     const handleChange = (event) => {
         user[event.target.id] = event.target.value;
         setUser(user);
     };
+
+    const saveUserData = useCallback(
+        () => dispatch({ type:  SAVE_CURRENT_USER}),
+        [dispatch]
+    );
 
     const handleSubmit = async () => {
         if (Object.values(user).includes('') || Object.keys(user).length < 2) {
             return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }
         const result = await AuthService.login(user);
-        console.log(result);
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successLogin);
+            saveUser(result.data);
             history.push('/');
         }
         else {
@@ -82,5 +92,15 @@ const LoginPage = ({history}) => {
         </>
     )
 };
+const mapStateToProps = (state) => {
+    return {
+        currUser: state.auth
+    };
+};
 
-export default withRouter(LoginPage);
+const mapDispatchToProps = (dispatch) => ({
+    saveUser: (data) =>
+        dispatch({type: SAVE_CURRENT_USER, data: {...data}})
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginPage));
