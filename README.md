@@ -93,16 +93,13 @@ until finished
 Add notes about how to use the system.
 
 ## ⛏️ Built With <a name = "tech_stack"></a>
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
+- [MSSQL Server](https://www.microsoft.com/en-gb/sql-server/sql-server-downloads) - Database
+- [ASP NET Core 3](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1) - Server Framework
+- [ReactJS](https://reactjs.org/) - Web Framework
 
 ## ✍️ Authors <a name = "authors"></a>
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
-
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) 
-who participated in this project.
+- [@Svetloslav Novoselski](https://github.com/Svetloslav15) - Idea & Front-End Development
+- [@Plamen Michev](https://github.com/PlamenMichev) - Idea & Back-End Development
 
 ## 🎉 Acknowledgments <a name = "acknowledgments"></a>
 - Hat tip to anyone whose code was used
