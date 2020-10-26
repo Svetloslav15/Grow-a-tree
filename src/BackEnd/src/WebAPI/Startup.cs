@@ -41,6 +41,14 @@ namespace GrowATree.WebAPI
                 .AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsApi",
+                    builder => builder.WithOrigins("http://localhost:3000", "http://mywebsite.com")
+                .AllowAnyHeader()
+                .AllowAnyMethod());
+            });
+
             services.AddControllersWithViews(options =>
                 options.Filters.Add(new ApiExceptionFilter()));
 
@@ -98,6 +106,7 @@ namespace GrowATree.WebAPI
                    settings.DocumentPath = "/api/specification.json";
                })
                .UseRouting()
+               .UseCors("CorsApi")
                .UseAuthentication()
                .UseIdentityServer()
                .UseAuthorization()

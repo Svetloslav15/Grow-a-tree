@@ -1,5 +1,6 @@
 ﻿namespace GrowATree.Application.Auth.Commands.ConfirmEmail
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using global::Common.Constants;
@@ -20,18 +21,25 @@
         public async Task<Result<bool>> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
         {
             User user = await this.userManager.FindByEmailAsync(request.Email);
-            if (user.EmailConfirmed)
-            {
-                return Result<bool>.Failure(ErrorMessages.EmailAlreadyConfirmedErrorMessage);
-            }
 
             if (user == null)
             {
                 return Result<bool>.Failure(ErrorMessages.EmailInvalidErrorMessage);
             }
 
-            var result = await this.userManager.ConfirmEmailAsync(user, request.Token);
+            if (user.EmailConfirmed)
+            {
+                return Result<bool>.Failure(ErrorMessages.EmailAlreadyConfirmedErrorMessage);
+            }
 
+            var result = await this.userManager.ConfirmEmailAsync(user, request.Token);
+            if (!result.Succeeded)
+            {
+                if (result.Errors.ToList()[0].Code == "InvalidToken")
+                {
+                    return Result<bool>.Failure(ErrorMessages.ConfirmTokenInvalidErrorMessage);
+                }
+            }
             return result.Succeeded ? Result<bool>.Success(true) : Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
         }
     }
