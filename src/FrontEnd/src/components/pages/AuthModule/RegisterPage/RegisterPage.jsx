@@ -22,8 +22,9 @@ const RegisterPage = ({history}) => {
     const [user, setUser] = useState({});
 
     const handleChange = (event) => {
-        user[event.target.id] = event.target.value;
-        setUser(user);
+        let copyData = user;
+        copyData[event.target.id] = event.target.value;
+        setUser(copyData);
     };
 
     const handleSubmit = async () => {
