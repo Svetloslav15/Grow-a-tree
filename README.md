@@ -36,7 +36,7 @@ focus on defining the problem.
 
 - IDEAL: This section is used to describe the desired or “to be” state of the process or product. At large, this section 
 should illustrate what the expected environment would look like once the solution is implemented.
-- REALITY: This section is used to describe the current or “as is” state of the process or product. 
+- REALITY: This section is used to describe the current or as is state of the process or product. 
 - CONSEQUENCES: This section is used to describe the impacts on the business if the problem is not fixed or improved upon.
 This includes costs associated with loss of money, time, productivity, competitive advantage, and so forth.
 
