@@ -373,6 +373,49 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GetShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/short-info/42619fbb-fb36-4c25-863f-1fed2d1e7843",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"short-info",
+								"42619fbb-fb36-4c25-863f-1fed2d1e7843"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/all-short-info?perPage=3",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"all-short-info"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -381,7 +424,7 @@
 			"name": "Trees",
 			"item": [
 				{
-					"name": "{{LocalUrl}}/trees/upsert",
+					"name": "Upsert",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -438,6 +481,168 @@
 							"path": [
 								"trees",
 								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Id",
+									"value": "a0d26387-ac7b-49ac-b804-250b",
+									"type": "text"
+								},
+								{
+									"key": "NewImageFile",
+									"type": "file",
+									"src": []
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/update-tree-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"update-tree-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "TreeId",
+									"value": "8f5a9c60-219d-49b9-a433-b2a5181606ee",
+									"type": "text"
+								},
+								{
+									"key": "ImagesFiles",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/add-tree-images",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"add-tree-images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ImageId\": \"a0d26387-ac7b-49ac-b804-250bdfa948be\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/delete-tree-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"delete-tree-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RestoreTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ImageId\": \"a0d26387-ac7b-49ac-b804-250bdfa948be\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/restore-tree-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"restore-tree-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/8f5a9c60-219d-49b9-a433-b2a5181606ee",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"8f5a9c60-219d-49b9-a433-b2a5181606ee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/short-info/8f5a9c60-219d-49b9-a433-b2a5181606ee",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"short-info",
+								"8f5a9c60-219d-49b9-a433-b2a5181606ee"
 							]
 						}
 					},

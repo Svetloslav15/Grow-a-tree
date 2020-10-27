@@ -473,6 +473,8 @@ export class AuthClient implements IAuthClient {
 }
 
 export interface ITreesClient {
+    getById(id: string | null): Observable<ResultOfTreeModel>;
+    getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel>;
     upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString>;
     editTreeImage(id: string | null | undefined, newImageFile: FileParameter | null | undefined): Observable<ResultOfString>;
     addTreeImages(treeId: string | null | undefined, imagesFiles: string[] | null | undefined): Observable<ResultOfListOfString>;
@@ -491,6 +493,108 @@ export class TreesClient implements ITreesClient {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getById(id: string | null): Observable<ResultOfTreeModel> {
+        let url_ = this.baseUrl + "/api/Trees/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfTreeModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfTreeModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<ResultOfTreeModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfTreeModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfTreeModel>(<any>null);
+    }
+
+    getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Trees/short-info/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetShortInfoById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetShortInfoById(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfTreeShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfTreeShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetShortInfoById(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfTreeShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfTreeShortInfoModel>(<any>null);
     }
 
     upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString> {
@@ -779,7 +883,9 @@ export class TreesClient implements ITreesClient {
 
 export interface IUsersClient {
     getById(id: string | null): Observable<ResultOfUserModel>;
+    getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel>;
     getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel>;
+    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListShortInfoModel>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
 }
@@ -848,6 +954,57 @@ export class UsersClient implements IUsersClient {
         return _observableOf<ResultOfUserModel>(<any>null);
     }
 
+    getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Users/short-info/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id)); 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetShortInfoById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetShortInfoById(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfUserShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfUserShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetShortInfoById(response: HttpResponseBase): Observable<ResultOfUserShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfUserShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfUserShortInfoModel>(<any>null);
+    }
+
     getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel> {
         let url_ = this.baseUrl + "/api/Users/all?";
         if (page === null)
@@ -902,6 +1059,62 @@ export class UsersClient implements IUsersClient {
             }));
         }
         return _observableOf<ResultOfUsersListModel>(<any>null);
+    }
+
+    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Users/all-short-info?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllShortInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllShortInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfUsersListShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfUsersListShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllShortInfo(response: HttpResponseBase): Observable<ResultOfUsersListShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfUsersListShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfUsersListShortInfoModel>(<any>null);
     }
 
     edit(command: EditUserCommand): Observable<ResultOfUserModel> {
@@ -1524,6 +1737,408 @@ export interface IRefreshTokenCommand {
     refreshToken: string;
 }
 
+export class ResultOfTreeModel implements IResultOfTreeModel {
+    data?: TreeModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfTreeModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? TreeModel.fromJS(_data["data"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfTreeModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfTreeModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfTreeModel {
+    data?: TreeModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreeModel implements ITreeModel {
+    id?: string | undefined;
+    nickname?: string | undefined;
+    type?: string | undefined;
+    plantedOn?: Date;
+    latitude?: number;
+    longitude?: number;
+    status?: TreeStatus;
+    city?: string | undefined;
+    category?: string | undefined;
+    ownerId?: string | undefined;
+    owner?: UserModel | undefined;
+    images?: ImageModel[] | undefined;
+
+    constructor(data?: ITreeModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.nickname = _data["nickname"];
+            this.type = _data["type"];
+            this.plantedOn = _data["plantedOn"] ? new Date(_data["plantedOn"].toString()) : <any>undefined;
+            this.latitude = _data["latitude"];
+            this.longitude = _data["longitude"];
+            this.status = _data["status"];
+            this.city = _data["city"];
+            this.category = _data["category"];
+            this.ownerId = _data["ownerId"];
+            this.owner = _data["owner"] ? UserModel.fromJS(_data["owner"]) : <any>undefined;
+            if (Array.isArray(_data["images"])) {
+                this.images = [] as any;
+                for (let item of _data["images"])
+                    this.images!.push(ImageModel.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TreeModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["nickname"] = this.nickname;
+        data["type"] = this.type;
+        data["plantedOn"] = this.plantedOn ? this.plantedOn.toISOString() : <any>undefined;
+        data["latitude"] = this.latitude;
+        data["longitude"] = this.longitude;
+        data["status"] = this.status;
+        data["city"] = this.city;
+        data["category"] = this.category;
+        data["ownerId"] = this.ownerId;
+        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
+        if (Array.isArray(this.images)) {
+            data["images"] = [];
+            for (let item of this.images)
+                data["images"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ITreeModel {
+    id?: string | undefined;
+    nickname?: string | undefined;
+    type?: string | undefined;
+    plantedOn?: Date;
+    latitude?: number;
+    longitude?: number;
+    status?: TreeStatus;
+    city?: string | undefined;
+    category?: string | undefined;
+    ownerId?: string | undefined;
+    owner?: UserModel | undefined;
+    images?: ImageModel[] | undefined;
+}
+
+export enum TreeStatus {
+    GoodCondition = 1,
+    Damaged = 2,
+    Dry = 3,
+}
+
+export class UserModel implements IUserModel {
+    id?: string | undefined;
+    email?: string | undefined;
+    userName?: string | undefined;
+    city?: string | undefined;
+    phoneNumber?: string | undefined;
+    profilePictureUrl?: string | undefined;
+
+    constructor(data?: IUserModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.email = _data["email"];
+            this.userName = _data["userName"];
+            this.city = _data["city"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.profilePictureUrl = _data["profilePictureUrl"];
+        }
+    }
+
+    static fromJS(data: any): UserModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["email"] = this.email;
+        data["userName"] = this.userName;
+        data["city"] = this.city;
+        data["phoneNumber"] = this.phoneNumber;
+        data["profilePictureUrl"] = this.profilePictureUrl;
+        return data; 
+    }
+}
+
+export interface IUserModel {
+    id?: string | undefined;
+    email?: string | undefined;
+    userName?: string | undefined;
+    city?: string | undefined;
+    phoneNumber?: string | undefined;
+    profilePictureUrl?: string | undefined;
+}
+
+export class ImageModel implements IImageModel {
+    id?: string | undefined;
+    url?: string | undefined;
+
+    constructor(data?: IImageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.url = _data["url"];
+        }
+    }
+
+    static fromJS(data: any): ImageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ImageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["url"] = this.url;
+        return data; 
+    }
+}
+
+export interface IImageModel {
+    id?: string | undefined;
+    url?: string | undefined;
+}
+
+export class ResultOfTreeShortInfoModel implements IResultOfTreeShortInfoModel {
+    data?: TreeShortInfoModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfTreeShortInfoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? TreeShortInfoModel.fromJS(_data["data"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfTreeShortInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfTreeShortInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfTreeShortInfoModel {
+    data?: TreeShortInfoModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreeShortInfoModel implements ITreeShortInfoModel {
+    id?: string | undefined;
+    nickname?: string | undefined;
+    plantedOn?: Date;
+    status?: TreeStatus;
+    city?: string | undefined;
+    owner?: UserShortInfoModel | undefined;
+    image?: ImageModel | undefined;
+
+    constructor(data?: ITreeShortInfoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.nickname = _data["nickname"];
+            this.plantedOn = _data["plantedOn"] ? new Date(_data["plantedOn"].toString()) : <any>undefined;
+            this.status = _data["status"];
+            this.city = _data["city"];
+            this.owner = _data["owner"] ? UserShortInfoModel.fromJS(_data["owner"]) : <any>undefined;
+            this.image = _data["image"] ? ImageModel.fromJS(_data["image"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TreeShortInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeShortInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["nickname"] = this.nickname;
+        data["plantedOn"] = this.plantedOn ? this.plantedOn.toISOString() : <any>undefined;
+        data["status"] = this.status;
+        data["city"] = this.city;
+        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
+        data["image"] = this.image ? this.image.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ITreeShortInfoModel {
+    id?: string | undefined;
+    nickname?: string | undefined;
+    plantedOn?: Date;
+    status?: TreeStatus;
+    city?: string | undefined;
+    owner?: UserShortInfoModel | undefined;
+    image?: ImageModel | undefined;
+}
+
+export class UserShortInfoModel implements IUserShortInfoModel {
+    id?: string | undefined;
+    userName?: string | undefined;
+    city?: string | undefined;
+    profilePictureUrl?: string | undefined;
+
+    constructor(data?: IUserShortInfoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.userName = _data["userName"];
+            this.city = _data["city"];
+            this.profilePictureUrl = _data["profilePictureUrl"];
+        }
+    }
+
+    static fromJS(data: any): UserShortInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserShortInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["userName"] = this.userName;
+        data["city"] = this.city;
+        data["profilePictureUrl"] = this.profilePictureUrl;
+        return data; 
+    }
+}
+
+export interface IUserShortInfoModel {
+    id?: string | undefined;
+    userName?: string | undefined;
+    city?: string | undefined;
+    profilePictureUrl?: string | undefined;
+}
+
 export class ResultOfString implements IResultOfString {
     data?: string | undefined;
     succeeded?: boolean;
@@ -1760,15 +2375,12 @@ export interface IResultOfUserModel {
     errors?: string[] | undefined;
 }
 
-export class UserModel implements IUserModel {
-    id?: string | undefined;
-    email?: string | undefined;
-    userName?: string | undefined;
-    city?: string | undefined;
-    phoneNumber?: string | undefined;
-    profilePictureUrl?: string | undefined;
+export class ResultOfUserShortInfoModel implements IResultOfUserShortInfoModel {
+    data?: UserShortInfoModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
 
-    constructor(data?: IUserModel) {
+    constructor(data?: IResultOfUserShortInfoModel) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1779,41 +2391,40 @@ export class UserModel implements IUserModel {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.email = _data["email"];
-            this.userName = _data["userName"];
-            this.city = _data["city"];
-            this.phoneNumber = _data["phoneNumber"];
-            this.profilePictureUrl = _data["profilePictureUrl"];
+            this.data = _data["data"] ? UserShortInfoModel.fromJS(_data["data"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
         }
     }
 
-    static fromJS(data: any): UserModel {
+    static fromJS(data: any): ResultOfUserShortInfoModel {
         data = typeof data === 'object' ? data : {};
-        let result = new UserModel();
+        let result = new ResultOfUserShortInfoModel();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["email"] = this.email;
-        data["userName"] = this.userName;
-        data["city"] = this.city;
-        data["phoneNumber"] = this.phoneNumber;
-        data["profilePictureUrl"] = this.profilePictureUrl;
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
         return data; 
     }
 }
 
-export interface IUserModel {
-    id?: string | undefined;
-    email?: string | undefined;
-    userName?: string | undefined;
-    city?: string | undefined;
-    phoneNumber?: string | undefined;
-    profilePictureUrl?: string | undefined;
+export interface IResultOfUserShortInfoModel {
+    data?: UserShortInfoModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
 }
 
 export class ResultOfUsersListModel implements IResultOfUsersListModel {
@@ -2041,6 +2652,149 @@ export interface IPagination {
     totalPages?: number;
     currentPage?: number;
     perPage?: number;
+}
+
+export class ResultOfUsersListShortInfoModel implements IResultOfUsersListShortInfoModel {
+    data?: UsersListShortInfoModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfUsersListShortInfoModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? UsersListShortInfoModel.fromJS(_data["data"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfUsersListShortInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfUsersListShortInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfUsersListShortInfoModel {
+    data?: UsersListShortInfoModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class MetaResultOfIListOfUserShortInfoModelAndPaginationMeta implements IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
+    data?: UserShortInfoModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(UserShortInfoModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfUserShortInfoModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
+    data?: UserShortInfoModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class UsersListShortInfoModel extends MetaResultOfIListOfUserShortInfoModelAndPaginationMeta implements IUsersListShortInfoModel {
+
+    constructor(data?: IUsersListShortInfoModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): UsersListShortInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UsersListShortInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IUsersListShortInfoModel extends IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
 }
 
 export class EditUserCommand implements IEditUserCommand {
