@@ -219,6 +219,109 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Forgotten Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"michev10@abv.bg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/forgotten-password",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"forgotten-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ResetPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"michev10@abv.bg\",\r\n    \"token\": \"CfDJ8GhwiI0RHEpMnYwg8Kutss8tPIDULXqKzwoU+l/HUVfVSml+7KdSvLIjCPd2eJCzlnQDz3tB4sbLfzIb/iGD/3bkw5V7JYCXmwexGdvaIS1UWptd1iTGEBSX4KnvZ8RRqLrRkjZ8J+f1lWvjxIJbBtZ9vXUUzEo3rAtp7wALH6qpaGEb3XZnsybSxevceACS3+EOv6naE2JJeGQg1r2DiZoNlOeQz+nbO4wonZonkit2\",\r\n    \"password\": \"4325423\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/reset-password",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ExternalLogin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"providerKey\": \"135135123512351235\",\r\n    \"providerName\": \"Facebook\",\r\n    \"email\": \"michev10@abv.bg\",\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Geroev\",\r\n    \"profilePictureUrl\": \"https://image.com/plamen\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/external-login",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"external-login"
+							],
+							"query": [
+								{
+									"key": "FirstName",
+									"value": "Plamen",
+									"disabled": true
+								},
+								{
+									"key": "LastName",
+									"value": "Michev",
+									"disabled": true
+								},
+								{
+									"key": "Email",
+									"value": "asas@afad.com",
+									"disabled": true
+								},
+								{
+									"key": "UserId",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}

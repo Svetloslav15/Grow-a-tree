@@ -27,11 +27,6 @@
 
         public async Task<Result<TokenModel>> Handle(ExternalLoginCommand request, CancellationToken cancellationToken)
         {
-            // TODO Add appropriate profile picture
-
-            // What about username?
-            // what about profile picture
-            // say the name of the provider
             var user = await this.userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
@@ -39,7 +34,7 @@
                 {
                     Email = request.Email,
                     UserName = request.FirstName + " " + request.LastName,
-                    ProfilePictureUrl = $"https://graph.facebook.com/{request.ProviderKey}/picture?type=large",
+                    ProfilePictureUrl = request.ProfilePictureUrl,
                     EmailConfirmed = true,
                 };
                 ExternalLoginInfo info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.ProviderKey, request.ProviderName);
