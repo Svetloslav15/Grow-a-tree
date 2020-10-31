@@ -102,6 +102,38 @@
         }
       }
     },
+    "/api/Auth/external-login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_ExternalLogin",
+        "requestBody": {
+          "x-name": "externalLoginCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalLoginCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfTokenModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Auth/confirm-email": {
       "post": {
         "tags": [
@@ -291,7 +323,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees/short-info/{id}": {
@@ -696,12 +733,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/Users/all-short-info": {
@@ -988,6 +1020,36 @@
             "nullable": true
           },
           "password": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ExternalLoginCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "providerKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "providerName": {
             "type": "string",
             "nullable": true
           }

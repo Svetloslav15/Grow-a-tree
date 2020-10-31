@@ -15,6 +15,7 @@
     using GrowATree.Application.Trees.Commands.RestoreImage;
     using GrowATree.Application.Trees.Commands.UpsertCommand;
     using GrowATree.Application.Trees.Queries.GetShortInfoById;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
@@ -23,6 +24,7 @@
     {
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<Result<TreeModel>> GetById(string id)
         {
             try

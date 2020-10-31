@@ -87,6 +87,7 @@ export class StoresClient implements IStoresClient {
 export interface IAuthClient {
     register(registerCommand: RegisterCommand): Observable<ResultOfBoolean>;
     login(loginCommand: LoginCommand): Observable<ResultOfTokenModel>;
+    externalLogin(externalLoginCommand: ExternalLoginCommand): Observable<ResultOfTokenModel>;
     confirmEmail(confirmEmailCommand: ConfirmEmailCommand): Observable<ResultOfBoolean>;
     resendLinkConfirmEmail(confirmEmailCommand: ResendConfirmationLinkCommand): Observable<ResultOfBoolean>;
     forgottenPassword(command: ForgottenPasswordCommand): Observable<ResultOfBoolean>;
@@ -190,6 +191,58 @@ export class AuthClient implements IAuthClient {
     }
 
     protected processLogin(response: HttpResponseBase): Observable<ResultOfTokenModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfTokenModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfTokenModel>(<any>null);
+    }
+
+    externalLogin(externalLoginCommand: ExternalLoginCommand): Observable<ResultOfTokenModel> {
+        let url_ = this.baseUrl + "/api/Auth/external-login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(externalLoginCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processExternalLogin(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processExternalLogin(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfTokenModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfTokenModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processExternalLogin(response: HttpResponseBase): Observable<ResultOfTokenModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -1539,6 +1592,58 @@ export class LoginCommand implements ILoginCommand {
 export interface ILoginCommand {
     email?: string | undefined;
     password?: string | undefined;
+}
+
+export class ExternalLoginCommand implements IExternalLoginCommand {
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    email!: string;
+    providerKey?: string | undefined;
+    providerName?: string | undefined;
+
+    constructor(data?: IExternalLoginCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.providerKey = _data["providerKey"];
+            this.providerName = _data["providerName"];
+        }
+    }
+
+    static fromJS(data: any): ExternalLoginCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ExternalLoginCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["providerKey"] = this.providerKey;
+        data["providerName"] = this.providerName;
+        return data; 
+    }
+}
+
+export interface IExternalLoginCommand {
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    email: string;
+    providerKey?: string | undefined;
+    providerName?: string | undefined;
 }
 
 export class ConfirmEmailCommand implements IConfirmEmailCommand {

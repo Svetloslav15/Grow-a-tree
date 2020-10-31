@@ -13,6 +13,7 @@
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
+    using IdentityServer4.Validation;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -46,6 +47,27 @@
                     return Result<TokenModel>.Failure(ErrorMessages.EmailNotConfirmedErrorMessage);
                 }
 
+                var tokenModel = await this.GenerateTokenModel(user);
+
+                user.RefreshToken = tokenModel.RefreshToken;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Constants.JwtExpirationTimeInMinutes);
+
+                await this.userManager.UpdateAsync(user);
+
+                return Result<TokenModel>.Success(tokenModel);
+            }
+            else
+            {
+                return Result<TokenModel>.Failure(ErrorMessages.LoginFailureErrorMessage);
+            }
+        }
+
+        public async Task<Result<TokenModel>> ExternalLoginAsync(string providerName, string providerKey)
+        {
+            var user = await this.userManager.FindByLoginAsync(providerName, providerKey);
+
+            if (user != null)
+            {
                 var tokenModel = await this.GenerateTokenModel(user);
 
                 user.RefreshToken = tokenModel.RefreshToken;
