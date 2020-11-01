@@ -37,22 +37,14 @@
                     ProfilePictureUrl = request.ProfilePictureUrl,
                     EmailConfirmed = true,
                 };
-                ExternalLoginInfo info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.ProviderKey, request.ProviderName);
+                var info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.ProviderKey, request.ProviderName);
                 var identityResult = await this.userManager.CreateAsync(newUser);
 
                 if (identityResult.Succeeded)
                 {
                     var result = await this.userManager.AddLoginAsync(newUser, info);
-                    if (result.Succeeded)
-                    {
-                        var tokenModel = await this.identityService.ExternalLoginAsync(request.ProviderName, request.ProviderKey);
 
-                        return tokenModel;
-                    }
-                    else
-                    {
-                        return Result<TokenModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
-                    }
+                    return result.Succeeded ? await this.identityService.ExternalLoginAsync(request.ProviderName, request.ProviderKey) : Result<TokenModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
                 }
                 else
                 {

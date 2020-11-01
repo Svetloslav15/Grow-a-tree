@@ -1597,9 +1597,10 @@ export interface ILoginCommand {
 export class ExternalLoginCommand implements IExternalLoginCommand {
     firstName?: string | undefined;
     lastName?: string | undefined;
-    email!: string;
+    email?: string | undefined;
     providerKey?: string | undefined;
     providerName?: string | undefined;
+    profilePictureUrl?: string | undefined;
 
     constructor(data?: IExternalLoginCommand) {
         if (data) {
@@ -1617,6 +1618,7 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
             this.email = _data["email"];
             this.providerKey = _data["providerKey"];
             this.providerName = _data["providerName"];
+            this.profilePictureUrl = _data["profilePictureUrl"];
         }
     }
 
@@ -1634,6 +1636,7 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
         data["email"] = this.email;
         data["providerKey"] = this.providerKey;
         data["providerName"] = this.providerName;
+        data["profilePictureUrl"] = this.profilePictureUrl;
         return data; 
     }
 }
@@ -1641,9 +1644,10 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
 export interface IExternalLoginCommand {
     firstName?: string | undefined;
     lastName?: string | undefined;
-    email: string;
+    email?: string | undefined;
     providerKey?: string | undefined;
     providerName?: string | undefined;
+    profilePictureUrl?: string | undefined;
 }
 
 export class ConfirmEmailCommand implements IConfirmEmailCommand {

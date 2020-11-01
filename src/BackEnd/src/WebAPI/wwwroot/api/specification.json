@@ -1028,9 +1028,6 @@
       "ExternalLoginCommand": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "email"
-        ],
         "properties": {
           "firstName": {
             "type": "string",
@@ -1042,14 +1039,17 @@
           },
           "email": {
             "type": "string",
-            "format": "email",
-            "minLength": 1
+            "nullable": true
           },
           "providerKey": {
             "type": "string",
             "nullable": true
           },
           "providerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "profilePictureUrl": {
             "type": "string",
             "nullable": true
           }
