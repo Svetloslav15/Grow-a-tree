@@ -281,7 +281,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"providerKey\": \"135135123512351235\",\r\n    \"providerName\": \"Facebook\",\r\n    \"email\": \"michev10@abv.bg\",\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Geroev\",\r\n    \"profilePictureUrl\": \"https://image.com/plamen\"\r\n}",
+							"raw": "{\r\n    \"providerKey\": \"266530738078781\",\r\n    \"providerName\": \"Facebook\",\r\n    \"email\": \"michev10@abv.bg\",\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Geroev\",\r\n    \"profilePictureUrl\": \"https://image.com/plamen\",\r\n    \"userId\": \"135135123512351235\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -717,6 +717,16 @@
 				{
 					"name": "GetById",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.asdf.CcVJLhHokS8KTDsRrN3CaECfgrjFAKO-jBAsQlcUO20",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {

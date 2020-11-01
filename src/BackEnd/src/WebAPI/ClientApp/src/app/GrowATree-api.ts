@@ -1597,9 +1597,11 @@ export interface ILoginCommand {
 export class ExternalLoginCommand implements IExternalLoginCommand {
     firstName?: string | undefined;
     lastName?: string | undefined;
-    email!: string;
-    providerKey?: string | undefined;
+    email?: string | undefined;
+    userId?: string | undefined;
     providerName?: string | undefined;
+    providerKey?: string | undefined;
+    profilePictureUrl?: string | undefined;
 
     constructor(data?: IExternalLoginCommand) {
         if (data) {
@@ -1615,8 +1617,10 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
-            this.providerKey = _data["providerKey"];
+            this.userId = _data["userId"];
             this.providerName = _data["providerName"];
+            this.providerKey = _data["providerKey"];
+            this.profilePictureUrl = _data["profilePictureUrl"];
         }
     }
 
@@ -1632,8 +1636,10 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
-        data["providerKey"] = this.providerKey;
+        data["userId"] = this.userId;
         data["providerName"] = this.providerName;
+        data["providerKey"] = this.providerKey;
+        data["profilePictureUrl"] = this.profilePictureUrl;
         return data; 
     }
 }
@@ -1641,9 +1647,11 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
 export interface IExternalLoginCommand {
     firstName?: string | undefined;
     lastName?: string | undefined;
-    email: string;
-    providerKey?: string | undefined;
+    email?: string | undefined;
+    userId?: string | undefined;
     providerName?: string | undefined;
+    providerKey?: string | undefined;
+    profilePictureUrl?: string | undefined;
 }
 
 export class ConfirmEmailCommand implements IConfirmEmailCommand {

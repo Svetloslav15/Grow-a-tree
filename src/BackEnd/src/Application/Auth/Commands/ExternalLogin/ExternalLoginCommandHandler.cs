@@ -11,43 +11,53 @@
     using GrowATree.Domain.Entities;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Configuration;
 
     public class ExternalLoginCommandHandler : IRequestHandler<ExternalLoginCommand, Result<TokenModel>>
     {
         private readonly UserManager<User> userManager;
         private readonly IIdentityService identityService;
         private readonly SignInManager<User> signInManager;
+        private readonly IConfiguration configuration;
 
-        public ExternalLoginCommandHandler(UserManager<User> userManager, IIdentityService identityService, SignInManager<User> signInManager)
+        public ExternalLoginCommandHandler(UserManager<User> userManager, IIdentityService identityService, SignInManager<User> signInManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.identityService = identityService;
             this.signInManager = signInManager;
+            this.configuration = configuration;
         }
 
         public async Task<Result<TokenModel>> Handle(ExternalLoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await this.userManager.FindByEmailAsync(request.Email);
-            if (user == null)
+            if (request.ProviderKey == this.configuration["Logins:Google"] || request.ProviderKey == this.configuration["Logins:Facebook"])
             {
-                var newUser = new User
+                var user = await this.userManager.FindByEmailAsync(request.Email);
+                if (user == null)
                 {
-                    Email = request.Email,
-                    UserName = request.FirstName + " " + request.LastName,
-                    ProfilePictureUrl = request.ProfilePictureUrl,
-                    EmailConfirmed = true,
-                };
-                ExternalLoginInfo info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.ProviderKey, request.ProviderName);
-                var identityResult = await this.userManager.CreateAsync(newUser);
-
-                if (identityResult.Succeeded)
-                {
-                    var result = await this.userManager.AddLoginAsync(newUser, info);
-                    if (result.Succeeded)
+                    var newUser = new User
                     {
-                        var tokenModel = await this.identityService.ExternalLoginAsync(request.ProviderName, request.ProviderKey);
+                        Email = request.Email,
+                        UserName = request.FirstName + " " + request.LastName,
+                        ProfilePictureUrl = request.ProfilePictureUrl,
+                        EmailConfirmed = true,
+                    };
+                    ExternalLoginInfo info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.UserId, request.ProviderName);
+                    var identityResult = await this.userManager.CreateAsync(newUser);
 
-                        return tokenModel;
+                    if (identityResult.Succeeded)
+                    {
+                        var result = await this.userManager.AddLoginAsync(newUser, info);
+                        if (result.Succeeded)
+                        {
+                            var tokenModel = await this.identityService.ExternalLoginAsync(request.ProviderName, request.UserId);
+
+                            return tokenModel;
+                        }
+                        else
+                        {
+                            return Result<TokenModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+                        }
                     }
                     else
                     {
@@ -56,14 +66,14 @@
                 }
                 else
                 {
-                    return Result<TokenModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+                    var tokenModel = await this.identityService.ExternalLoginAsync(request.ProviderName, request.UserId);
+
+                    return tokenModel;
                 }
             }
             else
             {
-                var tokenModel = await this.identityService.ExternalLoginAsync(request.ProviderName, request.ProviderKey);
-
-                return tokenModel;
+                return Result<TokenModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }
