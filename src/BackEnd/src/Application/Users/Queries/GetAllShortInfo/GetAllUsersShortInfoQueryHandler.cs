@@ -12,7 +12,7 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetAllUsersShortInfoQueryHandler : IRequestHandler<GetAllUsersShortInfoQuery, UsersListShortInfoModel>
+    public class GetAllUsersShortInfoQueryHandler : IRequestHandler<GetAllUsersShortInfoQuery, UserListShortInfoModel>
     {
         private readonly IApplicationDbContext context;
         private readonly IMapper mapper;
@@ -23,7 +23,7 @@
             this.mapper = mapper;
         }
 
-        public async Task<UsersListShortInfoModel> Handle(GetAllUsersShortInfoQuery request, CancellationToken cancellationToken)
+        public async Task<UserListShortInfoModel> Handle(GetAllUsersShortInfoQuery request, CancellationToken cancellationToken)
         {
             var list = await this.context.Users
                 .Skip(request.PerPage * (request.Page - 1))
@@ -40,7 +40,7 @@
                 TotalPages = Convert.ToInt32(Math.Ceiling(totalUsers / Convert.ToDouble(request.PerPage))),
             };
 
-            var result = new UsersListShortInfoModel
+            var result = new UserListShortInfoModel
             {
                 Data = list,
                 Meta = new PaginationMeta

@@ -1,4 +1,4 @@
-﻿namespace GrowATree.Application.Users.Queries.GetAll
+﻿namespace GrowATree.Application.Trees.Queries.GetList
 {
     using System;
     using System.Linq;
@@ -8,27 +8,27 @@
     using AutoMapper.QueryableExtensions;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Models.Common.Models;
-    using GrowATree.Application.Models.Users;
+    using GrowATree.Application.Models.Trees;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, UserListModel>
+    public class GetTreeListQueryHandler : IRequestHandler<GetTreeListQuery, TreeListModel>
     {
         private readonly IApplicationDbContext context;
         private readonly IMapper mapper;
 
-        public GetAllUsersQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetTreeListQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        public async Task<UserListModel> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<TreeListModel> Handle(GetTreeListQuery request, CancellationToken cancellationToken)
         {
             var list = await this.context.Users
                 .Skip(request.PerPage * (request.Page - 1))
                 .Take(request.PerPage)
-                .ProjectTo<UserModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<TreeModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
             var totalUsers = await this.context.Users.CountAsync();
@@ -40,7 +40,7 @@
                 TotalPages = Convert.ToInt32(Math.Ceiling(totalUsers / Convert.ToDouble(request.PerPage))),
             };
 
-            var result = new UserListModel()
+            var result = new TreeListModel
             {
                 Data = list,
                 Meta = new PaginationMeta

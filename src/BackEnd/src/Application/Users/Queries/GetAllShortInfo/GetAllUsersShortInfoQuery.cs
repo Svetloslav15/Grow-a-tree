@@ -5,7 +5,7 @@
     using GrowATree.Application.Models.Users;
     using MediatR;
 
-    public class GetAllUsersShortInfoQuery : PagedQuery, IRequest<UsersListShortInfoModel>
+    public class GetAllUsersShortInfoQuery : PagedQuery, IRequest<UserListShortInfoModel>
     {
     }
 }

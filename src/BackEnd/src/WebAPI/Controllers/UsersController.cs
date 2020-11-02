@@ -80,7 +80,7 @@
         }
 
         [HttpGet("all")]
-        public async Task<Result<UsersListModel>> GetAll([FromQuery] GetAllUsersQuery query)
+        public async Task<ActionResult<UserListModel>> GetAll([FromQuery] GetAllUsersQuery query)
         {
             try
             {
@@ -92,22 +92,21 @@
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
 
-                    return Result<UsersListModel>.Failure(errorMessage);
+                    return UserListModel.Failure<UserListModel>(errorMessage);
                 }
 
-                var result = await this.Mediator.Send(query);
-                return Result<UsersListModel>.Success(result);
+                return await this.Mediator.Send(query);
             }
             catch (Exception ex)
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<UsersListModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+                return UserListModel.Failure<UserListModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
         [HttpGet("all-short-info")]
-        public async Task<Result<UsersListShortInfoModel>> GetAllShortInfo([FromQuery] GetAllUsersShortInfoQuery query)
+        public async Task<ActionResult<UserListShortInfoModel>> GetAllShortInfo([FromQuery] GetAllUsersShortInfoQuery query)
         {
             try
             {
@@ -119,17 +118,16 @@
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
 
-                    return Result<UsersListShortInfoModel>.Failure(errorMessage);
+                    return UserListShortInfoModel.Failure<UserListShortInfoModel>(errorMessage);
                 }
 
-                var result = await this.Mediator.Send(query);
-                return Result<UsersListShortInfoModel>.Success(result);
+                return await this.Mediator.Send(query);
             }
             catch (Exception ex)
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<UsersListShortInfoModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+                return UserListShortInfoModel.Failure<UserListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 

@@ -528,6 +528,8 @@ export class AuthClient implements IAuthClient {
 export interface ITreesClient {
     getById(id: string | null): Observable<ResultOfTreeModel>;
     getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel>;
+    getTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
+    getTreesShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
     upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString>;
     editTreeImage(id: string | null | undefined, newImageFile: FileParameter | null | undefined): Observable<ResultOfString>;
     addTreeImages(treeId: string | null | undefined, imagesFiles: string[] | null | undefined): Observable<ResultOfListOfString>;
@@ -629,6 +631,112 @@ export class TreesClient implements ITreesClient {
     }
 
     protected processGetShortInfoById(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfTreeShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfTreeShortInfoModel>(<any>null);
+    }
+
+    getTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel> {
+        let url_ = this.baseUrl + "/api/Trees?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTrees(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTrees(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTrees(response: HttpResponseBase): Observable<TreeListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeListModel>(<any>null);
+    }
+
+    getTreesShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Trees/short-info?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTreesShortInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTreesShortInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfTreeShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfTreeShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTreesShortInfo(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -937,8 +1045,8 @@ export class TreesClient implements ITreesClient {
 export interface IUsersClient {
     getById(id: string | null): Observable<ResultOfUserModel>;
     getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel>;
-    getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel>;
-    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListShortInfoModel>;
+    getAll(page: number | undefined, perPage: number | undefined): Observable<UserListModel>;
+    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
 }
@@ -1058,7 +1166,7 @@ export class UsersClient implements IUsersClient {
         return _observableOf<ResultOfUserShortInfoModel>(<any>null);
     }
 
-    getAll(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListModel> {
+    getAll(page: number | undefined, perPage: number | undefined): Observable<UserListModel> {
         let url_ = this.baseUrl + "/api/Users/all?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
@@ -1085,14 +1193,14 @@ export class UsersClient implements IUsersClient {
                 try {
                     return this.processGetAll(<any>response_);
                 } catch (e) {
-                    return <Observable<ResultOfUsersListModel>><any>_observableThrow(e);
+                    return <Observable<UserListModel>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ResultOfUsersListModel>><any>_observableThrow(response_);
+                return <Observable<UserListModel>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAll(response: HttpResponseBase): Observable<ResultOfUsersListModel> {
+    protected processGetAll(response: HttpResponseBase): Observable<UserListModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -1103,7 +1211,7 @@ export class UsersClient implements IUsersClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ResultOfUsersListModel.fromJS(resultData200);
+            result200 = UserListModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1111,10 +1219,10 @@ export class UsersClient implements IUsersClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<ResultOfUsersListModel>(<any>null);
+        return _observableOf<UserListModel>(<any>null);
     }
 
-    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<ResultOfUsersListShortInfoModel> {
+    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
         let url_ = this.baseUrl + "/api/Users/all-short-info?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
@@ -1141,14 +1249,14 @@ export class UsersClient implements IUsersClient {
                 try {
                     return this.processGetAllShortInfo(<any>response_);
                 } catch (e) {
-                    return <Observable<ResultOfUsersListShortInfoModel>><any>_observableThrow(e);
+                    return <Observable<UserListShortInfoModel>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ResultOfUsersListShortInfoModel>><any>_observableThrow(response_);
+                return <Observable<UserListShortInfoModel>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetAllShortInfo(response: HttpResponseBase): Observable<ResultOfUsersListShortInfoModel> {
+    protected processGetAllShortInfo(response: HttpResponseBase): Observable<UserListShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -1159,7 +1267,7 @@ export class UsersClient implements IUsersClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ResultOfUsersListShortInfoModel.fromJS(resultData200);
+            result200 = UserListShortInfoModel.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1167,7 +1275,7 @@ export class UsersClient implements IUsersClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<ResultOfUsersListShortInfoModel>(<any>null);
+        return _observableOf<UserListShortInfoModel>(<any>null);
     }
 
     edit(command: EditUserCommand): Observable<ResultOfUserModel> {
@@ -2252,6 +2360,181 @@ export interface IUserShortInfoModel {
     profilePictureUrl?: string | undefined;
 }
 
+export class MetaResultOfIListOfTreeModelAndPaginationMeta implements IMetaResultOfIListOfTreeModelAndPaginationMeta {
+    data?: TreeModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfTreeModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreeModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfTreeModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfTreeModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfTreeModelAndPaginationMeta {
+    data?: TreeModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreeListModel extends MetaResultOfIListOfTreeModelAndPaginationMeta implements ITreeListModel {
+
+    constructor(data?: ITreeListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): TreeListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITreeListModel extends IMetaResultOfIListOfTreeModelAndPaginationMeta {
+}
+
+export class PaginationMeta implements IPaginationMeta {
+    pagination?: Pagination | undefined;
+
+    constructor(data?: IPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPaginationMeta {
+    pagination?: Pagination | undefined;
+}
+
+export class Pagination implements IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+
+    constructor(data?: IPagination) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalItems = _data["totalItems"];
+            this.totalPages = _data["totalPages"];
+            this.currentPage = _data["currentPage"];
+            this.perPage = _data["perPage"];
+        }
+    }
+
+    static fromJS(data: any): Pagination {
+        data = typeof data === 'object' ? data : {};
+        let result = new Pagination();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalItems"] = this.totalItems;
+        data["totalPages"] = this.totalPages;
+        data["currentPage"] = this.currentPage;
+        data["perPage"] = this.perPage;
+        return data; 
+    }
+}
+
+export interface IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+}
+
 export class ResultOfString implements IResultOfString {
     data?: string | undefined;
     succeeded?: boolean;
@@ -2540,58 +2823,6 @@ export interface IResultOfUserShortInfoModel {
     errors?: string[] | undefined;
 }
 
-export class ResultOfUsersListModel implements IResultOfUsersListModel {
-    data?: UsersListModel | undefined;
-    succeeded?: boolean;
-    errors?: string[] | undefined;
-
-    constructor(data?: IResultOfUsersListModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.data = _data["data"] ? UsersListModel.fromJS(_data["data"]) : <any>undefined;
-            this.succeeded = _data["succeeded"];
-            if (Array.isArray(_data["errors"])) {
-                this.errors = [] as any;
-                for (let item of _data["errors"])
-                    this.errors!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): ResultOfUsersListModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new ResultOfUsersListModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
-        data["succeeded"] = this.succeeded;
-        if (Array.isArray(this.errors)) {
-            data["errors"] = [];
-            for (let item of this.errors)
-                data["errors"].push(item);
-        }
-        return data; 
-    }
-}
-
-export interface IResultOfUsersListModel {
-    data?: UsersListModel | undefined;
-    succeeded?: boolean;
-    errors?: string[] | undefined;
-}
-
 export class MetaResultOfIListOfUserModelAndPaginationMeta implements IMetaResultOfIListOfUserModelAndPaginationMeta {
     data?: UserModel[] | undefined;
     meta?: PaginationMeta | undefined;
@@ -2656,9 +2887,9 @@ export interface IMetaResultOfIListOfUserModelAndPaginationMeta {
     errors?: string[] | undefined;
 }
 
-export class UsersListModel extends MetaResultOfIListOfUserModelAndPaginationMeta implements IUsersListModel {
+export class UserListModel extends MetaResultOfIListOfUserModelAndPaginationMeta implements IUserListModel {
 
-    constructor(data?: IUsersListModel) {
+    constructor(data?: IUserListModel) {
         super(data);
     }
 
@@ -2666,9 +2897,9 @@ export class UsersListModel extends MetaResultOfIListOfUserModelAndPaginationMet
         super.init(_data);
     }
 
-    static fromJS(data: any): UsersListModel {
+    static fromJS(data: any): UserListModel {
         data = typeof data === 'object' ? data : {};
-        let result = new UsersListModel();
+        let result = new UserListModel();
         result.init(data);
         return result;
     }
@@ -2680,143 +2911,7 @@ export class UsersListModel extends MetaResultOfIListOfUserModelAndPaginationMet
     }
 }
 
-export interface IUsersListModel extends IMetaResultOfIListOfUserModelAndPaginationMeta {
-}
-
-export class PaginationMeta implements IPaginationMeta {
-    pagination?: Pagination | undefined;
-
-    constructor(data?: IPaginationMeta) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): PaginationMeta {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginationMeta();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface IPaginationMeta {
-    pagination?: Pagination | undefined;
-}
-
-export class Pagination implements IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
-
-    constructor(data?: IPagination) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.totalItems = _data["totalItems"];
-            this.totalPages = _data["totalPages"];
-            this.currentPage = _data["currentPage"];
-            this.perPage = _data["perPage"];
-        }
-    }
-
-    static fromJS(data: any): Pagination {
-        data = typeof data === 'object' ? data : {};
-        let result = new Pagination();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalItems"] = this.totalItems;
-        data["totalPages"] = this.totalPages;
-        data["currentPage"] = this.currentPage;
-        data["perPage"] = this.perPage;
-        return data; 
-    }
-}
-
-export interface IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
-}
-
-export class ResultOfUsersListShortInfoModel implements IResultOfUsersListShortInfoModel {
-    data?: UsersListShortInfoModel | undefined;
-    succeeded?: boolean;
-    errors?: string[] | undefined;
-
-    constructor(data?: IResultOfUsersListShortInfoModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.data = _data["data"] ? UsersListShortInfoModel.fromJS(_data["data"]) : <any>undefined;
-            this.succeeded = _data["succeeded"];
-            if (Array.isArray(_data["errors"])) {
-                this.errors = [] as any;
-                for (let item of _data["errors"])
-                    this.errors!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): ResultOfUsersListShortInfoModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new ResultOfUsersListShortInfoModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
-        data["succeeded"] = this.succeeded;
-        if (Array.isArray(this.errors)) {
-            data["errors"] = [];
-            for (let item of this.errors)
-                data["errors"].push(item);
-        }
-        return data; 
-    }
-}
-
-export interface IResultOfUsersListShortInfoModel {
-    data?: UsersListShortInfoModel | undefined;
-    succeeded?: boolean;
-    errors?: string[] | undefined;
+export interface IUserListModel extends IMetaResultOfIListOfUserModelAndPaginationMeta {
 }
 
 export class MetaResultOfIListOfUserShortInfoModelAndPaginationMeta implements IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
@@ -2883,9 +2978,9 @@ export interface IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
     errors?: string[] | undefined;
 }
 
-export class UsersListShortInfoModel extends MetaResultOfIListOfUserShortInfoModelAndPaginationMeta implements IUsersListShortInfoModel {
+export class UserListShortInfoModel extends MetaResultOfIListOfUserShortInfoModelAndPaginationMeta implements IUserListShortInfoModel {
 
-    constructor(data?: IUsersListShortInfoModel) {
+    constructor(data?: IUserListShortInfoModel) {
         super(data);
     }
 
@@ -2893,9 +2988,9 @@ export class UsersListShortInfoModel extends MetaResultOfIListOfUserShortInfoMod
         super.init(_data);
     }
 
-    static fromJS(data: any): UsersListShortInfoModel {
+    static fromJS(data: any): UserListShortInfoModel {
         data = typeof data === 'object' ? data : {};
-        let result = new UsersListShortInfoModel();
+        let result = new UserListShortInfoModel();
         result.init(data);
         return result;
     }
@@ -2907,7 +3002,7 @@ export class UsersListShortInfoModel extends MetaResultOfIListOfUserShortInfoMod
     }
 }
 
-export interface IUsersListShortInfoModel extends IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
+export interface IUserListShortInfoModel extends IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
 }
 
 export class EditUserCommand implements IEditUserCommand {

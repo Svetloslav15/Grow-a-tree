@@ -14,6 +14,7 @@
     using GrowATree.Application.Trees.Commands.EditImage;
     using GrowATree.Application.Trees.Commands.RestoreImage;
     using GrowATree.Application.Trees.Commands.UpsertCommand;
+    using GrowATree.Application.Trees.Queries.GetList;
     using GrowATree.Application.Trees.Queries.GetShortInfoById;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<Result<TreeModel>> GetById(string id)
+        public async Task<ActionResult<Result<TreeModel>>> GetById(string id)
         {
             try
             {
@@ -52,7 +53,60 @@
         }
 
         [HttpGet("short-info/{id}")]
-        public async Task<Result<TreeShortInfoModel>> GetShortInfoById(string id)
+        public async Task<ActionResult<Result<TreeShortInfoModel>>> GetShortInfoById(string id)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<TreeShortInfoModel>.Failure(errorMessage);
+                }
+
+                var query = new GetTreeShortInfoQuery { Id = id };
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<TreeShortInfoModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<TreeListModel>> GetTrees([FromQuery] GetTreeListQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return TreeListModel.Failure<TreeListModel>(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeListModel.Failure<TreeListModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("short-info")]
+        public async Task<Result<TreeShortInfoModel>> GetTreesShortInfo(string id)
         {
             try
             {

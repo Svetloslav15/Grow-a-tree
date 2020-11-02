@@ -363,6 +363,77 @@
         }
       }
     },
+    "/api/Trees": {
+      "get": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_GetTrees",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeListModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Trees/short-info": {
+      "get": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_GetTreesShortInfo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfTreeShortInfoModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Trees/upsert": {
       "post": {
         "tags": [
@@ -728,7 +799,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultOfUsersListModel"
+                  "$ref": "#/components/schemas/UserListModel"
                 }
               }
             }
@@ -768,7 +839,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultOfUsersListShortInfoModel"
+                  "$ref": "#/components/schemas/UserListShortInfoModel"
                 }
               }
             }
@@ -1361,6 +1432,84 @@
           }
         }
       },
+      "TreeListModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MetaResultOfIListOfTreeModelAndPaginationMeta"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "MetaResultOfIListOfTreeModelAndPaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreeModel"
+            }
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pagination": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Pagination"
+              }
+            ]
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perPage": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "ResultOfString": {
         "type": "object",
         "additionalProperties": false,
@@ -1478,31 +1627,7 @@
           }
         }
       },
-      "ResultOfUsersListModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "data": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/UsersListModel"
-              }
-            ]
-          },
-          "succeeded": {
-            "type": "boolean"
-          },
-          "errors": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "UsersListModel": {
+      "UserListModel": {
         "allOf": [
           {
             "$ref": "#/components/schemas/MetaResultOfIListOfUserModelAndPaginationMeta"
@@ -1544,67 +1669,7 @@
           }
         }
       },
-      "PaginationMeta": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "pagination": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Pagination"
-              }
-            ]
-          }
-        }
-      },
-      "Pagination": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "totalItems": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "currentPage": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "perPage": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "ResultOfUsersListShortInfoModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "data": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/UsersListShortInfoModel"
-              }
-            ]
-          },
-          "succeeded": {
-            "type": "boolean"
-          },
-          "errors": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "UsersListShortInfoModel": {
+      "UserListShortInfoModel": {
         "allOf": [
           {
             "$ref": "#/components/schemas/MetaResultOfIListOfUserShortInfoModelAndPaginationMeta"
