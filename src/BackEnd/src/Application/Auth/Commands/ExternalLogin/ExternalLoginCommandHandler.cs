@@ -30,7 +30,8 @@
 
         public async Task<Result<TokenModel>> Handle(ExternalLoginCommand request, CancellationToken cancellationToken)
         {
-            if (request.ProviderKey == this.configuration["Logins:Google"] || request.ProviderKey == this.configuration["Logins:Facebook"])
+            if ((request.ProviderKey == this.configuration["Logins:Google"] && request.ProviderName == "Google") ||
+                (request.ProviderKey == this.configuration["Logins:Facebook"] && request.ProviderName == "Facebook"))
             {
                 var user = await this.userManager.FindByEmailAsync(request.Email);
                 if (user == null)

@@ -1049,13 +1049,10 @@
             "type": "string",
             "nullable": true
           },
-<<<<<<< HEAD
           "providerKey": {
             "type": "string",
             "nullable": true
           },
-=======
->>>>>>> 037ed882bde8527dc714fee999b4ee989bc04a85
           "profilePictureUrl": {
             "type": "string",
             "nullable": true

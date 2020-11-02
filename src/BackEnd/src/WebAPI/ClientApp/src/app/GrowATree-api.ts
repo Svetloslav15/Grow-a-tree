@@ -1598,14 +1598,9 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
     firstName?: string | undefined;
     lastName?: string | undefined;
     email?: string | undefined;
-<<<<<<< HEAD
     userId?: string | undefined;
     providerName?: string | undefined;
     providerKey?: string | undefined;
-=======
-    providerKey?: string | undefined;
-    providerName?: string | undefined;
->>>>>>> 037ed882bde8527dc714fee999b4ee989bc04a85
     profilePictureUrl?: string | undefined;
 
     constructor(data?: IExternalLoginCommand) {
@@ -1624,10 +1619,7 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
             this.email = _data["email"];
             this.userId = _data["userId"];
             this.providerName = _data["providerName"];
-<<<<<<< HEAD
             this.providerKey = _data["providerKey"];
-=======
->>>>>>> 037ed882bde8527dc714fee999b4ee989bc04a85
             this.profilePictureUrl = _data["profilePictureUrl"];
         }
     }
@@ -1646,10 +1638,7 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
         data["email"] = this.email;
         data["userId"] = this.userId;
         data["providerName"] = this.providerName;
-<<<<<<< HEAD
         data["providerKey"] = this.providerKey;
-=======
->>>>>>> 037ed882bde8527dc714fee999b4ee989bc04a85
         data["profilePictureUrl"] = this.profilePictureUrl;
         return data; 
     }
@@ -1659,14 +1648,9 @@ export interface IExternalLoginCommand {
     firstName?: string | undefined;
     lastName?: string | undefined;
     email?: string | undefined;
-<<<<<<< HEAD
     userId?: string | undefined;
     providerName?: string | undefined;
     providerKey?: string | undefined;
-=======
-    providerKey?: string | undefined;
-    providerName?: string | undefined;
->>>>>>> 037ed882bde8527dc714fee999b4ee989bc04a85
     profilePictureUrl?: string | undefined;
 }
 
