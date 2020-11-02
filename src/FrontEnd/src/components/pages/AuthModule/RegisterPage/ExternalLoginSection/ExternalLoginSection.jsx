@@ -2,6 +2,7 @@ import React from 'react';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import AuthService from '../../../../../services/authService';
+import axios from 'axios';
 
 import * as style from './ExternalLoginSection.module.scss';
 
@@ -19,7 +20,10 @@ const ExternalLoginSection = () => {
         await AuthService.externalLogin(model);
     };
     const responseFacebook = async (response) => {
-        console.log(response);
+        axios.get(response.picture.data.url)
+            .then((data) => {
+                axios.get(data.config.url).then(console.log)
+            })
     };
 
     return (
