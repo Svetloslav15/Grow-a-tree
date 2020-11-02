@@ -219,6 +219,109 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Forgotten Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"michev10@abv.bg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/forgotten-password",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"forgotten-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ResetPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"michev10@abv.bg\",\r\n    \"token\": \"CfDJ8GhwiI0RHEpMnYwg8Kutss8tPIDULXqKzwoU+l/HUVfVSml+7KdSvLIjCPd2eJCzlnQDz3tB4sbLfzIb/iGD/3bkw5V7JYCXmwexGdvaIS1UWptd1iTGEBSX4KnvZ8RRqLrRkjZ8J+f1lWvjxIJbBtZ9vXUUzEo3rAtp7wALH6qpaGEb3XZnsybSxevceACS3+EOv6naE2JJeGQg1r2DiZoNlOeQz+nbO4wonZonkit2\",\r\n    \"password\": \"4325423\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/reset-password",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ExternalLogin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"providerKey\": \"266530738078781\",\r\n    \"providerName\": \"Facebook\",\r\n    \"email\": \"michev10@abv.bg\",\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Geroev\",\r\n    \"profilePictureUrl\": \"https://image.com/plamen\",\r\n    \"userId\": \"135135123512351235\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/external-login",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"external-login"
+							],
+							"query": [
+								{
+									"key": "FirstName",
+									"value": "Plamen",
+									"disabled": true
+								},
+								{
+									"key": "LastName",
+									"value": "Michev",
+									"disabled": true
+								},
+								{
+									"key": "Email",
+									"value": "asas@afad.com",
+									"disabled": true
+								},
+								{
+									"key": "UserId",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -373,6 +476,49 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GetShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/short-info/42619fbb-fb36-4c25-863f-1fed2d1e7843",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"short-info",
+								"42619fbb-fb36-4c25-863f-1fed2d1e7843"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/all-short-info?perPage=3",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"all-short-info"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -381,7 +527,7 @@
 			"name": "Trees",
 			"item": [
 				{
-					"name": "{{LocalUrl}}/trees/upsert",
+					"name": "Upsert",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -438,6 +584,178 @@
 							"path": [
 								"trees",
 								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Id",
+									"value": "a0d26387-ac7b-49ac-b804-250b",
+									"type": "text"
+								},
+								{
+									"key": "NewImageFile",
+									"type": "file",
+									"src": []
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/update-tree-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"update-tree-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "TreeId",
+									"value": "8f5a9c60-219d-49b9-a433-b2a5181606ee",
+									"type": "text"
+								},
+								{
+									"key": "ImagesFiles",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/add-tree-images",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"add-tree-images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ImageId\": \"a0d26387-ac7b-49ac-b804-250bdfa948be\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/delete-tree-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"delete-tree-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RestoreTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ImageId\": \"a0d26387-ac7b-49ac-b804-250bdfa948be\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/restore-tree-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"restore-tree-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.asdf.CcVJLhHokS8KTDsRrN3CaECfgrjFAKO-jBAsQlcUO20",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/8f5a9c60-219d-49b9-a433-b2a5181606ee",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"8f5a9c60-219d-49b9-a433-b2a5181606ee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/short-info/8f5a9c60-219d-49b9-a433-b2a5181606ee",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"short-info",
+								"8f5a9c60-219d-49b9-a433-b2a5181606ee"
 							]
 						}
 					},

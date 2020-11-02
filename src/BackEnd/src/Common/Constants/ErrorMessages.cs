@@ -50,6 +50,8 @@ namespace Common.Constants
 
         public const string PasswordResetErrorMessage = "Грешка при смяна на паролата";
 
+        public const string PasswordRequirmentsErrorMessage = "Паролата трябва да има малка буква и поне 5 символа";
+
         #endregion
 
         #region City

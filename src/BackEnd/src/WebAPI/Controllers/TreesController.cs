@@ -7,17 +7,77 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using GrowATree.Application.Common.Models;
+    using GrowATree.Application.Models.Trees;
+    using GrowATree.Application.Stores.Queries.GetById;
     using GrowATree.Application.Trees.Commands.AddImage;
     using GrowATree.Application.Trees.Commands.DeleteImage;
     using GrowATree.Application.Trees.Commands.EditImage;
     using GrowATree.Application.Trees.Commands.RestoreImage;
     using GrowATree.Application.Trees.Commands.UpsertCommand;
+    using GrowATree.Application.Trees.Queries.GetShortInfoById;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
 
     public class TreesController : ApiController
     {
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<Result<TreeModel>> GetById(string id)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<TreeModel>.Failure(errorMessage);
+                }
+
+                var query = new GetTreeByIdQuery { Id = id };
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<TreeModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("short-info/{id}")]
+        public async Task<Result<TreeShortInfoModel>> GetShortInfoById(string id)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<TreeShortInfoModel>.Failure(errorMessage);
+                }
+
+                var query = new GetTreeShortInfoQuery { Id = id };
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<TreeShortInfoModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
         /// <summary>
         /// Creates a new Tree by the given data.
         /// </summary>

@@ -47,7 +47,6 @@
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddScoped<RoleManager<IdentityRole>>();
 
-
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
 

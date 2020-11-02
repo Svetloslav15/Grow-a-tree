@@ -32,10 +32,10 @@
             }
 
             IdentityResult resetPassResult = await this.userManager.ResetPasswordAsync(user, request.Token, request.Password);
-            
+
             if (!resetPassResult.Succeeded)
             {
-                return Result<bool>.Failure(ErrorMessages.PasswordResetErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.PasswordRequirmentsErrorMessage);
             }
 
             return Result<bool>.Success(true);

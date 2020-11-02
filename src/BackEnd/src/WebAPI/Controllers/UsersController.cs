@@ -10,8 +10,9 @@
     using GrowATree.Application.Users.Commands.ChangeProfilePicture;
     using GrowATree.Application.Users.Commands.Edit;
     using GrowATree.Application.Users.Queries.GetAll;
+    using GrowATree.Application.Users.Queries.GetAllShortInfo;
     using GrowATree.Application.Users.Queries.GetById;
-    using Microsoft.AspNetCore.Authorization;
+    using GrowATree.Application.Users.Queries.GetShortInfoById;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
@@ -51,8 +52,34 @@
             }
         }
 
+        [HttpGet("short-info/{id}")]
+        public async Task<Result<UserShortInfoModel>> GetShortInfoById(string id)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<UserShortInfoModel>.Failure(errorMessage);
+                }
+
+                var query = new GetUserShortInfoQuery { Id = id };
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<UserShortInfoModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
         [HttpGet("all")]
-        [Authorize]
         public async Task<Result<UsersListModel>> GetAll([FromQuery] GetAllUsersQuery query)
         {
             try
@@ -76,6 +103,33 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<UsersListModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("all-short-info")]
+        public async Task<Result<UsersListShortInfoModel>> GetAllShortInfo([FromQuery] GetAllUsersShortInfoQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<UsersListShortInfoModel>.Failure(errorMessage);
+                }
+
+                var result = await this.Mediator.Send(query);
+                return Result<UsersListShortInfoModel>.Success(result);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<UsersListShortInfoModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
