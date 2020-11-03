@@ -106,7 +106,7 @@
         }
 
         [HttpGet("short-info")]
-        public async Task<Result<TreeShortInfoModel>> GetTreesShortInfo(string id)
+        public async Task<ActionResult<Result<TreeShortInfoModel>>> GetTreesShortInfo(string id)
         {
             try
             {
@@ -138,7 +138,7 @@
         /// <param name="upsertCommand">A tree data which.</param>
         /// <returns>Returns created tree id.</returns>
         [HttpPost("upsert")]
-        public async Task<Result<string>> Upsert([FromForm] UpsertTreeCommand upsertCommand)
+        public async Task<ActionResult<Result<string>>> Upsert([FromForm] UpsertTreeCommand upsertCommand)
         {
             try
             {
@@ -169,7 +169,7 @@
         /// <param name="editTreeImageCommand">A command with image id and new image file. Both are required.</param>
         /// <returns>A result with data that represents the new image url.</returns>
         [HttpPost("update-tree-image")]
-        public async Task<Result<string>> EditTreeImage([FromForm] EditTreeImageCommand editTreeImageCommand)
+        public async Task<ActionResult<Result<string>>> EditTreeImage([FromForm] EditTreeImageCommand editTreeImageCommand)
         {
             try
             {
@@ -200,7 +200,7 @@
         /// <param name="addTreeImagesCommand">A tree id for which the images are and the images files.</param>
         /// <returns>Returns all the added images urls.</returns>
         [HttpPost("add-tree-images")]
-        public async Task<Result<List<string>>> AddTreeImages([FromForm] AddTreeImagesCommand addTreeImagesCommand)
+        public async Task<ActionResult<Result<List<string>>>> AddTreeImages([FromForm] AddTreeImagesCommand addTreeImagesCommand)
         {
             try
             {
@@ -231,7 +231,7 @@
         /// <param name="deleteTreeImagesCommand">The id of the wanted to delete item.</param>
         /// <returns>Returns the id of the deleted image.</returns>
         [HttpPost("delete-tree-image")]
-        public async Task<Result<string>> DeleteTreeImages([FromBody] DeleteTreeImageCommand deleteTreeImagesCommand)
+        public async Task<ActionResult<Result<string>>> DeleteTreeImages([FromBody] DeleteTreeImageCommand deleteTreeImagesCommand)
         {
             try
             {
@@ -262,7 +262,7 @@
         /// <param name="restoreTreeImagesCommand">The restored entity id.</param>
         /// <returns>Returns the id of the restored entity.</returns>
         [HttpPost("restore-tree-image")]
-        public async Task<Result<string>> RestoreTreeImages([FromBody] RestoreTreeImageCommand restoreTreeImagesCommand)
+        public async Task<ActionResult<Result<string>>> RestoreTreeImages([FromBody] RestoreTreeImageCommand restoreTreeImagesCommand)
         {
             try
             {

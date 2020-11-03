@@ -26,7 +26,7 @@
         /// <param name="id">Wanted user's id.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpGet("{id}")]
-        public async Task<Result<UserModel>> GetById(string id)
+        public async Task<ActionResult<Result<UserModel>>> GetById(string id)
         {
             try
             {
@@ -53,7 +53,7 @@
         }
 
         [HttpGet("short-info/{id}")]
-        public async Task<Result<UserShortInfoModel>> GetShortInfoById(string id)
+        public async Task<ActionResult<Result<UserShortInfoModel>>> GetShortInfoById(string id)
         {
             try
             {
@@ -132,7 +132,7 @@
         }
 
         [HttpPost("edit")]
-        public async Task<Result<UserModel>> Edit([FromBody] EditUserCommand command)
+        public async Task<ActionResult<Result<UserModel>>> Edit([FromBody] EditUserCommand command)
         {
             try
             {
@@ -158,7 +158,7 @@
         }
 
         [HttpPost("change-profile-picture")]
-        public async Task<Result<string>> ChangeProfilePicture([FromForm] ChangeProfilePictureCommand command)
+        public async Task<ActionResult<Result<string>>> ChangeProfilePicture([FromForm] ChangeProfilePictureCommand command)
         {
             try
             {
