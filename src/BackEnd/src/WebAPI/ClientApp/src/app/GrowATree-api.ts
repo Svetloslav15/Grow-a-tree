@@ -529,7 +529,10 @@ export interface ITreesClient {
     getById(id: string | null): Observable<ResultOfTreeModel>;
     getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel>;
     getTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
-    getTreesShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
+    getTreesShortInfo(page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
+    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
+    getTreeDeletedImages(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel>;
+    getUserTrees(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString>;
     editTreeImage(id: string | null | undefined, newImageFile: FileParameter | null | undefined): Observable<ResultOfString>;
     addTreeImages(treeId: string | null | undefined, imagesFiles: string[] | null | undefined): Observable<ResultOfListOfString>;
@@ -708,10 +711,16 @@ export class TreesClient implements ITreesClient {
         return _observableOf<TreeListModel>(<any>null);
     }
 
-    getTreesShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
-        let url_ = this.baseUrl + "/api/Trees/short-info?";
-        if (id !== undefined)
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+    getTreesShortInfo(page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Trees/list-short-info?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -729,6 +738,56 @@ export class TreesClient implements ITreesClient {
                 try {
                     return this.processGetTreesShortInfo(<any>response_);
                 } catch (e) {
+                    return <Observable<TreeListShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeListShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTreesShortInfo(response: HttpResponseBase): Observable<TreeListShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeListShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeListShortInfoModel>(<any>null);
+    }
+
+    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Trees/short-info?";
+        if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTreesShortInfo2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTreesShortInfo2(<any>response_);
+                } catch (e) {
                     return <Observable<ResultOfTreeShortInfoModel>><any>_observableThrow(e);
                 }
             } else
@@ -736,7 +795,7 @@ export class TreesClient implements ITreesClient {
         }));
     }
 
-    protected processGetTreesShortInfo(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
+    protected processGetTreesShortInfo2(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -756,6 +815,122 @@ export class TreesClient implements ITreesClient {
             }));
         }
         return _observableOf<ResultOfTreeShortInfoModel>(<any>null);
+    }
+
+    getTreeDeletedImages(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel> {
+        let url_ = this.baseUrl + "/api/Trees/deleted-images?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTreeDeletedImages(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTreeDeletedImages(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeImageListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeImageListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTreeDeletedImages(response: HttpResponseBase): Observable<TreeImageListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeImageListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeImageListModel>(<any>null);
+    }
+
+    getUserTrees(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListModel> {
+        let url_ = this.baseUrl + "/api/Trees/user?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetUserTrees(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetUserTrees(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetUserTrees(response: HttpResponseBase): Observable<TreeListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeListModel>(<any>null);
     }
 
     upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString> {
@@ -1045,7 +1220,7 @@ export class TreesClient implements ITreesClient {
 export interface IUsersClient {
     getById(id: string | null): Observable<ResultOfUserModel>;
     getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel>;
-    getAll(page: number | undefined, perPage: number | undefined): Observable<UserListModel>;
+    getList(page: number | undefined, perPage: number | undefined): Observable<UserListModel>;
     getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
@@ -1166,8 +1341,8 @@ export class UsersClient implements IUsersClient {
         return _observableOf<ResultOfUserShortInfoModel>(<any>null);
     }
 
-    getAll(page: number | undefined, perPage: number | undefined): Observable<UserListModel> {
-        let url_ = this.baseUrl + "/api/Users/all?";
+    getList(page: number | undefined, perPage: number | undefined): Observable<UserListModel> {
+        let url_ = this.baseUrl + "/api/Users?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -1187,11 +1362,11 @@ export class UsersClient implements IUsersClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAll(response_);
+            return this.processGetList(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAll(<any>response_);
+                    return this.processGetList(<any>response_);
                 } catch (e) {
                     return <Observable<UserListModel>><any>_observableThrow(e);
                 }
@@ -1200,7 +1375,7 @@ export class UsersClient implements IUsersClient {
         }));
     }
 
-    protected processGetAll(response: HttpResponseBase): Observable<UserListModel> {
+    protected processGetList(response: HttpResponseBase): Observable<UserListModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -1223,7 +1398,7 @@ export class UsersClient implements IUsersClient {
     }
 
     getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
-        let url_ = this.baseUrl + "/api/Users/all-short-info?";
+        let url_ = this.baseUrl + "/api/Users/list-short-info?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -2533,6 +2708,228 @@ export interface IPagination {
     totalPages?: number;
     currentPage?: number;
     perPage?: number;
+}
+
+export class MetaResultOfIListOfTreeShortInfoModelAndPaginationMeta implements IMetaResultOfIListOfTreeShortInfoModelAndPaginationMeta {
+    data?: TreeShortInfoModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfTreeShortInfoModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreeShortInfoModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfTreeShortInfoModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfTreeShortInfoModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfTreeShortInfoModelAndPaginationMeta {
+    data?: TreeShortInfoModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreeListShortInfoModel extends MetaResultOfIListOfTreeShortInfoModelAndPaginationMeta implements ITreeListShortInfoModel {
+
+    constructor(data?: ITreeListShortInfoModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): TreeListShortInfoModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeListShortInfoModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITreeListShortInfoModel extends IMetaResultOfIListOfTreeShortInfoModelAndPaginationMeta {
+}
+
+export class MetaResultOfIListOfTreeImageModelAndPaginationMeta implements IMetaResultOfIListOfTreeImageModelAndPaginationMeta {
+    data?: TreeImageModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfTreeImageModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreeImageModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfTreeImageModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfTreeImageModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfTreeImageModelAndPaginationMeta {
+    data?: TreeImageModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreeImageListModel extends MetaResultOfIListOfTreeImageModelAndPaginationMeta implements ITreeImageListModel {
+
+    constructor(data?: ITreeImageListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): TreeImageListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeImageListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITreeImageListModel extends IMetaResultOfIListOfTreeImageModelAndPaginationMeta {
+}
+
+export class TreeImageModel implements ITreeImageModel {
+    id?: string | undefined;
+    url?: string | undefined;
+
+    constructor(data?: ITreeImageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.url = _data["url"];
+        }
+    }
+
+    static fromJS(data: any): TreeImageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeImageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["url"] = this.url;
+        return data; 
+    }
+}
+
+export interface ITreeImageModel {
+    id?: string | undefined;
+    url?: string | undefined;
 }
 
 export class ResultOfString implements IResultOfString {

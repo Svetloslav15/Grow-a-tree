@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using GrowATree.Application.Common.Models;
+    using GrowATree.Application.Models.TreeImages;
     using GrowATree.Application.Models.Trees;
     using GrowATree.Application.Stores.Queries.GetById;
     using GrowATree.Application.Trees.Commands.AddImage;
@@ -14,8 +15,11 @@
     using GrowATree.Application.Trees.Commands.EditImage;
     using GrowATree.Application.Trees.Commands.RestoreImage;
     using GrowATree.Application.Trees.Commands.UpsertCommand;
+    using GrowATree.Application.Trees.Queries.GetDeletedImages;
     using GrowATree.Application.Trees.Queries.GetList;
+    using GrowATree.Application.Trees.Queries.GetListShortInfo;
     using GrowATree.Application.Trees.Queries.GetShortInfoById;
+    using GrowATree.Application.Users.Queries.GetTrees;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -105,6 +109,32 @@
             }
         }
 
+        [HttpGet("list-short-info")]
+        public async Task<ActionResult<TreeListShortInfoModel>> GetTreesShortInfo([FromQuery] GetTreeListShortInfoQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return TreeListShortInfoModel.Failure<TreeListShortInfoModel>(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeListShortInfoModel.Failure<TreeListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
         [HttpGet("short-info")]
         public async Task<ActionResult<Result<TreeShortInfoModel>>> GetTreesShortInfo(string id)
         {
@@ -129,6 +159,58 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<TreeShortInfoModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("deleted-images")]
+        public async Task<ActionResult<TreeImageListModel>> GetTreeDeletedImages([FromQuery] GetTreeDeletedImagesQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return TreeImageListModel.Failure<TreeImageListModel>(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeImageListModel.Failure<TreeImageListModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("user")]
+        public async Task<ActionResult<TreeListModel>> GetUserTrees([FromQuery] GetUserTreesQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return TreeListModel.Failure<TreeListModel>(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeListModel.Failure<TreeListModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 

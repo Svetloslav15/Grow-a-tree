@@ -13,6 +13,7 @@
     using GrowATree.Application.Users.Queries.GetAllShortInfo;
     using GrowATree.Application.Users.Queries.GetById;
     using GrowATree.Application.Users.Queries.GetShortInfoById;
+    using GrowATree.Application.Users.Queries.GetTrees;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
@@ -79,8 +80,8 @@
             }
         }
 
-        [HttpGet("all")]
-        public async Task<ActionResult<UserListModel>> GetAll([FromQuery] GetAllUsersQuery query)
+        [HttpGet]
+        public async Task<ActionResult<UserListModel>> GetList([FromQuery] GetUserListQuery query)
         {
             try
             {
@@ -105,8 +106,8 @@
             }
         }
 
-        [HttpGet("all-short-info")]
-        public async Task<ActionResult<UserListShortInfoModel>> GetAllShortInfo([FromQuery] GetAllUsersShortInfoQuery query)
+        [HttpGet("list-short-info")]
+        public async Task<ActionResult<UserListShortInfoModel>> GetAllShortInfo([FromQuery] GetUserListShortInfoQuery query)
         {
             try
             {

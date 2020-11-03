@@ -1,33 +1,38 @@
-﻿namespace GrowATree.Application.Trees.Queries.GetList
+﻿namespace GrowATree.Application.Users.Queries.GetTrees
 {
     using System;
     using System.Linq;
+    using System.Security.Cryptography.X509Certificates;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Models.Common.Models;
+    using GrowATree.Application.Models.TreeImages;
     using GrowATree.Application.Models.Trees;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetTreeListQueryHandler : IRequestHandler<GetTreeListQuery, TreeListModel>
+    public class GetUserTreesQueryHandler : IRequestHandler<GetUserTreesQuery, TreeListModel>
     {
         private readonly IApplicationDbContext context;
         private readonly IMapper mapper;
 
-        public GetTreeListQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetUserTreesQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        public async Task<TreeListModel> Handle(GetTreeListQuery request, CancellationToken cancellationToken)
+        public async Task<TreeListModel> Handle(GetUserTreesQuery request, CancellationToken cancellationToken)
         {
-            var list = await this.context.Trees
+            var list = await this.context.Users
+                .Where(x => x.Id == request.Id)
                 .Skip(request.PerPage * (request.Page - 1))
                 .Take(request.PerPage)
+                .Select(x => x.Trees)
+                .Select(x => x)
                 .ProjectTo<TreeModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 

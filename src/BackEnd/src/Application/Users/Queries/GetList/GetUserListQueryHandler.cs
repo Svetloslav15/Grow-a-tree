@@ -1,4 +1,4 @@
-﻿namespace GrowATree.Application.Trees.Queries.GetList
+﻿namespace GrowATree.Application.Users.Queries.GetAll
 {
     using System;
     using System.Linq;
@@ -8,39 +8,39 @@
     using AutoMapper.QueryableExtensions;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Models.Common.Models;
-    using GrowATree.Application.Models.Trees;
+    using GrowATree.Application.Models.Users;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetTreeListQueryHandler : IRequestHandler<GetTreeListQuery, TreeListModel>
+    public class GetUserListQueryHandler : IRequestHandler<GetUserListQuery, UserListModel>
     {
         private readonly IApplicationDbContext context;
         private readonly IMapper mapper;
 
-        public GetTreeListQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetUserListQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        public async Task<TreeListModel> Handle(GetTreeListQuery request, CancellationToken cancellationToken)
+        public async Task<UserListModel> Handle(GetUserListQuery request, CancellationToken cancellationToken)
         {
-            var list = await this.context.Trees
+            var list = await this.context.Users
                 .Skip(request.PerPage * (request.Page - 1))
                 .Take(request.PerPage)
-                .ProjectTo<TreeModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<UserModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var totalTrees = await this.context.Users.CountAsync();
+            var totalUsers = await this.context.Users.CountAsync();
             var meta = new Pagination
             {
                 CurrentPage = request.Page,
                 PerPage = request.PerPage,
-                TotalItems = totalTrees,
-                TotalPages = Convert.ToInt32(Math.Ceiling(totalTrees / Convert.ToDouble(request.PerPage))),
+                TotalItems = totalUsers,
+                TotalPages = Convert.ToInt32(Math.Ceiling(totalUsers / Convert.ToDouble(request.PerPage))),
             };
 
-            var result = new TreeListModel
+            var result = new UserListModel()
             {
                 Data = list,
                 Meta = new PaginationMeta
