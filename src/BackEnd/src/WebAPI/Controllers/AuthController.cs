@@ -30,7 +30,7 @@
         /// <param name="registerCommand">Model with user's data.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpPost("register")]
-        public async Task<Result<bool>> Register([FromBody] RegisterCommand registerCommand)
+        public async Task<ActionResult<Result<bool>>> Register([FromBody] RegisterCommand registerCommand)
         {
             try
             {
@@ -62,7 +62,7 @@
         /// <param name="loginCommand">Model with credentials.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpPost("login")]
-        public async Task<Result<TokenModel>> Login([FromBody] LoginCommand loginCommand)
+        public async Task<ActionResult<Result<TokenModel>>> Login([FromBody] LoginCommand loginCommand)
         {
             try
             {
@@ -83,7 +83,7 @@
         /// <param name="loginCommand">Model with credentials.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpPost("external-login")]
-        public async Task<Result<TokenModel>> ExternalLogin([FromBody] ExternalLoginCommand externalLoginCommand)
+        public async Task<ActionResult<Result<TokenModel>>> ExternalLogin([FromBody] ExternalLoginCommand externalLoginCommand)
         {
             try
             {
@@ -98,7 +98,7 @@
         }
 
         [HttpPost("confirm-email")]
-        public async Task<Result<bool>> ConfirmEmail([FromBody] ConfirmEmailCommand confirmEmailCommand)
+        public async Task<ActionResult<Result<bool>>> ConfirmEmail([FromBody] ConfirmEmailCommand confirmEmailCommand)
         {
             try
             {
@@ -113,7 +113,7 @@
         }
 
         [HttpPost("resend-link-confirm-email")]
-        public async Task<Result<bool>> ResendLinkConfirmEmail([FromBody] ResendConfirmationLinkCommand confirmEmailCommand)
+        public async Task<ActionResult<Result<bool>>> ResendLinkConfirmEmail([FromBody] ResendConfirmationLinkCommand confirmEmailCommand)
         {
             try
             {
@@ -128,7 +128,7 @@
         }
 
         [HttpPost("forgotten-password")]
-        public async Task<Result<bool>> ForgottenPassword([FromBody] ForgottenPasswordCommand command)
+        public async Task<ActionResult<Result<bool>>> ForgottenPassword([FromBody] ForgottenPasswordCommand command)
         {
             try
             {
@@ -143,7 +143,7 @@
         }
 
         [HttpPost("reset-password")]
-        public async Task<Result<bool>> ResetPassword([FromBody] ResetPasswordCommand command)
+        public async Task<ActionResult<Result<bool>>> ResetPassword([FromBody] ResetPasswordCommand command)
         {
             try
             {
@@ -169,7 +169,7 @@
         }
 
         [HttpPost("refresh-token")]
-        public async Task<Result<TokenModel>> RefreshToken([FromBody] RefreshTokenCommand command)
+        public async Task<ActionResult<Result<TokenModel>>> RefreshToken([FromBody] RefreshTokenCommand command)
         {
             try
             {

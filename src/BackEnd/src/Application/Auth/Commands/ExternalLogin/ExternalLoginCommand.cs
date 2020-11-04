@@ -3,6 +3,7 @@
     using global::Application.Models.Auth;
     using GrowATree.Application.Common.Models;
     using MediatR;
+    using Microsoft.AspNetCore.Http;
 
     public class ExternalLoginCommand : IRequest<Result<TokenModel>>
     {

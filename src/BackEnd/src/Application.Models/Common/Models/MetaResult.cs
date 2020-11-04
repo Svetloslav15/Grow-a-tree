@@ -12,14 +12,8 @@
     {
         public MetaResult()
         {
-        }
-
-        public MetaResult(bool succeeded, TData data, TMeta meta, IEnumerable<string> errors)
-        {
-            this.Succeeded = succeeded;
-            this.Errors = errors.ToArray();
-            this.Data = data;
-            this.Meta = meta;
+            this.Succeeded = true;
+            this.Errors = new string[] { };
         }
 
         public TData Data { get; set; }
@@ -30,19 +24,34 @@
 
         public string[] Errors { get; set; }
 
-        public static MetaResult<TData, TMeta> Success(TData data, TMeta meta)
+        public static T Failure<T>()
+            where T : MetaResult<TData, TMeta>, new()
         {
-            return new MetaResult<TData, TMeta>(true, data, meta, new string[] { });
+            return new T
+            {
+                Succeeded = false,
+                Errors = new string[] { },
+            };
         }
 
-        public static MetaResult<TData, TMeta> Failure(IEnumerable<string> errors)
+        public static T Failure<T>(string error)
+            where T : MetaResult<TData, TMeta>, new()
         {
-            return new MetaResult<TData, TMeta>(false, default(TData), default(TMeta), errors);
+            return new T
+            {
+                Succeeded = false,
+                Errors = new string[] { error },
+            };
         }
 
-        public static MetaResult<TData, TMeta> Failure(string error)
+        public static T Failure<T>(string[] error)
+            where T : MetaResult<TData, TMeta>, new()
         {
-            return new MetaResult<TData, TMeta>(false, default(TData), default(TMeta), new string[] { error });
+            return new T
+            {
+                Succeeded = false,
+                Errors = error,
+            };
         }
     }
 }

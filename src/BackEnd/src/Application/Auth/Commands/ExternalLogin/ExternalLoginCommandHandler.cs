@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using global::Application.Models.Auth;
     using global::Common.Constants;
+    using global::Common.Interfaces;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
@@ -20,7 +21,12 @@
         private readonly SignInManager<User> signInManager;
         private readonly IConfiguration configuration;
 
-        public ExternalLoginCommandHandler(UserManager<User> userManager, IIdentityService identityService, SignInManager<User> signInManager, IConfiguration configuration)
+        public ExternalLoginCommandHandler(
+            UserManager<User> userManager,
+            IIdentityService identityService,
+            SignInManager<User> signInManager,
+            IConfiguration configuration,
+            ICloudinaryService cloudinaryService)
         {
             this.userManager = userManager;
             this.identityService = identityService;
@@ -36,6 +42,11 @@
                 var user = await this.userManager.FindByEmailAsync(request.Email);
                 if (user == null)
                 {
+                    if (await this.userManager.FindByEmailAsync(request.Email) != null)
+                    {
+                        return Result<TokenModel>.Failure(ErrorMessages.EmailInUseErrorMessage);
+                    }
+
                     var newUser = new User
                     {
                         Email = request.Email,
@@ -43,14 +54,14 @@
                         ProfilePictureUrl = request.ProfilePictureUrl,
                         EmailConfirmed = true,
                     };
-                    var info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.ProviderKey, request.ProviderName);
+                    var info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.UserId, request.ProviderName);
                     var identityResult = await this.userManager.CreateAsync(newUser);
 
                     if (identityResult.Succeeded)
                     {
                         var result = await this.userManager.AddLoginAsync(newUser, info);
 
-                        return result.Succeeded ? await this.identityService.ExternalLoginAsync(request.ProviderName, request.ProviderKey) : Result<TokenModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+                        return result.Succeeded ? await this.identityService.ExternalLoginAsync(request.ProviderName, request.UserId) : Result<TokenModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
                     }
                     else
                     {
@@ -59,7 +70,7 @@
                 }
                 else
                 {
-                    var tokenModel = await this.identityService.ExternalLoginAsync(request.ProviderName, request.ProviderKey);
+                    var tokenModel = await this.identityService.ExternalLoginAsync(request.ProviderName, request.UserId);
 
                     return tokenModel;
                 }
