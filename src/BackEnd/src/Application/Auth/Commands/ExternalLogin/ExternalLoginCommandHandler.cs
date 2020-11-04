@@ -20,7 +20,6 @@
         private readonly IIdentityService identityService;
         private readonly SignInManager<User> signInManager;
         private readonly IConfiguration configuration;
-        private readonly ICloudinaryService cloudinaryService;
 
         public ExternalLoginCommandHandler(
             UserManager<User> userManager,
@@ -33,7 +32,6 @@
             this.identityService = identityService;
             this.signInManager = signInManager;
             this.configuration = configuration;
-            this.cloudinaryService = cloudinaryService;
         }
 
         public async Task<Result<TokenModel>> Handle(ExternalLoginCommand request, CancellationToken cancellationToken)
@@ -53,11 +51,7 @@
                     {
                         Email = request.Email,
                         UserName = request.FirstName + " " + request.LastName,
-                        ProfilePictureUrl = request.ProviderName == "Google"
-                        ? request.ProfilePictureUrl
-                        : this.cloudinaryService.IsFileValid(request.ProfilePictureFile)
-                            ? await this.cloudinaryService.UploudAsync(request.ProfilePictureFile)
-                            : Constants.DefaultProfilePictureUrl,
+                        ProfilePictureUrl = request.ProfilePictureUrl,
                         EmailConfirmed = true,
                     };
                     var info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.UserId, request.ProviderName);

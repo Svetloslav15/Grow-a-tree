@@ -20,7 +20,5 @@
         public string ProviderKey { get; set; }
 
         public string ProfilePictureUrl { get; set; }
-
-        public IFormFile ProfilePictureFile { get; set; }
     }
 }
