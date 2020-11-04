@@ -2,12 +2,10 @@ import React from 'react';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import AuthService from '../../../../../services/authService';
-import axios from 'axios';
 
 import * as style from './ExternalLoginSection.module.scss';
 
 const ExternalLoginSection = () => {
-
     const responseGoogle = async (response) => {
         const model = {
             "providerKey": process.env.REACT_APP_GOOGLE_PROVIDER_ID,
@@ -17,13 +15,20 @@ const ExternalLoginSection = () => {
             "lastName": response.profileObj.familyName,
             "profilePictureUrl": response.profileObj.imageUrl
         };
-        await AuthService.externalLogin(model);
+        const res = await AuthService.externalLogin(model);
+        console.log(res);
     };
     const responseFacebook = async (response) => {
-        axios.get(response.picture.data.url)
-            .then((data) => {
-                axios.get(data.config.url).then(console.log)
-            })
+        const model = {
+            "providerKey": process.env.REACT_APP_FACEBOOK_ID,
+            "providerName": "Facebook",
+            "email": response.email,
+            "firstName": response.name.split(' ')[0],
+            "lastName": response.name.split(' ')[1],
+            "profilePictureUrl": response.picture.data.url
+        };
+        const res = await AuthService.externalLogin(model);
+        console.log(res);
     };
 
     return (
