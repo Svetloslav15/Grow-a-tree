@@ -13,6 +13,7 @@
     using GrowATree.Application.Users.Queries.GetAllShortInfo;
     using GrowATree.Application.Users.Queries.GetById;
     using GrowATree.Application.Users.Queries.GetShortInfoById;
+    using GrowATree.Application.Users.Queries.GetTrees;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
@@ -26,7 +27,7 @@
         /// <param name="id">Wanted user's id.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpGet("{id}")]
-        public async Task<Result<UserModel>> GetById(string id)
+        public async Task<ActionResult<Result<UserModel>>> GetById(string id)
         {
             try
             {
@@ -53,7 +54,7 @@
         }
 
         [HttpGet("short-info/{id}")]
-        public async Task<Result<UserShortInfoModel>> GetShortInfoById(string id)
+        public async Task<ActionResult<Result<UserShortInfoModel>>> GetShortInfoById(string id)
         {
             try
             {
@@ -79,8 +80,8 @@
             }
         }
 
-        [HttpGet("all")]
-        public async Task<Result<UsersListModel>> GetAll([FromQuery] GetAllUsersQuery query)
+        [HttpGet]
+        public async Task<ActionResult<UserListModel>> GetList([FromQuery] GetUserListQuery query)
         {
             try
             {
@@ -92,22 +93,21 @@
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
 
-                    return Result<UsersListModel>.Failure(errorMessage);
+                    return UserListModel.Failure<UserListModel>(errorMessage);
                 }
 
-                var result = await this.Mediator.Send(query);
-                return Result<UsersListModel>.Success(result);
+                return await this.Mediator.Send(query);
             }
             catch (Exception ex)
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<UsersListModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+                return UserListModel.Failure<UserListModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
-        [HttpGet("all-short-info")]
-        public async Task<Result<UsersListShortInfoModel>> GetAllShortInfo([FromQuery] GetAllUsersShortInfoQuery query)
+        [HttpGet("list-short-info")]
+        public async Task<ActionResult<UserListShortInfoModel>> GetAllShortInfo([FromQuery] GetUserListShortInfoQuery query)
         {
             try
             {
@@ -119,22 +119,21 @@
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
 
-                    return Result<UsersListShortInfoModel>.Failure(errorMessage);
+                    return UserListShortInfoModel.Failure<UserListShortInfoModel>(errorMessage);
                 }
 
-                var result = await this.Mediator.Send(query);
-                return Result<UsersListShortInfoModel>.Success(result);
+                return await this.Mediator.Send(query);
             }
             catch (Exception ex)
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<UsersListShortInfoModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+                return UserListShortInfoModel.Failure<UserListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
         [HttpPost("edit")]
-        public async Task<Result<UserModel>> Edit([FromBody] EditUserCommand command)
+        public async Task<ActionResult<Result<UserModel>>> Edit([FromBody] EditUserCommand command)
         {
             try
             {
@@ -160,7 +159,7 @@
         }
 
         [HttpPost("change-profile-picture")]
-        public async Task<Result<string>> ChangeProfilePicture([FromForm] ChangeProfilePictureCommand command)
+        public async Task<ActionResult<Result<string>>> ChangeProfilePicture([FromForm] ChangeProfilePictureCommand command)
         {
             try
             {

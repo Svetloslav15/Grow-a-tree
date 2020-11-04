@@ -1,4 +1,4 @@
-﻿namespace GrowATree.Application.Users.Queries.GetAllShortInfo
+﻿namespace GrowATree.Application.Users.Queries.GetTrees
 {
     using System;
     using System.Linq;
@@ -8,39 +8,40 @@
     using AutoMapper.QueryableExtensions;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Models.Common.Models;
-    using GrowATree.Application.Models.Users;
+    using GrowATree.Application.Models.Trees;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetAllUsersShortInfoQueryHandler : IRequestHandler<GetAllUsersShortInfoQuery, UsersListShortInfoModel>
+    public class GetUserTreesQueryHandler : IRequestHandler<GetUserTreesQuery, TreeListModel>
     {
         private readonly IApplicationDbContext context;
         private readonly IMapper mapper;
 
-        public GetAllUsersShortInfoQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetUserTreesQueryHandler(IApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
-        public async Task<UsersListShortInfoModel> Handle(GetAllUsersShortInfoQuery request, CancellationToken cancellationToken)
+        public async Task<TreeListModel> Handle(GetUserTreesQuery request, CancellationToken cancellationToken)
         {
-            var list = await this.context.Users
+            var list = await this.context.Trees
+                .Where(x => x.OwnerId == request.Id)
                 .Skip(request.PerPage * (request.Page - 1))
                 .Take(request.PerPage)
-                .ProjectTo<UserShortInfoModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<TreeModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var totalUsers = await this.context.Users.CountAsync();
+            var totalTrees = list.Count;
             var meta = new Pagination
             {
                 CurrentPage = request.Page,
                 PerPage = request.PerPage,
-                TotalItems = totalUsers,
-                TotalPages = Convert.ToInt32(Math.Ceiling(totalUsers / Convert.ToDouble(request.PerPage))),
+                TotalItems = totalTrees,
+                TotalPages = Convert.ToInt32(Math.Ceiling(totalTrees / Convert.ToDouble(request.PerPage))),
             };
 
-            var result = new UsersListShortInfoModel
+            var result = new TreeListModel
             {
                 Data = list,
                 Meta = new PaginationMeta

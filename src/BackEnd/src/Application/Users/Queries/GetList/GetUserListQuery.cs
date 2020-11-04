@@ -4,7 +4,7 @@
     using GrowATree.Application.Models.Users;
     using MediatR;
 
-    public class GetAllUsersQuery : PagedQuery, IRequest<UsersListModel>
+    public class GetUserListQuery : PagedQuery, IRequest<UserListModel>
     {
     }
 }

@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using global::Application.Models.Auth;
     using global::Common.Constants;
+    using global::Common.Interfaces;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
@@ -19,13 +20,20 @@
         private readonly IIdentityService identityService;
         private readonly SignInManager<User> signInManager;
         private readonly IConfiguration configuration;
+        private readonly ICloudinaryService cloudinaryService;
 
-        public ExternalLoginCommandHandler(UserManager<User> userManager, IIdentityService identityService, SignInManager<User> signInManager, IConfiguration configuration)
+        public ExternalLoginCommandHandler(
+            UserManager<User> userManager,
+            IIdentityService identityService,
+            SignInManager<User> signInManager,
+            IConfiguration configuration,
+            ICloudinaryService cloudinaryService)
         {
             this.userManager = userManager;
             this.identityService = identityService;
             this.signInManager = signInManager;
             this.configuration = configuration;
+            this.cloudinaryService = cloudinaryService;
         }
 
         public async Task<Result<TokenModel>> Handle(ExternalLoginCommand request, CancellationToken cancellationToken)
@@ -45,7 +53,11 @@
                     {
                         Email = request.Email,
                         UserName = request.FirstName + " " + request.LastName,
-                        ProfilePictureUrl = request.ProfilePictureUrl,
+                        ProfilePictureUrl = request.ProviderName == "Google"
+                        ? request.ProfilePictureUrl
+                        : this.cloudinaryService.IsFileValid(request.ProfilePictureFile)
+                            ? await this.cloudinaryService.UploudAsync(request.ProfilePictureFile)
+                            : Constants.DefaultProfilePictureUrl,
                         EmailConfirmed = true,
                     };
                     var info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.UserId, request.ProviderName);

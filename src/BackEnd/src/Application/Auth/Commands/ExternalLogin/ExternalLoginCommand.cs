@@ -3,6 +3,7 @@
     using global::Application.Models.Auth;
     using GrowATree.Application.Common.Models;
     using MediatR;
+    using Microsoft.AspNetCore.Http;
 
     public class ExternalLoginCommand : IRequest<Result<TokenModel>>
     {
@@ -19,5 +20,7 @@
         public string ProviderKey { get; set; }
 
         public string ProfilePictureUrl { get; set; }
+
+        public IFormFile ProfilePictureFile { get; set; }
     }
 }
