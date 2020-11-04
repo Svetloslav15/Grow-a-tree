@@ -18,7 +18,6 @@ const ExternalLoginSection = () => {
             "profilePictureUrl": response.profileObj.imageUrl
         };
         const res = await AuthService.externalLogin(model);
-        console.log(res);
     };
     const responseFacebook = async (response) => {
         const model = {
@@ -31,7 +30,6 @@ const ExternalLoginSection = () => {
             "profilePictureUrl": response.picture.data.url
         };
         const res = await AuthService.externalLogin(model);
-        console.log(res);
     };
 
     return (
