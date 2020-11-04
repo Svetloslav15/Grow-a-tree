@@ -2,14 +2,12 @@
 {
     using System;
     using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Models.Common.Models;
-    using GrowATree.Application.Models.TreeImages;
     using GrowATree.Application.Models.Trees;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
@@ -27,16 +25,14 @@
 
         public async Task<TreeListModel> Handle(GetUserTreesQuery request, CancellationToken cancellationToken)
         {
-            var list = await this.context.Users
-                .Where(x => x.Id == request.Id)
+            var list = await this.context.Trees
+                .Where(x => x.OwnerId == request.Id)
                 .Skip(request.PerPage * (request.Page - 1))
                 .Take(request.PerPage)
-                .Select(x => x.Trees)
-                .Select(x => x)
                 .ProjectTo<TreeModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var totalTrees = await this.context.Users.CountAsync();
+            var totalTrees = list.Count;
             var meta = new Pagination
             {
                 CurrentPage = request.Page,

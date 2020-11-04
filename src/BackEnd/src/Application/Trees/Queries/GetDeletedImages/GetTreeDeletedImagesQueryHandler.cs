@@ -33,7 +33,7 @@
                .ProjectTo<TreeImageModel>(this.mapper.ConfigurationProvider)
                .ToListAsync();
 
-            var totalImages = await this.context.Users.CountAsync();
+            var totalImages = list.Count;
             var meta = new Pagination
             {
                 CurrentPage = request.Page,

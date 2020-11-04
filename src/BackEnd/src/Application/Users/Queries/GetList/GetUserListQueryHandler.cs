@@ -31,7 +31,7 @@
                 .ProjectTo<UserModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var totalUsers = await this.context.Users.CountAsync();
+            var totalUsers = list.Count;
             var meta = new Pagination
             {
                 CurrentPage = request.Page,

@@ -31,7 +31,7 @@
                 .ProjectTo<TreeShortInfoModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var totalTrees = await this.context.Users.CountAsync();
+            var totalTrees = list.Count;
             var meta = new Pagination
             {
                 CurrentPage = request.Page,

@@ -1,6 +1,8 @@
 ﻿namespace GrowATree.Application.Models.Trees
 {
     using System;
+    using System.Linq;
+    using AutoMapper;
     using GrowATree.Application.Common.Mappings;
     using GrowATree.Application.Models.Images;
     using GrowATree.Application.Models.Users;
@@ -22,5 +24,13 @@
         public UserShortInfoModel Owner { get; set; }
 
         public ImageModel Image { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.AllowNullCollections = true;
+            profile.CreateMap<Tree, TreeShortInfoModel>()
+                .ForMember(m => m.Image, o => o.MapFrom(s => s.Images.FirstOrDefault()));
+
+        }
     }
 }

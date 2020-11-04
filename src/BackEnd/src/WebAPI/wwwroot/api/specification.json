@@ -572,6 +572,55 @@
         }
       }
     },
+    "/api/Trees/user/short-info": {
+      "get": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_GetUserTreeShortInfo",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeListShortInfoModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Trees/upsert": {
       "post": {
         "tags": [
@@ -1264,6 +1313,11 @@
           },
           "profilePictureUrl": {
             "type": "string",
+            "nullable": true
+          },
+          "profilePictureFile": {
+            "type": "string",
+            "format": "binary",
             "nullable": true
           }
         }

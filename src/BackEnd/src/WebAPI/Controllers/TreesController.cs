@@ -19,6 +19,7 @@
     using GrowATree.Application.Trees.Queries.GetList;
     using GrowATree.Application.Trees.Queries.GetListShortInfo;
     using GrowATree.Application.Trees.Queries.GetShortInfoById;
+    using GrowATree.Application.Trees.Queries.GetUserTreesShortInfo;
     using GrowATree.Application.Users.Queries.GetTrees;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -211,6 +212,32 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return TreeListModel.Failure<TreeListModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("user/short-info")]
+        public async Task<ActionResult<TreeListShortInfoModel>> GetUserTreeShortInfo([FromQuery] GetUserTreesShortInfoQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return TreeListShortInfoModel.Failure<TreeListShortInfoModel>(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeListShortInfoModel.Failure<TreeListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
