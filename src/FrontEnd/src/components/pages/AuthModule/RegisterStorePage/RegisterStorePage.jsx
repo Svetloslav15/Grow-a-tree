@@ -74,7 +74,7 @@ const RegisterStorePage = ({history}) => {
                                     icon={Icons.user}
                                     width={6}
                                     onChange={handleChange}/>
-                        <InputField type='phone'
+                        <InputField type='text'
                                     label={'Телефон'}
                                     id='phoneNumber'
                                     icon={Icons.user}
@@ -104,8 +104,7 @@ const RegisterStorePage = ({history}) => {
                                            onChange={handleChange}/>
                     </div>
                     <Map google={window.google}/>
-
-                    <div className='text-center'>
+                    <div className='text-center mt-5'>
                         <Link to='/auth/forgotten-password'>
                             <span className={'dark-text'}>Забравена парола?</span>
                         </Link>

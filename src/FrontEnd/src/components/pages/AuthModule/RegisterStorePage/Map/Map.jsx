@@ -1,12 +1,14 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import * as style from './Map.module.scss';
+import Button from "../../../../common/Button/Button";
 
 const MapContainer = ({google}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
     const [isSelected, setIsSelected] = useState(false);
 
     const closeButton = useRef();
+    const openModalButton = useRef();
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(getCurrentUserLocation);
@@ -23,20 +25,27 @@ const MapContainer = ({google}) => {
         setMarker({
             position: {lat, lng}
         });
+        setIsSelected(true);
         closeButton.current.click();
     };
     return (
         <>
             <div className='row col-md-12'>
-                <div className='col-md-6'>
-                    <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#mapContainerModal">
+                <div className='col-md-7'>
+                    <Button type="Dark"
+                    onClick={() => openModalButton.current.click()}>
                         Изберете кординати
-                    </button>
+                    </Button>
+                    <button ref={openModalButton} data-toggle="modal" data-target="#mapContainerModal" className='d-none'/>
                 </div>
-                <div className='col-md-6'>
-                    <p>Latitude: {marker.position.lat.toFixed(4)}</p>
-                    <p>Longitude: {marker.position.lng.toFixed(4)}</p>
-                </div>
+                {
+                    isSelected && (
+                        <div className='col-md-5'>
+                            <p><span className='font-weight-bold'>Latitude</span>: {marker.position.lat.toFixed(4)}</p>
+                            <p><span className='font-weight-bold'>Longitude</span>: {marker.position.lng.toFixed(4)}</p>
+                        </div>)
+                }
+
             </div>
             <div className="modal fade" id="mapContainerModal" role="dialog"
                  aria-labelledby="exampleModalLabel"
