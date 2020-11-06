@@ -3,6 +3,7 @@ import {Link, withRouter} from 'react-router-dom';
 import * as style from './RegisterStorePage.module.scss';
 import Icons from '../../../../static/icons';
 import Button from '../../../common/Button/Button';
+import Map from './Map/Map';
 
 import InputField from '../../../common/InputField/InputField';
 import Cities from "../../../../static/cities";
@@ -86,6 +87,7 @@ const RegisterStorePage = ({history}) => {
                                            data={Cities}
                                            width={6}
                                            onChange={handleChange}/>
+                        <Map google={window.google}/>
                     </div>
                     <div className='text-center'>
                         <Link to='/auth/forgotten-password'><span className={'dark-text'}>Забравена парола?</span></Link>
