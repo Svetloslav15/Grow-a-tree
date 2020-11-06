@@ -40,7 +40,6 @@ const RegisterStorePage = ({history}) => {
             return AlertService.error(ErrorMessages.passwordsShouldMatch);
         }
         const result = await AuthService.signUpStore(store);
-
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successSignUp);
             history.push('/auth/resend-confirmation-link');

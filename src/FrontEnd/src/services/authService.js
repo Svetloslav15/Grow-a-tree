@@ -1,7 +1,7 @@
 import baseService from './baseService';
 
 const SIGN_UP_ROUTE = '/auth/register';
-const SIGN_UP_STORE_ROUTE = '/auth/register/store';
+const SIGN_UP_STORE_ROUTE = '/stores/upsert';
 const LOGIN_ROUTE = '/auth/login';
 const EXTERNAL_LOGIN_ROUTE = '/auth/external-login';
 const CONFIRM_EMAIL_ROUTE = '/auth/confirm-email';

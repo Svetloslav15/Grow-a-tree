@@ -25,7 +25,7 @@ const MapContainer = ({google, handleCoordinates}) => {
         setMarker({
             position: {lat, lng}
         });
-        handleCoordinates(lat, lng);
+        handleCoordinates(lat.toString(), lng.toString());
         setIsSelected(true);
         closeButton.current.click();
     };
