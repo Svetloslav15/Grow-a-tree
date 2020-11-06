@@ -19,22 +19,22 @@ const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 
 const RegisterStorePage = ({history}) => {
-    const [user, setUser] = useState({});
+    const [store, setStore] = useState({});
 
     const handleChange = (event) => {
-        let copyData = user;
+        const copyData = store;
         copyData[event.target.id] = event.target.value;
-        setUser(copyData);
+        setStore(copyData);
     };
 
     const handleSubmit = async () => {
-        if (Object.values(user).includes('') || Object.keys(user).length < 5) {
+        if (Object.values(store).includes('') || Object.keys(store).length < 5) {
             return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }
-        if (user.password !== user['repeated-password']) {
+        if (store.password !== store['repeated-password']) {
             return AlertService.error(ErrorMessages.passwordsShouldMatch);
         }
-        const result = await AuthService.signUp(user);
+        const result = await AuthService.signUp(store);
 
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successSignUp);
@@ -61,8 +61,22 @@ const RegisterStorePage = ({history}) => {
                                     width={6}
                                     onChange={handleChange}/>
                         <InputField type='text'
-                                    label={'Потребителско име'}
-                                    id='username'
+                                    label={'Име'}
+                                    id='name'
+                                    icon={Icons.user}
+                                    width={6}
+                                    onChange={handleChange}/>
+                    </div>
+                    <div className='row'>
+                        <InputField type='email'
+                                    label={'Работно време'}
+                                    id='workingHours'
+                                    icon={Icons.user}
+                                    width={6}
+                                    onChange={handleChange}/>
+                        <InputField type='phone'
+                                    label={'Телефон'}
+                                    id='phoneNumber'
                                     icon={Icons.user}
                                     width={6}
                                     onChange={handleChange}/>
@@ -77,6 +91,7 @@ const RegisterStorePage = ({history}) => {
                         <InputField type='password'
                                     label={'Повторете паролата'}
                                     id='repeated-password'
+                                    width={6}
                                     icon={Icons.password}
                                     onChange={handleChange}/>
                     </div>
@@ -87,10 +102,13 @@ const RegisterStorePage = ({history}) => {
                                            data={Cities}
                                            width={6}
                                            onChange={handleChange}/>
-                        <Map google={window.google}/>
                     </div>
+                    <Map google={window.google}/>
+
                     <div className='text-center'>
-                        <Link to='/auth/forgotten-password'><span className={'dark-text'}>Забравена парола?</span></Link>
+                        <Link to='/auth/forgotten-password'>
+                            <span className={'dark-text'}>Забравена парола?</span>
+                        </Link>
                         <Button type='Green' className='w-75' onClick={handleSubmit}>Регистрация</Button>
                         <Link to='/auth/login'>
                             <Button type='GreenOutline' className='w-75'>Имате акаунт?</Button>
