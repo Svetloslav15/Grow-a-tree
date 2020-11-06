@@ -11,9 +11,8 @@ const ROUTES = {
     externalLogin: '/auth/external-login',
 };
 
-const api = new Proxy({}, {
-        get(target, propName) {
-            return async (data) => await baseService.post(ROUTES[propName], data);
-        }
-    });
-export default api;
+export default new Proxy({}, {
+    get(target, propName) {
+        return async (data) => await baseService.post(ROUTES[propName], data);
+    }
+});
