@@ -6,9 +6,3 @@ labels: ''
 assignees: ''
 
 ---
-
-### Description
-
-### Working Time (in hours)
-Original Estimate:
-Completed:
