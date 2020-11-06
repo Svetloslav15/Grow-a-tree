@@ -33,14 +33,13 @@ const RegisterStorePage = ({history}) => {
     };
 
     const handleSubmit = async () => {
-        console.log(store);
-        if (Object.values(store).includes('') || Object.keys(store).length < 5) {
+        if (Object.values(store).includes('') || Object.keys(store).length < 10) {
             return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }
         if (store.password !== store['repeated-password']) {
             return AlertService.error(ErrorMessages.passwordsShouldMatch);
         }
-        const result = await AuthService.signUp(store);
+        const result = await AuthService.signUpStore(store);
 
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successSignUp);
