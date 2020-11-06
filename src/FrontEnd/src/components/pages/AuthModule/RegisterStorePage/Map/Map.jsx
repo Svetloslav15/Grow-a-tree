@@ -5,9 +5,9 @@ import Button from '../../../../common/Button/Button';
 
 const MapContainer = ({google, handleCoordinates}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
+    const [isFetched, setFetched] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
 
-    const closeButton = useRef();
     const openModalButton = useRef();
 
     useEffect(() => {
@@ -16,6 +16,7 @@ const MapContainer = ({google, handleCoordinates}) => {
 
     const getCurrentUserLocation = (position) => {
         setMarker({position: {lat: position.coords.latitude, lng: position.coords.longitude}});
+        setFetched(true);
     };
 
     const getNewCoordinates = (t, map, coord) => {
@@ -27,7 +28,6 @@ const MapContainer = ({google, handleCoordinates}) => {
         });
         handleCoordinates(lat.toString(), lng.toString());
         setIsSelected(true);
-        closeButton.current.click();
     };
     return (
         <>
@@ -60,18 +60,16 @@ const MapContainer = ({google, handleCoordinates}) => {
                             </button>
                         </div>
                         <div className={`modal-body ${style.mapContainer}`}>
-                            <Map google={google}
-                                 zoom={14}
-                                 onClick={getNewCoordinates}
-                                 center={{
-                                     lat: marker.position.lat,
-                                     lng: marker.position.lng
-                                 }}>
+                            {isFetched && <Map google={google}
+                                               zoom={14}
+                                               onClick={getNewCoordinates}
+                                               initialCenter={{
+                                                   lat: marker.position.lat,
+                                                   lng: marker.position.lng
+                                               }}>
                                 <Marker position={marker.position}/>
-                            </Map>
+                            </Map>}
                         </div>
-                        <button type="hidden" ref={closeButton} className="d-none btn btn-secondary"
-                                data-dismiss="modal"/>
                     </div>
                 </div>
             </div>
