@@ -1,25 +1,27 @@
-import React, {useState} from 'react';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import React, {useState, useRef, useEffect} from 'react';
+import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import * as style from './Map.module.scss';
 
 const MapContainer = ({google}) => {
-    const [marker, setMarker] = useState({});
+    const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
+    const closeButton = useRef();
 
-    const onMarkerClick = () => {
-    };
-    const onInfoWindowClose = () => {
-    };
-    const selectedPlace = '';
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(getCurrentUserLocation);
+    }, []);
 
-    const getCoordinates = (t, map, coord) => {
+    const getCurrentUserLocation = (position) => {
+        setMarker({position: {lat: position.coords.latitude, lng: position.coords.longitude}});
+    };
+
+    const getNewCoordinates = (t, map, coord) => {
         const {latLng} = coord;
         const lat = latLng.lat();
         const lng = latLng.lng();
         setMarker({
-            title: "Място",
-            name: "ехооо",
             position: {lat, lng}
-        })
+        });
+        closeButton.current.click();
     };
     return (
         <>
@@ -38,18 +40,20 @@ const MapContainer = ({google}) => {
                             </button>
                         </div>
                         <div className={`modal-body ${style.mapContainer}`}>
-                            <Map google={google} zoom={14} onClick={getCoordinates}>
+                            <Map google={google}
+                                 zoom={14}
+                                 onClick={getNewCoordinates}
+                                 center={{
+                                     lat: marker.position.lat,
+                                     lng: marker.position.lng
+                                 }}>
                                 <Marker
-                                    title={marker.title}
-                                    name={marker.name}
                                     position={marker.position}
                                 />
                             </Map>
                         </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
-                        </div>
+                        <button type="hidden" ref={closeButton} className="d-none btn btn-secondary"
+                                data-dismiss="modal"/>
                     </div>
                 </div>
             </div>
