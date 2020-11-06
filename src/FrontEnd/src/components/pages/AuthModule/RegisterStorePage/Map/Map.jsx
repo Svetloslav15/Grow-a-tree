@@ -3,7 +3,7 @@ import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import * as style from './Map.module.scss';
 import Button from "../../../../common/Button/Button";
 
-const MapContainer = ({google}) => {
+const MapContainer = ({google, handleCoordinates}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
     const [isSelected, setIsSelected] = useState(false);
 
@@ -25,6 +25,7 @@ const MapContainer = ({google}) => {
         setMarker({
             position: {lat, lng}
         });
+        handleCoordinates(lat, lng);
         setIsSelected(true);
         closeButton.current.click();
     };

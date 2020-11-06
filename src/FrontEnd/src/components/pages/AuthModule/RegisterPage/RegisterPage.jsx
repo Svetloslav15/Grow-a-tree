@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 
 import * as style from './RegisterPage.module.scss';
@@ -52,7 +52,12 @@ const RegisterPage = ({history}) => {
             <img src={BgShape3} className='shape3'/>
             <div className='px-0 mx-0 my-5 row'>
                 <div className='offset-md-1 col-md-5'>
-                    <h2 className={style.title}>Регистрация</h2>
+                    <h2 className={`${style.title} row`}>
+                        <span className='mx-auto mb-3'>Регистрация</span>
+                        <Link to='/auth/register/store'>
+                            <Button type='DarkOutline' className='w-75 ml-5'>Регистрация като магазин</Button>
+                        </Link>
+                    </h2>
                     <ExternalLoginSection/>
                     <div className='row'>
                         <InputField type='email'
@@ -90,7 +95,8 @@ const RegisterPage = ({history}) => {
                                            onChange={handleChange}/>
                     </div>
                     <div className='text-center'>
-                        <Link to='/auth/forgotten-password'><span className={'dark-text'}>Забравена парола?</span></Link>
+                        <Link to='/auth/forgotten-password'><span
+                            className={'dark-text'}>Забравена парола?</span></Link>
                         <Button type='Green' className='w-75' onClick={handleSubmit}>Регистрация</Button>
                         <Link to='/auth/login'>
                             <Button type='GreenOutline' className='w-75'>Имате акаунт?</Button>

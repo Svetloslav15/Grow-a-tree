@@ -27,7 +27,12 @@ const RegisterStorePage = ({history}) => {
         setStore(copyData);
     };
 
+    const handleCoordinates = (latitude, longitute) => {
+        setStore({...store, longitute, latitude});
+    };
+
     const handleSubmit = async () => {
+        console.log(store);
         if (Object.values(store).includes('') || Object.keys(store).length < 5) {
             return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }
@@ -103,7 +108,7 @@ const RegisterStorePage = ({history}) => {
                                            width={6}
                                            onChange={handleChange}/>
                     </div>
-                    <Map google={window.google}/>
+                    <Map google={window.google} handleCoordinates={handleCoordinates}/>
                     <div className='text-center mt-5'>
                         <Link to='/auth/forgotten-password'>
                             <span className={'dark-text'}>Забравена парола?</span>
