@@ -16,6 +16,7 @@ import ResendConfirmationLinkPage from './components/pages/AuthModule/ResendConf
 import HomePage from './components/pages/HomeModule/HomePage/HomePage';
 import LoginPage from './components/pages/AuthModule/LoginPage/LoginPage';
 import ResetPasswordPage from './components/pages/AuthModule/ResetPasswordPage/ResetPasswordPage';
+import RegisterStorePage from "./components/pages/AuthModule/RegisterStorePage/RegisterStorePage";
 
 const App = () => (
     <>
@@ -25,6 +26,7 @@ const App = () => (
             <Route exact path='/' component={HomePage}/>
             <Route exact path='/auth/confirm' component={ConfirmEmailPage}/>
             <Route exact path='/auth/register' component={RegisterPage}/>
+            <Route exact path='/auth/register/store' component={RegisterStorePage}/>
             <Route exact path='/auth/login' component={LoginPage}/>
             <Route exact path='/auth/reset-password' component={ResetPasswordPage}/>
             <Route exact path='/auth/forgotten-password' component={ForgottenPassword}/>
