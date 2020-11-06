@@ -1,5 +1,9 @@
 ﻿namespace GrowATree.Infrastructure
 {
+    using System.Text;
+    using CloudinaryDotNet;
+    using Common.Interfaces;
+    using Common.Services;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Domain.Entities;
     using GrowATree.Infrastructure.Identity;
@@ -12,7 +16,6 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
-    using System.Text;
 
     public static class DependencyInjection
     {
@@ -43,6 +46,18 @@
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddScoped<RoleManager<IdentityRole>>();
+
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
+
+            // Add clodinary
+            var cloudinary = new Cloudinary(new Account()
+            {
+                Cloud = configuration["Cloudinary:CloudName"],
+                ApiKey = configuration["Cloudinary:ApiKey"],
+                ApiSecret = configuration["Cloudinary:ApiSecret"],
+            });
+            services.AddSingleton(cloudinary);
 
             services
                 .AddAuthentication(options =>

@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 2em 0;
+}
+
+.googleButton {
+  padding: 0 !important;
+  border-radius: 0 20px !important;
+  height: fit-content;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.75) !important;
+}
+
+.fbButton {
+  padding: 10px 14px !important;
+  border-radius: 0 20px !important;
+  height: fit-content;
+  background-color: #3b5998;
+  color: white;
+  border: none;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.75) !important;
+}
+
+.fbButton > i {
+  margin-right: 1em;
+}
+
+@media all and (max-width: 480px) {
+  .wrapper {
+    flex-direction: column;
+    height: fit-content;
+  }
+  button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+

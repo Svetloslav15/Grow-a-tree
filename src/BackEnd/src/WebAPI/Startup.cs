@@ -1,6 +1,7 @@
 namespace GrowATree.WebAPI
 {
     using System.Linq;
+    using CloudinaryDotNet;
     using Common.Constants;
     using Common.Interfaces;
     using Common.Services;
@@ -40,6 +41,14 @@ namespace GrowATree.WebAPI
                 .AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsApi",
+                    builder => builder.WithOrigins("http://localhost:3000", "http://mywebsite.com")
+                .AllowAnyHeader()
+                .AllowAnyMethod());
+            });
+
             services.AddControllersWithViews(options =>
                 options.Filters.Add(new ApiExceptionFilter()));
 
@@ -72,8 +81,7 @@ namespace GrowATree.WebAPI
                 });
 
                 configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-            })
-            .AddScoped<IEmailSender, EmailSender>();
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -98,6 +106,7 @@ namespace GrowATree.WebAPI
                    settings.DocumentPath = "/api/specification.json";
                })
                .UseRouting()
+               .UseCors("CorsApi")
                .UseAuthentication()
                .UseIdentityServer()
                .UseAuthorization()

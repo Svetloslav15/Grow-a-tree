@@ -8,12 +8,14 @@
     using global::Application.Models.Auth;
     using GrowATree.Application.Auth.Commands;
     using GrowATree.Application.Auth.Commands.ConfirmEmail;
+    using GrowATree.Application.Auth.Commands.FacebookLogin;
     using GrowATree.Application.Auth.Commands.ForgottenPassword;
     using GrowATree.Application.Auth.Commands.RefreshToken;
     using GrowATree.Application.Auth.Commands.Register;
     using GrowATree.Application.Auth.Commands.ResetPassword;
     using GrowATree.Application.Common.Models;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
 
     /// <summary>
@@ -28,13 +30,14 @@
         /// <param name="registerCommand">Model with user's data.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpPost("register")]
-        public async Task<Result<bool>> Register([FromBody] RegisterCommand registerCommand)
+        public async Task<ActionResult<Result<bool>>> Register([FromBody] RegisterCommand registerCommand)
         {
             try
             {
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
@@ -59,7 +62,7 @@
         /// <param name="loginCommand">Model with credentials.</param>
         /// <returns>Result Models with error or success.</returns>
         [HttpPost("login")]
-        public async Task<Result<TokenModel>> Login([FromBody] LoginCommand loginCommand)
+        public async Task<ActionResult<Result<TokenModel>>> Login([FromBody] LoginCommand loginCommand)
         {
             try
             {
@@ -73,8 +76,29 @@
             }
         }
 
+        /// <summary>
+        /// Returns token when credentials are
+        /// valid and error message when not.
+        /// </summary>
+        /// <param name="loginCommand">Model with credentials.</param>
+        /// <returns>Result Models with error or success.</returns>
+        [HttpPost("external-login")]
+        public async Task<ActionResult<Result<TokenModel>>> ExternalLogin([FromBody] ExternalLoginCommand externalLoginCommand)
+        {
+            try
+            {
+                return await this.Mediator.Send(externalLoginCommand);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<TokenModel>.Failure(ErrorMessages.AccountFailureErrorMessage);
+            }
+        }
+
         [HttpPost("confirm-email")]
-        public async Task<Result<bool>> ConfirmEmail([FromBody] ConfirmEmailCommand confirmEmailCommand)
+        public async Task<ActionResult<Result<bool>>> ConfirmEmail([FromBody] ConfirmEmailCommand confirmEmailCommand)
         {
             try
             {
@@ -89,7 +113,7 @@
         }
 
         [HttpPost("resend-link-confirm-email")]
-        public async Task<Result<bool>> ResendLinkConfirmEmail([FromBody] ResendConfirmationLinkCommand confirmEmailCommand)
+        public async Task<ActionResult<Result<bool>>> ResendLinkConfirmEmail([FromBody] ResendConfirmationLinkCommand confirmEmailCommand)
         {
             try
             {
@@ -104,7 +128,7 @@
         }
 
         [HttpPost("forgotten-password")]
-        public async Task<Result<bool>> ForgottenPassword([FromBody] ForgottenPasswordCommand command)
+        public async Task<ActionResult<Result<bool>>> ForgottenPassword([FromBody] ForgottenPasswordCommand command)
         {
             try
             {
@@ -119,13 +143,14 @@
         }
 
         [HttpPost("reset-password")]
-        public async Task<Result<bool>> ResetPassword([FromBody] ResetPasswordCommand command)
+        public async Task<ActionResult<Result<bool>>> ResetPassword([FromBody] ResetPasswordCommand command)
         {
             try
             {
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();
@@ -144,13 +169,14 @@
         }
 
         [HttpPost("refresh-token")]
-        public async Task<Result<TokenModel>> RefreshToken([FromBody] RefreshTokenCommand command)
+        public async Task<ActionResult<Result<TokenModel>>> RefreshToken([FromBody] RefreshTokenCommand command)
         {
             try
             {
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();

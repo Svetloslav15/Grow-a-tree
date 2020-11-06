@@ -50,17 +50,13 @@ namespace Common.Constants
 
         public const string PasswordResetErrorMessage = "Грешка при смяна на паролата";
 
+        public const string PasswordRequirmentsErrorMessage = "Паролата трябва да има малка буква и поне 5 символа";
+
         #endregion
 
         #region City
 
         public const string CityRequiredErrorMessage = "Населеното място е задължително поле";
-
-        #endregion
-
-        #region Common
-
-        public const string CommonErrorMessage = "Възникна грешка. Моля опитайте отново!";
 
         #endregion
 
@@ -92,6 +88,8 @@ namespace Common.Constants
 
         public const string PhoneNumberRequiredErrorMessage = "Телефонният номер е задължително поле";
 
+        public const string PhoneNumberFormatErrorMessage = "Телефонният номер е в невалиден формат";
+
         #endregion
 
         #region General
@@ -116,6 +114,68 @@ namespace Common.Constants
         #region Token
 
         public const string AccessTokenInvalidErrorMessage = "Невалидна сесия";
+
+        public const string ConfirmTokenInvalidErrorMessage = "Невалиден токен, изпратете нов линк за потвърждаване";
+
+        #endregion
+
+        #region User
+
+        public const string UserNotFoundErrorMessage = "Потребителят не беше намерен";
+
+        #endregion
+
+        #region FirstName
+
+        public const string FirstNameMinLengthErrorMessage = "Първото име трябва да е поне 3 символа";
+
+        public const string FirstNameMaxLengthErrorMessage = "Първото име трябва да е най-много 30 символа";
+
+        #endregion
+
+        #region LastName
+
+        public const string LastNameMinLengthErrorMessage = "Фамилията трябва да е поне 3 символа";
+
+        public const string LastNameMaxLengthErrorMessage = "Фамилията трябва да е най-много 30 символа";
+
+        #endregion
+
+        #region ProfilePicture
+
+        public const string InvalidProfilePictureFormatErrorMessage = "Профилната снимка е в невалиден формат";
+
+        public const string ProfilePictureRequiredErrorMessage = "Липсва профилна снимка";
+
+        #endregion
+
+        #region TreeImage
+
+        public const string TreeImageRequiredErrorMessage = "Въведете поне една снимка на дървото";
+
+        public const string TreeImageNotFoundErrorMessage = "Снимката не беше намерена";
+
+        public const string TreeImageInvalidFormatErrorMessage = "Снимката е в невалиден формат";
+
+        #endregion
+
+        #region Tree
+
+        public const string TreeNicknameRequiredErrorMessage = "Името на дървото е задължително";
+
+        public const string TreeNicknameInUseErrorMessage = "Името на дървото е заето";
+
+        public const string TreeNicknameMinLengthErrorMessage = "Името на дървото трябва да е поне 3 символа";
+
+        public const string TreeNicknameMaxLengthErrorMessage = "Името на дървото трябва да е максимум 20 символа";
+
+        public const string TreeTypeRequiredErrorMessage = "Типът на дървото е задължителен";
+
+        public const string TreeCategoryRequiredErrorMessage = "Категорията на дървото е задължителна";
+
+        public const string TreeLocationRequiredErrorMessage = "Локацията на дървото е задължителна";
+
+        public const string TreeNotFoundErrorMessage = "Не съществува такова дърво";
 
         #endregion
     }

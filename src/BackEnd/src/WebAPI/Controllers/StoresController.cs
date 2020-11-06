@@ -9,18 +9,20 @@
     using GrowATree.Application.Stores.Commands.Upsert;
     using GrowATree.WebAPI.Controllers;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
 
     public class StoresController : ApiController
     {
         [HttpPost("upsert")]
-        public async Task<Result<bool>> Upsert([FromBody] UpsertCommand upsertCommand)
+        public async Task<ActionResult<Result<bool>>> Upsert([FromBody] UpsertStoreCommand upsertCommand)
         {
             try
             {
                 if (!this.ModelState.IsValid)
                 {
                     var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
                         .Select(x => x.Errors)
                         .Select(x => x.FirstOrDefault()?.ErrorMessage)
                         .FirstOrDefault();

@@ -9,7 +9,9 @@
     {
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Image> Images { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+
+        public DbSet<TreeImage> TreeImages { get; set; }
 
         public DbSet<Reaction> Reactions { get; set; }
 

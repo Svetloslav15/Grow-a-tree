@@ -1,26 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {ToastContainer} from 'react-toastify';
+import {Route, Switch} from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import 'mdbreact/dist/css/mdb.css';
+import 'react-toastify/dist/ReactToastify.css';
+import './App.scss';
+
+import RegisterPage from './components/pages/AuthModule/RegisterPage/RegisterPage';
+import Navigation from './components/common/Navigation/Navigation';
+import Footer from './components/common/Footer/Footer';
+import ConfirmEmailPage from './components/pages/AuthModule/ConfirmEmailPage/ConfirmEmailPage';
+import PrivateRoute from "./components/common/PrivateRoute/PrivateRoute";
+import ForgottenPassword from './components/pages/AuthModule/ForgottenPasswordPage/ForgottenPasswordPage';
+import ResendConfirmationLinkPage from './components/pages/AuthModule/ResendConfirmationLinkPage/ResendConfirmationLinkPage';
+import HomePage from './components/pages/HomeModule/HomePage/HomePage';
+import LoginPage from './components/pages/AuthModule/LoginPage/LoginPage';
+import ResetPasswordPage from './components/pages/AuthModule/ResetPasswordPage/ResetPasswordPage';
+import RegisterStorePage from "./components/pages/AuthModule/RegisterStorePage/RegisterStorePage";
+
+const App = () => (
+    <>
+        <ToastContainer/>
+        <Navigation/>
+        <Switch>
+            <Route exact path='/' component={HomePage}/>
+            <Route exact path='/auth/confirm' component={ConfirmEmailPage}/>
+            <Route exact path='/auth/register' component={RegisterPage}/>
+            <Route exact path='/auth/register/store' component={RegisterStorePage}/>
+            <Route exact path='/auth/login' component={LoginPage}/>
+            <Route exact path='/auth/reset-password' component={ResetPasswordPage}/>
+            <Route exact path='/auth/forgotten-password' component={ForgottenPassword}/>
+            <Route exact path='/auth/resend-confirmation-link' component={ResendConfirmationLinkPage}/>
+        </Switch>
+        <Footer/>
+    </>
+);
 
 export default App;

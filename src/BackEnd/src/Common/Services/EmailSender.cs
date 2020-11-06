@@ -19,18 +19,18 @@
             try
             {
                 MailMessage mail = new MailMessage();
-                SmtpClient SmtpServer = new SmtpClient(Settings.GmailServerName);
+                SmtpClient smtpServer = new SmtpClient(Settings.GmailServerName);
 
                 mail.From = new MailAddress(Settings.GmailEmail);
                 mail.To.Add(receiver.Email);
                 mail.Subject = subject;
                 mail.Body = mailDescription;
 
-                SmtpServer.Port = Settings.SendGridPortNotSecured;
-                SmtpServer.Credentials = new NetworkCredential(Settings.GmailEmail, Settings.GmailPassword);
-                SmtpServer.EnableSsl = true;
+                smtpServer.Port = Settings.SendGridPortNotSecured;
+                smtpServer.Credentials = new NetworkCredential(Settings.GmailEmail, Settings.GmailPassword);
+                smtpServer.EnableSsl = true;
 
-                SmtpServer.Send(mail);
+                smtpServer.Send(mail);
                 return true;
             }
             catch (Exception ex)

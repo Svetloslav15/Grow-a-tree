@@ -35,7 +35,7 @@
 
             if (!resetPassResult.Succeeded)
             {
-                return Result<bool>.Failure(ErrorMessages.PasswordResetErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.PasswordRequirmentsErrorMessage);
             }
 
             return Result<bool>.Success(true);

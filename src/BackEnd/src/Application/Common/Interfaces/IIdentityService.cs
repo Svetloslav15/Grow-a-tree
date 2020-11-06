@@ -12,6 +12,8 @@
 
         Task<Result<TokenModel>> LoginAsync(string email, string password);
 
+        Task<Result<TokenModel>> ExternalLoginAsync(string providerName, string providerKey);
+
         Task<TokenModel> GenerateTokenModel(User user);
 
         string GenerateRefreshToken();
