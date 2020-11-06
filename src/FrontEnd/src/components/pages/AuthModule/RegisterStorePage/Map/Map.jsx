@@ -34,8 +34,8 @@ const MapContainer = ({google, handleCoordinates}) => {
             <div className='row col-md-12'>
                 <div className='col-md-7'>
                     <Button type="Dark"
-                    onClick={() => openModalButton.current.click()}>
-                        Изберете кординати
+                            onClick={() => openModalButton.current.click()}>
+                            Изберете кординати
                     </Button>
                     <button ref={openModalButton} data-toggle="modal" data-target="#mapContainerModal" className='d-none'/>
                 </div>
@@ -67,9 +67,7 @@ const MapContainer = ({google, handleCoordinates}) => {
                                      lat: marker.position.lat,
                                      lng: marker.position.lng
                                  }}>
-                                <Marker
-                                    position={marker.position}
-                                />
+                                <Marker position={marker.position}/>
                             </Map>
                         </div>
                         <button type="hidden" ref={closeButton} className="d-none btn btn-secondary"

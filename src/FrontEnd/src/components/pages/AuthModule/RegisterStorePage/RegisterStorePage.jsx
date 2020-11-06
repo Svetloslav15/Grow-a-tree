@@ -4,6 +4,7 @@ import * as style from './RegisterStorePage.module.scss';
 import Icons from '../../../../static/icons';
 import Button from '../../../common/Button/Button';
 import Map from './Map/Map';
+import TextArea from '../../../common/TextArea/TextArea';
 
 import InputField from '../../../common/InputField/InputField';
 import Cities from "../../../../static/cities";
@@ -86,6 +87,14 @@ const RegisterStorePage = ({history}) => {
                                     width={6}
                                     onChange={handleChange}/>
                     </div>
+                    <TextArea
+                        label='Описание'
+                        id='description'
+                        icon={Icons.edit}
+                        width={12}
+                        rows={5}
+                        onChange={handleChange}
+                        />
                     <div className='row'>
                         <InputField type='password'
                                     label={'Парола'}
