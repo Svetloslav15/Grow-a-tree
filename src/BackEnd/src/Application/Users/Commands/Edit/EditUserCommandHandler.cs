@@ -31,7 +31,6 @@
 
         public async Task<Result<UserModel>> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
-
             if ((await this.identityService.GetCurrentUserId()) != request.Id)
             {
                 return Result<UserModel>.Failure(ErrorMessages.NotAllowedErrorMessage);

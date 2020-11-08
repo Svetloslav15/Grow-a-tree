@@ -135,6 +135,7 @@
             }
         }
 
+        [Authorize]
         [HttpPost("edit")]
         public async Task<ActionResult<Result<UserModel>>> Edit([FromBody] EditUserCommand command)
         {
@@ -161,6 +162,7 @@
             }
         }
 
+        [Authorize]
         [HttpPost("change-profile-picture")]
         public async Task<ActionResult<Result<string>>> ChangeProfilePicture([FromForm] ChangeProfilePictureCommand command)
         {
