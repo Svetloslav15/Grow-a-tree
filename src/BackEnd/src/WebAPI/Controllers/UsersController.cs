@@ -14,6 +14,7 @@
     using GrowATree.Application.Users.Queries.GetById;
     using GrowATree.Application.Users.Queries.GetShortInfoById;
     using GrowATree.Application.Users.Queries.GetTrees;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
@@ -26,6 +27,7 @@
         /// </summary>
         /// <param name="id">Wanted user's id.</param>
         /// <returns>Result Models with error or success.</returns>
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Result<UserModel>>> GetById(string id)
         {
@@ -80,6 +82,7 @@
             }
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<UserListModel>> GetList([FromQuery] GetUserListQuery query)
         {

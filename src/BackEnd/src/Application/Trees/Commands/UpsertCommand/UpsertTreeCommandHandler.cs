@@ -18,12 +18,14 @@
         private readonly IApplicationDbContext context;
         private readonly ICloudinaryService cloudinaryService;
         private readonly UserManager<User> userManager;
+        private readonly IIdentityService identityService;
 
-        public UpsertTreeCommandHandler(IApplicationDbContext context, ICloudinaryService cloudinaryService, UserManager<User> userManager)
+        public UpsertTreeCommandHandler(IApplicationDbContext context, ICloudinaryService cloudinaryService, UserManager<User> userManager, IIdentityService identityService)
         {
             this.context = context;
             this.cloudinaryService = cloudinaryService;
             this.userManager = userManager;
+            this.identityService = identityService;
         }
 
         public async Task<Result<string>> Handle(UpsertTreeCommand request, CancellationToken cancellationToken)
@@ -36,6 +38,11 @@
                 if (model == null)
                 {
                     return Result<string>.Failure(ErrorMessages.TreeNotFoundErrorMessage);
+                }
+
+                if ((await this.identityService.GetCurrentUserId()) != model.OwnerId)
+                {
+                    return Result<string>.Failure(ErrorMessages.NotAllowedErrorMessage);
                 }
 
                 var treeWithNickname = await this.context.Trees.FirstOrDefaultAsync(x => x.Nickname == request.Nickname);

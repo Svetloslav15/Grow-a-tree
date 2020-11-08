@@ -35,7 +35,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Auth/register": {
@@ -259,7 +264,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Auth/refresh-token": {
@@ -1313,11 +1323,6 @@
           },
           "profilePictureUrl": {
             "type": "string",
-            "nullable": true
-          },
-          "profilePictureFile": {
-            "type": "string",
-            "format": "binary",
             "nullable": true
           }
         }

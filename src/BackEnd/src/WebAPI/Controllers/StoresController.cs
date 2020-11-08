@@ -8,12 +8,14 @@
     using GrowATree.Application.Common.Models;
     using GrowATree.Application.Stores.Commands.Upsert;
     using GrowATree.WebAPI.Controllers;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
 
     public class StoresController : ApiController
     {
+        [Authorize]
         [HttpPost("upsert")]
         public async Task<ActionResult<Result<bool>>> Upsert([FromBody] UpsertStoreCommand upsertCommand)
         {
