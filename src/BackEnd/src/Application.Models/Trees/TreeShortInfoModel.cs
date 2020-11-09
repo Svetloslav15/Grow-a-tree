@@ -21,6 +21,10 @@
 
         public string City { get; set; }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
         public UserShortInfoModel Owner { get; set; }
 
         public ImageModel Image { get; set; }
