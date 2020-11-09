@@ -15,7 +15,6 @@
 
     public class StoresController : ApiController
     {
-        [Authorize]
         [HttpPost("upsert")]
         public async Task<ActionResult<Result<bool>>> Upsert([FromBody] UpsertStoreCommand upsertCommand)
         {
