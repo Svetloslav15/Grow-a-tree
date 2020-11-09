@@ -1944,7 +1944,6 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
     providerName?: string | undefined;
     providerKey?: string | undefined;
     profilePictureUrl?: string | undefined;
-    profilePictureFile?: string | undefined;
 
     constructor(data?: IExternalLoginCommand) {
         if (data) {
@@ -1964,7 +1963,6 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
             this.providerName = _data["providerName"];
             this.providerKey = _data["providerKey"];
             this.profilePictureUrl = _data["profilePictureUrl"];
-            this.profilePictureFile = _data["profilePictureFile"];
         }
     }
 
@@ -1984,7 +1982,6 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
         data["providerName"] = this.providerName;
         data["providerKey"] = this.providerKey;
         data["profilePictureUrl"] = this.profilePictureUrl;
-        data["profilePictureFile"] = this.profilePictureFile;
         return data; 
     }
 }
@@ -1997,7 +1994,6 @@ export interface IExternalLoginCommand {
     providerName?: string | undefined;
     providerKey?: string | undefined;
     profilePictureUrl?: string | undefined;
-    profilePictureFile?: string | undefined;
 }
 
 export class ConfirmEmailCommand implements IConfirmEmailCommand {

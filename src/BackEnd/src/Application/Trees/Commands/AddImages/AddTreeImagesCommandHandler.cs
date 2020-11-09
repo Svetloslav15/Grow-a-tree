@@ -15,11 +15,13 @@
     {
         private readonly IApplicationDbContext context;
         private readonly ICloudinaryService cloudinaryService;
+        private readonly IIdentityService identityService;
 
-        public AddTreeImagesCommandHandler(IApplicationDbContext context, ICloudinaryService cloudinaryService)
+        public AddTreeImagesCommandHandler(IApplicationDbContext context, ICloudinaryService cloudinaryService, IIdentityService identityService)
         {
             this.context = context;
             this.cloudinaryService = cloudinaryService;
+            this.identityService = identityService;
         }
 
         public async Task<Result<List<string>>> Handle(AddTreeImagesCommand request, CancellationToken cancellationToken)
@@ -35,6 +37,11 @@
             if (request.ImagesFiles == null && request.ImagesFiles.Count == 0)
             {
                 return Result<List<string>>.Failure(ErrorMessages.TreeImageRequiredErrorMessage);
+            }
+
+            if ((await this.identityService.GetCurrentUserId()) != treeModel.OwnerId)
+            {
+                return Result<List<string>>.Failure(ErrorMessages.NotAllowedErrorMessage);
             }
 
             var result = new List<string>();

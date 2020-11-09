@@ -10,6 +10,8 @@ namespace Common.Constants
 
         public const string LoginFailureErrorMessage = "Невалиден имейл или парола";
 
+        public const string NotAllowedErrorMessage = "Нямате достъп до този ресурс";
+
         #endregion
 
         #region Email

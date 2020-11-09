@@ -8,6 +8,8 @@
 
     public interface IIdentityService
     {
+        Task<string> GetCurrentUserId();
+
         Task<string> GetUserNameAsync(string userId);
 
         Task<Result<TokenModel>> LoginAsync(string email, string password);
