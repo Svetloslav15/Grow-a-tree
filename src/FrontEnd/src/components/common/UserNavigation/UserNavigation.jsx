@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import Item from './Item/Item';
 
 import * as style from './UserNavigation.module.scss';
 
@@ -12,10 +13,15 @@ const UserNavigation = ({props}) => (
                 <p>(Svetloslav Novoselski)</p>
             </div>
         </div>
-        <div>
-            <i className={`${style.icon} fas fa-user`}/>
-            <Link to='/'>Моят профил</Link>
-        </div>
+        <Item link='/' text='Моят профил' icon='user'/>
+        <Item link='/' text='Моят профил' icon='user'/>
+        <Item link='/' text='Моят профил' icon='user'/>
+        <Item link='/' text='Моят профил' icon='user'/>
+        <Item link='/' text='Моят профил' icon='user'/>
+        <Item link='/' text='Моят профил' icon='user'/>
+        <Item link='/' text='Моят профил' icon='user'/>
+        <Item link='/' text='Моят профил' icon='user'/>
+        <Item link='/' text='Моят профил' icon='user'/>
     </div>
 );
 

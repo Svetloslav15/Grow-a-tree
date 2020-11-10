@@ -1,10 +1,9 @@
 .wrapper {
   background-color: #B7DCC6;
-  max-height: 80vh;
-  position: fixed;
-  top: 0;
+  position: absolute;
+  top: 75px;
   right: 0;
-  width: 20%;
+  width: 15rem;
   z-index: 100;
 }
 
@@ -14,9 +13,4 @@
 
 .userSection {
 
-}
-
-.icon {
-  padding: 1em;
-  color: #002F3E;
 }
