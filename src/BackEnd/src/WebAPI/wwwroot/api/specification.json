@@ -1720,6 +1720,10 @@
             "type": "number",
             "format": "double"
           },
+          "metresAway": {
+            "type": "number",
+            "format": "double"
+          },
           "owner": {
             "nullable": true,
             "oneOf": [

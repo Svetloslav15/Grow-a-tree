@@ -29,16 +29,22 @@
 
         public async Task<TreeListShortInfoModel> Handle(GetClosestTreesShortInfoQuery request, CancellationToken cancellationToken)
         {
+            // OPTIMIZE THIS BULLSHIT!!!!
             var init = this.context.Trees
-                .Skip(request.PerPage * (request.Page - 1))
-                .Take(request.PerPage)
                 .ProjectTo<TreeShortInfoModel>(this.mapper.ConfigurationProvider);
 
             var list = init
                 .ToList()
                 .Where(x => this.locationsService.CalculateDistanceBetweenTwoPoints(request.Latitude, request.Longtitude, x.Latitude, x.Longitude) <= Constants.MaxDistanceForClosestTreesInMetres)
                 .OrderBy(x => this.locationsService.CalculateDistanceBetweenTwoPoints(request.Latitude, request.Longtitude, x.Latitude, x.Longitude))
+                .Skip(request.PerPage * (request.Page - 1))
+                .Take(request.PerPage)
                 .ToList();
+
+            foreach (var tree in list)
+            {
+                tree.MetresAway = double.Parse(this.locationsService.CalculateDistanceBetweenTwoPoints(request.Latitude, request.Longtitude, tree.Latitude, tree.Longitude).ToString("F0"));
+            }
 
             var totalTrees = list.Count;
             var meta = new Pagination

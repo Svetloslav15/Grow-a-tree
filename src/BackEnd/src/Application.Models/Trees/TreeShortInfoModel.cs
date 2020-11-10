@@ -25,6 +25,8 @@
 
         public double Longitude { get; set; }
 
+        public double MetresAway { get; set; }
+
         public UserShortInfoModel Owner { get; set; }
 
         public ImageModel Image { get; set; }

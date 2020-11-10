@@ -2559,6 +2559,7 @@ export class TreeShortInfoModel implements ITreeShortInfoModel {
     city?: string | undefined;
     latitude?: number;
     longitude?: number;
+    metresAway?: number;
     owner?: UserShortInfoModel | undefined;
     image?: ImageModel | undefined;
 
@@ -2580,6 +2581,7 @@ export class TreeShortInfoModel implements ITreeShortInfoModel {
             this.city = _data["city"];
             this.latitude = _data["latitude"];
             this.longitude = _data["longitude"];
+            this.metresAway = _data["metresAway"];
             this.owner = _data["owner"] ? UserShortInfoModel.fromJS(_data["owner"]) : <any>undefined;
             this.image = _data["image"] ? ImageModel.fromJS(_data["image"]) : <any>undefined;
         }
@@ -2601,6 +2603,7 @@ export class TreeShortInfoModel implements ITreeShortInfoModel {
         data["city"] = this.city;
         data["latitude"] = this.latitude;
         data["longitude"] = this.longitude;
+        data["metresAway"] = this.metresAway;
         data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
         data["image"] = this.image ? this.image.toJSON() : <any>undefined;
         return data; 
@@ -2615,6 +2618,7 @@ export interface ITreeShortInfoModel {
     city?: string | undefined;
     latitude?: number;
     longitude?: number;
+    metresAway?: number;
     owner?: UserShortInfoModel | undefined;
     image?: ImageModel | undefined;
 }
