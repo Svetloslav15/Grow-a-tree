@@ -27,7 +27,6 @@ const Navigation = () => {
                     </NavItem>
                 </ul>
             </div>
-            <UserNavigation/>
         </nav>
     )
 };
