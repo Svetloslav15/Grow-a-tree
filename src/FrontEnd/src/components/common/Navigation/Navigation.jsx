@@ -1,9 +1,12 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+
+import UserNavigation from '../UserNavigation/UserNavigation';
 import NavItem from './NavItem/NavItem';
 import NavCollapseButton from './NavCollapseButton/NavCollapseButton';
 import * as style from './Navigation.module.scss';
 import Button from '../../common/Button/Button';
-import {Link} from 'react-router-dom';
+
 const Logo = require('../../../assets/logo.png');
 
 const Navigation = () => {
@@ -24,6 +27,7 @@ const Navigation = () => {
                     </NavItem>
                 </ul>
             </div>
+            <UserNavigation/>
         </nav>
     )
 };
