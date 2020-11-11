@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 
 import UserNavigation from '../UserNavigation/UserNavigation';
 import NavItem from './NavItem/NavItem';
@@ -10,6 +11,9 @@ import Button from '../../common/Button/Button';
 const Logo = require('../../../assets/logo.png');
 
 const Navigation = () => {
+    const currUser = useSelector(state => state.auth);
+    console.log(currUser);
+
     return (
         <nav className={`${style.navigation} py-0 navbar navbar-expand-lg`}>
             <NavCollapseButton/>
@@ -22,13 +26,21 @@ const Navigation = () => {
                     <NavItem link='/shop'>Магазин</NavItem>
                     <NavItem link='/events'>Събития</NavItem>
                     <NavItem link='/forum'>Форум</NavItem>
-                    <NavItem link={'/auth/login'}>
-                        <Button type='GreenOutline'>Вход</Button>
-                    </NavItem>
+                    {
+                        !currUser.accessToken ?
+                            (
+                                <NavItem link={'/auth/login'}>
+                                    <Button type='GreenOutline'>Вход</Button>
+                                </NavItem>
+                            )
+                            :
+                            (
+                                <NavItem link='#' isBold={true}>Здравей, {currUser.username}!</NavItem>
+                            )
+                    }
                 </ul>
             </div>
         </nav>
     )
 };
-
 export default Navigation;

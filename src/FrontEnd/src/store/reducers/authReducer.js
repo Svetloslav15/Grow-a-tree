@@ -5,7 +5,8 @@ const initialState = {
     expired: '',
     id: '',
     isStore: false,
-    refreshToken: ''
+    refreshToken: '',
+    username: ''
 };
 
 const authReducer = (state = initialState, action) => {
