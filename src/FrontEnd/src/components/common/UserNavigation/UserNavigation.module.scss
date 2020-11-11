@@ -1,0 +1,29 @@
+.wrapper {
+  background-color: #B7DCC6;
+  position: absolute;
+  top: 75px;
+  right: 0;
+  width: 15rem;
+  z-index: 100;
+}
+
+.userProfileImage {
+  width: 40px;
+  height: 40px;
+  margin: 0.7em;
+}
+
+.userSection {
+  border-bottom: 1px solid #002F3E;
+  text-align: left;
+  padding-top: 15px;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.collapseIcon {
+  padding: 1em 1.5em;
+  cursor: pointer;
+}

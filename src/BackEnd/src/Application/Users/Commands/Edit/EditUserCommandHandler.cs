@@ -19,16 +19,23 @@
         private readonly IApplicationDbContext context;
         private readonly UserManager<User> userManager;
         private readonly ICloudinaryService cloudinaryService;
+        private readonly IIdentityService identityService;
 
-        public EditUserCommandHandler(IApplicationDbContext context, UserManager<User> userManager, ICloudinaryService cloudinaryService)
+        public EditUserCommandHandler(IApplicationDbContext context, UserManager<User> userManager, ICloudinaryService cloudinaryService, IIdentityService identityService)
         {
             this.context = context;
             this.userManager = userManager;
             this.cloudinaryService = cloudinaryService;
+            this.identityService = identityService;
         }
 
         public async Task<Result<UserModel>> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
+            if ((await this.identityService.GetCurrentUserId()) != request.Id)
+            {
+                return Result<UserModel>.Failure(ErrorMessages.NotAllowedErrorMessage);
+            }
+
             var currentUser = await this.context.Users
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 

@@ -8,6 +8,7 @@
     using GrowATree.Application.Common.Models;
     using GrowATree.Application.Stores.Commands.Upsert;
     using GrowATree.WebAPI.Controllers;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;

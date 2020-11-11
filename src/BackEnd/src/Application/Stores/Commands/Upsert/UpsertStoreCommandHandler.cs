@@ -13,11 +13,13 @@
     {
         private readonly IApplicationDbContext dbContext;
         private readonly UserManager<User> userManager;
+        private readonly IIdentityService identityService;
 
-        public UpsertStoreCommandHandler(IApplicationDbContext dbContext, UserManager<User> userManager)
+        public UpsertStoreCommandHandler(IApplicationDbContext dbContext, UserManager<User> userManager, IIdentityService identityService)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
+            this.identityService = identityService;
         }
 
         public async Task<Result<bool>> Handle(UpsertStoreCommand request, CancellationToken cancellationToken)
@@ -25,8 +27,15 @@
             Store entity;
             if (request.Id != null)
             {
+
                 var store = await this.dbContext.Stores.FindAsync(request.Id);
                 var storeUser = await this.userManager.FindByIdAsync(store.ApplicationUserId);
+
+                if ((await this.identityService.GetCurrentUserId()) != store.ApplicationUserId)
+                {
+                    return Result<bool>.Failure(ErrorMessages.NotAllowedErrorMessage);
+                }
+
                 if (store != null && storeUser != null)
                 {
                     // Update properties for store

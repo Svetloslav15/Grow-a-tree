@@ -13,11 +13,13 @@
     {
         private readonly IApplicationDbContext context;
         private readonly ICloudinaryService cloudinaryService;
+        private readonly IIdentityService identityService;
 
-        public EditTreeImageCommandHandler(IApplicationDbContext context, ICloudinaryService cloudinaryService)
+        public EditTreeImageCommandHandler(IApplicationDbContext context, ICloudinaryService cloudinaryService, IIdentityService identityService)
         {
             this.context = context;
             this.cloudinaryService = cloudinaryService;
+            this.identityService = identityService;
         }
 
         public async Task<Result<string>> Handle(EditTreeImageCommand request, CancellationToken cancellationToken)
@@ -33,6 +35,11 @@
             if (imageModel == null)
             {
                 return Result<string>.Failure(ErrorMessages.TreeImageNotFoundErrorMessage);
+            }
+
+            if ((await this.identityService.GetCurrentUserId()) != imageModel.Tree.OwnerId)
+            {
+                return Result<string>.Failure(ErrorMessages.NotAllowedErrorMessage);
             }
 
             var newImageUrl = await this.cloudinaryService.UploudAsync(request.newImageFile);

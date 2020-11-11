@@ -12,16 +12,23 @@
     public class DeleteTreeImageCommandHandler : IRequestHandler<DeleteTreeImageCommand, Result<string>>
     {
         private readonly IApplicationDbContext context;
+        private readonly IIdentityService identityService;
 
-        public DeleteTreeImageCommandHandler(IApplicationDbContext context)
+        public DeleteTreeImageCommandHandler(IApplicationDbContext context, IIdentityService identityService)
         {
             this.context = context;
+            this.identityService = identityService;
         }
 
         public async Task<Result<string>> Handle(DeleteTreeImageCommand request, CancellationToken cancellationToken)
         {
             var treeImageModel = await this.context.TreeImages
                 .FirstOrDefaultAsync(x => x.Id == request.ImageId);
+
+            if ((await this.identityService.GetCurrentUserId()) != treeImageModel.Tree.OwnerId)
+            {
+                return Result<string>.Failure(ErrorMessages.NotAllowedErrorMessage);
+            }
 
             if (treeImageModel == null)
             {
