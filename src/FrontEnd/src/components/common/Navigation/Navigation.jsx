@@ -13,9 +13,7 @@ const Logo = require('../../../assets/logo.png');
 const Navigation = () => {
     const currUser = useSelector(state => state.auth);
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
-    useEffect(() => {
-        console.log(isNavigationOpen);
-    })
+
     return (
         <nav className={`${style.navigation} py-0 navbar navbar-expand-lg`}>
             <NavCollapseButton/>
