@@ -38,6 +38,17 @@ const UserInfoPage = () => {
         setCurrUser({...currUser});
     };
 
+    const handleSubmit = async () => {
+        const response = await UsersService.postAuthorized.editUser(currUser, stateUserData.accessToken);
+
+        if (response.data.succeeded) {
+            AlertService.success('Успешно променихте вашите данни!');
+        }
+        else {
+            AlertService.error(response.data.errors[0]);
+        }
+    };
+
     return (
         <div className='row'>
             <img src={BgShape3} className='shape3'/>
@@ -68,7 +79,7 @@ const UserInfoPage = () => {
                                         onChange={handleChange}/>
                             <InputField type='text'
                                         label={'Град'}
-                                        id='town'
+                                        id='city'
                                         icon={Icons.user}
                                         width={6}
                                         value={currUser.city}
@@ -88,7 +99,10 @@ const UserInfoPage = () => {
                                         width={6}
                                         onChange={handleChange}/>
                             <div className='col-md-6 text-center mt-3'>
-                                <Button type='DarkOutline'>Запази</Button>
+                                <Button type='DarkOutline'
+                                        onClick={handleSubmit}>
+                                    Запази
+                                </Button>
                             </div>
                         </div>
                     </div>

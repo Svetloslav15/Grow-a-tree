@@ -1,7 +1,8 @@
 import baseService from './baseService';
 
 const ROUTES = {
-    getUserById: '/users/'
+    getUserById: '/users/',
+    editUser: '/users/edit'
 };
 export default {
     get: new Proxy({}, {
@@ -21,7 +22,9 @@ export default {
     }),
     postAuthorized: new Proxy({}, {
         get(target, propName) {
-            return async (data, token) => await baseService.postAuthorized(ROUTES[propName], data, token);
+            return async (data, token) => {
+                return await baseService.postAuthorized(ROUTES[propName], data, token);
+            }
         }
     }),
 }

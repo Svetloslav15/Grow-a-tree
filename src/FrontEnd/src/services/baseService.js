@@ -13,9 +13,15 @@ export default {
         });
         return res.data;
     },
-    postAuthorized: async (url, data, token) => await axios.post(`${BASE_URL}${url}`, {
-        data,
-        headers: {"Authorization": `Bearer ${token}`}
-    }),
+    postAuthorized: async (url, data, token) => {
+        return await axios(`${BASE_URL}${url}`, {
+            method: 'post',
+            data: JSON.stringify(data),
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-type": "application/json"
+            }
+        })
+    },
     getAuthorized: async (url, token) => await axios.get(`${BASE_URL}${url}`, {headers: {"Authorization": `Bearer ${token}`}})
 }
