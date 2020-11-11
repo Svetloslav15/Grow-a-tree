@@ -538,6 +538,48 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GetIsUserNearTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/is-user-near-tree?latitude=41.980118&longitude=23.080451&treeId=48e81e20-7e16-4550-92bd-c56b6b9dab49",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"is-user-near-tree"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "41.980118"
+								},
+								{
+									"key": "longitude",
+									"value": "23.080451"
+								},
+								{
+									"key": "treeId",
+									"value": "48e81e20-7e16-4550-92bd-c56b6b9dab49"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -940,7 +982,7 @@
 					"response": []
 				},
 				{
-					"name": "ClosestTrees",
+					"name": "GetClosestTrees",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -967,7 +1009,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{LocalUrl}}/trees/closest-trees-short-info?latitude=41.982750&longtitude=23.087382",
+							"raw": "{{LocalUrl}}/trees/closest-trees-short-info?latitude=41.982750&longitude=23.087382",
 							"host": [
 								"{{LocalUrl}}"
 							],
@@ -981,7 +1023,7 @@
 									"value": "41.982750"
 								},
 								{
-									"key": "longtitude",
+									"key": "longitude",
 									"value": "23.087382"
 								},
 								{
