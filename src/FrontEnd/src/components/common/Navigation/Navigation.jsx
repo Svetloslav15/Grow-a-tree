@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
@@ -12,8 +12,10 @@ const Logo = require('../../../assets/logo.png');
 
 const Navigation = () => {
     const currUser = useSelector(state => state.auth);
-    console.log(currUser);
-
+    const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+    useEffect(() => {
+        console.log(isNavigationOpen);
+    })
     return (
         <nav className={`${style.navigation} py-0 navbar navbar-expand-lg`}>
             <NavCollapseButton/>
@@ -35,7 +37,15 @@ const Navigation = () => {
                             )
                             :
                             (
-                                <NavItem link='#' isBold={true}>Здравей, {currUser.username}!</NavItem>
+                                <>
+                                    <NavItem link='#'
+                                             isBold={true}
+                                             onClick={() => setIsNavigationOpen(!isNavigationOpen)}>
+                                        Здравей, {currUser.username}!
+                                    </NavItem>
+                                    <UserNavigation isOpen={isNavigationOpen}
+                                                    closeNavigation={setIsNavigationOpen}/>
+                                </>
                             )
                     }
                 </ul>

@@ -6,8 +6,8 @@ import * as style from './UserNavigation.module.scss';
 const UserImage = require('../../../assets/user-profile.png');
 const UpArrow = require('../../../assets/up-arrow.png');
 
-const UserNavigation = ({props}) => (
-    <div className={style.wrapper}>
+const UserNavigation = ({isOpen, closeNavigation}) => (
+    <div className={`${style.wrapper} ${isOpen ? '' : 'd-none'}`}>
         <div className={`mx-0 row ${style.userSection}`}>
             <img className={style.userProfileImage} src={UserImage} alt=""/>
             <div className=''>
@@ -25,7 +25,7 @@ const UserNavigation = ({props}) => (
             <Item link='/' text='Моят профил' icon='user'/>
             <Item link='/' text='Моят профил' icon='user'/>
             <Item link='/' text='Моят профил' icon='user'/>
-            <div className='col-md-12 text-center'>
+            <div className='col-md-12 text-center' onClick={() => closeNavigation(false)}>
                 <img className={style.collapseIcon} src={UpArrow} alt="Close Icon"/>
             </div>
         </div>
