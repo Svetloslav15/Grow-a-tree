@@ -50,7 +50,7 @@
 								"id": "8537f1e4-52dc-4ce2-9f3b-9fa0f8f9f8b5",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
-									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
+									"postman.setEnvironmentVariable(\"Bearer\", jsonData.data.accessToken);"
 								],
 								"type": "text/javascript"
 							}
@@ -332,6 +332,16 @@
 				{
 					"name": "GetById",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -348,28 +358,37 @@
 					"response": []
 				},
 				{
-					"name": "GetAll",
+					"name": "GetList",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LocalUrl}}/users/all?perPage=3",
+							"raw": "{{LocalUrl}}/users?perPage=3",
 							"host": [
 								"{{LocalUrl}}"
 							],
 							"path": [
-								"users",
-								"all"
+								"users"
 							],
 							"query": [
-								{
-									"key": "perPage",
-									"value": "3"
-								},
 								{
 									"key": "page",
 									"value": "1",
 									"disabled": true
+								},
+								{
+									"key": "perPage",
+									"value": "3"
 								}
 							]
 						}
@@ -483,37 +502,79 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LocalUrl}}/users/short-info/42619fbb-fb36-4c25-863f-1fed2d1e7843",
+							"raw": "{{LocalUrl}}/users/short-info/4cb0ac37-0f71-43a3-954c-01d6af4ce2c6",
 							"host": [
 								"{{LocalUrl}}"
 							],
 							"path": [
 								"users",
 								"short-info",
-								"42619fbb-fb36-4c25-863f-1fed2d1e7843"
+								"4cb0ac37-0f71-43a3-954c-01d6af4ce2c6"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "GetAllShortInfo",
+					"name": "GetListShortInfo",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LocalUrl}}/users/all-short-info?perPage=3",
+							"raw": "{{LocalUrl}}/users/list-short-info?perPage=3",
 							"host": [
 								"{{LocalUrl}}"
 							],
 							"path": [
 								"users",
-								"all-short-info"
+								"list-short-info"
 							],
 							"query": [
 								{
 									"key": "perPage",
 									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetIsUserNearTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/is-user-near-tree?latitude=41.980118&longitude=23.080451&treeId=48e81e20-7e16-4550-92bd-c56b6b9dab49",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"is-user-near-tree"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "41.980118"
+								},
+								{
+									"key": "longitude",
+									"value": "23.080451"
+								},
+								{
+									"key": "treeId",
+									"value": "48e81e20-7e16-4550-92bd-c56b6b9dab49"
 								}
 							]
 						}
@@ -529,6 +590,16 @@
 				{
 					"name": "Upsert",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -536,7 +607,7 @@
 							"formdata": [
 								{
 									"key": "Nickname",
-									"value": "tree1",
+									"value": "tree4",
 									"type": "text"
 								},
 								{
@@ -546,12 +617,12 @@
 								},
 								{
 									"key": "Longitude",
-									"value": "42.125415",
+									"value": "41.980908",
 									"type": "text"
 								},
 								{
 									"key": "Latitude",
-									"value": "42.125415",
+									"value": "23.081503",
 									"type": "text"
 								},
 								{
@@ -566,15 +637,22 @@
 								},
 								{
 									"key": "OwnerId",
-									"value": "42619fbb-fb36-4c25-863f-1fed2d1e7843",
+									"value": "0446497c-b24d-4729-ac21-a3845fba0efe",
 									"type": "text"
 								},
 								{
 									"key": "ImageFiles",
 									"type": "file",
-									"src": "/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/640-420-najstaroto-dyrvo-v-sveta-navyrshva-4847-godini.jpg"
+									"src": [
+										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/200px-Duby_nad_Pozorkou_I.jpg",
+										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/640-420-najstaroto-dyrvo-v-sveta-navyrshva-4847-godini.jpg",
+										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/768x432.jpg"
+									]
 								}
-							]
+							],
+							"options": {
+								"formdata": {}
+							}
 						},
 						"url": {
 							"raw": "{{LocalUrl}}/trees/upsert",
@@ -592,6 +670,16 @@
 				{
 					"name": "EditTreeImage",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -756,6 +844,198 @@
 								"trees",
 								"short-info",
 								"8f5a9c60-219d-49b9-a433-b2a5181606ee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees?perPage=3",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetListShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/list-short-info?perPage=3",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"list-short-info"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDeletedImages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/deleted-images?perPage=3&id=f7f3ee60-4c33-4e1b-9aba-48d7efe7ea17",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"deleted-images"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								},
+								{
+									"key": "id",
+									"value": "f7f3ee60-4c33-4e1b-9aba-48d7efe7ea17"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserTrees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/user?perPage=3&id=a289799e-0247-4550-bfda-ce7222f95302",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"user"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								},
+								{
+									"key": "id",
+									"value": "a289799e-0247-4550-bfda-ce7222f95302"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserTreesShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/user/short-info?perPage=3&id=a289799e-0247-4550-bfda-ce7222f95302",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"user",
+								"short-info"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								},
+								{
+									"key": "id",
+									"value": "a289799e-0247-4550-bfda-ce7222f95302"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetClosestTrees",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/closest-trees-short-info?latitude=41.982750&longitude=23.087382",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"closest-trees-short-info"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "41.982750"
+								},
+								{
+									"key": "longitude",
+									"value": "23.087382"
+								},
+								{
+									"key": "perPage",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
 							]
 						}
 					},

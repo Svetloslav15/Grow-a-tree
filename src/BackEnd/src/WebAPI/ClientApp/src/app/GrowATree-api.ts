@@ -530,10 +530,11 @@ export interface ITreesClient {
     getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel>;
     getTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getTreesShortInfo(page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
-    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
+    getTreeShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
     getTreeDeletedImages(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel>;
     getUserTrees(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getUserTreeShortInfo(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
+    getClosestTreesShortInfo(latitude: number | undefined, longitude: number | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
     upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString>;
     editTreeImage(id: string | null | undefined, newImageFile: FileParameter | null | undefined): Observable<ResultOfString>;
     addTreeImages(treeId: string | null | undefined, imagesFiles: string[] | null | undefined): Observable<ResultOfListOfString>;
@@ -768,7 +769,7 @@ export class TreesClient implements ITreesClient {
         return _observableOf<TreeListShortInfoModel>(<any>null);
     }
 
-    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
+    getTreeShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
         let url_ = this.baseUrl + "/api/Trees/short-info?";
         if (id !== undefined)
             url_ += "id=" + encodeURIComponent("" + id) + "&"; 
@@ -783,11 +784,11 @@ export class TreesClient implements ITreesClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTreesShortInfo2(response_);
+            return this.processGetTreeShortInfo(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetTreesShortInfo2(<any>response_);
+                    return this.processGetTreeShortInfo(<any>response_);
                 } catch (e) {
                     return <Observable<ResultOfTreeShortInfoModel>><any>_observableThrow(e);
                 }
@@ -796,7 +797,7 @@ export class TreesClient implements ITreesClient {
         }));
     }
 
-    protected processGetTreesShortInfo2(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
+    protected processGetTreeShortInfo(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -971,6 +972,70 @@ export class TreesClient implements ITreesClient {
     }
 
     protected processGetUserTreeShortInfo(response: HttpResponseBase): Observable<TreeListShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeListShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeListShortInfoModel>(<any>null);
+    }
+
+    getClosestTreesShortInfo(latitude: number | undefined, longitude: number | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Trees/closest-trees-short-info?";
+        if (latitude === null)
+            throw new Error("The parameter 'latitude' cannot be null.");
+        else if (latitude !== undefined)
+            url_ += "Latitude=" + encodeURIComponent("" + latitude) + "&"; 
+        if (longitude === null)
+            throw new Error("The parameter 'longitude' cannot be null.");
+        else if (longitude !== undefined)
+            url_ += "Longitude=" + encodeURIComponent("" + longitude) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetClosestTreesShortInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetClosestTreesShortInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeListShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeListShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetClosestTreesShortInfo(response: HttpResponseBase): Observable<TreeListShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -1281,6 +1346,7 @@ export interface IUsersClient {
     getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel>;
     getList(page: number | undefined, perPage: number | undefined): Observable<UserListModel>;
     getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
+    isUserShortToTree(latitude: number | undefined, longitude: number | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
 }
@@ -1510,6 +1576,64 @@ export class UsersClient implements IUsersClient {
             }));
         }
         return _observableOf<UserListShortInfoModel>(<any>null);
+    }
+
+    isUserShortToTree(latitude: number | undefined, longitude: number | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Users/is-user-near-tree?";
+        if (latitude === null)
+            throw new Error("The parameter 'latitude' cannot be null.");
+        else if (latitude !== undefined)
+            url_ += "Latitude=" + encodeURIComponent("" + latitude) + "&"; 
+        if (longitude === null)
+            throw new Error("The parameter 'longitude' cannot be null.");
+        else if (longitude !== undefined)
+            url_ += "Longitude=" + encodeURIComponent("" + longitude) + "&"; 
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processIsUserShortToTree(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processIsUserShortToTree(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processIsUserShortToTree(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
     }
 
     edit(command: EditUserCommand): Observable<ResultOfUserModel> {
@@ -2492,6 +2616,9 @@ export class TreeShortInfoModel implements ITreeShortInfoModel {
     plantedOn?: Date;
     status?: TreeStatus;
     city?: string | undefined;
+    latitude?: number;
+    longitude?: number;
+    metresAway?: number;
     owner?: UserShortInfoModel | undefined;
     image?: ImageModel | undefined;
 
@@ -2511,6 +2638,9 @@ export class TreeShortInfoModel implements ITreeShortInfoModel {
             this.plantedOn = _data["plantedOn"] ? new Date(_data["plantedOn"].toString()) : <any>undefined;
             this.status = _data["status"];
             this.city = _data["city"];
+            this.latitude = _data["latitude"];
+            this.longitude = _data["longitude"];
+            this.metresAway = _data["metresAway"];
             this.owner = _data["owner"] ? UserShortInfoModel.fromJS(_data["owner"]) : <any>undefined;
             this.image = _data["image"] ? ImageModel.fromJS(_data["image"]) : <any>undefined;
         }
@@ -2530,6 +2660,9 @@ export class TreeShortInfoModel implements ITreeShortInfoModel {
         data["plantedOn"] = this.plantedOn ? this.plantedOn.toISOString() : <any>undefined;
         data["status"] = this.status;
         data["city"] = this.city;
+        data["latitude"] = this.latitude;
+        data["longitude"] = this.longitude;
+        data["metresAway"] = this.metresAway;
         data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
         data["image"] = this.image ? this.image.toJSON() : <any>undefined;
         return data; 
@@ -2542,6 +2675,9 @@ export interface ITreeShortInfoModel {
     plantedOn?: Date;
     status?: TreeStatus;
     city?: string | undefined;
+    latitude?: number;
+    longitude?: number;
+    metresAway?: number;
     owner?: UserShortInfoModel | undefined;
     image?: ImageModel | undefined;
 }

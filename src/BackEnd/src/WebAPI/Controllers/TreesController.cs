@@ -15,6 +15,7 @@
     using GrowATree.Application.Trees.Commands.EditImage;
     using GrowATree.Application.Trees.Commands.RestoreImage;
     using GrowATree.Application.Trees.Commands.UpsertCommand;
+    using GrowATree.Application.Trees.Queries.GetClosestTrees;
     using GrowATree.Application.Trees.Queries.GetDeletedImages;
     using GrowATree.Application.Trees.Queries.GetList;
     using GrowATree.Application.Trees.Queries.GetListShortInfo;
@@ -221,6 +222,32 @@
         [Authorize]
         [HttpGet("user/short-info")]
         public async Task<ActionResult<TreeListShortInfoModel>> GetUserTreeShortInfo([FromQuery] GetUserTreesShortInfoQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return TreeListShortInfoModel.Failure<TreeListShortInfoModel>(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeListShortInfoModel.Failure<TreeListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("closest-trees-short-info")]
+        public async Task<ActionResult<TreeListShortInfoModel>> GetClosestTreesShortInfo([FromQuery] GetClosestTreesShortInfoQuery query)
         {
             try
             {

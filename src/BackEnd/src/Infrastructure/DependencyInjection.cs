@@ -51,6 +51,7 @@
 
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddScoped<ILocationsService, LocationsService>();
 
             // Add clodinary
             var cloudinary = new Cloudinary(new Account()
