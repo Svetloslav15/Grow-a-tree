@@ -21,7 +21,6 @@ const UserNavigation = ({isOpen, closeNavigation, isFixed}) => {
         };
         dispatch({ type:  SAVE_CURRENT_USER, data});
     };
-    console.table(isFixed, isOpen);
     return (
         <div className={`${style.wrapper} ${isOpen ? '' : 'd-none'}  ${isFixed ? style.isFixed : ''} `}>
             <div className={`mx-0 row ${style.userSection}`}>
