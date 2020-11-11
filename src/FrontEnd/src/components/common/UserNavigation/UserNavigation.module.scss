@@ -1,7 +1,7 @@
 .wrapper {
   background-color: #B7DCC6;
   position: absolute;
-  top: 60px;
+  top: 57px;
   border: 1px solid white;
   right: 0;
   width: 15rem;
@@ -30,5 +30,11 @@
 }
 
 .isFixed {
-
+  background-color: #B7DCC6;
+  position: fixed;
+  top: 57px;
+  left: 0;
+  width: 15rem;
+  z-index: 100;
+  display: block !important;
 }

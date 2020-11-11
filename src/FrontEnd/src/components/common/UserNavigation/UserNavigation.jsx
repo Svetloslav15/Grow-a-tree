@@ -1,6 +1,6 @@
 import React from 'react';
 import Item from './Item/Item';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import * as style from './UserNavigation.module.scss';
 import {SAVE_CURRENT_USER} from '../../../store/actions/actionTypes';
@@ -21,9 +21,9 @@ const UserNavigation = ({isOpen, closeNavigation, isFixed}) => {
         };
         dispatch({ type:  SAVE_CURRENT_USER, data});
     };
-
+    console.table(isFixed, isOpen);
     return (
-        <div className={`${style.wrapper} ${isOpen && !isFixed ? '' : 'd-none'} ${isFixed ? style.isFixed : ''}`}>
+        <div className={`${style.wrapper} ${isOpen ? '' : 'd-none'}  ${isFixed ? style.isFixed : ''} `}>
             <div className={`mx-0 row ${style.userSection}`}>
                 <img className={style.userProfileImage} src={UserImage} alt=""/>
                 <div className=''>

@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+
 import * as style from './UserInfoPage.module.scss';
 import Icons from "../../../../static/icons";
 import SuccessMessages from "../../../../static/successMessages";
@@ -6,40 +8,28 @@ import AuthService from "../../../../services/authService";
 import AlertService from "../../../../services/alertService";
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
+import {CHANGE_IS_USER_NAV_FIXED, CHANGE_IS_USER_NAV_OPENED} from '../../../../store/actions/actionTypes';
 
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 const BgShape4 = require('../../../../assets/bg-shape-4.png');
 
 const ForgottenPasswordPage = () => {
-    const [email, setEmail] = useState('');
+    const dispatch = useDispatch();
 
-    const handleChange = (event) => {
-        setEmail(event.target.value);
-    };
+    useEffect(() => {
+        dispatch({type: CHANGE_IS_USER_NAV_FIXED, data: true});
+        return () => {
+            dispatch({type: CHANGE_IS_USER_NAV_FIXED, data: false});
+            dispatch({type: CHANGE_IS_USER_NAV_OPENED, data: false});
+        }
+    }, []);
 
-    const handleSubmit = async () => {
-        const result = await AuthService.forgottenPassword({email});
-        return result.succeeded ? AlertService.success(SuccessMessages.successSendLinkForForgottenPassword) : AlertService.error(result.errors[0]);
-    };
     return (
         <>
             <img src={BgShape3} className='shape3'/>
             <img src={BgShape4} className='shape4'/>
             <div className={`col-md-12`}>
-                <div className='col-md-4 my-5 mx-auto text-center'>
-                    <h2># Забравена парола</h2>
 
-                    <InputField type='email'
-                                label={'Имейл'}
-                                id='email'
-                                icon={Icons.email}
-                                width={12}
-                                onChange={handleChange}/>
-                    <Button type={'DarkOutline'} className={'mb-5'} onClick={handleSubmit}>
-                        <i className="fas fa-paper-plane mr-2"/>
-                        Изпрати линк
-                    </Button>
-                </div>
             </div>
         </>
     )

@@ -1,18 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import UserNavigation from '../UserNavigation/UserNavigation';
 import NavItem from './NavItem/NavItem';
 import NavCollapseButton from './NavCollapseButton/NavCollapseButton';
 import * as style from './Navigation.module.scss';
 import Button from '../../common/Button/Button';
+import {CHANGE_IS_USER_NAV_OPENED} from "../../../store/actions/actionTypes";
 
 const Logo = require('../../../assets/logo.png');
 
 const Navigation = () => {
     const currUser = useSelector(state => state.auth);
-    const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+    const commonData = useSelector(state => state.common);
+    const dispatch = useDispatch();
+
+    const toggleNavOpen = () => {
+        dispatch({type: CHANGE_IS_USER_NAV_OPENED, data: !commonData.isUserNavOpen});
+    };
 
     return (
         <nav className={`${style.navigation} py-0 navbar navbar-expand-lg`}>
@@ -38,11 +44,12 @@ const Navigation = () => {
                                 <>
                                     <NavItem link='#'
                                              isBold={true}
-                                             onClick={() => setIsNavigationOpen(!isNavigationOpen)}>
+                                             onClick={toggleNavOpen}>
                                         Здравей, {currUser.username}!
                                     </NavItem>
-                                    <UserNavigation isOpen={isNavigationOpen}
-                                                    closeNavigation={setIsNavigationOpen}/>
+                                    <UserNavigation isOpen={commonData.isUserNavOpen}
+                                                    closeNavigation={toggleNavOpen}
+                                                    isFixed={commonData.isUserNavFixed}/>
                                 </>
                             )
                     }
