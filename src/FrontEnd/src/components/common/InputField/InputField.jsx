@@ -2,11 +2,12 @@ import React, {useRef, useEffect} from 'react';
 import * as style from './InputField.module.scss';
 
 const InputField = ({label, type, id, icon, onChange, width, value}) => {
-    const btnRef = useRef(null);
+    const btnRef = useRef({});
 
     useEffect(() => {
+        console.log(btnRef.current);
         btnRef.current.click();
-    }, [btnRef]);
+    }, []);
 
     return (
         <div className={`md-form col-md-${width}`}>

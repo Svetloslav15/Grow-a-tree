@@ -14,7 +14,6 @@ import Sidebar from '../Sidebar/Sidebar';
 
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 const BgShape4 = require('../../../../assets/bg-shape-4.png');
-const UserImage = require('../../../../assets/user-profile.png');
 
 const UserInfoPage = () => {
     const dispatch = useDispatch();
@@ -93,7 +92,7 @@ const UserInfoPage = () => {
                                         onChange={handleChange}/>
                             <InputField type='text'
                                         label={'Потребителско име'}
-                                        id='username'
+                                        id='userName'
                                         icon={Icons.user}
                                         value={currUser.userName}
                                         width={6}
