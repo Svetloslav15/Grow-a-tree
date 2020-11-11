@@ -7,7 +7,7 @@ import {SAVE_CURRENT_USER} from '../../../store/actions/actionTypes';
 const UserImage = require('../../../assets/user-profile.png');
 const UpArrow = require('../../../assets/up-arrow.png');
 
-const UserNavigation = ({isOpen, closeNavigation}) => {
+const UserNavigation = ({isOpen, closeNavigation, isFixed}) => {
     const dispatch = useDispatch({});
 
     const logoutUser = () => {
@@ -23,7 +23,7 @@ const UserNavigation = ({isOpen, closeNavigation}) => {
     };
 
     return (
-        <div className={`${style.wrapper} ${isOpen ? '' : 'd-none'}`}>
+        <div className={`${style.wrapper} ${isOpen && !isFixed ? '' : 'd-none'} ${isFixed ? style.isFixed : ''}`}>
             <div className={`mx-0 row ${style.userSection}`}>
                 <img className={style.userProfileImage} src={UserImage} alt=""/>
                 <div className=''>
@@ -32,14 +32,14 @@ const UserNavigation = ({isOpen, closeNavigation}) => {
                 </div>
             </div>
             <div>
-                <Item link='/' text='Моят профил' icon='user'/>
-                <Item link='/' text='Моят профил' icon='user'/>
-                <Item link='/' text='Моят профил' icon='user'/>
-                <Item link='/' text='Моят профил' icon='user'/>
-                <Item link='/' text='Моят профил' icon='user'/>
-                <Item link='/' text='Моят профил' icon='user'/>
-                <Item link='/' text='Моят профил' icon='user'/>
-                <Item link='/' text='Моят профил' icon='user'/>
+                <Item link='/users/my-info' text='Моят профил' icon='user'/>
+                <Item link='/' text='Comming soon...' icon='user'/>
+                <Item link='/' text='Comming soon...' icon='user'/>
+                <Item link='/' text='Comming soon...' icon='user'/>
+                <Item link='/' text='Comming soon...' icon='user'/>
+                <Item link='/' text='Comming soon...' icon='user'/>
+                <Item link='/' text='Comming soon...' icon='user'/>
+                <Item link='/' text='Comming soon...' icon='user'/>
                 <Item link='#' onClick={logoutUser} text='Изход' icon='door-open'/>
                 <div className='col-md-12 text-center' onClick={() => closeNavigation(false)}>
                     <img className={style.collapseIcon} src={UpArrow} alt="Close Icon"/>

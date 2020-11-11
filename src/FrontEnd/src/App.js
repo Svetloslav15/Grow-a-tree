@@ -17,6 +17,7 @@ import HomePage from './components/pages/HomeModule/HomePage/HomePage';
 import LoginPage from './components/pages/AuthModule/LoginPage/LoginPage';
 import ResetPasswordPage from './components/pages/AuthModule/ResetPasswordPage/ResetPasswordPage';
 import RegisterStorePage from "./components/pages/AuthModule/RegisterStorePage/RegisterStorePage";
+import UserInfoPage from './components/pages/UserModule/UserInfo/UserInfoPage';
 
 const App = () => (
     <>
@@ -31,6 +32,7 @@ const App = () => (
             <Route exact path='/auth/reset-password' component={ResetPasswordPage}/>
             <Route exact path='/auth/forgotten-password' component={ForgottenPassword}/>
             <Route exact path='/auth/resend-confirmation-link' component={ResendConfirmationLinkPage}/>
+            <Route exact path='/users/my-info' component={UserInfoPage}/>
         </Switch>
         <Footer/>
     </>
