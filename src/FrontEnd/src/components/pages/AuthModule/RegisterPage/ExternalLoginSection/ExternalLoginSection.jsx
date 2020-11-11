@@ -1,13 +1,14 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
-import AuthService from '../../../../../services/authService';
-
-import * as style from './ExternalLoginSection.module.scss';
+import {withRouter} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
+
+import AuthService from '../../../../../services/authService';
+import * as style from './ExternalLoginSection.module.scss';
 import {SAVE_CURRENT_USER} from '../../../../../store/actions/actionTypes';
 
-const ExternalLoginSection = () => {
+const ExternalLoginSection = ({history}) => {
     const dispatch = useDispatch();
 
     const responseGoogle = async (response) => {
@@ -22,7 +23,7 @@ const ExternalLoginSection = () => {
         };
         const res = await AuthService.externalLogin(model);
         dispatch({type: SAVE_CURRENT_USER, data: res.data});
-
+        history.push('/');
     };
     const responseFacebook = async (response) => {
         const model = {
@@ -36,6 +37,7 @@ const ExternalLoginSection = () => {
         };
         const res = await AuthService.externalLogin(model);
         dispatch({type: SAVE_CURRENT_USER, data: res.data});
+        history.push('/');
     };
 
     return (
@@ -58,4 +60,4 @@ const ExternalLoginSection = () => {
     )
 };
 
-export default ExternalLoginSection;
+export default withRouter(ExternalLoginSection);
