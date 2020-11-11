@@ -25,6 +25,7 @@ const LoginPage = ({history}) => {
     const handleChange = (event) => {
         user[event.target.id] = event.target.value;
         setUser(user);
+        saveUserData({type: SAVE_CURRENT_USER, data: user});
     };
 
     const handleSubmit = async () => {

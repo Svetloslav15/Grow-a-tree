@@ -4,10 +4,13 @@ import FacebookLogin from 'react-facebook-login';
 import AuthService from '../../../../../services/authService';
 
 import * as style from './ExternalLoginSection.module.scss';
+import {useDispatch} from 'react-redux';
+import {SAVE_CURRENT_USER} from '../../../../../store/actions/actionTypes';
 
 const ExternalLoginSection = () => {
+    const dispatch = useDispatch();
+
     const responseGoogle = async (response) => {
-        console.log(response);
         const model = {
             "providerKey": process.env.REACT_APP_GOOGLE_PROVIDER_ID,
             "providerName": "Google",
@@ -18,6 +21,8 @@ const ExternalLoginSection = () => {
             "profilePictureUrl": response.profileObj.imageUrl
         };
         const res = await AuthService.externalLogin(model);
+        dispatch({type: SAVE_CURRENT_USER, data: res.data});
+
     };
     const responseFacebook = async (response) => {
         const model = {
@@ -30,6 +35,7 @@ const ExternalLoginSection = () => {
             "profilePictureUrl": response.picture.data.url
         };
         const res = await AuthService.externalLogin(model);
+        dispatch({type: SAVE_CURRENT_USER, data: res.data});
     };
 
     return (
