@@ -6,13 +6,13 @@ const InputField = ({label, type, id, icon, onChange, width, value}) => {
 
     useEffect(() => {
         btnRef.current.click();
-    }, []);
+    }, [btnRef]);
 
     return (
         <div className={`md-form col-md-${width}`}>
             <i className={`${style.icon} ${icon} prefix`}/>
-            <input type={type} id={id} ref={btnRef} className="form-control" onChange={onChange} value={value}/>
-            <label htmlFor={id}>{label}</label>
+            <input type={type} id={id} className="form-control" onChange={onChange} value={value}/>
+            <label ref={btnRef} htmlFor={id}>{label}</label>
         </div>
     );
 };
