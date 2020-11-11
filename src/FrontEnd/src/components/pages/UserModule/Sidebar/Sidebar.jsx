@@ -1,13 +1,12 @@
 import React from 'react';
-import Item from './Item/Item';
-import {useDispatch, useSelector} from 'react-redux';
+import Item from '../../../common/UserNavigation/Item/Item';
+import {useDispatch} from 'react-redux';
 
-import * as style from './UserNavigation.module.scss';
-import {SAVE_CURRENT_USER} from '../../../store/actions/actionTypes';
-const UserImage = require('../../../assets/user-profile.png');
-const UpArrow = require('../../../assets/up-arrow.png');
+import * as style from './Sidebar.module.scss';
+import {SAVE_CURRENT_USER} from '../../../../store/actions/actionTypes';
+const UserImage = require('../../../../assets/user-profile.png');
 
-const UserNavigation = ({isOpen, closeNavigation, isLocked}) => {
+const Sidebar = ({isOpen, closeNavigation, isFixed}) => {
     const dispatch = useDispatch({});
 
     const logoutUser = () => {
@@ -23,7 +22,7 @@ const UserNavigation = ({isOpen, closeNavigation, isLocked}) => {
     };
 
     return (
-        <div className={`${style.wrapper} ${isOpen ? '' : 'd-none'}  ${isLocked ? 'd-none' : ''} `}>
+        <div className={`${style.wrapper} col-md-3`}>
             <div className={`mx-0 row ${style.userSection}`}>
                 <img className={style.userProfileImage} src={UserImage} alt=""/>
                 <div className=''>
@@ -41,12 +40,9 @@ const UserNavigation = ({isOpen, closeNavigation, isLocked}) => {
                 <Item link='/' text='Comming soon...' icon='user'/>
                 <Item link='/' text='Comming soon...' icon='user'/>
                 <Item link='#' onClick={logoutUser} text='Изход' icon='door-open'/>
-                <div className='col-md-12 text-center' onClick={() => closeNavigation(false)}>
-                    <img className={style.collapseIcon} src={UpArrow} alt="Close Icon"/>
-                </div>
             </div>
         </div>
     );
 };
 
-export default UserNavigation;
+export default Sidebar;

@@ -49,7 +49,7 @@ const Navigation = () => {
                                     </NavItem>
                                     <UserNavigation isOpen={commonData.isUserNavOpen}
                                                     closeNavigation={toggleNavOpen}
-                                                    isFixed={commonData.isUserNavFixed}/>
+                                                    isLocked={commonData.isUserNavLocked}/>
                                 </>
                             )
                     }

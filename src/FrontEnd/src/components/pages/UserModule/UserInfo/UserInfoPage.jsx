@@ -2,37 +2,39 @@ import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
 import * as style from './UserInfoPage.module.scss';
-import Icons from "../../../../static/icons";
+import Icons from '../../../../static/icons';
 import SuccessMessages from "../../../../static/successMessages";
 import AuthService from "../../../../services/authService";
 import AlertService from "../../../../services/alertService";
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
-import {CHANGE_IS_USER_NAV_FIXED, CHANGE_IS_USER_NAV_OPENED} from '../../../../store/actions/actionTypes';
+import {CHANGE_IS_USER_NAV_LOCKED, CHANGE_IS_USER_NAV_OPENED} from '../../../../store/actions/actionTypes';
+import Sidebar from '../Sidebar/Sidebar';
 
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 const BgShape4 = require('../../../../assets/bg-shape-4.png');
 const UserImage = require('../../../../assets/user-profile.png');
 
-const ForgottenPasswordPage = () => {
+const UserInfoPage = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch({type: CHANGE_IS_USER_NAV_FIXED, data: true});
+        dispatch({type: CHANGE_IS_USER_NAV_LOCKED, data: true});
         return () => {
-            dispatch({type: CHANGE_IS_USER_NAV_FIXED, data: false});
+            dispatch({type: CHANGE_IS_USER_NAV_LOCKED, data: false});
             dispatch({type: CHANGE_IS_USER_NAV_OPENED, data: false});
         }
     }, []);
 
     return (
-        <>
+        <div className='row'>
             <img src={BgShape3} className='shape3'/>
             <img src={BgShape4} className='shape4'/>
-            <div className={`${style.wrapper} offset-3 col-9`}>
+            <Sidebar/>
+            <div className={`${style.wrapper} col-md-8`}>
                 <div className='col-md-12 row'>
                     <div className='col-md-3'>
-                        <img className={style.profileImage} src={UserImage} alt="User Image"/>
+                        <img className={style.profileImage} src={UserImage} alt='User Image'/>
                     </div>
                     <div className='col-md-7'>
                         <p className={style.username}>@Svetloslav</p>
@@ -80,8 +82,7 @@ const ForgottenPasswordPage = () => {
                 </div>
                 <div></div>
             </div>
-        </>
+        </div>
     )
 };
-
-export default ForgottenPasswordPage;
+export default UserInfoPage;

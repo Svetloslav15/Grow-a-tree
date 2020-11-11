@@ -1,14 +1,14 @@
-import {CHANGE_IS_USER_NAV_FIXED, CHANGE_IS_USER_NAV_OPENED} from '../actions/actionTypes';
+import {CHANGE_IS_USER_NAV_LOCKED, CHANGE_IS_USER_NAV_OPENED} from '../actions/actionTypes';
 
 const initialState = {
-    isUserNavFixed: false,
+    isUserNavLocked: false,
     isUserNavOpen: false
 };
 
 const commonReducer = (state = initialState, action) => {
     switch (action.type) {
-        case CHANGE_IS_USER_NAV_FIXED:
-            return Object.assign({}, state, {isUserNavFixed: action.data});
+        case CHANGE_IS_USER_NAV_LOCKED:
+            return Object.assign({}, state, {isUserNavLocked: action.data});
         case CHANGE_IS_USER_NAV_OPENED:
             return Object.assign({}, state, {isUserNavOpen: action.data});
         default:
