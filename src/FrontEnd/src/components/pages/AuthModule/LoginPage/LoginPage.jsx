@@ -1,6 +1,8 @@
 import React, {useState, useCallback, useEffect } from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import { useDispatch } from 'react-redux'
+import Cookies from 'js-cookie';
+
 import * as style from './LoginPage.module.scss';
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
@@ -36,6 +38,7 @@ const LoginPage = ({history}) => {
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successLogin);
             saveUserData({ type:  SAVE_CURRENT_USER, data: result.data});
+            Cookies('gt_curr_user', result.data);
             history.push('/');
         }
         else {
@@ -80,7 +83,6 @@ const LoginPage = ({history}) => {
                         </Link>
                     </div>
                 </div>
-
             </div>
         </>
     )

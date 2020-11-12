@@ -10,6 +10,7 @@ const initialState = {
 };
 
 const authReducer = (state = initialState, action) => {
+    localStorage.setItem()
     switch (action.type) {
         case SAVE_CURRENT_USER:
             return Object.assign({}, state, {...action.data});
