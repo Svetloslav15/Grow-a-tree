@@ -23,8 +23,8 @@ const ExternalLoginSection = ({history}) => {
             "profilePictureUrl": response.profileObj.imageUrl
         };
         const res = await AuthService.externalLogin(model);
-        dispatch({type: SAVE_CURRENT_USER, data: res.data});
         Cookies.set('gt_curr_user', res.data);
+        dispatch({type: SAVE_CURRENT_USER, data: res.data});
         history.push('/');
     };
     const responseFacebook = async (response) => {
@@ -38,8 +38,8 @@ const ExternalLoginSection = ({history}) => {
             "profilePictureUrl": response.picture.data.url
         };
         const res = await AuthService.externalLogin(model);
-        dispatch({type: SAVE_CURRENT_USER, data: res.data});
         Cookies.set('gt_curr_user', res.data);
+        dispatch({type: SAVE_CURRENT_USER, data: res.data});
         history.push('/');
     };
 

@@ -9,14 +9,15 @@ import NavCollapseButton from './NavCollapseButton/NavCollapseButton';
 import * as style from './Navigation.module.scss';
 import Button from '../../common/Button/Button';
 import {CHANGE_IS_USER_NAV_OPENED} from "../../../store/actions/actionTypes";
+import CookieNames from "../../../static/cookieNames";
 
 const Logo = require('../../../assets/logo.png');
 
 const Navigation = () => {
-    const currUser = JSON.parse(Cookies.get('gt_curr_user'));
     const commonData = useSelector(state => state.common);
+    const currUser = useSelector(state => state.auth);
     const dispatch = useDispatch();
-    console.log(currUser);
+
     const toggleNavOpen = () => {
         dispatch({type: CHANGE_IS_USER_NAV_OPENED, data: !commonData.isUserNavOpen});
     };

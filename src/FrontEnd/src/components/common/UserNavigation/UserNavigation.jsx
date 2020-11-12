@@ -1,9 +1,11 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import Item from './Item/Item';
-import {useDispatch, useSelector} from 'react-redux';
 
 import * as style from './UserNavigation.module.scss';
-import {SAVE_CURRENT_USER} from '../../../store/actions/actionTypes';
+import Cookies from "js-cookie";
+import CookieNames from "../../../static/cookieNames";
+import {SAVE_CURRENT_USER} from "../../../store/actions/actionTypes";
 const UserImage = require('../../../assets/user-profile.png');
 const UpArrow = require('../../../assets/up-arrow.png');
 
@@ -19,9 +21,9 @@ const UserNavigation = ({isOpen, closeNavigation, isLocked}) => {
             refreshToken: '',
             username: ''
         };
+        Cookies.remove(CookieNames.currentUser);
         dispatch({ type:  SAVE_CURRENT_USER, data});
     };
-
     return (
         <div className={`${style.wrapper} ${isOpen ? '' : 'd-none'}  ${isLocked ? 'd-none' : ''} `}>
             <div className={`mx-0 row ${style.userSection}`}>

@@ -2,6 +2,7 @@ import React, {useState, useCallback, useEffect } from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import Cookies from 'js-cookie';
+import CookieNames from '../../../../static/cookieNames';
 
 import * as style from './LoginPage.module.scss';
 import InputField from '../../../common/InputField/InputField';
@@ -27,7 +28,6 @@ const LoginPage = ({history}) => {
     const handleChange = (event) => {
         user[event.target.id] = event.target.value;
         setUser(user);
-        saveUserData({type: SAVE_CURRENT_USER, data: user});
     };
 
     const handleSubmit = async () => {
@@ -37,8 +37,8 @@ const LoginPage = ({history}) => {
         const result = await AuthService.login(user);
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successLogin);
+            Cookies.set(CookieNames.currentUser, result.data);
             saveUserData({ type:  SAVE_CURRENT_USER, data: result.data});
-            Cookies.set('gt_curr_user', result.data);
             history.push('/');
         }
         else {
