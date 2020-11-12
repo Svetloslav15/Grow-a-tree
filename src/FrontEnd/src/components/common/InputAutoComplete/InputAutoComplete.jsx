@@ -4,6 +4,7 @@ import * as style from './InputAutoComplete.module.scss';
 const InputAutoComplete = ({label, id, icon, data, onChange, className}) => {
     const [isLabelHidden, setHidden] = useState(false);
     const [currVal, setCurrentValue] = useState('');
+    const [previousVal, setPreviousValue] = useState('');
     const [dataElements, setData] = useState([]);
 
     useEffect(() => {
@@ -11,7 +12,13 @@ const InputAutoComplete = ({label, id, icon, data, onChange, className}) => {
     }, []);
 
     const handleChange = (event) => {
-        setCurrentValue(event.target.value);
+        if (data.filter(x => x.toLowerCase().includes(event.target.value.toLowerCase())).length === 0) {
+            setCurrentValue(previousVal);
+        }
+        else {
+            setPreviousValue(currVal);
+            setCurrentValue(event.target.value);
+        }
         onChange(event);
     };
 
@@ -25,11 +32,15 @@ const InputAutoComplete = ({label, id, icon, data, onChange, className}) => {
             <input list='data-list-items' id={id} className='form-control'
                    onSelect={() => setHidden(true)}
                    onChange={handleChange}
-                   onBlur={blur}/>
+                   onBlur={blur}
+                   value={currVal}/>
             {!isLabelHidden && <label htmlFor={id}>{label}</label>}
             <datalist id='data-list-items' className={style.datalist}>
                 {dataElements}
             </datalist>
+            <div className='col-md-12 text-center'>
+                <small className='text-danger'><i>* Градът е невалиден</i></small>
+            </div>
         </div>
     )
 };
