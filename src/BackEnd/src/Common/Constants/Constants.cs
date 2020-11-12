@@ -26,6 +26,10 @@
 
         public const int TreeNicknameMaxLength = 20;
 
+        public const int MaxDistanceForClosestTreesInMetres = 2000;
+
+        public const int MaxDistanceBetweenTreeAndUser = 20;
+
         public const string PhoneNumberRegEx = @"/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/";
 
         public const string StoreRoleName = "Store";

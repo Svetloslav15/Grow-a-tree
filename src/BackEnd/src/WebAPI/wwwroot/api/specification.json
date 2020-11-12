@@ -651,6 +651,64 @@
         ]
       }
     },
+    "/api/Trees/closest-trees-short-info": {
+      "get": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_GetClosestTreesShortInfo",
+        "parameters": [
+          {
+            "name": "Latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeListShortInfoModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Trees/upsert": {
       "post": {
         "tags": [
@@ -1092,6 +1150,55 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserListShortInfoModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/is-user-near-tree": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_IsUserShortToTree",
+        "parameters": [
+          {
+            "name": "Latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
                 }
               }
             }
@@ -1665,6 +1772,18 @@
           "city": {
             "type": "string",
             "nullable": true
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "metresAway": {
+            "type": "number",
+            "format": "double"
           },
           "owner": {
             "nullable": true,

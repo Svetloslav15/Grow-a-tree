@@ -14,6 +14,7 @@
     using GrowATree.Application.Users.Queries.GetById;
     using GrowATree.Application.Users.Queries.GetShortInfoById;
     using GrowATree.Application.Users.Queries.GetTrees;
+    using GrowATree.Application.Users.Queries.UserNearTree;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -132,6 +133,32 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return UserListShortInfoModel.Failure<UserListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("is-user-near-tree")]
+        public async Task<ActionResult<Result<bool>>> IsUserShortToTree([FromQuery] IsUserNearTreeQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<bool>.Failure(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
