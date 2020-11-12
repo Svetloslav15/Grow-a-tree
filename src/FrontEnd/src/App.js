@@ -33,8 +33,8 @@ const App = () => (
             <Route exact path='/auth/reset-password' component={ResetPasswordPage}/>
             <Route exact path='/auth/forgotten-password' component={ForgottenPassword}/>
             <Route exact path='/auth/resend-confirmation-link' component={ResendConfirmationLinkPage}/>
-            <Route exact path='/users/my-info' component={UserInfoPage}/>
-            <Route exact path='/users/referral' component={ReferralPage}/>
+            <PrivateRoute exact path='/users/my-info' component={UserInfoPage}/>
+            <PrivateRoute exact path='/users/referral' component={ReferralPage}/>
         </Switch>
         <Footer/>
     </>

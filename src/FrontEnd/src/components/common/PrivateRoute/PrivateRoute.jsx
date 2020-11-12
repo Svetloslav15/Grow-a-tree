@@ -1,13 +1,17 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Redirect, Route} from 'react-router-dom';
 import AlertService from '../../../services/alertService';
 import ErrorMessages from '../../../static/errorMessages';
+import Cookies from 'js-cookie';
+import CookieNames from '../../../static/cookieNames';
 
-//TODO implement strategy for checking if the user is authenticated
 const PrivateRoute = ({component: Component, ...rest}) => {
+    const [hasToken, setHasToken] = useState(true);
+
     useEffect(() => {
-        if (!localStorage.getItem('authToken')) {
-            AlertService.warning(ErrorMessages.privateRoute)
+        if (!Cookies.get(CookieNames.currentUser)) {
+            setHasToken(false);
+            AlertService.warning(ErrorMessages.privateRoute);
         }
     }, []);
 
@@ -15,7 +19,7 @@ const PrivateRoute = ({component: Component, ...rest}) => {
         <Route
             {...rest}
             render={props =>
-                localStorage.getItem('authToken') ? (<Component {...props}/>
+                hasToken ? (<Component {...props}/>
                 ) : (
                     <Redirect
                         to={{

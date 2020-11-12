@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import AuthService from '../../../../../services/authService';
 import * as style from './ExternalLoginSection.module.scss';
 import {SAVE_CURRENT_USER} from '../../../../../store/actions/actionTypes';
+import CookieNames from '../../../../../static/cookieNames';
 
 const ExternalLoginSection = ({history}) => {
     const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const ExternalLoginSection = ({history}) => {
             "profilePictureUrl": response.profileObj.imageUrl
         };
         const res = await AuthService.externalLogin(model);
-        Cookies.set('gt_curr_user', res.data);
+        Cookies.set(CookieNames.currentUser, res.data);
         dispatch({type: SAVE_CURRENT_USER, data: res.data});
         history.push('/');
     };
@@ -38,7 +39,7 @@ const ExternalLoginSection = ({history}) => {
             "profilePictureUrl": response.picture.data.url
         };
         const res = await AuthService.externalLogin(model);
-        Cookies.set('gt_curr_user', res.data);
+        Cookies.set(CookieNames.currentUser, res.data);
         dispatch({type: SAVE_CURRENT_USER, data: res.data});
         history.push('/');
     };
