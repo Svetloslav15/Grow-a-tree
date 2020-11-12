@@ -4,5 +4,6 @@ export default {
     successConfirmEmail: 'Успешно потвърдихте вашия имейл!',
     successConfirmEmailLinkSent: 'Успешно изпратихте линк за потвърждаване на вашия имейл!',
     successSendLinkForForgottenPassword: 'Успешно изпратихте линк за забравена парола!',
-    successResetPassword: 'Успешно сменихте вашата парола!'
+    successResetPassword: 'Успешно сменихте вашата парола!',
+    successEditYourInfo: 'Успешно променихте вашите данни!'
 }

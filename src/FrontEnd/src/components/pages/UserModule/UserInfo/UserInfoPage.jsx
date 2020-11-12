@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import * as style from './UserInfoPage.module.scss';
 import Icons from '../../../../static/icons';
-import SuccessMessages from "../../../../static/successMessages";
+import SuccessMessages from '../../../../static/successMessages';
 import AlertService from "../../../../services/alertService";
 import UsersService from '../../../../services/usersService';
 
@@ -11,6 +11,7 @@ import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
 import {CHANGE_IS_USER_NAV_LOCKED, CHANGE_IS_USER_NAV_OPENED} from '../../../../store/actions/actionTypes';
 import Sidebar from '../Sidebar/Sidebar';
+import Layout from '../Layout/Layout';
 
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 const BgShape4 = require('../../../../assets/bg-shape-4.png');
@@ -41,7 +42,7 @@ const UserInfoPage = () => {
         const response = await UsersService.postAuthorized.editUser(currUser, stateUserData.accessToken);
 
         if (response.data.succeeded) {
-            AlertService.success('Успешно променихте вашите данни!');
+            AlertService.success(SuccessMessages.successEditYourInfo);
         }
         else {
             AlertService.error(response.data.errors[0]);
@@ -49,10 +50,7 @@ const UserInfoPage = () => {
     };
 
     return (
-        <div className='row'>
-            <img src={BgShape3} className='shape3'/>
-            <img src={BgShape4} className='shape4'/>
-            <Sidebar/>
+        <Layout>
             <div className={`${style.wrapper} col-md-9`}>
                 <div className='col-md-12 row'>
                     <div className='col-md-3'>
@@ -112,7 +110,7 @@ const UserInfoPage = () => {
                 </div>
                 <div></div>
             </div>
-        </div>
+        </Layout>
     )
 };
 export default UserInfoPage;
