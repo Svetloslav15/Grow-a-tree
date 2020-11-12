@@ -128,6 +128,7 @@
                 Expires = token.ValidTo,
                 Id = user.Id,
                 IsStore = isStore,
+                Username = user.UserName
             };
 
             return result;

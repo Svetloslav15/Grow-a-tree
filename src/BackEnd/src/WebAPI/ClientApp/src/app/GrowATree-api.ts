@@ -530,7 +530,7 @@ export interface ITreesClient {
     getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel>;
     getTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getTreesShortInfo(page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
-    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
+    getTreeShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
     getTreeDeletedImages(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel>;
     getUserTrees(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getUserTreeShortInfo(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
@@ -768,7 +768,7 @@ export class TreesClient implements ITreesClient {
         return _observableOf<TreeListShortInfoModel>(<any>null);
     }
 
-    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
+    getTreeShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
         let url_ = this.baseUrl + "/api/Trees/short-info?";
         if (id !== undefined)
             url_ += "id=" + encodeURIComponent("" + id) + "&"; 
@@ -783,11 +783,11 @@ export class TreesClient implements ITreesClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTreesShortInfo2(response_);
+            return this.processGetTreeShortInfo(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetTreesShortInfo2(<any>response_);
+                    return this.processGetTreeShortInfo(<any>response_);
                 } catch (e) {
                     return <Observable<ResultOfTreeShortInfoModel>><any>_observableThrow(e);
                 }
@@ -796,7 +796,7 @@ export class TreesClient implements ITreesClient {
         }));
     }
 
-    protected processGetTreesShortInfo2(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
+    protected processGetTreeShortInfo(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -1850,6 +1850,7 @@ export class TokenModel implements ITokenModel {
     expires?: Date;
     id?: string | undefined;
     isStore?: boolean;
+    username?: string | undefined;
 
     constructor(data?: ITokenModel) {
         if (data) {
@@ -1867,6 +1868,7 @@ export class TokenModel implements ITokenModel {
             this.expires = _data["expires"] ? new Date(_data["expires"].toString()) : <any>undefined;
             this.id = _data["id"];
             this.isStore = _data["isStore"];
+            this.username = _data["username"];
         }
     }
 
@@ -1884,6 +1886,7 @@ export class TokenModel implements ITokenModel {
         data["expires"] = this.expires ? this.expires.toISOString() : <any>undefined;
         data["id"] = this.id;
         data["isStore"] = this.isStore;
+        data["username"] = this.username;
         return data; 
     }
 }
@@ -1894,6 +1897,7 @@ export interface ITokenModel {
     expires?: Date;
     id?: string | undefined;
     isStore?: boolean;
+    username?: string | undefined;
 }
 
 export class LoginCommand implements ILoginCommand {
@@ -2342,6 +2346,8 @@ export class UserModel implements IUserModel {
     id?: string | undefined;
     email?: string | undefined;
     userName?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
     city?: string | undefined;
     phoneNumber?: string | undefined;
     profilePictureUrl?: string | undefined;
@@ -2360,6 +2366,8 @@ export class UserModel implements IUserModel {
             this.id = _data["id"];
             this.email = _data["email"];
             this.userName = _data["userName"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
             this.city = _data["city"];
             this.phoneNumber = _data["phoneNumber"];
             this.profilePictureUrl = _data["profilePictureUrl"];
@@ -2378,6 +2386,8 @@ export class UserModel implements IUserModel {
         data["id"] = this.id;
         data["email"] = this.email;
         data["userName"] = this.userName;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
         data["city"] = this.city;
         data["phoneNumber"] = this.phoneNumber;
         data["profilePictureUrl"] = this.profilePictureUrl;
@@ -2389,6 +2399,8 @@ export interface IUserModel {
     id?: string | undefined;
     email?: string | undefined;
     userName?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
     city?: string | undefined;
     phoneNumber?: string | undefined;
     profilePictureUrl?: string | undefined;
