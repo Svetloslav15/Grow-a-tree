@@ -12,9 +12,7 @@
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
 </div>
-
 ---
-
 <p align="center"> Few lines describing your project.
     <br> 
 </p>
@@ -38,7 +36,7 @@ focus on defining the problem.
 
 - IDEAL: This section is used to describe the desired or “to be” state of the process or product. At large, this section 
 should illustrate what the expected environment would look like once the solution is implemented.
-- REALITY: This section is used to describe the current or “as is” state of the process or product. 
+- REALITY: This section is used to describe the current or as is state of the process or product. 
 - CONSEQUENCES: This section is used to describe the impacts on the business if the problem is not fixed or improved upon.
 This includes costs associated with loss of money, time, productivity, competitive advantage, and so forth.
 
@@ -95,16 +93,13 @@ until finished
 Add notes about how to use the system.
 
 ## ⛏️ Built With <a name = "tech_stack"></a>
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
+- [ASP NET Core 3](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1) - Back-End Framework
+- [ReactJS](https://reactjs.org/) - Front-End Framework
+- [MSSQL Server](https://www.microsoft.com/en-gb/sql-server/sql-server-downloads) - Database
 
 ## ✍️ Authors <a name = "authors"></a>
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
-
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) 
-who participated in this project.
+- [@Svetloslav Novoselski](https://github.com/Svetloslav15) - Idea & Front-End Development
+- [@Plamen Michev](https://github.com/PlamenMichev) - Idea & Back-End Development
 
 ## 🎉 Acknowledgments <a name = "acknowledgments"></a>
 - Hat tip to anyone whose code was used

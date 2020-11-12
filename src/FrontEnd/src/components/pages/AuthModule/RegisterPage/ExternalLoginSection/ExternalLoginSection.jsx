@@ -1,13 +1,18 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
+import {withRouter} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import Cookies from 'js-cookie';
+
 import AuthService from '../../../../../services/authService';
-
 import * as style from './ExternalLoginSection.module.scss';
+import {SAVE_CURRENT_USER} from '../../../../../store/actions/actionTypes';
 
-const ExternalLoginSection = () => {
+const ExternalLoginSection = ({history}) => {
+    const dispatch = useDispatch();
+
     const responseGoogle = async (response) => {
-        console.log(response);
         const model = {
             "providerKey": process.env.REACT_APP_GOOGLE_PROVIDER_ID,
             "providerName": "Google",
@@ -18,6 +23,9 @@ const ExternalLoginSection = () => {
             "profilePictureUrl": response.profileObj.imageUrl
         };
         const res = await AuthService.externalLogin(model);
+        Cookies.set('gt_curr_user', res.data);
+        dispatch({type: SAVE_CURRENT_USER, data: res.data});
+        history.push('/');
     };
     const responseFacebook = async (response) => {
         const model = {
@@ -30,6 +38,9 @@ const ExternalLoginSection = () => {
             "profilePictureUrl": response.picture.data.url
         };
         const res = await AuthService.externalLogin(model);
+        Cookies.set('gt_curr_user', res.data);
+        dispatch({type: SAVE_CURRENT_USER, data: res.data});
+        history.push('/');
     };
 
     return (
@@ -52,4 +63,4 @@ const ExternalLoginSection = () => {
     )
 };
 
-export default ExternalLoginSection;
+export default withRouter(ExternalLoginSection);

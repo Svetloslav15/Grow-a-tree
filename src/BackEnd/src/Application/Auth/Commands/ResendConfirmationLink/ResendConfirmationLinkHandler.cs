@@ -2,6 +2,7 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Web;
     using global::Common.Constants;
     using global::Common.Interfaces;
     using GrowATree.Application.Common.Models;
@@ -34,6 +35,7 @@
             }
 
             string token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+            token = HttpUtility.UrlEncode(token);
             string confirmationLink = Constants.ConfirmEmailLink + "?token=" + token;
             bool result = await this.emailSender.SendEmail(user, confirmationLink, "Grow A Tree: Confirm email");
 

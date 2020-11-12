@@ -1974,6 +1974,7 @@ export class TokenModel implements ITokenModel {
     expires?: Date;
     id?: string | undefined;
     isStore?: boolean;
+    username?: string | undefined;
 
     constructor(data?: ITokenModel) {
         if (data) {
@@ -1991,6 +1992,7 @@ export class TokenModel implements ITokenModel {
             this.expires = _data["expires"] ? new Date(_data["expires"].toString()) : <any>undefined;
             this.id = _data["id"];
             this.isStore = _data["isStore"];
+            this.username = _data["username"];
         }
     }
 
@@ -2008,6 +2010,7 @@ export class TokenModel implements ITokenModel {
         data["expires"] = this.expires ? this.expires.toISOString() : <any>undefined;
         data["id"] = this.id;
         data["isStore"] = this.isStore;
+        data["username"] = this.username;
         return data; 
     }
 }
@@ -2018,6 +2021,7 @@ export interface ITokenModel {
     expires?: Date;
     id?: string | undefined;
     isStore?: boolean;
+    username?: string | undefined;
 }
 
 export class LoginCommand implements ILoginCommand {
@@ -2466,6 +2470,8 @@ export class UserModel implements IUserModel {
     id?: string | undefined;
     email?: string | undefined;
     userName?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
     city?: string | undefined;
     phoneNumber?: string | undefined;
     profilePictureUrl?: string | undefined;
@@ -2484,6 +2490,8 @@ export class UserModel implements IUserModel {
             this.id = _data["id"];
             this.email = _data["email"];
             this.userName = _data["userName"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
             this.city = _data["city"];
             this.phoneNumber = _data["phoneNumber"];
             this.profilePictureUrl = _data["profilePictureUrl"];
@@ -2502,6 +2510,8 @@ export class UserModel implements IUserModel {
         data["id"] = this.id;
         data["email"] = this.email;
         data["userName"] = this.userName;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
         data["city"] = this.city;
         data["phoneNumber"] = this.phoneNumber;
         data["profilePictureUrl"] = this.profilePictureUrl;
@@ -2513,6 +2523,8 @@ export interface IUserModel {
     id?: string | undefined;
     email?: string | undefined;
     userName?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
     city?: string | undefined;
     phoneNumber?: string | undefined;
     profilePictureUrl?: string | undefined;

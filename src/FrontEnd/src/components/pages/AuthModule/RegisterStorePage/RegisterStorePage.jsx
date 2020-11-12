@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-
-import * as style from './RegisterPage.module.scss';
-import InputField from '../../../common/InputField/InputField';
-import Button from '../../../common/Button/Button';
-import ExternalLoginSection from './ExternalLoginSection/ExternalLoginSection';
+import * as style from './RegisterStorePage.module.scss';
 import Icons from '../../../../static/icons';
+import Button from '../../../common/Button/Button';
+import Map from './Map/Map';
+import TextArea from '../../../common/TextArea/TextArea';
+
+import InputField from '../../../common/InputField/InputField';
+import Cities from "../../../../static/cities";
 import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
-import Cities from '../../../../static/cities';
 import ErrorMessages from '../../../../static/errorMessages';
 import SuccessMessages from '../../../../static/successMessages';
 import AuthService from '../../../../services/authService';
@@ -18,24 +19,27 @@ const BgShape1 = require('../../../../assets/bg-shape-1.png');
 const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 
-const RegisterPage = ({history}) => {
-    const [user, setUser] = useState({});
+const RegisterStorePage = ({history}) => {
+    const [store, setStore] = useState({});
 
     const handleChange = (event) => {
-        let copyData = user;
+        const copyData = store;
         copyData[event.target.id] = event.target.value;
-        setUser(copyData);
+        setStore(copyData);
+    };
+
+    const handleCoordinates = (latitude, longitute) => {
+        setStore({...store, longitute, latitude});
     };
 
     const handleSubmit = async () => {
-        if (Object.values(user).includes('') || Object.keys(user).length < 5) {
+        if (Object.values(store).includes('') || Object.keys(store).length < 10) {
             return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }
-        if (user.password !== user['repeated-password']) {
+        if (store.password !== store['repeated-password']) {
             return AlertService.error(ErrorMessages.passwordsShouldMatch);
         }
-        const result = await AuthService.signUp(user);
-
+        const result = await AuthService.signUpStore(store);
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successSignUp);
             history.push('/auth/resend-confirmation-link');
@@ -52,13 +56,7 @@ const RegisterPage = ({history}) => {
             <img src={BgShape3} className='shape3'/>
             <div className='px-0 mx-0 my-5 row'>
                 <div className='offset-md-1 col-md-5'>
-                    <h2 className={`${style.title} row`}>
-                        <span className='mx-auto mb-3'>Регистрация</span>
-                        <Link to='/auth/register/store'>
-                            <Button type='DarkOutline' className='w-75 ml-5'>Регистрация като магазин</Button>
-                        </Link>
-                    </h2>
-                    <ExternalLoginSection/>
+                    <h2 className={style.title}>Регистрация на магазин</h2>
                     <div className='row'>
                         <InputField type='email'
                                     label={'Имейл'}
@@ -67,12 +65,34 @@ const RegisterPage = ({history}) => {
                                     width={6}
                                     onChange={handleChange}/>
                         <InputField type='text'
-                                    label={'Потребителско име'}
-                                    id='username'
+                                    label={'Име'}
+                                    id='name'
                                     icon={Icons.user}
                                     width={6}
                                     onChange={handleChange}/>
                     </div>
+                    <div className='row'>
+                        <InputField type='email'
+                                    label={'Работно време'}
+                                    id='workingHours'
+                                    icon={Icons.user}
+                                    width={6}
+                                    onChange={handleChange}/>
+                        <InputField type='text'
+                                    label={'Телефон'}
+                                    id='phoneNumber'
+                                    icon={Icons.user}
+                                    width={6}
+                                    onChange={handleChange}/>
+                    </div>
+                    <TextArea
+                        label='Описание'
+                        id='description'
+                        icon={Icons.edit}
+                        width={12}
+                        rows={5}
+                        onChange={handleChange}
+                        />
                     <div className='row'>
                         <InputField type='password'
                                     label={'Парола'}
@@ -83,6 +103,7 @@ const RegisterPage = ({history}) => {
                         <InputField type='password'
                                     label={'Повторете паролата'}
                                     id='repeated-password'
+                                    width={6}
                                     icon={Icons.password}
                                     onChange={handleChange}/>
                     </div>
@@ -94,9 +115,11 @@ const RegisterPage = ({history}) => {
                                            width={6}
                                            onChange={handleChange}/>
                     </div>
-                    <div className='text-center'>
-                        <Link to='/auth/forgotten-password'><span
-                            className={'dark-text'}>Забравена парола?</span></Link>
+                    <Map google={window.google} handleCoordinates={handleCoordinates}/>
+                    <div className='text-center mt-5'>
+                        <Link to='/auth/forgotten-password'>
+                            <span className={'dark-text'}>Забравена парола?</span>
+                        </Link>
                         <Button type='Green' className='w-75' onClick={handleSubmit}>Регистрация</Button>
                         <Link to='/auth/login'>
                             <Button type='GreenOutline' className='w-75'>Имате акаунт?</Button>
@@ -111,4 +134,4 @@ const RegisterPage = ({history}) => {
     )
 };
 
-export default withRouter(RegisterPage);
+export default withRouter(RegisterStorePage);

@@ -1,6 +1,9 @@
 import React, {useState, useCallback, useEffect } from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import { useDispatch } from 'react-redux'
+import Cookies from 'js-cookie';
+import CookieNames from '../../../../static/cookieNames';
+
 import * as style from './LoginPage.module.scss';
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
@@ -34,6 +37,7 @@ const LoginPage = ({history}) => {
         const result = await AuthService.login(user);
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successLogin);
+            Cookies.set(CookieNames.currentUser, result.data);
             saveUserData({ type:  SAVE_CURRENT_USER, data: result.data});
             history.push('/');
         }
@@ -79,7 +83,6 @@ const LoginPage = ({history}) => {
                         </Link>
                     </div>
                 </div>
-
             </div>
         </>
     )

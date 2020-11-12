@@ -1,10 +1,7 @@
 .wrapper {
   background-color: #B7DCC6;
-  position: absolute;
-  top: 57px;
   border: 1px solid white;
-  right: 0;
-  width: 15rem;
+  width: 100%;
   z-index: 100;
 }
 
@@ -17,7 +14,6 @@
 .userSection {
   border-bottom: 1px solid #002F3E;
   text-align: left;
-  padding-top: 15px;
 }
 
 .username {
@@ -27,14 +23,4 @@
 .collapseIcon {
   padding: 1em 1.5em;
   cursor: pointer;
-}
-
-.isFixed {
-  background-color: #B7DCC6;
-  position: fixed;
-  top: 57px;
-  left: 0;
-  width: 15rem;
-  z-index: 100;
-  display: block !important;
 }

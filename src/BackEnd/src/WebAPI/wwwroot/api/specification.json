@@ -1448,6 +1448,10 @@
           },
           "isStore": {
             "type": "boolean"
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -1683,6 +1687,14 @@
             "nullable": true
           },
           "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
             "type": "string",
             "nullable": true
           },
