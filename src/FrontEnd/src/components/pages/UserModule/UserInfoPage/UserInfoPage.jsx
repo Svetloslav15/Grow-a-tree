@@ -14,6 +14,8 @@ import Button from '../../../common/Button/Button';
 import {CHANGE_IS_USER_NAV_LOCKED, CHANGE_IS_USER_NAV_OPENED} from '../../../../store/actions/actionTypes';
 import Sidebar from '../Sidebar/Sidebar';
 import Layout from '../Layout/Layout';
+import Cities from "../../../../static/cities";
+import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
 
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 const BgShape4 = require('../../../../assets/bg-shape-4.png');
@@ -76,13 +78,13 @@ const UserInfoPage = () => {
                                         width={6}
                                         value={currUser.lastName}
                                         onChange={handleChange}/>
-                            <InputField type='text'
-                                        label={'Град'}
-                                        id='city'
-                                        icon={Icons.user}
-                                        width={6}
-                                        value={currUser.city}
-                                        onChange={handleChange}/>
+                            <InputAutoComplete label={'Град'}
+                                               id='city'
+                                               icon={Icons.map}
+                                               data={Cities}
+                                               width={6}
+                                               value={currUser.city}
+                                               onChange={handleChange}/>
                             <InputField type='text'
                                         label={'Телефон'}
                                         id='phoneNumber'

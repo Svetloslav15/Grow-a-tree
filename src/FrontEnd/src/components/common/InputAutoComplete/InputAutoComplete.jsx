@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as style from './InputAutoComplete.module.scss';
 
-const InputAutoComplete = ({label, id, icon, data, onChange, className}) => {
+const InputAutoComplete = ({width, label, id, icon, data, onChange, className}) => {
     const [isLabelHidden, setHidden] = useState(false);
     const [currVal, setCurrentValue] = useState('');
     const [previousVal, setPreviousValue] = useState('');
@@ -27,7 +27,7 @@ const InputAutoComplete = ({label, id, icon, data, onChange, className}) => {
     };
 
     return (
-        <div className='md-form col-md-12'>
+        <div className={`${style.wrapper} md-form col-md-${width}`}>
             <i className={`${style.icon} ${icon} prefix`}/>
             <input list='data-list-items' id={id} className='form-control'
                    onSelect={() => setHidden(true)}
@@ -38,9 +38,6 @@ const InputAutoComplete = ({label, id, icon, data, onChange, className}) => {
             <datalist id='data-list-items' className={style.datalist}>
                 {dataElements}
             </datalist>
-            <div className='col-md-12 text-center'>
-                <small className='text-danger'><i>* Градът е невалиден</i></small>
-            </div>
         </div>
     )
 };
