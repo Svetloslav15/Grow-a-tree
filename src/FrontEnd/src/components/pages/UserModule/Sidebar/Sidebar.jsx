@@ -32,7 +32,7 @@ const Sidebar = ({isOpen, closeNavigation, isFixed}) => {
             </div>
             <div>
                 <Item link='/users/my-info' text='Моят профил' icon='user'/>
-                <Item link='/' text='Comming soon...' icon='user'/>
+                <Item link='/users/referral' text='QR код' icon='user'/>
                 <Item link='/' text='Comming soon...' icon='user'/>
                 <Item link='/' text='Comming soon...' icon='user'/>
                 <Item link='/' text='Comming soon...' icon='user'/>
