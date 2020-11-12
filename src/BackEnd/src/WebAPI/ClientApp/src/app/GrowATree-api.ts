@@ -530,7 +530,7 @@ export interface ITreesClient {
     getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel>;
     getTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getTreesShortInfo(page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
-    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
+    getTreeShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
     getTreeDeletedImages(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel>;
     getUserTrees(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getUserTreeShortInfo(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
@@ -768,7 +768,7 @@ export class TreesClient implements ITreesClient {
         return _observableOf<TreeListShortInfoModel>(<any>null);
     }
 
-    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
+    getTreeShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
         let url_ = this.baseUrl + "/api/Trees/short-info?";
         if (id !== undefined)
             url_ += "id=" + encodeURIComponent("" + id) + "&"; 
@@ -783,11 +783,11 @@ export class TreesClient implements ITreesClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTreesShortInfo2(response_);
+            return this.processGetTreeShortInfo(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetTreesShortInfo2(<any>response_);
+                    return this.processGetTreeShortInfo(<any>response_);
                 } catch (e) {
                     return <Observable<ResultOfTreeShortInfoModel>><any>_observableThrow(e);
                 }
@@ -796,7 +796,7 @@ export class TreesClient implements ITreesClient {
         }));
     }
 
-    protected processGetTreesShortInfo2(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
+    protected processGetTreeShortInfo(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
