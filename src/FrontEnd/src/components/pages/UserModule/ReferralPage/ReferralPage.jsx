@@ -28,7 +28,7 @@ const ReferralPage = () => {
                 <div className='pt-2'>
                     <InputField
                         type='text'
-                        label=''
+                        label='Линк за покана'
                         id='referral-link'
                         value={referralLink}
                         disabled={true}
