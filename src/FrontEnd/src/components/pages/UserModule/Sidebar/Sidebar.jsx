@@ -2,6 +2,7 @@ import React from 'react';
 import Item from '../../../common/UserNavigation/Item/Item';
 import {useDispatch} from 'react-redux';
 import Cookies from 'js-cookie';
+import {withRouter} from 'react-router-dom';
 
 import * as style from './Sidebar.module.scss';
 import {SAVE_CURRENT_USER} from '../../../../store/actions/actionTypes';
@@ -9,7 +10,7 @@ import CookieNames from '../../../../static/cookieNames';
 
 const UserImage = require('../../../../assets/user-profile.png');
 
-const Sidebar = ({isOpen, closeNavigation, isFixed}) => {
+const Sidebar = ({history}) => {
     const dispatch = useDispatch({});
 
     const logoutUser = () => {
@@ -23,6 +24,7 @@ const Sidebar = ({isOpen, closeNavigation, isFixed}) => {
         };
         Cookies.remove(CookieNames.currentUser);
         dispatch({ type:  SAVE_CURRENT_USER, data});
+        history.push('/');
     };
 
     return (
@@ -49,4 +51,4 @@ const Sidebar = ({isOpen, closeNavigation, isFixed}) => {
     );
 };
 
-export default Sidebar;
+export default withRouter(Sidebar);
