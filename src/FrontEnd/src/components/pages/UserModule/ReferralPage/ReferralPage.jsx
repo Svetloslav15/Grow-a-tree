@@ -1,4 +1,8 @@
 import React, {useEffect, useState} from 'react';
+import {FacebookShareButton, FacebookIcon,
+    TwitterIcon, TwitterShareButton,
+    LinkedinShareButton, RedditShareButton,
+    LinkedinIcon, RedditIcon, ViberShareButton, ViberIcon} from 'react-share';
 import {useSelector} from 'react-redux';
 import Layout from '../Layout/Layout';
 import * as style from './ReferralPage.module.scss';
@@ -34,7 +38,31 @@ const ReferralPage = () => {
                         disabled={true}
                     />
                     <div className={style.buttonsSection}>
-                        <Button type='DarkOutline'>Сподели</Button>
+                        <FacebookShareButton
+                            url={referralLink}
+                            className="m-2">
+                            <FacebookIcon size={32} round={true} />
+                        </FacebookShareButton>
+                        <ViberShareButton
+                            url={referralLink}
+                            className="m-2">
+                            <ViberIcon size={32} round={true} />
+                        </ViberShareButton>
+                        <TwitterShareButton
+                            url={referralLink}
+                            className="m-2">
+                            <TwitterIcon size={32} round={true} />
+                        </TwitterShareButton>
+                        <LinkedinShareButton
+                            url={referralLink}
+                            className="m-2">
+                            <LinkedinIcon size={32} round={true} />
+                        </LinkedinShareButton>
+                        <RedditShareButton
+                            url={referralLink}
+                            className="m-2">
+                            <RedditIcon size={32} round={true} />
+                        </RedditShareButton>
                         <Button type='Dark' onClick={copyToClipboard}>Копирай</Button>
                     </div>
                 </div>
