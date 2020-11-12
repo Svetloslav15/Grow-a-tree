@@ -3,6 +3,7 @@ import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import {withRouter} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
+import Cookies from 'js-cookie';
 
 import AuthService from '../../../../../services/authService';
 import * as style from './ExternalLoginSection.module.scss';
@@ -23,6 +24,7 @@ const ExternalLoginSection = ({history}) => {
         };
         const res = await AuthService.externalLogin(model);
         dispatch({type: SAVE_CURRENT_USER, data: res.data});
+        Cookies.set('gt_curr_user', res.data);
         history.push('/');
     };
     const responseFacebook = async (response) => {
@@ -37,6 +39,7 @@ const ExternalLoginSection = ({history}) => {
         };
         const res = await AuthService.externalLogin(model);
         dispatch({type: SAVE_CURRENT_USER, data: res.data});
+        Cookies.set('gt_curr_user', res.data);
         history.push('/');
     };
 

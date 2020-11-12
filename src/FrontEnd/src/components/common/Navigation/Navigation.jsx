@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
+import Cookies from 'js-cookie';
 
 import UserNavigation from '../UserNavigation/UserNavigation';
 import NavItem from './NavItem/NavItem';
@@ -12,10 +13,10 @@ import {CHANGE_IS_USER_NAV_OPENED} from "../../../store/actions/actionTypes";
 const Logo = require('../../../assets/logo.png');
 
 const Navigation = () => {
-    const currUser = useSelector(state => state.auth);
+    const currUser = JSON.parse(Cookies.get('gt_curr_user'));
     const commonData = useSelector(state => state.common);
     const dispatch = useDispatch();
-
+    console.log(currUser);
     const toggleNavOpen = () => {
         dispatch({type: CHANGE_IS_USER_NAV_OPENED, data: !commonData.isUserNavOpen});
     };

@@ -38,7 +38,7 @@ const LoginPage = ({history}) => {
         if (result.succeeded) {
             AlertService.success(SuccessMessages.successLogin);
             saveUserData({ type:  SAVE_CURRENT_USER, data: result.data});
-            Cookies('gt_curr_user', result.data);
+            Cookies.set('gt_curr_user', result.data);
             history.push('/');
         }
         else {

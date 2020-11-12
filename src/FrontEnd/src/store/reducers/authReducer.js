@@ -1,6 +1,7 @@
 import {SAVE_CURRENT_USER} from '../actions/actionTypes';
+import Cookies from 'js-cookie';
 
-const initialState = {
+let currUser = Cookies.get('gt_curr_user') || {
     accessToken: '',
     expired: '',
     id: '',
@@ -9,8 +10,16 @@ const initialState = {
     username: ''
 };
 
+const initialState = {
+    accessToken: currUser.accessToken,
+    expired: currUser.expired,
+    id: currUser.id,
+    isStore: false,
+    refreshToken: currUser.refreshToken,
+    username: currUser.username
+};
+
 const authReducer = (state = initialState, action) => {
-    localStorage.setItem()
     switch (action.type) {
         case SAVE_CURRENT_USER:
             return Object.assign({}, state, {...action.data});
