@@ -47,12 +47,21 @@
                         return Result<TokenModel>.Failure(ErrorMessages.EmailInUseErrorMessage);
                     }
 
+                    var generatedUsername = request.FirstName + request.LastName;
+                    while (await this.userManager.FindByNameAsync(generatedUsername) != null)
+                    {
+                        var random = new Random();
+                        generatedUsername = request.FirstName + request.LastName + random.Next(1, 1000);
+                    }
+
                     var newUser = new User
                     {
                         Email = request.Email,
-                        UserName = request.FirstName + " " + request.LastName,
+                        UserName = generatedUsername,
                         ProfilePictureUrl = request.ProfilePictureUrl,
                         EmailConfirmed = true,
+                        FirstName = request.FirstName,
+                        LastName = request.LastName,
                     };
                     var info = new ExternalLoginInfo(ClaimsPrincipal.Current, request.ProviderName, request.UserId, request.ProviderName);
                     var identityResult = await this.userManager.CreateAsync(newUser);
