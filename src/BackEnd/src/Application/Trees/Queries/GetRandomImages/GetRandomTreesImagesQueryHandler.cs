@@ -12,6 +12,7 @@
     using GrowATree.Application.Models.TreeImages;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
+    using MoreLinq;
 
     public class GetRandomTreesImagesQueryHandler : IRequestHandler<GetRandomTreesImagesQuery, TreeImageListModel>
     {
@@ -26,11 +27,12 @@
 
         public async Task<TreeImageListModel> Handle(GetRandomTreesImagesQuery request, CancellationToken cancellationToken)
         {
-            var list = await this.context.TreeImages
+            var list = this.context.TreeImages
                 .OrderBy(x => Guid.NewGuid())
                 .Take(Constants.TreeImagesCount)
                 .ProjectTo<TreeImageModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync();
+                .DistinctBy(x => x.TreeId)
+                .ToList();
 
             var totalTreesImages = list.Count;
             var meta = new Pagination
