@@ -5,13 +5,13 @@ import ErrorMessages from '../../../static/errorMessages';
 import Cookies from 'js-cookie';
 import CookieNames from '../../../static/cookieNames';
 
-const PrivateRoute = ({component: Component, ...rest}) => {
-    const [hasToken, setHasToken] = useState(true);
+const AnonymousRoute = ({component: Component, ...rest}) => {
+    const [hasToken, setHasToken] = useState(false);
 
     useEffect(() => {
-        if (!Cookies.get(CookieNames.currentUser)) {
-            setHasToken(false);
-            AlertService.warning(ErrorMessages.privateRoute);
+        if (Cookies.get(CookieNames.currentUser)) {
+            setHasToken(true);
+            AlertService.warning(ErrorMessages.anonymousRoute);
         }
     }, []);
 
@@ -19,11 +19,11 @@ const PrivateRoute = ({component: Component, ...rest}) => {
         <Route
             {...rest}
             render={props =>
-                hasToken ? (<Component {...props}/>
+                !hasToken ? (<Component {...props}/>
                 ) : (
                     <Redirect
                         to={{
-                            pathname: '/auth/login',
+                            pathname: '/',
                             state: {from: props.location}
                         }}/>
                 )
@@ -32,4 +32,4 @@ const PrivateRoute = ({component: Component, ...rest}) => {
     )
 };
 
-export default PrivateRoute;
+export default AnonymousRoute;

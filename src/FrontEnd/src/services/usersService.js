@@ -2,7 +2,8 @@ import baseService from './baseService';
 
 const ROUTES = {
     getUserById: '/users/',
-    editUser: '/users/edit'
+    editUser: '/users/edit',
+    getFacebookProfilePicture: 'https://graph.facebook.com'
 };
 export default {
     get: new Proxy({}, {

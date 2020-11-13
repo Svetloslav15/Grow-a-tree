@@ -6,8 +6,10 @@ import {useDispatch} from 'react-redux';
 import Cookies from 'js-cookie';
 
 import AuthService from '../../../../../services/authService';
+import BaseService from '../../../../../services/baseService';
 import * as style from './ExternalLoginSection.module.scss';
 import {SAVE_CURRENT_USER} from '../../../../../store/actions/actionTypes';
+import CookieNames from '../../../../../static/cookieNames';
 
 const ExternalLoginSection = ({history}) => {
     const dispatch = useDispatch();
@@ -23,7 +25,7 @@ const ExternalLoginSection = ({history}) => {
             "profilePictureUrl": response.profileObj.imageUrl
         };
         const res = await AuthService.externalLogin(model);
-        Cookies.set('gt_curr_user', res.data);
+        Cookies.set(CookieNames.currentUser, res.data);
         dispatch({type: SAVE_CURRENT_USER, data: res.data});
         history.push('/');
     };
@@ -35,10 +37,10 @@ const ExternalLoginSection = ({history}) => {
             "userId": response.id,
             "firstName": response.name.split(' ')[0],
             "lastName": response.name.split(' ')[1],
-            "profilePictureUrl": response.picture.data.url
+            "profilePictureUrl": `https://graph.facebook.com/${response.id}/picture?width=500&height=500&access_token=${response.accessToken}`
         };
         const res = await AuthService.externalLogin(model);
-        Cookies.set('gt_curr_user', res.data);
+        Cookies.set(CookieNames.currentUser, res.data);
         dispatch({type: SAVE_CURRENT_USER, data: res.data});
         history.push('/');
     };

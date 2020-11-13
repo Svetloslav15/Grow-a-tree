@@ -1,7 +1,8 @@
 import React from 'react';
 import {useDispatch} from 'react-redux';
-import Item from './Item/Item';
+import {withRouter} from 'react-router-dom';
 
+import Item from './Item/Item';
 import * as style from './UserNavigation.module.scss';
 import Cookies from "js-cookie";
 import CookieNames from "../../../static/cookieNames";
@@ -9,7 +10,7 @@ import {SAVE_CURRENT_USER} from "../../../store/actions/actionTypes";
 const UserImage = require('../../../assets/user-profile.png');
 const UpArrow = require('../../../assets/up-arrow.png');
 
-const UserNavigation = ({isOpen, closeNavigation, isLocked}) => {
+const UserNavigation = ({isOpen, closeNavigation, isLocked, history}) => {
     const dispatch = useDispatch({});
 
     const logoutUser = () => {
@@ -23,6 +24,7 @@ const UserNavigation = ({isOpen, closeNavigation, isLocked}) => {
         };
         Cookies.remove(CookieNames.currentUser);
         dispatch({ type:  SAVE_CURRENT_USER, data});
+        history.push('/');
     };
     return (
         <div className={`${style.wrapper} ${isOpen ? '' : 'd-none'}  ${isLocked ? 'd-none' : ''} `}>
@@ -51,4 +53,4 @@ const UserNavigation = ({isOpen, closeNavigation, isLocked}) => {
     );
 };
 
-export default UserNavigation;
+export default withRouter(UserNavigation);

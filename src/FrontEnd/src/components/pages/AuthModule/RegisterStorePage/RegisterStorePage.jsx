@@ -112,7 +112,7 @@ const RegisterStorePage = ({history}) => {
                                            id='city'
                                            icon={Icons.map}
                                            data={Cities}
-                                           width={6}
+                                           width={12}
                                            onChange={handleChange}/>
                     </div>
                     <Map google={window.google} handleCoordinates={handleCoordinates}/>
