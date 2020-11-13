@@ -6,6 +6,7 @@ import InputField from '../../../common/InputField/InputField';
 import DropdownField from "../../../common/DropdownField/DropdownField";
 import Map from "../../../common/Map/Map";
 import Button from "../../../common/Button/Button";
+import FileInput from "../../../common/FileInput/FileInput";
 
 const AddTreePage = ({}) => {
     const [data, setData] = useState({});
@@ -45,7 +46,8 @@ const AddTreePage = ({}) => {
                                        label='Категория'
                                        values={['test', 'test1', 'test2']}
                                        onChange={handleChange}/>
-                        <div className='text-right'>
+                        <FileInput/>
+                        <div className='text-right mt-3'>
                             <Button type='DarkOutline' onClick={() => console.log(data)}>Добави</Button>
                         </div>
                     </div>
