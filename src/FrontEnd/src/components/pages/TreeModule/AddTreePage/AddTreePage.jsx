@@ -5,6 +5,7 @@ import Layout from '../../../common/Layout/Layout';
 import InputField from '../../../common/InputField/InputField';
 import DropdownField from "../../../common/DropdownField/DropdownField";
 import Map from "../../../common/Map/Map";
+import Button from "../../../common/Button/Button";
 
 const AddTreePage = ({}) => {
     const [data, setData] = useState({});
@@ -15,15 +16,20 @@ const AddTreePage = ({}) => {
     };
 
     const handleCoordinates = (latitude, longitute) => {
-        //TODO
+        data.latitude = latitude;
+        data.longitute = longitute;
+        setData({...data});
     };
 
     return (
         <Layout>
-            <div className='offset-md-1 col-md-6 p-5'>
-                <h2 className={style.title}># Добави дърво</h2>
-                <div className='col-md-12 row'>
-                    <div className='col-md-10'>
+            <div className='ml-5 col-md-12 p-5'>
+               <div className='row justify-content-around'>
+                   <h2 className={style.title}># Добави дърво</h2>
+                   <h3 className={style.subtitle}># Изберете локация за дървото</h3>
+               </div>
+                <div className='row col-md-12'>
+                    <div className='col-md-6'>
                         <InputField type='email'
                                     label={'Прякор'}
                                     id='nickname'
@@ -39,8 +45,12 @@ const AddTreePage = ({}) => {
                                        label='Категория'
                                        values={['test', 'test1', 'test2']}
                                        onChange={handleChange}/>
+                        <div className='text-right'>
+                            <Button type='DarkOutline' onClick={() => console.log(data)}>Добави</Button>
+                        </div>
                     </div>
-                    <div className={style.mapContainer}>
+                    <div className={`${style.mapContainer} col-md-5`}>
+                        {data.latitude !== undefined ? (<p>Lat: <b>{data.latitude}</b>, Lng: <b>{data.longitute}</b></p>) : ''}
                         <Map handleCoordinates={handleCoordinates}/>
                     </div>
                 </div>
