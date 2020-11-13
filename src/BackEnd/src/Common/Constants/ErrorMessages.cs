@@ -38,7 +38,7 @@ namespace Common.Constants
 
         public const string UsernameMinLengthErrorMessage = "Потребителското име трябва да е поне 3 символа";
 
-        public const string UsernameMaxLengthErrorMessage = "Потребителското име трябва да е максимум 15 символа";
+        public const string UsernameMaxLengthErrorMessage = "Потребителското име трябва да е максимум 30 символа";
 
         #endregion
 
