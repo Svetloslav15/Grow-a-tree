@@ -16,7 +16,7 @@
 
         public const int UsernameMinLength = 3;
 
-        public const int UsernameMaxLength = 15;
+        public const int UsernameMaxLength = 30;
 
         public const int NameMinLength = 3;
 
@@ -32,7 +32,7 @@
 
         public const int TreeImagesCount = 10;
 
-        public const string PhoneNumberRegEx = @"/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/";
+        public const string PhoneNumberRegEx = @"\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})";
 
         public const string StoreRoleName = "Store";
 

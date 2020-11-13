@@ -1378,7 +1378,7 @@
           },
           "name": {
             "type": "string",
-            "maxLength": 15,
+            "maxLength": 30,
             "minLength": 3
           },
           "latitude": {
@@ -1423,7 +1423,7 @@
           },
           "username": {
             "type": "string",
-            "maxLength": 15,
+            "maxLength": 30,
             "minLength": 3
           },
           "password": {
@@ -2271,7 +2271,7 @@
           },
           "username": {
             "type": "string",
-            "maxLength": 15,
+            "maxLength": 30,
             "minLength": 3
           },
           "city": {
@@ -2280,7 +2280,7 @@
           },
           "phoneNumber": {
             "type": "string",
-            "pattern": "/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/",
+            "pattern": "\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})",
             "nullable": true
           }
         }
