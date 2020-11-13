@@ -489,12 +489,47 @@
         }
       }
     },
-    "/api/Trees/deleted-images": {
+    "/api/Trees/random-images": {
       "get": {
         "tags": [
           "Trees"
         ],
         "operationId": "Trees_GetTreeDeletedImages",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/GetRandomTreesImagesQuery"
+                }
+              ]
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeImageListModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Trees/deleted-images": {
+      "get": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_GetTreeDeletedImages2",
         "parameters": [
           {
             "name": "Id",
@@ -1998,8 +2033,16 @@
           "url": {
             "type": "string",
             "nullable": true
+          },
+          "treeId": {
+            "type": "string",
+            "nullable": true
           }
         }
+      },
+      "GetRandomTreesImagesQuery": {
+        "type": "object",
+        "additionalProperties": false
       },
       "ResultOfString": {
         "type": "object",

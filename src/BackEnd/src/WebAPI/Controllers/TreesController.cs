@@ -19,6 +19,7 @@
     using GrowATree.Application.Trees.Queries.GetDeletedImages;
     using GrowATree.Application.Trees.Queries.GetList;
     using GrowATree.Application.Trees.Queries.GetListShortInfo;
+    using GrowATree.Application.Trees.Queries.GetRandomImages;
     using GrowATree.Application.Trees.Queries.GetShortInfoById;
     using GrowATree.Application.Trees.Queries.GetUserTreesShortInfo;
     using GrowATree.Application.Users.Queries.GetTrees;
@@ -162,6 +163,21 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<TreeShortInfoModel>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("random-images")]
+        public async Task<ActionResult<TreeImageListModel>> GetTreeDeletedImages([FromQuery] GetRandomTreesImagesQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeImageListModel.Failure<TreeImageListModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
@@ -431,6 +447,5 @@
                 return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
-
     }
 }
