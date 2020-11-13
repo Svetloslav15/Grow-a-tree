@@ -11,5 +11,4 @@ const Item = ({icon, link, text, onClick}) => (
         </div>
     </Link>
 );
-
 export default Item;
