@@ -4,7 +4,7 @@ import {FacebookShareButton, FacebookIcon,
     LinkedinShareButton, RedditShareButton,
     LinkedinIcon, RedditIcon, ViberShareButton, ViberIcon} from 'react-share';
 import {useSelector} from 'react-redux';
-import Layout from '../Layout/Layout';
+import Layout from '../UserLayout/UserLayout';
 import * as style from './ReferralPage.module.scss';
 import QRCode from "react-qr-code";
 import InputField from "../../../common/InputField/InputField";
