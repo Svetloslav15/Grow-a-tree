@@ -1,6 +1,7 @@
 import baseService from './baseService';
 
 const ROUTES = {
+    addTree: '/trees/upsert'
 };
 export default {
     get: new Proxy({}, {
@@ -20,8 +21,8 @@ export default {
     }),
     postAuthorized: new Proxy({}, {
         get(target, propName) {
-            return async (data, token) => {
-                return await baseService.postAuthorized(ROUTES[propName], data, token);
+            return async (data, token, contentType) => {
+                return await baseService.postAuthorized(ROUTES[propName], data, token, contentType);
             }
         }
     }),

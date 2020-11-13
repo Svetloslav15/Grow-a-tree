@@ -24,7 +24,7 @@ export default {
     postAuthorized: new Proxy({}, {
         get(target, propName) {
             return async (data, token) => {
-                return await baseService.postAuthorized(ROUTES[propName], data, token);
+                return await baseService.postAuthorized(ROUTES[propName], data, token, "application/json");
             }
         }
     }),
