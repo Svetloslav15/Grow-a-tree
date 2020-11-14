@@ -180,11 +180,5 @@ namespace Common.Constants
         public const string TreeNotFoundErrorMessage = "Не съществува такова дърво";
 
         #endregion
-
-        #region
-
-        public const string WateringDelayErrorMessage = "Моля изчакайте преди да полеете дървото отново";
-
-        #endregion
     }
 }

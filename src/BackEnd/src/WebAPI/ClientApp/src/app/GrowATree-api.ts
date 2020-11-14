@@ -1744,76 +1744,6 @@ export class UsersClient implements IUsersClient {
     }
 }
 
-export interface IWateringsClient {
-    waterTree(command: WaterTreeCommand): Observable<ResultOfBoolean>;
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class WateringsClient implements IWateringsClient {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    waterTree(command: WaterTreeCommand): Observable<ResultOfBoolean> {
-        let url_ = this.baseUrl + "/api/Waterings/water-tree";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(command);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",			
-            headers: new HttpHeaders({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processWaterTree(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processWaterTree(<any>response_);
-                } catch (e) {
-                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processWaterTree(response: HttpResponseBase): Observable<ResultOfBoolean> {
-        const status = response.status;
-        const responseBlob = 
-            response instanceof HttpResponse ? response.body : 
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ResultOfBoolean.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ResultOfBoolean>(<any>null);
-    }
-}
-
 export class ResultOfBoolean implements IResultOfBoolean {
     data?: boolean;
     succeeded?: boolean;
@@ -3733,46 +3663,6 @@ export interface IEditUserCommand {
     username: string;
     city: string;
     phoneNumber?: string | undefined;
-}
-
-export class WaterTreeCommand implements IWaterTreeCommand {
-    treeId?: string | undefined;
-    watererId?: string | undefined;
-
-    constructor(data?: IWaterTreeCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.treeId = _data["treeId"];
-            this.watererId = _data["watererId"];
-        }
-    }
-
-    static fromJS(data: any): WaterTreeCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new WaterTreeCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["treeId"] = this.treeId;
-        data["watererId"] = this.watererId;
-        return data; 
-    }
-}
-
-export interface IWaterTreeCommand {
-    treeId?: string | undefined;
-    watererId?: string | undefined;
 }
 
 export interface FileParameter {
