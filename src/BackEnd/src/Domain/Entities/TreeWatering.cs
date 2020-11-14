@@ -15,5 +15,7 @@ namespace GrowATree.Domain.Entities
         public string UserId { get; set; }
 
         public User User { get; set; }
+
+        public DateTime WateredOn { get; set; }
     }
 }

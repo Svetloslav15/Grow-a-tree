@@ -1289,6 +1289,43 @@
           }
         ]
       }
+    },
+    "/api/Waterings/water-tree": {
+      "post": {
+        "tags": [
+          "Waterings"
+        ],
+        "operationId": "Waterings_WaterTree",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterTreeCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -2238,6 +2275,20 @@
           "phoneNumber": {
             "type": "string",
             "pattern": "\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})",
+            "nullable": true
+          }
+        }
+      },
+      "WaterTreeCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "treeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "watererId": {
+            "type": "string",
             "nullable": true
           }
         }
