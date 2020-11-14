@@ -17,7 +17,7 @@ export default {
     postAuthorized: async (url, data, token, contentType) => {
         return await axios(`${BASE_URL}${url}`, {
             method: 'post',
-            data: JSON.stringify(data),
+            data: data,
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-type": {contentType}

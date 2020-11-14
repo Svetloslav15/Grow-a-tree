@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 
 import * as style from './AddTreePage.module.scss';
 import Layout from '../../../common/Layout/Layout';
 import InputField from '../../../common/InputField/InputField';
-import DropdownField from "../../../common/DropdownField/DropdownField";
-import Map from "../../../common/Map/Map";
-import Button from "../../../common/Button/Button";
-import FileInput from "../../../common/FileInput/FileInput";
+import DropdownField from '../../../common/DropdownField/DropdownField';
+import Map from '../../../common/Map/Map';
+import Button from '../../../common/Button/Button';
+import FileInput from '../../../common/FileInput/FileInput';
 import TreeService from '../../../../services/treeService';
 
 const AddTreePage = ({}) => {
@@ -20,7 +21,7 @@ const AddTreePage = ({}) => {
 
     const handleCoordinates = (latitude, longitute) => {
         data.latitude = latitude;
-        data.longitute = longitute;
+        data.longitude = longitute;
         setData({...data});
     };
 
@@ -30,16 +31,18 @@ const AddTreePage = ({}) => {
 
     const handleSubmit = async () => {
         const formData = new FormData();
-        formData.append('ImageFiles', data.files);
+        const images = [...data.files];
+        for (let i = 0 ; i < images.length ; i++) {
+            formData.append("ImageFiles", images[i]);
+        }
         formData.append('nickname', data.nickname);
         formData.append('type', data.type);
         formData.append('category', data.category);
         formData.append('latitude', data.latitude);
         formData.append('longitude', data.longitude);
-        formData.append('city', "Blg");
+        formData.append('City', "Blagoevgrad");
         formData.append('ownerId', currUser.id);
-        const res = await TreeService.postAuthorized.addTree(formData, token, 'multipart/form-data');
-        console.log(res);
+        const res = await TreeService.postAuthorized.addTree(formData, currUser.accessToken, 'multipart/form-data');
     };
 
     return (
@@ -68,12 +71,12 @@ const AddTreePage = ({}) => {
                                        onChange={handleChange}/>
                         <FileInput onChange={handleFilesUpload}/>
                         <div className='text-right mt-3'>
-                            <Button type='DarkOutline' onClick={() => console.log(data)}>Добави</Button>
+                            <Button type='DarkOutline' onClick={handleSubmit}>Добави</Button>
                         </div>
                     </div>
                     <div className={`${style.mapContainer} col-md-5`}>
                         {data.latitude !== undefined ? (
-                            <p>Lat: <b>{data.latitude}</b>, Lng: <b>{data.longitute}</b></p>) : ''}
+                            <p>Lat: <b>{data.latitude}</b>, Lng: <b>{data.longitude}</b></p>) : ''}
                         <Map handleCoordinates={handleCoordinates}/>
                     </div>
                 </div>
