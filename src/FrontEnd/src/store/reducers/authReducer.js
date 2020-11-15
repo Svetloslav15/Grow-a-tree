@@ -1,10 +1,11 @@
 import {SAVE_CURRENT_USER} from '../actions/actionTypes';
-import Cookies from "js-cookie";
-import CookieNames from "../../static/cookieNames";
+import Cookies from 'js-cookie';
+import CookieNames from '../../static/cookieNames';
+import AuthService from '../../services/authService';
 
 const emptyUser = {
     accessToken: '',
-    expired: '',
+    expires: '',
     id: '',
     username: '',
     isStore: false,
@@ -13,16 +14,26 @@ const emptyUser = {
 
 const initialState = {
     accessToken: emptyUser.accessToken,
-    expired: emptyUser.expired,
+    expires: emptyUser.expires,
     id: emptyUser.id,
     isStore: false,
     refreshToken: emptyUser.refreshToken,
     username: emptyUser.username
 };
+let isFetching = false;
 
 const authReducer = (state = initialState, action) => {
     state = Cookies.get(CookieNames.currentUser) ? JSON.parse(Cookies.get(CookieNames.currentUser)) : emptyUser;
-
+    if (new Date().getTime() >= new Date(state.expires).getTime() && !isFetching) {
+        isFetching = true;
+        AuthService.getNewAccessToken({
+            accessToken: state.accessToken,
+            refreshToken: state.refreshToken
+        }).then((data) => {
+            //TODO save new access token and refresh token
+            console.log(data);
+        });
+    }
     switch (action.type) {
         case SAVE_CURRENT_USER:
             return Object.assign({}, state, {...action.data});
