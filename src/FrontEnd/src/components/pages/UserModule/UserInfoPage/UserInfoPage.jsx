@@ -27,6 +27,7 @@ const UserInfoPage = () => {
     const [currUser, setCurrUser] = useState({});
 
     useEffect(() => {
+        console.log(currUser.profilePictureUrl);
         dispatch({type: CHANGE_IS_USER_NAV_LOCKED, data: true});
         UsersService.getAuthorizedUserById(stateUserData.id, stateUserData.accessToken)
             .then((res) => {
@@ -36,12 +37,17 @@ const UserInfoPage = () => {
             dispatch({type: CHANGE_IS_USER_NAV_LOCKED, data: false});
             dispatch({type: CHANGE_IS_USER_NAV_OPENED, data: false});
         }
-    }, []);
+    }, [currUser.profilePictureUrl]);
 
     const handleChange = (event) => {
         currUser[event.target.id] = event.target.value;
         setCurrUser({...currUser});
     };
+
+    const changeProfileImage = (data) => {
+        currUser.profilePictureUrl = data;
+        setCurrUser({...currUser});
+    }
 
     const handleSubmit = async () => {
         const response = await UsersService.postAuthorizedEditUser(currUser, stateUserData.accessToken, 'application/json');
@@ -53,14 +59,14 @@ const UserInfoPage = () => {
             AlertService.error(response.data.errors[0]);
         }
     };
-    console.log(currUser);
+
     return (
         <Layout>
             <div className={`${style.wrapper} col-md-9`}>
                 <div className='col-md-12 row'>
                     <div className='col-md-3'>
                         <img className={style.profileImage} src={currUser.profilePictureUrl} alt={currUser.userName}/>
-                        <ChangeImage/>
+                        <ChangeImage changeProfileImage={changeProfileImage}/>
                     </div>
                     <div className='col-md-7'>
                         <p className={style.username}>@{currUser.userName}</p>

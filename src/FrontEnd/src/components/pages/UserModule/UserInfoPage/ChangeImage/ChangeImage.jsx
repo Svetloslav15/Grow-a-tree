@@ -1,14 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {useSelector} from 'react-redux';
 
 import Button from '../../../../common/Button/Button';
 import FileInput from '../../../../common/FileInput/FileInput';
 import AlertService from '../../../../../services/alertService';
 import UsersService from '../../../../../services/usersService';
+import SuccessMessages from '../../../../../static/successMessages';
 
-const ChangeImage = () => {
+const ChangeImage = ({changeProfileImage}) => {
     const [image, setImage] = useState(null);
     const currUser = useSelector(state => state.auth);
+    const closeModalButton = useRef();
 
     const handleFilesUpload = (event) => {
         setImage(event.target.files[0])
@@ -16,10 +18,19 @@ const ChangeImage = () => {
 
     const handleSubmit = async () => {
         const formData = new FormData();
-        formData.append('Id', currUser.Id);
+        formData.append('Id', currUser.id);
         formData.append('ProfilePictureFile', image);
         const response = await UsersService.postAuthorizedChangeProfilePicture(formData, currUser.accessToken, 'multipart/form-data');
-        console.log(response.data);
+
+        if (response.succeeded) {
+            await AlertService.success(SuccessMessages.successChangeProfilePicture);
+            changeProfileImage(response.data);
+            setImage(null);
+            closeModalButton.current.click();
+        }
+        else {
+            await AlertService.error(response.errors[0]);
+        }
     };
 
     return (
@@ -50,7 +61,7 @@ const ChangeImage = () => {
                         </div>
                         <div className="modal-footer">
                             <Button type='Red'>
-                                <div aria-label="Close" data-dismiss="modal">Затвори</div>
+                                <div aria-label="Close" data-dismiss="modal" ref={closeModalButton}>Затвори</div>
                             </Button>
                             <Button type='Green' onClick={handleSubmit}>Промени</Button>
                         </div>
