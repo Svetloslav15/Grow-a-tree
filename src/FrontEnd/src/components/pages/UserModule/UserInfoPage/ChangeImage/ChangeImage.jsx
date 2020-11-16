@@ -1,10 +1,18 @@
-import React from 'react';
-import Button from "../../../../common/Button/Button";
-import FileInput from "../../../../common/FileInput/FileInput";
+import React, {useState} from 'react';
+import Button from '../../../../common/Button/Button';
+import FileInput from '../../../../common/FileInput/FileInput';
+import AlertService from '../../../../../services/alertService';
 
-const ChangeImage = ({onSubmit}) => {
-    const handleFilesUpload = () => {
+const ChangeImage = ({userId}) => {
+    const [image, setImage] = useState(null);
 
+    const handleFilesUpload = (event) => {
+        setImage(event.target.files[0])
+    };
+
+    const handleSubmit = () => {
+        console.log(image);
+        console.log(userId);
     };
 
     return (
@@ -18,7 +26,8 @@ const ChangeImage = ({onSubmit}) => {
                 </Button>
 
             </div>
-            <div className="modal fade" id="profilePictureInputContainer"  role="dialog" aria-labelledby="profilePictureInputContainer"
+            <div className="modal fade" id="profilePictureInputContainer" role="dialog"
+                 aria-labelledby="profilePictureInputContainer"
                  aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
@@ -29,18 +38,19 @@ const ChangeImage = ({onSubmit}) => {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <FileInput onChange={handleFilesUpload}/>
+                            <FileInput onChange={handleFilesUpload}
+                                       isMultiple={false}/>
                         </div>
                         <div className="modal-footer">
                             <Button type='Red'>
                                 <div aria-label="Close" data-dismiss="modal">Затвори</div>
                             </Button>
-                            <Button type='Green' onClick={onSubmit}>Промени</Button>
+                            <Button type='Green' onClick={handleSubmit}>Промени</Button>
                         </div>
                     </div>
                 </div>
             </div>
-            </>
+        </>
     )
 };
 

@@ -28,7 +28,7 @@ const UserInfoPage = () => {
 
     useEffect(() => {
         dispatch({type: CHANGE_IS_USER_NAV_LOCKED, data: true});
-        UsersService.getAuthorized.getUserById(stateUserData.id, stateUserData.accessToken)
+        UsersService.getAuthorizedUserById(stateUserData.id, stateUserData.accessToken)
             .then((res) => {
                 setCurrUser(res.data.data)
             });
@@ -44,7 +44,7 @@ const UserInfoPage = () => {
     };
 
     const handleSubmit = async () => {
-        const response = await UsersService.postAuthorized.editUser(currUser, stateUserData.accessToken);
+        const response = await UsersService.postAuthorizedEditUser(currUser, stateUserData.accessToken);
 
         if (response.data.succeeded) {
             AlertService.success(SuccessMessages.successEditYourInfo);
@@ -60,7 +60,7 @@ const UserInfoPage = () => {
                 <div className='col-md-12 row'>
                     <div className='col-md-3'>
                         <img className={style.profileImage} src={currUser.profilePictureUrl} alt={currUser.userName}/>
-                        <ChangeImage/>
+                        <ChangeImage userId={currUser.id}/>
                     </div>
                     <div className='col-md-7'>
                         <p className={style.username}>@{currUser.userName}</p>

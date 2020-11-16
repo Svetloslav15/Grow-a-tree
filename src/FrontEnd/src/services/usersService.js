@@ -1,31 +1,22 @@
 import baseService from './baseService';
 
 const ROUTES = {
-    getUserById: '/users/',
-    editUser: '/users/edit',
+    getAuthorizedUserById: '/users/',
+    postAuthorizedEditUser: '/users/edit',
     getFacebookProfilePicture: 'https://graph.facebook.com'
 };
-export default {
-    get: new Proxy({}, {
-        get(target, propName) {
-            return async (urlParams) => await baseService.get(`${ROUTES[propName]}${urlParams}`);
+
+export default new Proxy({}, {
+    get(target, propName) {
+        if (propName.startsWith('postAuthorized')) {
+            return async (data, token) => await baseService.postAuthorized(ROUTES[propName], data, token);
         }
-    }),
-    post: new Proxy({}, {
-        get(target, propName) {
+        else if (propName.startsWith('post')) {
             return async (data) => await baseService.post(ROUTES[propName], data);
         }
-    }),
-    getAuthorized: new Proxy({}, {
-        get(target, propName) {
+        else if (propName.startsWith('getAuthorized')) {
             return async (urlParams, token) => await baseService.getAuthorized(`${ROUTES[propName]}${urlParams}`, token);
         }
-    }),
-    postAuthorized: new Proxy({}, {
-        get(target, propName) {
-            return async (data, token) => {
-                return await baseService.postAuthorized(ROUTES[propName], data, token);
-            }
-        }
-    }),
-}
+        return async (urlParams) => await baseService.get(`${ROUTES[propName]}${urlParams}`);
+    }
+});
