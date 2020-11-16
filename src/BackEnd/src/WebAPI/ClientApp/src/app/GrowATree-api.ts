@@ -531,7 +531,8 @@ export interface ITreesClient {
     getTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getTreesShortInfo(page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
     getTreeShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
-    getTreeDeletedImages(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel>;
+    getTreeDeletedImages(query: GetRandomTreesImagesQuery | null | undefined): Observable<TreeImageListModel>;
+    getTreeDeletedImages2(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel>;
     getUserTrees(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getUserTreeShortInfo(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
     getClosestTreesShortInfo(latitude: number | undefined, longitude: number | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
@@ -819,18 +820,10 @@ export class TreesClient implements ITreesClient {
         return _observableOf<ResultOfTreeShortInfoModel>(<any>null);
     }
 
-    getTreeDeletedImages(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel> {
-        let url_ = this.baseUrl + "/api/Trees/deleted-images?";
-        if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
-        if (perPage === null)
-            throw new Error("The parameter 'perPage' cannot be null.");
-        else if (perPage !== undefined)
-            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+    getTreeDeletedImages(query: GetRandomTreesImagesQuery | null | undefined): Observable<TreeImageListModel> {
+        let url_ = this.baseUrl + "/api/Trees/random-images?";
+        if (query !== undefined)
+            url_ += "query=" + encodeURIComponent("" + query) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -856,6 +849,64 @@ export class TreesClient implements ITreesClient {
     }
 
     protected processGetTreeDeletedImages(response: HttpResponseBase): Observable<TreeImageListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeImageListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeImageListModel>(<any>null);
+    }
+
+    getTreeDeletedImages2(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel> {
+        let url_ = this.baseUrl + "/api/Trees/deleted-images?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTreeDeletedImages2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTreeDeletedImages2(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeImageListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeImageListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTreeDeletedImages2(response: HttpResponseBase): Observable<TreeImageListModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -3102,6 +3153,7 @@ export interface ITreeImageListModel extends IMetaResultOfIListOfTreeImageModelA
 export class TreeImageModel implements ITreeImageModel {
     id?: string | undefined;
     url?: string | undefined;
+    treeId?: string | undefined;
 
     constructor(data?: ITreeImageModel) {
         if (data) {
@@ -3116,6 +3168,7 @@ export class TreeImageModel implements ITreeImageModel {
         if (_data) {
             this.id = _data["id"];
             this.url = _data["url"];
+            this.treeId = _data["treeId"];
         }
     }
 
@@ -3130,6 +3183,7 @@ export class TreeImageModel implements ITreeImageModel {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["url"] = this.url;
+        data["treeId"] = this.treeId;
         return data; 
     }
 }
@@ -3137,6 +3191,37 @@ export class TreeImageModel implements ITreeImageModel {
 export interface ITreeImageModel {
     id?: string | undefined;
     url?: string | undefined;
+    treeId?: string | undefined;
+}
+
+export class GetRandomTreesImagesQuery implements IGetRandomTreesImagesQuery {
+
+    constructor(data?: IGetRandomTreesImagesQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): GetRandomTreesImagesQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetRandomTreesImagesQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data; 
+    }
+}
+
+export interface IGetRandomTreesImagesQuery {
 }
 
 export class ResultOfString implements IResultOfString {

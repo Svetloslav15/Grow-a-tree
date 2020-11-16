@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0a882328-b90f-4bd2-bbbe-41b3616f497a",
+		"_postman_id": "2a4743f0-0d84-4d85-a95a-2f321201929c",
 		"name": "GrowATree Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -47,7 +47,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8537f1e4-52dc-4ce2-9f3b-9fa0f8f9f8b5",
+								"id": "6bff3b1d-5784-48cf-9ac3-e83af9f2b811",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", jsonData.data.accessToken);"
@@ -141,7 +141,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "f1531b30-fb05-4e95-bff9-18a95d2f59f0",
+								"id": "67d17b56-310d-49ee-ae84-e540ba2632e4",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -1036,6 +1036,24 @@
 									"value": "1",
 									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRandomImages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/random-images",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"random-images"
 							]
 						}
 					},
