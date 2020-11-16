@@ -23,7 +23,6 @@ let initialState = {
 
 const authReducer = (state = initialState, action) => {
     state = Cookies.get(CookieNames.currentUser) ? JSON.parse(Cookies.get(CookieNames.currentUser)) : emptyUser;
-    console.log(new Date(new Date().toISOString()).getTime() - new Date(state.expires).getTime());
     if (new Date(new Date().toISOString()).getTime() >= new Date(state.expires).getTime()) {
         AuthService.getNewAccessToken({
             accessToken: state.accessToken,
@@ -32,6 +31,10 @@ const authReducer = (state = initialState, action) => {
             state = {...response.data};
             if (response.succeeded) {
                 Cookies.set(CookieNames.currentUser, response.data);
+            }
+            else {
+                Cookies.remove(CookieNames.currentUser);
+                state = emptyUser;
             }
         });
     }
