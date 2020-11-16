@@ -13,6 +13,7 @@ import AlertService from '../../../../services/alertService';
 import ContentTypes from '../../../../static/contentTypes';
 import SuccessMessages from '../../../../static/successMessages';
 import ErrorMessages from '../../../../static/errorMessages';
+import TreeCategories from '../../../../static/treeCategories';
 
 const AddTreePage = ({}) => {
     const [data, setData] = useState({});
@@ -84,7 +85,7 @@ const AddTreePage = ({}) => {
                         <DropdownField width={12}
                                        id='category'
                                        label='Категория'
-                                       values={['test', 'test1', 'test2']}
+                                       values={TreeCategories}
                                        onChange={handleChange}/>
                         <FileInput onChange={handleFilesUpload}/>
                         <div className='text-right mt-3'>
