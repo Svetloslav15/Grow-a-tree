@@ -9,9 +9,13 @@ import Map from '../../../common/Map/Map';
 import Button from '../../../common/Button/Button';
 import FileInput from '../../../common/FileInput/FileInput';
 import TreeService from '../../../../services/treeService';
+import AlertService from '../../../../services/alertService';
+import ContentTypes from '../../../../static/contentTypes';
+import SuccessMessages from '../../../../static/successMessages';
+import ErrorMessages from '../../../../static/errorMessages';
 
 const AddTreePage = ({}) => {
-    const [data, setData] = useState({files: []});
+    const [data, setData] = useState({});
     const currUser = useSelector(state => state.auth);
 
     const handleChange = (event) => {
@@ -30,11 +34,16 @@ const AddTreePage = ({}) => {
     };
 
     const handleSubmit = async () => {
-        console.log(data);
+        if (Object.keys(data).length !== 6) {
+            return AlertService.error(ErrorMessages.allFieldsAreRequired);
+        }
         const formData = new FormData();
-        const images = [...data.files];
-        for (let i = 0 ; i < images.length ; i++) {
-            formData.append("ImageFiles", images[i]);
+        let images;
+        if (data.files) {
+            images = [...data.files];
+            for (let i = 0; i < images.length; i++) {
+                formData.append("ImageFiles", images[i]);
+            }
         }
         formData.append('nickname', data.nickname);
         formData.append('type', data.type);
@@ -43,8 +52,14 @@ const AddTreePage = ({}) => {
         formData.append('longitude', data.longitude);
         formData.append('City', "Blagoevgrad");
         formData.append('ownerId', currUser.id);
-        const res = await TreeService.postAuthorizedAddTree(formData, currUser.accessToken, 'multipart/form-data');
-        console.log(res.data);
+
+        const res = await TreeService.postAuthorizedAddTree(formData, currUser.accessToken, ContentTypes.FormData);
+
+        if (res.succeeded) {
+            setData({});
+            return await AlertService.success(SuccessMessages.successAddedTree);
+        }
+        return await AlertService.error(res.errors[0]);
     };
 
     return (

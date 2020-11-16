@@ -19,7 +19,6 @@ export default {
     },
     postAuthorized: async (url, data, token, contentType = ContentTypes.ApplicationJson) => {
         data = contentType === ContentTypes.ApplicationJson ? JSON.stringify(data) : data;
-
         const response = await axios(`${BASE_URL}${url}`, {
             method: 'post',
             data,

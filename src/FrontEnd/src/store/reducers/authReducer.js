@@ -20,12 +20,10 @@ const initialState = {
     refreshToken: emptyUser.refreshToken,
     username: emptyUser.username
 };
-let isFetching = false;
 
 const authReducer = (state = initialState, action) => {
     state = Cookies.get(CookieNames.currentUser) ? JSON.parse(Cookies.get(CookieNames.currentUser)) : emptyUser;
-    if (new Date().getTime() >= new Date(state.expires).getTime() && !isFetching) {
-        isFetching = true;
+    if (new Date().getTime() >= new Date(state.expires).getTime()) {
         AuthService.getNewAccessToken({
             accessToken: state.accessToken,
             refreshToken: state.refreshToken
