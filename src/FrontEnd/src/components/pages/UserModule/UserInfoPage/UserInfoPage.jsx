@@ -16,6 +16,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import Layout from '../Layout/Layout';
 import Cities from "../../../../static/cities";
 import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
+import ChangeImage from "./ChangeImage/ChangeImage";
 
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 const BgShape4 = require('../../../../assets/bg-shape-4.png');
@@ -59,6 +60,7 @@ const UserInfoPage = () => {
                 <div className='col-md-12 row'>
                     <div className='col-md-3'>
                         <img className={style.profileImage} src={currUser.profilePictureUrl} alt={currUser.userName}/>
+                        <ChangeImage/>
                     </div>
                     <div className='col-md-7'>
                         <p className={style.username}>@{currUser.userName}</p>
