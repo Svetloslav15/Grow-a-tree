@@ -161,6 +161,12 @@ namespace Common.Constants
 
         #endregion
 
+        #region Image
+
+        public const string ImageRequiredErrorMessage = "Снимката липсва";
+
+        #endregion
+
         #region Tree
 
         public const string TreeNicknameRequiredErrorMessage = "Името на дървото е задължително";
