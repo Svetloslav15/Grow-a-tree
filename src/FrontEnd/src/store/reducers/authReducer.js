@@ -12,7 +12,7 @@ const emptyUser = {
     refreshToken: ''
 };
 
-const initialState = {
+let initialState = {
     accessToken: emptyUser.accessToken,
     expires: emptyUser.expires,
     id: emptyUser.id,
@@ -23,15 +23,16 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
     state = Cookies.get(CookieNames.currentUser) ? JSON.parse(Cookies.get(CookieNames.currentUser)) : emptyUser;
-    if (new Date().getTime() >= new Date(state.expires).getTime()) {
+    console.log(new Date(new Date().toISOString()).getTime() - new Date(state.expires).getTime());
+    if (new Date(new Date().toISOString()).getTime() >= new Date(state.expires).getTime()) {
         AuthService.getNewAccessToken({
             accessToken: state.accessToken,
             refreshToken: state.refreshToken
-        }).then((data) => {
-            console.log(data);
-            //TODO check if it saves data correctly
-            state = {...data};
-            console.log(data);
+        }).then((response) => {
+            state = {...response.data};
+            if (response.succeeded) {
+                Cookies.set(CookieNames.currentUser, response.data);
+            }
         });
     }
     switch (action.type) {
