@@ -1,29 +1,19 @@
 import baseService from './baseService';
 
 const ROUTES = {
-    addTree: '/trees/upsert'
+    postAuthorizedAddTree: '/trees/upsert'
 };
-export default {
-    get: new Proxy({}, {
-        get(target, propName) {
-            return async (urlParams) => await baseService.get(`${ROUTES[propName]}${urlParams}`);
+export default new Proxy({}, {
+    get(target, propName) {
+        if (propName.includes('postAuthorized')) {
+            return async (data, token, contentType) => await baseService.postAuthorized(ROUTES[propName], data, token, contentType);
         }
-    }),
-    post: new Proxy({}, {
-        get(target, propName) {
+        else if (propName.startsWith('post')) {
             return async (data) => await baseService.post(ROUTES[propName], data);
         }
-    }),
-    getAuthorized: new Proxy({}, {
-        get(target, propName) {
+        else if (propName.includes('getAuthorized')) {
             return async (urlParams, token) => await baseService.getAuthorized(`${ROUTES[propName]}${urlParams}`, token);
         }
-    }),
-    postAuthorized: new Proxy({}, {
-        get(target, propName) {
-            return async (data, token, contentType) => {
-                return await baseService.postAuthorized(ROUTES[propName], data, token, contentType);
-            }
-        }
-    }),
-}
+        return async (urlParams) => await baseService.get(`${ROUTES[propName]}${urlParams}`);
+    }
+});

@@ -30,6 +30,7 @@ const authReducer = (state = initialState, action) => {
             accessToken: state.accessToken,
             refreshToken: state.refreshToken
         }).then((data) => {
+            console.log(data);
             //TODO check if it saves data correctly
             state = {...data};
             console.log(data);

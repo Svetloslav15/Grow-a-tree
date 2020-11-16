@@ -11,7 +11,7 @@ import FileInput from '../../../common/FileInput/FileInput';
 import TreeService from '../../../../services/treeService';
 
 const AddTreePage = ({}) => {
-    const [data, setData] = useState({});
+    const [data, setData] = useState({files: []});
     const currUser = useSelector(state => state.auth);
 
     const handleChange = (event) => {
@@ -30,6 +30,7 @@ const AddTreePage = ({}) => {
     };
 
     const handleSubmit = async () => {
+        console.log(data);
         const formData = new FormData();
         const images = [...data.files];
         for (let i = 0 ; i < images.length ; i++) {
@@ -42,7 +43,8 @@ const AddTreePage = ({}) => {
         formData.append('longitude', data.longitude);
         formData.append('City', "Blagoevgrad");
         formData.append('ownerId', currUser.id);
-        const res = await TreeService.postAuthorized.addTree(formData, currUser.accessToken, 'multipart/form-data');
+        const res = await TreeService.postAuthorizedAddTree(formData, currUser.accessToken, 'multipart/form-data');
+        console.log(res.data);
     };
 
     return (
