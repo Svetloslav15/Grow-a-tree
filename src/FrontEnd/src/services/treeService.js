@@ -3,6 +3,7 @@ import baseService from './baseService';
 const ROUTES = {
     postAuthorizedAddTree: '/trees/upsert'
 };
+
 export default new Proxy({}, {
     get(target, propName) {
         if (propName.startsWith('postAuthorized')) {

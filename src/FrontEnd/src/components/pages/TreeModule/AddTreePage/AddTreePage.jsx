@@ -14,6 +14,8 @@ import ContentTypes from '../../../../static/contentTypes';
 import SuccessMessages from '../../../../static/successMessages';
 import ErrorMessages from '../../../../static/errorMessages';
 import TreeCategories from '../../../../static/treeCategories';
+import TreeTypes from '../../../../static/treeTypes';
+import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
 
 const AddTreePage = ({}) => {
     const [data, setData] = useState({});
@@ -43,7 +45,7 @@ const AddTreePage = ({}) => {
         if (data.files) {
             images = [...data.files];
             for (let i = 0; i < images.length; i++) {
-                formData.append("ImageFiles", images[i]);
+                formData.append('ImageFiles', images[i]);
             }
         }
         formData.append('nickname', data.nickname);
@@ -65,23 +67,23 @@ const AddTreePage = ({}) => {
 
     return (
         <Layout>
-            <div className='ml-5 col-md-12 p-5'>
-                <div className='row justify-content-around'>
+            <div className='mx-0 col-md-12 p-5'>
+                <div className='mx-0 row justify-content-around'>
                     <h2 className={style.title}># Добави дърво</h2>
                     <h3 className={style.subtitle}># Изберете локация за дървото</h3>
                 </div>
-                <div className='row col-md-12'>
-                    <div className='col-md-6'>
+                <div className='mx-0 row col-md-12'>
+                    <div className='mx-0 col-md-6'>
                         <InputField type='email'
                                     label={'Прякор'}
                                     id='nickname'
                                     width={12}
                                     onChange={handleChange}/>
-                        <DropdownField width={12}
-                                       id='type'
-                                       label='Вид'
-                                       values={['test', 'test1', 'test2']}
-                                       onChange={handleChange}/>
+                        <InputAutoComplete label='Вид'
+                                           id='type'
+                                           data={TreeTypes}
+                                           width={12}
+                                           onChange={handleChange}/>
                         <DropdownField width={12}
                                        id='category'
                                        label='Категория'
