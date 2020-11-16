@@ -3,13 +3,14 @@ import baseService from './baseService';
 const ROUTES = {
     getAuthorizedUserById: '/users/',
     postAuthorizedEditUser: '/users/edit',
-    getFacebookProfilePicture: 'https://graph.facebook.com'
+    getFacebookProfilePicture: 'https://graph.facebook.com',
+    postAuthorizedChangeProfilePicture: '/users/change-profile-picture'
 };
 
 export default new Proxy({}, {
     get(target, propName) {
         if (propName.startsWith('postAuthorized')) {
-            return async (data, token) => await baseService.postAuthorized(ROUTES[propName], data, token);
+            return async (data, token, contentType) => await baseService.postAuthorized(ROUTES[propName], data, token, contentType);
         }
         else if (propName.startsWith('post')) {
             return async (data) => await baseService.post(ROUTES[propName], data);

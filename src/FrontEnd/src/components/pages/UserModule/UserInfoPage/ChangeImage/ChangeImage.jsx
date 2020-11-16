@@ -1,18 +1,25 @@
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
+
 import Button from '../../../../common/Button/Button';
 import FileInput from '../../../../common/FileInput/FileInput';
 import AlertService from '../../../../../services/alertService';
+import UsersService from '../../../../../services/usersService';
 
-const ChangeImage = ({userId}) => {
+const ChangeImage = () => {
     const [image, setImage] = useState(null);
+    const currUser = useSelector(state => state.auth);
 
     const handleFilesUpload = (event) => {
         setImage(event.target.files[0])
     };
 
-    const handleSubmit = () => {
-        console.log(image);
-        console.log(userId);
+    const handleSubmit = async () => {
+        const formData = new FormData();
+        formData.append('Id', currUser.Id);
+        formData.append('ProfilePictureFile', image);
+        const response = await UsersService.postAuthorizedChangeProfilePicture(formData, currUser.accessToken, 'multipart/form-data');
+        console.log(response.data);
     };
 
     return (

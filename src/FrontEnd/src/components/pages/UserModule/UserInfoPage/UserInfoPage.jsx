@@ -44,7 +44,7 @@ const UserInfoPage = () => {
     };
 
     const handleSubmit = async () => {
-        const response = await UsersService.postAuthorizedEditUser(currUser, stateUserData.accessToken);
+        const response = await UsersService.postAuthorizedEditUser(currUser, stateUserData.accessToken, 'application/json');
 
         if (response.data.succeeded) {
             AlertService.success(SuccessMessages.successEditYourInfo);
@@ -53,14 +53,14 @@ const UserInfoPage = () => {
             AlertService.error(response.data.errors[0]);
         }
     };
-
+    console.log(currUser);
     return (
         <Layout>
             <div className={`${style.wrapper} col-md-9`}>
                 <div className='col-md-12 row'>
                     <div className='col-md-3'>
                         <img className={style.profileImage} src={currUser.profilePictureUrl} alt={currUser.userName}/>
-                        <ChangeImage userId={currUser.id}/>
+                        <ChangeImage/>
                     </div>
                     <div className='col-md-7'>
                         <p className={style.username}>@{currUser.userName}</p>
