@@ -1,9 +1,9 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace GrowATree.WebAPI.Controllers
+﻿namespace GrowATree.WebAPI.Controllers
 {
+    using MediatR;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.DependencyInjection;
+
     [ApiController]
     [Route("api/[controller]")]
     public abstract class ApiController : ControllerBase

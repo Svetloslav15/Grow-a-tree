@@ -525,6 +525,77 @@ export class AuthClient implements IAuthClient {
     }
 }
 
+export interface IImagesClient {
+    uploadImage(imageFile: FileParameter | null | undefined): Observable<ResultOfImageModel>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ImagesClient implements IImagesClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    uploadImage(imageFile: FileParameter | null | undefined): Observable<ResultOfImageModel> {
+        let url_ = this.baseUrl + "/api/Images/upload-image";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (imageFile !== null && imageFile !== undefined)
+            content_.append("ImageFile", imageFile.data, imageFile.fileName ? imageFile.fileName : "ImageFile");
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUploadImage(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUploadImage(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfImageModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfImageModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUploadImage(response: HttpResponseBase): Observable<ResultOfImageModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfImageModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfImageModel>(<any>null);
+    }
+}
+
 export interface ITreesClient {
     getById(id: string | null): Observable<ResultOfTreeModel>;
     getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel>;
@@ -1185,7 +1256,7 @@ export class TreesClient implements ITreesClient {
         if (id !== null && id !== undefined)
             content_.append("Id", id.toString());
         if (newImageFile !== null && newImageFile !== undefined)
-            content_.append("newImageFile", newImageFile.data, newImageFile.fileName ? newImageFile.fileName : "newImageFile");
+            content_.append("NewImageFile", newImageFile.data, newImageFile.fileName ? newImageFile.fileName : "NewImageFile");
 
         let options_ : any = {
             body: content_,
@@ -2371,6 +2442,98 @@ export interface IRefreshTokenCommand {
     refreshToken: string;
 }
 
+export class ResultOfImageModel implements IResultOfImageModel {
+    data?: ImageModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfImageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? ImageModel.fromJS(_data["data"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfImageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfImageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfImageModel {
+    data?: ImageModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class ImageModel implements IImageModel {
+    id?: string | undefined;
+    url?: string | undefined;
+
+    constructor(data?: IImageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.url = _data["url"];
+        }
+    }
+
+    static fromJS(data: any): ImageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ImageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["url"] = this.url;
+        return data; 
+    }
+}
+
+export interface IImageModel {
+    id?: string | undefined;
+    url?: string | undefined;
+}
+
 export class ResultOfTreeModel implements IResultOfTreeModel {
     data?: TreeModel | undefined;
     succeeded?: boolean;
@@ -2579,46 +2742,6 @@ export interface IUserModel {
     city?: string | undefined;
     phoneNumber?: string | undefined;
     profilePictureUrl?: string | undefined;
-}
-
-export class ImageModel implements IImageModel {
-    id?: string | undefined;
-    url?: string | undefined;
-
-    constructor(data?: IImageModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.url = _data["url"];
-        }
-    }
-
-    static fromJS(data: any): ImageModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new ImageModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["url"] = this.url;
-        return data; 
-    }
-}
-
-export interface IImageModel {
-    id?: string | undefined;
-    url?: string | undefined;
 }
 
 export class ResultOfTreeShortInfoModel implements IResultOfTreeShortInfoModel {

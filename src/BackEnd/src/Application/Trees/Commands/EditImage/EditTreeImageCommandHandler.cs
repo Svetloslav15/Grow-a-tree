@@ -24,7 +24,7 @@
 
         public async Task<Result<string>> Handle(EditTreeImageCommand request, CancellationToken cancellationToken)
         {
-            if (!this.cloudinaryService.IsFileValid(request.newImageFile))
+            if (!this.cloudinaryService.IsFileValid(request.NewImageFile))
             {
                 return Result<string>.Failure(ErrorMessages.TreeImageInvalidFormatErrorMessage);
             }
@@ -42,7 +42,7 @@
                 return Result<string>.Failure(ErrorMessages.NotAllowedErrorMessage);
             }
 
-            var newImageUrl = await this.cloudinaryService.UploudAsync(request.newImageFile);
+            var newImageUrl = await this.cloudinaryService.UploudAsync(request.NewImageFile);
 
             imageModel.Url = newImageUrl;
             await this.context.SaveChangesAsync(cancellationToken);

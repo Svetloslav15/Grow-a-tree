@@ -299,6 +299,44 @@
         }
       }
     },
+    "/api/Images/upload-image": {
+      "post": {
+        "tags": [
+          "Images"
+        ],
+        "operationId": "Images_UploadImage",
+        "parameters": [
+          {
+            "type": "file",
+            "name": "ImageFile",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "nullable": true
+            },
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfImageModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Trees/{id}": {
       "get": {
         "tags": [
@@ -882,7 +920,7 @@
           },
           {
             "type": "file",
-            "name": "newImageFile",
+            "name": "NewImageFile",
             "in": "formData",
             "schema": {
               "type": "string",
@@ -1611,6 +1649,44 @@
           }
         }
       },
+      "ResultOfImageModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ImageModel"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ImageModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "ResultOfTreeModel": {
         "type": "object",
         "additionalProperties": false,
@@ -1742,20 +1818,6 @@
             "nullable": true
           },
           "profilePictureUrl": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "ImageModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "url": {
             "type": "string",
             "nullable": true
           }
