@@ -1,10 +1,7 @@
 import baseService from './baseService';
 
 const ROUTES = {
-    getAuthorizedUserById: '/users/',
-    postAuthorizedEditUser: '/users/edit',
-    getFacebookProfilePicture: 'https://graph.facebook.com',
-    postAuthorizedChangeProfilePicture: '/users/change-profile-picture'
+    postAuthorizedAddTree: '/trees/upsert'
 };
 
 export default new Proxy({}, {
