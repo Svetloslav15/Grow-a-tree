@@ -6,5 +6,6 @@ export default {
     successSendLinkForForgottenPassword: 'Успешно изпратихте линк за забравена парола!',
     successResetPassword: 'Успешно сменихте вашата парола!',
     successEditYourInfo: 'Успешно променихте вашите данни!',
+    successChangeProfilePicture: 'Успешно сменихте вашата профилна снимка!',
     successAddedTree: 'Успешно добавихте дърво!'
 }
