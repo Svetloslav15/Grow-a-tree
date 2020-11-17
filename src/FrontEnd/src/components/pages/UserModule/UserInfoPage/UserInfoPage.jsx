@@ -13,7 +13,7 @@ import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
 import {CHANGE_IS_USER_NAV_LOCKED, CHANGE_IS_USER_NAV_OPENED} from '../../../../store/actions/actionTypes';
 import Sidebar from '../Sidebar/Sidebar';
-import Layout from '../Layout/Layout';
+import Layout from '../UserLayout/UserLayout';
 import Cities from "../../../../static/cities";
 import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
 import ChangeImage from "./ChangeImage/ChangeImage";

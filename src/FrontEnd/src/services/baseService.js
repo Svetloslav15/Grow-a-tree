@@ -6,14 +6,16 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default {
     get: async (url) => await axios.get(`${BASE_URL}${url}`),
     getExternal: async (url) => await axios.get(`${url}`),
-    post: async (url, data) => {
-        let res = await axios({
+    post: async (url, data, contentType = ContentTypes.ApplicationJson) => {
+        data = contentType === ContentTypes.ApplicationJson ? JSON.stringify(data) : data;
+
+        const response = await axios({
             method: 'post',
             url: `${BASE_URL}${url}`,
             data,
-            headers: {"Content-Type": "application/json"}
+            headers: {"Content-Type": contentType}
         });
-        return res.data;
+        return response.data;
     },
     postAuthorized: async (url, data, token, contentType = ContentTypes.ApplicationJson) => {
         data = contentType === ContentTypes.ApplicationJson ? JSON.stringify(data) : data;

@@ -28,7 +28,7 @@ const InputAutoComplete = ({width, label, id, icon, data, onChange, className}) 
 
     return (
         <div className={`${style.wrapper} md-form col-md-${width}`}>
-            <i className={`${style.icon} ${icon} prefix`}/>
+            {icon && (<i className={`${style.icon} ${icon} prefix`}/>)}
             <input list='data-list-items' id={id} className='form-control'
                    onSelect={() => setHidden(true)}
                    onChange={handleChange}

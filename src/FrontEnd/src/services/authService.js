@@ -9,6 +9,7 @@ const ROUTES = {
     resendConfirmationLink: '/auth/resend-link-confirm-email',
     resetPassword: '/auth/reset-password',
     externalLogin: '/auth/external-login',
+    getNewAccessToken: '/auth/refresh-token'
 };
 
 export default new Proxy({}, {

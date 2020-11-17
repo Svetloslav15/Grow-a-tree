@@ -20,6 +20,7 @@ import RegisterStorePage from "./components/pages/AuthModule/RegisterStorePage/R
 import UserInfoPage from './components/pages/UserModule/UserInfoPage/UserInfoPage';
 import ReferralPage from './components/pages/UserModule/ReferralPage/ReferralPage';
 import AnonymousRoute from './components/common/AnonymousRoute/AnonymousRoute';
+import AddTreePage from './components/pages/TreeModule/AddTreePage/AddTreePage';
 
 const App = () => (
     <>
@@ -36,6 +37,7 @@ const App = () => (
             <Route exact path='/auth/resend-confirmation-link' component={ResendConfirmationLinkPage}/>
             <PrivateRoute exact path='/users/my-info' component={UserInfoPage}/>
             <PrivateRoute exact path='/users/referral' component={ReferralPage}/>
+            <Route exact path='/trees/add' component={AddTreePage}/>
         </Switch>
         <Footer/>
     </>
