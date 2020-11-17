@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0a882328-b90f-4bd2-bbbe-41b3616f497a",
+		"_postman_id": "2a4743f0-0d84-4d85-a95a-2f321201929c",
 		"name": "GrowATree Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -47,7 +47,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8537f1e4-52dc-4ce2-9f3b-9fa0f8f9f8b5",
+								"id": "6bff3b1d-5784-48cf-9ac3-e83af9f2b811",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", jsonData.data.accessToken);"
@@ -141,7 +141,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "f1531b30-fb05-4e95-bff9-18a95d2f59f0",
+								"id": "67d17b56-310d-49ee-ae84-e540ba2632e4",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -607,7 +607,7 @@
 							"formdata": [
 								{
 									"key": "Nickname",
-									"value": "tree4",
+									"value": "tree3",
 									"type": "text"
 								},
 								{
@@ -637,16 +637,16 @@
 								},
 								{
 									"key": "OwnerId",
-									"value": "0446497c-b24d-4729-ac21-a3845fba0efe",
+									"value": "ec6e716f-f8e1-4ebc-97ba-9a8f3b99a667",
 									"type": "text"
 								},
 								{
 									"key": "ImageFiles",
 									"type": "file",
 									"src": [
-										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/200px-Duby_nad_Pozorkou_I.jpg",
-										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/640-420-najstaroto-dyrvo-v-sveta-navyrshva-4847-godini.jpg",
-										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/768x432.jpg"
+										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/fb-post-photos.jpg",
+										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/instagram_multiple_infographic.png",
+										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/tree-770x832.jpg"
 									]
 								}
 							],
@@ -718,6 +718,16 @@
 				{
 					"name": "AddTreeImage",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -725,13 +735,13 @@
 							"formdata": [
 								{
 									"key": "TreeId",
-									"value": "8f5a9c60-219d-49b9-a433-b2a5181606ee",
+									"value": "adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504",
 									"type": "text"
 								},
 								{
 									"key": "ImagesFiles",
 									"type": "file",
-									"src": []
+									"src": "/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/instagram_multiple_infographic.png"
 								}
 							]
 						},
@@ -810,7 +820,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.asdf.CcVJLhHokS8KTDsRrN3CaECfgrjFAKO-jBAsQlcUO20",
+									"value": "{{Bearer}}",
 									"type": "string"
 								}
 							]
@@ -818,13 +828,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LocalUrl}}/trees/8f5a9c60-219d-49b9-a433-b2a5181606ee",
+							"raw": "{{LocalUrl}}/trees/adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504",
 							"host": [
 								"{{LocalUrl}}"
 							],
 							"path": [
 								"trees",
-								"8f5a9c60-219d-49b9-a433-b2a5181606ee"
+								"adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504"
 							]
 						}
 					},
@@ -1036,6 +1046,221 @@
 									"value": "1",
 									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRandomImages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/random-images",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"random-images"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Waterings",
+			"item": [
+				{
+					"name": "WaterTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"treeId\": \"adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504\",\r\n    \"watererId\": \"a2a1cd08-ea19-4107-b1af-0c80b86e7a69\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/water-tree",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"water-tree"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TreesWaterings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/tree-waterings?treeId=adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504&perPage=20",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"tree-waterings"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504"
+								},
+								{
+									"key": "perPage",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TreeWateringsCount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/tree-waterings-count?treeId=ffe529ba-311f-4999-8f53-0a1a22dcfbac",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"tree-waterings-count"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "ffe529ba-311f-4999-8f53-0a1a22dcfbac"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CanUserWaterTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/can-user-water-tree?treeId=adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504&userId=a2a1cd08-ea19-4107-b1af-0c80b86e7a69",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"can-user-water-tree"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504"
+								},
+								{
+									"key": "userId",
+									"value": "a2a1cd08-ea19-4107-b1af-0c80b86e7a69"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Images",
+			"item": [
+				{
+					"name": "UploadImage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "ImageFile",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/fb-post-photos.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/images/upload-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"images",
+								"upload-image"
 							]
 						}
 					},
