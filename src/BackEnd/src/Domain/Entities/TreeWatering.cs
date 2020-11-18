@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace GrowATree.Domain.Entities
+﻿namespace GrowATree.Domain.Entities
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     public class TreeWatering
     {
         [Key]
@@ -15,5 +15,7 @@ namespace GrowATree.Domain.Entities
         public string UserId { get; set; }
 
         public User User { get; set; }
+
+        public DateTime WateredOn { get; set; }
     }
 }

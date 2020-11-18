@@ -30,6 +30,8 @@
 
         public const int MaxDistanceBetweenTreeAndUser = 20;
 
+        public const int UserDelayToWaterTreeInMinutes = 6 * 60;
+
         public const int TreeImagesCount = 10;
 
         public const string PhoneNumberRegEx = @"\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})";

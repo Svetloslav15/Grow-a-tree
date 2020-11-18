@@ -1111,6 +1111,116 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "TreesWaterings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/tree-waterings?treeId=adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504&perPage=20",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"tree-waterings"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504"
+								},
+								{
+									"key": "perPage",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TreeWateringsCount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/tree-waterings-count?treeId=ffe529ba-311f-4999-8f53-0a1a22dcfbac",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"tree-waterings-count"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "ffe529ba-311f-4999-8f53-0a1a22dcfbac"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CanUserWaterTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/can-user-water-tree?treeId=adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504&userId=a2a1cd08-ea19-4107-b1af-0c80b86e7a69",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"can-user-water-tree"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504"
+								},
+								{
+									"key": "userId",
+									"value": "a2a1cd08-ea19-4107-b1af-0c80b86e7a69"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
