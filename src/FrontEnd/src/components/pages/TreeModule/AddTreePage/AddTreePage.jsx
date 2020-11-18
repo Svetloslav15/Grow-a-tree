@@ -16,6 +16,7 @@ import ErrorMessages from '../../../../static/errorMessages';
 import TreeCategories from '../../../../static/treeCategories';
 import TreeTypes from '../../../../static/treeTypes';
 import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
+import FormUpsertTree from "../FormUpsertTree/FormUpsertTree";
 
 const AddTreePage = ({}) => {
     const [data, setData] = useState({});
@@ -67,40 +68,12 @@ const AddTreePage = ({}) => {
 
     return (
         <Layout>
-            <div className='mx-0 col-md-12 p-5'>
-                <div className='mx-0 row justify-content-around'>
-                    <h2 className={style.title}># Добави дърво</h2>
-                    <h3 className={style.subtitle}># Изберете локация за дървото</h3>
-                </div>
-                <div className='mx-0 row col-md-12'>
-                    <div className='mx-0 col-md-6'>
-                        <InputField type='email'
-                                    label={'Прякор'}
-                                    id='nickname'
-                                    width={12}
-                                    onChange={handleChange}/>
-                        <InputAutoComplete label='Вид'
-                                           id='type'
-                                           data={TreeTypes}
-                                           width={12}
-                                           onChange={handleChange}/>
-                        <DropdownField width={12}
-                                       id='category'
-                                       label='Категория'
-                                       values={TreeCategories}
-                                       onChange={handleChange}/>
-                        <FileInput onChange={handleFilesUpload}/>
-                        <div className='text-right mt-3'>
-                            <Button type='DarkOutline' onClick={handleSubmit}>Добави</Button>
-                        </div>
-                    </div>
-                    <div className={`${style.mapContainer} col-md-5`}>
-                        {data.latitude !== undefined ? (
-                            <p>Lat: <b>{data.latitude}</b>, Lng: <b>{data.longitude}</b></p>) : ''}
-                        <Map handleCoordinates={handleCoordinates}/>
-                    </div>
-                </div>
-            </div>
+            <FormUpsertTree title='Добави дърво'
+                            data={data}
+                            handleChange={handleChange}
+                            handleFilesUpload={handleFilesUpload}
+                            handleSubmit={handleSubmit}
+                            handleCoordinates={handleCoordinates}/>
         </Layout>
     );
 };
