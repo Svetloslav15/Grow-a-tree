@@ -21,6 +21,7 @@ import UserInfoPage from './components/pages/UserModule/UserInfoPage/UserInfoPag
 import ReferralPage from './components/pages/UserModule/ReferralPage/ReferralPage';
 import AnonymousRoute from './components/common/AnonymousRoute/AnonymousRoute';
 import AddTreePage from './components/pages/TreeModule/AddTreePage/AddTreePage';
+import EditTreePage from './components/pages/TreeModule/EditTreePage/EditTreePage';
 
 const App = () => (
     <>
@@ -38,6 +39,7 @@ const App = () => (
             <PrivateRoute exact path='/users/my-info' component={UserInfoPage}/>
             <PrivateRoute exact path='/users/referral' component={ReferralPage}/>
             <Route exact path='/trees/add' component={AddTreePage}/>
+            <Route exact path='/trees/edit/:id' component={EditTreePage}/>
         </Switch>
         <Footer/>
     </>
