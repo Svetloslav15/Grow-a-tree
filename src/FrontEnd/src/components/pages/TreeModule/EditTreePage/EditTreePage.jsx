@@ -6,7 +6,7 @@ import AlertService from '../../../../services/alertService';
 import ContentTypes from '../../../../static/contentTypes';
 import SuccessMessages from '../../../../static/successMessages';
 import ErrorMessages from '../../../../static/errorMessages';
-import FormUpsertTree from "../FormUpsertTree/FormUpsertTree";
+import FormUpsertTree from '../FormUpsertTree/FormUpsertTree';
 
 const EditTreePage = () => {
     const [data, setData] = useState({});

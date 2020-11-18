@@ -1,13 +1,13 @@
 import React from 'react';
-import * as style from "./FormUpsertTree.module.scss";
-import InputField from "../../../common/InputField/InputField";
-import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
-import TreeTypes from "../../../../static/treeTypes";
-import DropdownField from "../../../common/DropdownField/DropdownField";
-import TreeCategories from "../../../../static/treeCategories";
-import FileInput from "../../../common/FileInput/FileInput";
-import Button from "../../../common/Button/Button";
-import Map from "../../../common/Map/Map";
+import * as style from './FormUpsertTree.module.scss';
+import InputField from '../../../common/InputField/InputField';
+import InputAutoComplete from '../../../common/InputAutoComplete/InputAutoComplete';
+import TreeTypes from '../../../../static/treeTypes';
+import DropdownField from '../../../common/DropdownField/DropdownField';
+import TreeCategories from '../../../../static/treeCategories';
+import FileInput from '../../../common/FileInput/FileInput';
+import Button from '../../../common/Button/Button';
+import Map from '../../../common/Map/Map';
 
 const FormUpsertTree = ({title, data, handleChange, handleFilesUpload, handleSubmit, handleCoordinates}) => (
     <div className='mx-0 col-md-12 p-5'>
