@@ -70,6 +70,7 @@ const AddTreePage = ({}) => {
         <Layout>
             <FormUpsertTree title='Добави дърво'
                             data={data}
+                            type='Добави'
                             handleChange={handleChange}
                             handleFilesUpload={handleFilesUpload}
                             handleSubmit={handleSubmit}

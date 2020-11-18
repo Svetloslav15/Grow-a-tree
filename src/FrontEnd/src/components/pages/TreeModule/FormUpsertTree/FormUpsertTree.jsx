@@ -9,7 +9,7 @@ import FileInput from '../../../common/FileInput/FileInput';
 import Button from '../../../common/Button/Button';
 import Map from '../../../common/Map/Map';
 
-const FormUpsertTree = ({title, data, handleChange, handleFilesUpload, handleSubmit, handleCoordinates}) => (
+const FormUpsertTree = ({title, data, type, handleChange, handleFilesUpload, handleSubmit, handleCoordinates}) => (
     <div className='mx-0 col-md-12 p-5'>
         <div className='mx-0 row justify-content-around'>
             <h2 className={style.title}># {title}</h2>
@@ -34,7 +34,7 @@ const FormUpsertTree = ({title, data, handleChange, handleFilesUpload, handleSub
                                onChange={handleChange}/>
                 <FileInput onChange={handleFilesUpload}/>
                 <div className='text-right mt-3'>
-                    <Button type='DarkOutline' onClick={handleSubmit}>Добави</Button>
+                    <Button type='DarkOutline' onClick={handleSubmit}>{type}</Button>
                 </div>
             </div>
             <div className={`${style.mapContainer} col-md-5`}>
