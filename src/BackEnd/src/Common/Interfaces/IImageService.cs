@@ -4,6 +4,6 @@
 
     public interface IImageService
     {
-        IFormFile ReadImageFromUrl(string url);
+        byte[] ReadImageFromUrl(string url);
     }
 }

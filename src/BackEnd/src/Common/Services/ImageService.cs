@@ -13,17 +13,15 @@
     public class ImageService : IImageService
     {
         /// <summary>
-        /// Read image data from url and convert to IFormFile
+        /// Read image data from url and convert to bytes
         /// </summary>
         /// <param name="url">Url parameter</param>
-        /// <returns>Image in IFormFile</returns>
-        public IFormFile ReadImageFromUrl(string url)
+        /// <returns>Image in bytes</returns>
+        public byte[] ReadImageFromUrl(string url)
         {
             using (var webClient = new WebClient())
             {
-                byte[] imageBytes = webClient.DownloadData(url);
-                var stream = new MemoryStream(imageBytes);
-                return new FormFile(stream, 0, imageBytes.Length, "name", Guid.NewGuid().ToString());
+                return webClient.DownloadData(url);
             }
         }
     }
