@@ -192,5 +192,13 @@ namespace Common.Constants
         public const string WateringDelayErrorMessage = "Моля изчакайте преди да полеете дървото отново";
 
         #endregion
+
+        #region TreeReports
+
+        public const string TreeReportSelfReportErrorMessage = "Не може да докладвате собственото си дърво";
+
+        public const string TreeReportDublicateErrorMessage = "Вече сте докладвали това дърво за този проблем";
+
+        #endregion
     }
 }

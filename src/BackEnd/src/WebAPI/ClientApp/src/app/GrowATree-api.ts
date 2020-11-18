@@ -596,6 +596,87 @@ export class ImagesClient implements IImagesClient {
     }
 }
 
+export interface ITreeReportsClient {
+    reportTree(message: string | null | undefined, type: TreeReportType | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class TreeReportsClient implements ITreeReportsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    reportTree(message: string | null | undefined, type: TreeReportType | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/TreeReports/report-tree";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (message !== null && message !== undefined)
+            content_.append("Message", message.toString());
+        if (type === null || type === undefined)
+            throw new Error("The parameter 'type' cannot be null.");
+        else
+            content_.append("Type", type.toString());
+        if (imageFile !== null && imageFile !== undefined)
+            content_.append("ImageFile", imageFile.data, imageFile.fileName ? imageFile.fileName : "ImageFile");
+        if (userId !== null && userId !== undefined)
+            content_.append("UserId", userId.toString());
+        if (treeId !== null && treeId !== undefined)
+            content_.append("TreeId", treeId.toString());
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processReportTree(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processReportTree(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processReportTree(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+}
+
 export interface ITreesClient {
     getById(id: string | null): Observable<ResultOfTreeModel>;
     getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel>;
@@ -2765,6 +2846,13 @@ export class ImageModel implements IImageModel {
 export interface IImageModel {
     id?: string | undefined;
     url?: string | undefined;
+}
+
+export enum TreeReportType {
+    Broken = 1,
+    Dry = 2,
+    Damaged = 3,
+    Missing = 4,
 }
 
 export class ResultOfTreeModel implements IResultOfTreeModel {

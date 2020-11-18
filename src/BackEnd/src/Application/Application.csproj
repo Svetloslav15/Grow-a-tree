@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <Folder Include="Images\Queries\" />
+    <Folder Include="TreeReportings\Queries\" />
   </ItemGroup>
 
 </Project>

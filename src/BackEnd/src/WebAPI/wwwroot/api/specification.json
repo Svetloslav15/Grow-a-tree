@@ -337,6 +337,79 @@
         ]
       }
     },
+    "/api/TreeReports/report-tree": {
+      "post": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ReportTree",
+        "parameters": [
+          {
+            "name": "Message",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Type",
+            "in": "formData",
+            "schema": {
+              "$ref": "#/components/schemas/TreeReportType"
+            },
+            "x-position": 2
+          },
+          {
+            "type": "file",
+            "name": "ImageFile",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "nullable": true
+            },
+            "nullable": true
+          },
+          {
+            "name": "UserId",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "TreeId",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Trees/{id}": {
       "get": {
         "tags": [
@@ -1858,6 +1931,22 @@
             "nullable": true
           }
         }
+      },
+      "TreeReportType": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Broken",
+          "Dry",
+          "Damaged",
+          "Missing"
+        ],
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ]
       },
       "ResultOfTreeModel": {
         "type": "object",
