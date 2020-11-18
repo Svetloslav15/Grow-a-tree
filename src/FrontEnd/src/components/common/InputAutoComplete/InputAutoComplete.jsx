@@ -8,8 +8,11 @@ const InputAutoComplete = ({width, label, id, icon, data, onChange, value}) => {
     const [dataElements, setData] = useState([]);
 
     useEffect(() => {
-        setData(data.map((x, i) => <option key={i} value={x}/>))
-    }, []);
+        if (value !== currVal) {
+            setCurrentValue(value);
+        }
+        setData(data.map((x, i) => <option key={i} value={x}/>));
+    }, [value]);
 
     const handleChange = (event) => {
         if (data.filter(x => x.toLowerCase().includes(event.target.value.toLowerCase())).length === 0) {
@@ -34,7 +37,7 @@ const InputAutoComplete = ({width, label, id, icon, data, onChange, value}) => {
                    onChange={handleChange}
                    onBlur={blur}
                    value={currVal}/>
-            {!isLabelHidden && <label htmlFor={id}>{label}</label>}
+            {!isLabelHidden && !value && <label htmlFor={id}>{label}</label>}
             <datalist id='data-list-items' className={style.datalist}>
                 {dataElements}
             </datalist>

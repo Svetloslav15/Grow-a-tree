@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import Layout from '../../../common/Layout/Layout';
 import TreeService from '../../../../services/treeService';
@@ -8,9 +8,9 @@ import SuccessMessages from '../../../../static/successMessages';
 import ErrorMessages from '../../../../static/errorMessages';
 import FormUpsertTree from '../FormUpsertTree/FormUpsertTree';
 
-const EditTreePage = () => {
+const EditTreePage = ({match}) => {
     const [data, setData] = useState({
-        email: '',
+        id:'',
         nickName: '',
         type: '',
         categorie: '',
@@ -20,6 +20,13 @@ const EditTreePage = () => {
         ownerId: ''
     });
     const currUser = useSelector(state => state.auth);
+
+    useEffect(() => {
+        if (currUser) {
+            TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken)
+                .then(data => setData({...data.data.data}))
+        }
+    }, [currUser]);
 
     const handleChange = (event) => {
         data[event.target.id] = event.target.value;

@@ -7,7 +7,7 @@ const DropdownField = ({width, onChange, values, label, id, defaultValue}) => (
             defaultValue={label}>
         <option value={label}>{label}</option>
         {
-            defaultValue && <option selected value={defaultValue}>{defaultValue}</option>
+            defaultValue ? <option selected={true} value={defaultValue}>{defaultValue}</option> : ''
         }
         {
             values.map((x, i) => <option key={i} value={x}>{x}</option>)

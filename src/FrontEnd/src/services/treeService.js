@@ -1,7 +1,8 @@
 import baseService from './baseService';
 
 const ROUTES = {
-    postAuthorizedAddTree: '/trees/upsert'
+    postAuthorizedAddTree: '/trees/upsert',
+    getAuthorizedTreeById: '/trees/'
 };
 
 export default new Proxy({}, {

@@ -11,7 +11,6 @@ import FormUpsertTree from '../FormUpsertTree/FormUpsertTree';
 
 const AddTreePage = ({}) => {
     const [data, setData] = useState({
-        email: '',
         nickName: '',
         type: '',
         categorie: '',
