@@ -37,9 +37,6 @@ const AddTreePage = ({}) => {
     };
 
     const handleSubmit = async () => {
-        if (Object.keys(data).length !== 6) {
-            return AlertService.error(ErrorMessages.allFieldsAreRequired);
-        }
         const formData = new FormData();
         let images;
         if (data.files) {
