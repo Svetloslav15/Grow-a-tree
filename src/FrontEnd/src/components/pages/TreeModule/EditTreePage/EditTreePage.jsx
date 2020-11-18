@@ -13,7 +13,7 @@ const EditTreePage = ({match}) => {
         id:'',
         nickName: '',
         type: '',
-        categorie: '',
+        category: '',
         latitude: '',
         longitude: '',
         city: '',
@@ -44,7 +44,8 @@ const EditTreePage = ({match}) => {
     };
 
     const handleSubmit = async () => {
-        if (Object.keys(data).length !== 6) {
+        console.log(Object.keys(data));
+        if (Object.keys(data).length < 6) {
             return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }
         const formData = new FormData();
@@ -56,6 +57,7 @@ const EditTreePage = ({match}) => {
             }
         }
         formData.append('nickname', data.nickname);
+        formData.append('id', data.id);
         formData.append('type', data.type);
         formData.append('category', data.category);
         formData.append('latitude', data.latitude);
@@ -66,7 +68,6 @@ const EditTreePage = ({match}) => {
         const res = await TreeService.postAuthorizedAddTree(formData, currUser.accessToken, ContentTypes.FormData);
 
         if (res.succeeded) {
-            setData({});
             return await AlertService.success(SuccessMessages.successAddedTree);
         }
         return await AlertService.error(res.errors[0]);
