@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import * as style from './InputAutoComplete.module.scss';
 
-const InputAutoComplete = ({width, label, id, icon, data, onChange, className}) => {
+const InputAutoComplete = ({width, label, id, icon, data, onChange, value}) => {
     const [isLabelHidden, setHidden] = useState(false);
-    const [currVal, setCurrentValue] = useState('');
+    const [currVal, setCurrentValue] = useState(value);
     const [previousVal, setPreviousValue] = useState('');
     const [dataElements, setData] = useState([]);
 

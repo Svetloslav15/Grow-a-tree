@@ -1,25 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 
-import * as style from './AddTreePage.module.scss';
 import Layout from '../../../common/Layout/Layout';
-import InputField from '../../../common/InputField/InputField';
-import DropdownField from '../../../common/DropdownField/DropdownField';
-import Map from '../../../common/Map/Map';
-import Button from '../../../common/Button/Button';
-import FileInput from '../../../common/FileInput/FileInput';
 import TreeService from '../../../../services/treeService';
 import AlertService from '../../../../services/alertService';
 import ContentTypes from '../../../../static/contentTypes';
 import SuccessMessages from '../../../../static/successMessages';
 import ErrorMessages from '../../../../static/errorMessages';
-import TreeCategories from '../../../../static/treeCategories';
-import TreeTypes from '../../../../static/treeTypes';
-import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
-import FormUpsertTree from "../FormUpsertTree/FormUpsertTree";
+import FormUpsertTree from '../FormUpsertTree/FormUpsertTree';
 
 const AddTreePage = ({}) => {
-    const [data, setData] = useState({});
+    const [data, setData] = useState({
+        email: '',
+        nickName: '',
+        type: '',
+        categorie: '',
+        latitude: '',
+        longitude: '',
+        city: '',
+        ownerId: ''
+    });
     const currUser = useSelector(state => state.auth);
 
     const handleChange = (event) => {

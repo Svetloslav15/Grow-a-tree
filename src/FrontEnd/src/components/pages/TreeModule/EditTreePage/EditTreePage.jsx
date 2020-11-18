@@ -9,7 +9,16 @@ import ErrorMessages from '../../../../static/errorMessages';
 import FormUpsertTree from '../FormUpsertTree/FormUpsertTree';
 
 const EditTreePage = () => {
-    const [data, setData] = useState({});
+    const [data, setData] = useState({
+        email: '',
+        nickName: '',
+        type: '',
+        categorie: '',
+        latitude: '',
+        longitude: '',
+        city: '',
+        ownerId: ''
+    });
     const currUser = useSelector(state => state.auth);
 
     const handleChange = (event) => {
@@ -44,7 +53,7 @@ const EditTreePage = () => {
         formData.append('category', data.category);
         formData.append('latitude', data.latitude);
         formData.append('longitude', data.longitude);
-        formData.append('City', "Blagoevgrad");
+        formData.append('city', "Blagoevgrad");
         formData.append('ownerId', currUser.id);
 
         const res = await TreeService.postAuthorizedAddTree(formData, currUser.accessToken, ContentTypes.FormData);
