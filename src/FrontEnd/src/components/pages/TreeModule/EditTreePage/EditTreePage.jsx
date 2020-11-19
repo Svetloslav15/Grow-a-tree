@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+
 import Layout from '../../../common/Layout/Layout';
 import TreeService from '../../../../services/treeService';
 import AlertService from '../../../../services/alertService';
@@ -8,9 +10,9 @@ import SuccessMessages from '../../../../static/successMessages';
 import ErrorMessages from '../../../../static/errorMessages';
 import FormUpsertTree from '../FormUpsertTree/FormUpsertTree';
 
-const EditTreePage = ({match}) => {
+const EditTreePage = ({history, match}) => {
     const [data, setData] = useState({
-        id:'',
+        id: '',
         nickName: '',
         type: '',
         category: '',
@@ -24,7 +26,14 @@ const EditTreePage = ({match}) => {
     useEffect(() => {
         if (currUser) {
             TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken)
-                .then(data => setData({...data.data.data}))
+                .then(data => {
+                    if (data.succeeded) {
+                        setData({...data.data.data});
+                    } else {
+                        history.push('/');
+                        AlertService.warning(ErrorMessages.treeNotExists);
+                    }
+                })
         }
     }, [currUser]);
 
@@ -86,4 +95,4 @@ const EditTreePage = ({match}) => {
     );
 };
 
-export default EditTreePage;
+export default withRouter(EditTreePage);
