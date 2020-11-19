@@ -8,5 +8,7 @@
         bool IsFileValid(IFormFile photoFile);
 
         Task<string> UploudAsync(IFormFile file);
+
+        Task<string> UploudAsync(byte[] file);
     }
 }
