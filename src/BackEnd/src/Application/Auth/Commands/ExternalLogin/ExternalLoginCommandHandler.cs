@@ -20,18 +20,23 @@
         private readonly IIdentityService identityService;
         private readonly SignInManager<User> signInManager;
         private readonly IConfiguration configuration;
+        private readonly IImageService imageService;
+        private readonly ICloudinaryService cloudinaryService;
 
         public ExternalLoginCommandHandler(
             UserManager<User> userManager,
             IIdentityService identityService,
             SignInManager<User> signInManager,
             IConfiguration configuration,
-            ICloudinaryService cloudinaryService)
+            ICloudinaryService cloudinaryService,
+            IImageService imageService)
         {
             this.userManager = userManager;
             this.identityService = identityService;
             this.signInManager = signInManager;
             this.configuration = configuration;
+            this.imageService = imageService;
+            this.cloudinaryService = cloudinaryService;
         }
 
         public async Task<Result<TokenModel>> Handle(ExternalLoginCommand request, CancellationToken cancellationToken)
@@ -54,11 +59,14 @@
                         generatedUsername = request.FirstName + request.LastName + random.Next(1, 1000);
                     }
 
+                    var imageFile = imageService.ReadImageFromUrl(request.ProfilePictureUrl);
+                    var imageUrl = await cloudinaryService.UploudAsync(imageFile);
+
                     var newUser = new User
                     {
                         Email = request.Email,
                         UserName = generatedUsername,
-                        ProfilePictureUrl = request.ProfilePictureUrl,
+                        ProfilePictureUrl = imageUrl,
                         EmailConfirmed = true,
                         FirstName = request.FirstName,
                         LastName = request.LastName,

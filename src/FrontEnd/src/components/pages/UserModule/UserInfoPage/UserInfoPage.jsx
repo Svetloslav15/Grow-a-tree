@@ -27,7 +27,6 @@ const UserInfoPage = () => {
     const [currUser, setCurrUser] = useState({});
 
     useEffect(() => {
-        console.log(currUser.profilePictureUrl);
         dispatch({type: CHANGE_IS_USER_NAV_LOCKED, data: true});
         UsersService.getAuthorizedUserById(stateUserData.id, stateUserData.accessToken)
             .then((res) => {

@@ -20,7 +20,6 @@
 
         public async Task<string> UploudAsync(IFormFile file)
         {
-            string url = " ";
             byte[] fileBytes;
             using (var stream = new MemoryStream())
             {
@@ -28,19 +27,7 @@
                 fileBytes = stream.ToArray();
             }
 
-            using (var uploadStream = new MemoryStream(fileBytes))
-            {
-                var uploadParams = new ImageUploadParams()
-                {
-                    File = new FileDescription(file.FileName, uploadStream),
-                    PublicId = $"GrowATree/{Guid.NewGuid().ToString()}",
-                };
-                var result = await this.cloudinary.UploadAsync(uploadParams);
-
-                url = result.Url.AbsoluteUri;
-            }
-
-            return url;
+            return await this.UploudAsync(fileBytes);
         }
 
         public bool IsFileValid(IFormFile photoFile)
@@ -61,6 +48,25 @@
             }
 
             return true;
+        }
+
+        public async Task<string> UploudAsync(byte[] fileBytes)
+        {
+            string url = " ";
+
+            using (var uploadStream = new MemoryStream(fileBytes))
+            {
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(Guid.NewGuid().ToString(), uploadStream),
+                    PublicId = $"GrowATree/{Guid.NewGuid().ToString()}",
+                };
+                var result = await this.cloudinary.UploadAsync(uploadParams);
+
+                url = result.Url.AbsoluteUri;
+            }
+
+            return url;
         }
     }
 }
