@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using GrowATree.Application.Common.Models;
+    using GrowATree.Application.TreeReportings.Commands.MarkReportAsSpam;
     using GrowATree.Application.TreeReportings.Commands.ReportTree;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,22 @@
                     return Result<bool>.Failure(errorMessage);
                 }
 
+                return await this.Mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("mark-as-spam")]
+        public async Task<ActionResult<Result<bool>>> MarkReportAsSpam([FromBody] MarkTreeReportAsSpamCommand command)
+        {
+            try
+            {
                 return await this.Mediator.Send(command);
             }
             catch (Exception ex)

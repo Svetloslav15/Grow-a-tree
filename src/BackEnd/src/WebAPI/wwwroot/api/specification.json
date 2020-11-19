@@ -410,6 +410,43 @@
         ]
       }
     },
+    "/api/TreeReports/mark-as-spam": {
+      "post": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_MarkReportAsSpam",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkTreeReportAsSpamCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/Trees/{id}": {
       "get": {
         "tags": [
@@ -1947,6 +1984,16 @@
           3,
           4
         ]
+      },
+      "MarkTreeReportAsSpamCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "treeReportId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       },
       "ResultOfTreeModel": {
         "type": "object",

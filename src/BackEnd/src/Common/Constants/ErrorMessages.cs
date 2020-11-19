@@ -199,6 +199,8 @@ namespace Common.Constants
 
         public const string TreeReportDublicateErrorMessage = "Вече сте докладвали това дърво за този проблем";
 
+        public const string TreeReporNotFoundErrorMessage = "Вече сте докладвали това дърво за този проблем";
+
         #endregion
     }
 }
