@@ -27,7 +27,7 @@ const EditTreePage = ({history, match}) => {
         if (currUser) {
             TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken)
                 .then(data => {
-                    if (data.succeeded) {
+                    if (data.data.succeeded) {
                         setData({...data.data.data});
                     } else {
                         history.push('/');
@@ -84,13 +84,13 @@ const EditTreePage = ({history, match}) => {
 
     return (
         <Layout>
-            <FormUpsertTree title='Промени дърво'
-                            data={data}
-                            type='Промени'
-                            handleChange={handleChange}
-                            handleFilesUpload={handleFilesUpload}
-                            handleSubmit={handleSubmit}
-                            handleCoordinates={handleCoordinates}/>
+            {data.nickname ? (<FormUpsertTree title='Промени дърво'
+                                              data={data}
+                                              type='Промени'
+                                              handleChange={handleChange}
+                                              handleFilesUpload={handleFilesUpload}
+                                              handleSubmit={handleSubmit}
+                                              handleCoordinates={handleCoordinates}/>) : <p>Зареждане....</p>}
         </Layout>
     );
 };
