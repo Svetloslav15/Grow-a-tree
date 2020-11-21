@@ -1,5 +1,6 @@
 ﻿namespace GrowATree.Application.TreeReportings.Commands.ReportTree
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -8,6 +9,7 @@
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
+    using GrowATree.Domain.Enums;
     using MediatR;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -57,7 +59,7 @@
             var duplicateReport = await this.context.TreeReports
                 .AnyAsync(x => x.TreeId == request.TreeId
                 && x.UserId == request.UserId
-                && x.Type == request.Type
+                && x.Type == (TreeReportType)Enum.Parse(typeof(TreeReportType), request.Type)
                 && x.IsActive == true
                 && x.IsSpam == false);
 
@@ -74,7 +76,7 @@
                 IsSpam = false,
                 ImageUrl = await this.cloudinaryService.UploudAsync(request.ImageFile),
                 Message = request.Message,
-                Type = request.Type,
+                Type = (TreeReportType)Enum.Parse(typeof(TreeReportType), request.Type),
             };
 
             await this.context.TreeReports.AddAsync(newReport);

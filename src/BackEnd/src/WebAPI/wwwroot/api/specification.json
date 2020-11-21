@@ -357,7 +357,8 @@
             "name": "Type",
             "in": "formData",
             "schema": {
-              "$ref": "#/components/schemas/TreeReportType"
+              "type": "string",
+              "nullable": true
             },
             "x-position": 2
           },
@@ -422,6 +423,43 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/MarkTreeReportAsSpamCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/archive-report": {
+      "post": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ArchiveReport",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchiveTreeReportCommand"
               }
             }
           },
@@ -1969,27 +2007,25 @@
           }
         }
       },
-      "TreeReportType": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Broken",
-          "Dry",
-          "Damaged",
-          "Missing"
-        ],
-        "enum": [
-          1,
-          2,
-          3,
-          4
-        ]
-      },
       "MarkTreeReportAsSpamCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "treeReportId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ArchiveTreeReportCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "treeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportType": {
             "type": "string",
             "nullable": true
           }

@@ -9,7 +9,7 @@
     {
         public string Message { get; set; }
 
-        public TreeReportType Type { get; set; }
+        public string Type { get; set; }
 
         public IFormFile ImageFile { get; set; }
 

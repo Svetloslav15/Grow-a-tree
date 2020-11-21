@@ -597,8 +597,9 @@ export class ImagesClient implements IImagesClient {
 }
 
 export interface ITreeReportsClient {
-    reportTree(message: string | null | undefined, type: TreeReportType | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
+    reportTree(message: string | null | undefined, type: string | null | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
     markReportAsSpam(command: MarkTreeReportAsSpamCommand): Observable<ResultOfBoolean>;
+    archiveReport(command: ArchiveTreeReportCommand): Observable<ResultOfBoolean>;
 }
 
 @Injectable({
@@ -614,16 +615,14 @@ export class TreeReportsClient implements ITreeReportsClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    reportTree(message: string | null | undefined, type: TreeReportType | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean> {
+    reportTree(message: string | null | undefined, type: string | null | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean> {
         let url_ = this.baseUrl + "/api/TreeReports/report-tree";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = new FormData();
         if (message !== null && message !== undefined)
             content_.append("Message", message.toString());
-        if (type === null || type === undefined)
-            throw new Error("The parameter 'type' cannot be null.");
-        else
+        if (type !== null && type !== undefined)
             content_.append("Type", type.toString());
         if (imageFile !== null && imageFile !== undefined)
             content_.append("ImageFile", imageFile.data, imageFile.fileName ? imageFile.fileName : "ImageFile");
@@ -708,6 +707,58 @@ export class TreeReportsClient implements ITreeReportsClient {
     }
 
     protected processMarkReportAsSpam(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+
+    archiveReport(command: ArchiveTreeReportCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/TreeReports/archive-report";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processArchiveReport(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processArchiveReport(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processArchiveReport(response: HttpResponseBase): Observable<ResultOfBoolean> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -2901,13 +2952,6 @@ export interface IImageModel {
     url?: string | undefined;
 }
 
-export enum TreeReportType {
-    Broken = 1,
-    Dry = 2,
-    Damaged = 3,
-    Missing = 4,
-}
-
 export class MarkTreeReportAsSpamCommand implements IMarkTreeReportAsSpamCommand {
     treeReportId?: string | undefined;
 
@@ -2942,6 +2986,46 @@ export class MarkTreeReportAsSpamCommand implements IMarkTreeReportAsSpamCommand
 
 export interface IMarkTreeReportAsSpamCommand {
     treeReportId?: string | undefined;
+}
+
+export class ArchiveTreeReportCommand implements IArchiveTreeReportCommand {
+    treeId?: string | undefined;
+    reportType?: string | undefined;
+
+    constructor(data?: IArchiveTreeReportCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.treeId = _data["treeId"];
+            this.reportType = _data["reportType"];
+        }
+    }
+
+    static fromJS(data: any): ArchiveTreeReportCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArchiveTreeReportCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["treeId"] = this.treeId;
+        data["reportType"] = this.reportType;
+        return data; 
+    }
+}
+
+export interface IArchiveTreeReportCommand {
+    treeId?: string | undefined;
+    reportType?: string | undefined;
 }
 
 export class ResultOfTreeModel implements IResultOfTreeModel {
