@@ -46,6 +46,11 @@ const EditTreePage = ({history, match}) => {
 
     const handleCoordinates = async (latitude, longitute) => {
         const res = await GeoCodingService.getCityByCoords(latitude, longitute);
+        const {municipality, suburb, village} = res.data.address;
+        const result = [municipality, suburb, village]
+            .filter(x => x !== undefined)
+            .map(x => `${x} `);
+        setLocation(result);
         data.city = res.data.address.municipality;
         data.latitude = latitude;
         data.longitude = longitute;
