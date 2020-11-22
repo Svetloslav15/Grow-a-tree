@@ -5,5 +5,14 @@ const ROUTES = {
 }
 
 export default {
-    getCityByCoords: async (lat, lon) => await axios.get(`${ROUTES.getCityByCoords}lat=${lat}&lon=${lon}&format=json`)
+    getCityByCoords: async (lat, lon) => {
+        return await axios({
+            method: 'GET',
+            url: `${ROUTES.getCityByCoords}lat=${lat}&lon=${lon}&format=json`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept-Language': 'bg'
+            }
+        });
+    }
 }
