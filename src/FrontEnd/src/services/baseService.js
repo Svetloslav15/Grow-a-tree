@@ -13,7 +13,9 @@ export default {
             method: 'post',
             url: `${BASE_URL}${url}`,
             data,
-            headers: {"Content-Type": contentType}
+            headers: {
+                "Content-Type": `${contentType}`
+            }
         });
         return response.data;
     },
@@ -24,7 +26,7 @@ export default {
             data,
             headers: {
                 "Authorization": `Bearer ${token}`,
-                "Content-type": {contentType}
+                "Content-type": `${contentType}`
             }
         });
 

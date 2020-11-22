@@ -4,12 +4,12 @@ import {Link} from 'react-router-dom';
 import * as style from './Item.module.scss';
 
 const Item = ({icon, link, text, onClick}) => (
-    <div className={style.item} onClick={onClick}>
-        <Link to={link}>
+    <Link to={link} className='w-100'>
+        <div className={style.item} onClick={onClick}>
             <i className={`${style.icon} fas fa-${icon}`}/>
             <span className={style.text}>{text}</span>
-        </Link>
-    </div>
+        </div>
+    </Link>
 );
 
 export default Item;

@@ -10,9 +10,11 @@ import InputField from '../../../common/InputField/InputField';
 import Cities from "../../../../static/cities";
 import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
 import ErrorMessages from '../../../../static/errorMessages';
+import GeocodingService from '../../../../services/geocodingService';
 import SuccessMessages from '../../../../static/successMessages';
 import AuthService from '../../../../services/authService';
 import AlertService from '../../../../services/alertService';
+import GeoCodingService from "../../../../services/geocodingService";
 
 const BgImage = require('../../../../assets/tree-for-bg.png');
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
@@ -21,6 +23,7 @@ const BgShape3 = require('../../../../assets/bg-shape-3.png');
 
 const RegisterStorePage = ({history}) => {
     const [store, setStore] = useState({});
+    const [location, setLocation] = useState('');
 
     const handleChange = (event) => {
         const copyData = store;
@@ -28,7 +31,13 @@ const RegisterStorePage = ({history}) => {
         setStore(copyData);
     };
 
-    const handleCoordinates = (latitude, longitute) => {
+    const handleCoordinates = async (latitude, longitute) => {
+        const res = await GeoCodingService.getCityByCoords(latitude, longitute);
+        const {municipality, suburb, village} = res.data.address;
+        const result = [municipality, suburb, village]
+            .filter(x => x !== undefined)
+            .map(x => `${x} `);
+        setLocation(result);
         setStore({...store, longitute, latitude});
     };
 
@@ -115,7 +124,7 @@ const RegisterStorePage = ({history}) => {
                                            width={12}
                                            onChange={handleChange}/>
                     </div>
-                    <Map google={window.google} handleCoordinates={handleCoordinates}/>
+                    <Map location={location} google={window.google} handleCoordinates={handleCoordinates}/>
                     <div className='text-center mt-5'>
                         <Link to='/auth/forgotten-password'>
                             <span className={'dark-text'}>Забравена парола?</span>

@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-dom';
 
 import Layout from '../../../common/Layout/Layout';
 import TreeService from '../../../../services/treeService';
+import GeoCodingService from '../../../../services/geocodingService';
 import AlertService from '../../../../services/alertService';
 import ContentTypes from '../../../../static/contentTypes';
 import SuccessMessages from '../../../../static/successMessages';
@@ -21,6 +22,7 @@ const EditTreePage = ({history, match}) => {
         city: '',
         ownerId: ''
     });
+    const [location, setLocation] = useState('');
     const currUser = useSelector(state => state.auth);
 
     useEffect(() => {
@@ -42,7 +44,14 @@ const EditTreePage = ({history, match}) => {
         setData(data);
     };
 
-    const handleCoordinates = (latitude, longitute) => {
+    const handleCoordinates = async (latitude, longitute) => {
+        const res = await GeoCodingService.getCityByCoords(latitude, longitute);
+        const {municipality, suburb, village} = res.data.address;
+        const result = [municipality, suburb, village]
+            .filter(x => x !== undefined)
+            .map(x => `${x} `);
+        setLocation(result);
+        data.city = res.data.address.municipality;
         data.latitude = latitude;
         data.longitude = longitute;
         setData({...data});
@@ -53,7 +62,6 @@ const EditTreePage = ({history, match}) => {
     };
 
     const handleSubmit = async () => {
-        console.log(Object.keys(data));
         if (Object.keys(data).length < 6) {
             return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }
@@ -87,6 +95,7 @@ const EditTreePage = ({history, match}) => {
             {data.nickname ? (<FormUpsertTree title='Промени дърво'
                                               data={data}
                                               type='Промени'
+                                              location={location}
                                               handleChange={handleChange}
                                               handleFilesUpload={handleFilesUpload}
                                               handleSubmit={handleSubmit}

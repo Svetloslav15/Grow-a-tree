@@ -9,7 +9,7 @@ import FileInput from '../../../common/FileInput/FileInput';
 import Button from '../../../common/Button/Button';
 import Map from '../../../common/Map/Map';
 
-const FormUpsertTree = ({title, data, type, handleChange, handleFilesUpload, handleSubmit, handleCoordinates}) => {
+const FormUpsertTree = ({title, data, type, location, handleChange, handleFilesUpload, handleSubmit, handleCoordinates}) => {
     const [nickName, setNickname] = useState(data.nickname);
 
     useEffect(() => {
@@ -52,8 +52,7 @@ const FormUpsertTree = ({title, data, type, handleChange, handleFilesUpload, han
                     </div>
                 </div>
                 <div className={`${style.mapContainer} col-md-5`}>
-                    {data.latitude !== undefined ? (
-                        <p>Lat: <b>{data.latitude}</b>, Lng: <b>{data.longitude}</b></p>) : ''}
+                    <p>Местоположение: <span className='font-weight-bold'>{location}</span></p>
                     <Map handleCoordinates={handleCoordinates}/>
                 </div>
             </div>
