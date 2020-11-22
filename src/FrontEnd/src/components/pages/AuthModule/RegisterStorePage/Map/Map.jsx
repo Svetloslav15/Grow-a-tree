@@ -3,7 +3,7 @@ import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import * as style from './Map.module.scss';
 import Button from '../../../../common/Button/Button';
 
-const MapContainer = ({google, handleCoordinates}) => {
+const MapContainer = ({google, location, handleCoordinates}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
     const [isFetched, setFetched] = useState(false);
     const [isSelected, setIsSelected] = useState(false);
@@ -42,8 +42,7 @@ const MapContainer = ({google, handleCoordinates}) => {
                 {
                     isSelected && (
                         <div className='col-md-5'>
-                            <p><span className='font-weight-bold'>Latitude</span>: {marker.position.lat.toFixed(4)}</p>
-                            <p><span className='font-weight-bold'>Longitude</span>: {marker.position.lng.toFixed(4)}</p>
+                            <p>Местоположение: <span className='font-weight-bold'>{location}</span></p>
                         </div>)
                 }
 
