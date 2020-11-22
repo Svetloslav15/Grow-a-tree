@@ -65,7 +65,6 @@ const ExternalLoginSection = ({history}) => {
                 appId={process.env.REACT_APP_FACEBOOK_ID}
                 icon="fa-facebook"
                 fields="name,email,picture"
-                scope="public_profile,user_friends,user_actions.books"
                 cssClass={style.fbButton}
                 callback={responseFacebook}/>
         </div>
