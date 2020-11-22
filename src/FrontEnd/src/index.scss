@@ -79,3 +79,9 @@ h1, h2, h3 {
 .ExternalLoginSection_googleButton__107my > div {
   background: none !important;
 }
+
+.react-multi-carousel-item {
+  flex: auto !important;
+  position: unset !important;
+  width: 200px !important;
+}
