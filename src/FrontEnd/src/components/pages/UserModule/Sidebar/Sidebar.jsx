@@ -38,7 +38,7 @@ const Sidebar = ({history}) => {
             </div>
             <div>
                 <Item link='/users/my-info' text='Моят профил' icon='user'/>
-                <Item link='/' text='Смени парола' icon='user'/>
+                <Item link='/auth/reset-password' text='Смени парола' icon='user'/>
                 <Item link='/' text='Моите дървета' icon='user'/>
                 <Item link='/' text='Моите събития' icon='user'/>
                 <Item link='/' text='Предизвикателства' icon='user'/>
