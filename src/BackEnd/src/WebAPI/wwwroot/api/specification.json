@@ -337,6 +337,42 @@
         ]
       }
     },
+    "/api/TreeReports/active-report-types": {
+      "get": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ActiveReportTypes",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfICollectionOfTreeReportTypeModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/TreeReports/report-tree": {
       "post": {
         "tags": [
@@ -2004,6 +2040,43 @@
           "url": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "ResultOfICollectionOfTreeReportTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreeReportTypeModel"
+            }
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreeReportTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportsCount": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

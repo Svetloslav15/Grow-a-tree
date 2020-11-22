@@ -1,14 +1,17 @@
 ﻿namespace GrowATree.WebAPI.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using Common.Constants;
     using GrowATree.Application.Common.Models;
+    using GrowATree.Application.Models.TreeReporting;
     using GrowATree.Application.TreeReportings.Commands.ArchiveReport;
     using GrowATree.Application.TreeReportings.Commands.MarkReportAsSpam;
     using GrowATree.Application.TreeReportings.Commands.ReportTree;
+    using GrowATree.Application.TreeReportings.Queries.GetActiveReportTypes;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -16,6 +19,22 @@
 
     public class TreeReportsController : ApiController
     {
+        [Authorize]
+        [HttpGet("active-report-types")]
+        public async Task<ActionResult<Result<ICollection<TreeReportTypeModel>>>> ActiveReportTypes([FromQuery] GetActiveTreeReportTypesQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<ICollection<TreeReportTypeModel>>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
         [Authorize]
         [HttpPost("report-tree")]
         public async Task<ActionResult<Result<bool>>> ReportTree([FromForm] ReportTreeCommand command)
