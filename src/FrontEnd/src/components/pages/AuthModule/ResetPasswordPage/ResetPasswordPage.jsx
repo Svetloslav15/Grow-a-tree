@@ -7,6 +7,7 @@ import Button from '../../../common/Button/Button';
 import AuthService from '../../../../services/authService';
 import SuccessMessages from "../../../../static/successMessages";
 import AlertService from "../../../../services/alertService";
+import {useSelector} from "react-redux";
 
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 const BgShape4 = require('../../../../assets/bg-shape-4.png');
@@ -14,14 +15,14 @@ const BgShape4 = require('../../../../assets/bg-shape-4.png');
 const ResetPasswordPage = ({location}) => {
     const [token, setToken] = useState(location.search.slice(7));
     const [data, setData] = useState({});
-
+    const user = useSelector(state => state.auth);
     const handleChange = (event) => {
         data[event.target.id] = event.target.value;
         setData(data);
     };
 
     const handleSubmit = async () => {
-        const result = await AuthService.resetPassword({token, ...data});
+        const result = await AuthService.postAuthorizedResetPassword(data, user.accessToken);
         return result.succeeded ? AlertService.success(SuccessMessages.successResetPassword) : AlertService.error(result.errors[0]);
     };
 

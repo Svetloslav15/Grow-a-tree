@@ -13,18 +13,21 @@ export default {
             method: 'post',
             url: `${BASE_URL}${url}`,
             data,
-            headers: {"Content-Type": contentType}
+            headers: {
+                "Content-Type": `${contentType}`
+            }
         });
         return response.data;
     },
     postAuthorized: async (url, data, token, contentType = ContentTypes.ApplicationJson) => {
         data = contentType === ContentTypes.ApplicationJson ? JSON.stringify(data) : data;
+        console.log(data);
         const response = await axios(`${BASE_URL}${url}`, {
             method: 'post',
             data,
             headers: {
                 "Authorization": `Bearer ${token}`,
-                "Content-type": {contentType}
+                "Content-type": `${contentType}`
             }
         });
 

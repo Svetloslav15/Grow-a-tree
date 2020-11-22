@@ -8,6 +8,7 @@ import SuccessMessages from '../../../../static/successMessages';
 import AlertService from "../../../../services/alertService";
 import UsersService from '../../../../services/usersService';
 import CookieNames from '../../../../static/cookieNames';
+import ContentTypes from '../../../../static/contentTypes';
 
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
@@ -49,9 +50,8 @@ const UserInfoPage = () => {
     }
 
     const handleSubmit = async () => {
-        const response = await UsersService.postAuthorizedEditUser(currUser, stateUserData.accessToken, 'application/json');
-
-        if (response.data.succeeded) {
+        const response = await UsersService.postAuthorizedEditUser(currUser, stateUserData.accessToken);
+        if (response.succeeded) {
             AlertService.success(SuccessMessages.successEditYourInfo);
         }
         else {
