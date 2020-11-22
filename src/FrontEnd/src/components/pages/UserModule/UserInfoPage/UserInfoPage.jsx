@@ -1,14 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import Cookies from 'js-cookie';
 
 import * as style from './UserInfoPage.module.scss';
 import Icons from '../../../../static/icons';
 import SuccessMessages from '../../../../static/successMessages';
 import AlertService from "../../../../services/alertService";
 import UsersService from '../../../../services/usersService';
-import CookieNames from '../../../../static/cookieNames';
-import ContentTypes from '../../../../static/contentTypes';
 
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';

@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux';
 
 import Layout from '../../../common/Layout/Layout';
 import TreeService from '../../../../services/treeService';
+import GeoCodingService from '../../../../services/geocodingService';
 import AlertService from '../../../../services/alertService';
 import ContentTypes from '../../../../static/contentTypes';
 import SuccessMessages from '../../../../static/successMessages';
@@ -26,7 +27,9 @@ const AddTreePage = ({}) => {
         setData(data);
     };
 
-    const handleCoordinates = (latitude, longitute) => {
+    const handleCoordinates = async (latitude, longitute) => {
+        let res = await GeoCodingService.getCityByCoords(latitude, longitute)
+        data.city = res.data.address.municipality;
         data.latitude = latitude;
         data.longitude = longitute;
         setData({...data});
@@ -50,7 +53,7 @@ const AddTreePage = ({}) => {
         formData.append('category', data.category);
         formData.append('latitude', data.latitude);
         formData.append('longitude', data.longitude);
-        formData.append('City', "Blagoevgrad");
+        formData.append('City', data.city);
         formData.append('ownerId', currUser.id);
 
         const res = await TreeService.postAuthorizedAddTree(formData, currUser.accessToken, ContentTypes.FormData);
