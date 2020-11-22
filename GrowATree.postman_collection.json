@@ -637,7 +637,7 @@
 								},
 								{
 									"key": "OwnerId",
-									"value": "ec6e716f-f8e1-4ebc-97ba-9a8f3b99a667",
+									"value": "a647531f-68ca-4a8f-8ce6-64d051feec25",
 									"type": "text"
 								},
 								{
@@ -1261,6 +1261,288 @@
 							"path": [
 								"images",
 								"upload-image"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "TreeReports",
+			"item": [
+				{
+					"name": "ReportTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Message",
+									"value": "Tuka si4ko si e balo maikata",
+									"type": "text"
+								},
+								{
+									"key": "UserId",
+									"value": "92017285-4f7d-41bc-b314-09fc594f8b71",
+									"type": "text"
+								},
+								{
+									"key": "TreeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38",
+									"type": "text"
+								},
+								{
+									"key": "Type",
+									"value": "Missing",
+									"type": "text"
+								},
+								{
+									"key": "ImageFile",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/768x432.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/report-tree",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"report-tree"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MarkAsSpam",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"treeReportId\": \"7d8616ad-34a3-4528-86c4-162e0c69cd9a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/mark-as-spam",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"mark-as-spam"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ArchiveReport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"treeId\": \"4d5b5aac-4aec-45ef-a4a4-51f48b790a38\",\r\n    \"reportType\": \"Broken\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/archive-report",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"archive-report"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetActiveReportTypes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/active-reports-types?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"active-reports-types"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetActiveReportsByType",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/active-reports?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38&reportType=Broken",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"active-reports"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								},
+								{
+									"key": "reportType",
+									"value": "Broken"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetArchivedReportTypes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/archived-reports-types?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"archived-reports-types"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetArchivedReportsByType",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/archived-reports?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38&reportType=Missing",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"archived-reports"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								},
+								{
+									"key": "reportType",
+									"value": "Missing"
+								}
 							]
 						}
 					},
