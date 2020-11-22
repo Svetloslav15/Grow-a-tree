@@ -20,6 +20,8 @@ const AddTreePage = ({}) => {
         city: '',
         ownerId: ''
     });
+    const [location, setLocation] = useState('');
+
     const currUser = useSelector(state => state.auth);
 
     const handleChange = (event) => {
@@ -28,7 +30,12 @@ const AddTreePage = ({}) => {
     };
 
     const handleCoordinates = async (latitude, longitute) => {
-        const res = await GeoCodingService.getCityByCoords(latitude, longitute)
+        const res = await GeoCodingService.getCityByCoords(latitude, longitute);
+        const {municipality, suburb, village} = res.data.address;
+        const result = [municipality, suburb, village]
+            .filter(x => x !== undefined)
+            .map(x => `${x} `);
+        setLocation(result);
         data.city = res.data.address.municipality;
         data.latitude = latitude;
         data.longitude = longitute;
@@ -70,6 +77,7 @@ const AddTreePage = ({}) => {
             <FormUpsertTree title='Добави дърво'
                             data={data}
                             type='Добави'
+                            location={location}
                             handleChange={handleChange}
                             handleFilesUpload={handleFilesUpload}
                             handleSubmit={handleSubmit}

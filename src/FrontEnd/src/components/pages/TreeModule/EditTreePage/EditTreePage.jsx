@@ -22,6 +22,7 @@ const EditTreePage = ({history, match}) => {
         city: '',
         ownerId: ''
     });
+    const [location, setLocation] = useState('');
     const currUser = useSelector(state => state.auth);
 
     useEffect(() => {
@@ -44,7 +45,7 @@ const EditTreePage = ({history, match}) => {
     };
 
     const handleCoordinates = async (latitude, longitute) => {
-        const res = await GeoCodingService.getCityByCoords(latitude, longitute)
+        const res = await GeoCodingService.getCityByCoords(latitude, longitute);
         data.city = res.data.address.municipality;
         data.latitude = latitude;
         data.longitude = longitute;
@@ -89,6 +90,7 @@ const EditTreePage = ({history, match}) => {
             {data.nickname ? (<FormUpsertTree title='Промени дърво'
                                               data={data}
                                               type='Промени'
+                                              location={location}
                                               handleChange={handleChange}
                                               handleFilesUpload={handleFilesUpload}
                                               handleSubmit={handleSubmit}
