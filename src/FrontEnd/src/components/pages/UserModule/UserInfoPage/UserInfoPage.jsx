@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import * as style from './UserInfoPage.module.scss';
 import Icons from '../../../../static/icons';
@@ -9,31 +9,20 @@ import UsersService from '../../../../services/usersService';
 
 import InputField from '../../../common/InputField/InputField';
 import Button from '../../../common/Button/Button';
-import {CHANGE_IS_USER_NAV_LOCKED, CHANGE_IS_USER_NAV_OPENED} from '../../../../store/actions/actionTypes';
-import Sidebar from '../Sidebar/Sidebar';
 import Layout from '../UserLayout/UserLayout';
 import Cities from "../../../../static/cities";
 import InputAutoComplete from "../../../common/InputAutoComplete/InputAutoComplete";
 import ChangeImage from "./ChangeImage/ChangeImage";
 
-const BgShape3 = require('../../../../assets/bg-shape-3.png');
-const BgShape4 = require('../../../../assets/bg-shape-4.png');
-
 const UserInfoPage = () => {
-    const dispatch = useDispatch();
     const stateUserData = useSelector(state => state.auth);
     const [currUser, setCurrUser] = useState({});
 
     useEffect(() => {
-        dispatch({type: CHANGE_IS_USER_NAV_LOCKED, data: true});
         UsersService.getAuthorizedUserById(stateUserData.id, stateUserData.accessToken)
             .then((res) => {
                 setCurrUser(res.data.data)
             });
-        return () => {
-            dispatch({type: CHANGE_IS_USER_NAV_LOCKED, data: false});
-            dispatch({type: CHANGE_IS_USER_NAV_OPENED, data: false});
-        }
     }, [currUser.profilePictureUrl]);
 
     const handleChange = (event) => {
