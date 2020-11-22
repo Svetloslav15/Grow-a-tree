@@ -14,6 +14,7 @@
     using GrowATree.Application.Auth.Commands.Register;
     using GrowATree.Application.Auth.Commands.ResetPassword;
     using GrowATree.Application.Common.Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Serilog;
@@ -142,6 +143,7 @@
             }
         }
 
+        [Authorize]
         [HttpPost("reset-password")]
         public async Task<ActionResult<Result<bool>>> ResetPassword([FromBody] ResetPasswordCommand command)
         {

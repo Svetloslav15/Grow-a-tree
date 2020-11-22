@@ -269,11 +269,23 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Content")
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSpam")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TreeId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -297,6 +309,9 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("WateredOn")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

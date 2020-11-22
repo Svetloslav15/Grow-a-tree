@@ -9,11 +9,10 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using global::Application.Models.Auth;
-    using global::Common.Interfaces;
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
-    using IdentityServer4.Validation;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -23,11 +22,20 @@
     {
         private readonly UserManager<User> userManager;
         private readonly IConfiguration configuration;
+        private readonly IHttpContextAccessor httpContext;
 
-        public IdentityService(UserManager<User> userManager, IConfiguration configuration)
+        public IdentityService(UserManager<User> userManager, IConfiguration configuration, IHttpContextAccessor httpContext)
         {
             this.userManager = userManager;
             this.configuration = configuration;
+            this.httpContext = httpContext;
+        }
+
+        public async Task<string> GetCurrentUserId()
+        {
+            var userName = this.httpContext.HttpContext.User.Identity.Name;
+            var user = await this.userManager.Users.FirstAsync(x => x.UserName == userName);
+            return user.Id;
         }
 
         public async Task<string> GetUserNameAsync(string userId)
@@ -50,7 +58,7 @@
                 var tokenModel = await this.GenerateTokenModel(user);
 
                 user.RefreshToken = tokenModel.RefreshToken;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Constants.JwtExpirationTimeInMinutes);
+                user.RefreshTokenExpiryTime = DateTime.Now.AddDays(Constants.JwtExpirationTimeInDays);
 
                 await this.userManager.UpdateAsync(user);
 
@@ -101,7 +109,7 @@
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"]));
 
             var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddDays(Constants.JwtExpirationTimeInDays),
+                expires: DateTime.UtcNow.AddMinutes(Constants.JwtExpirationTimeInMinutes),
                 claims: authClaims,
                 issuer: this.configuration["JWT:ValidIssuer"],
                 audience: this.configuration["JWT:ValidAudience"],
@@ -120,6 +128,7 @@
                 Expires = token.ValidTo,
                 Id = user.Id,
                 IsStore = isStore,
+                Username = user.UserName
             };
 
             return result;

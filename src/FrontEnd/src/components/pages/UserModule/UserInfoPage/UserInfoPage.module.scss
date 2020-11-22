@@ -1,0 +1,23 @@
+.wrapper {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.profileImage {
+  clip-path: polygon(49% 0, 100% 25%, 100% 74%, 51% 100%, 0 75%, 0 24%);
+  width: 100%;
+}
+
+.username {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.name {
+  font-size: 30px;
+}
+
+.points {
+  font-weight: bold;
+  font-size: 20px;
+}

@@ -12,6 +12,6 @@
         public string Id { get; set; }
 
         [Required(ErrorMessage = ErrorMessages.TreeImageRequiredErrorMessage)]
-        public IFormFile newImageFile { get; set; }
+        public IFormFile NewImageFile { get; set; }
     }
 }

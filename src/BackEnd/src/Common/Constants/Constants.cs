@@ -16,7 +16,7 @@
 
         public const int UsernameMinLength = 3;
 
-        public const int UsernameMaxLength = 15;
+        public const int UsernameMaxLength = 30;
 
         public const int NameMinLength = 3;
 
@@ -26,7 +26,15 @@
 
         public const int TreeNicknameMaxLength = 20;
 
-        public const string PhoneNumberRegEx = @"/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/";
+        public const int MaxDistanceForClosestTreesInMetres = 2000;
+
+        public const int MaxDistanceBetweenTreeAndUser = 20;
+
+        public const int UserDelayToWaterTreeInMinutes = 6 * 60;
+
+        public const int TreeImagesCount = 10;
+
+        public const string PhoneNumberRegEx = @"\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})";
 
         public const string StoreRoleName = "Store";
 

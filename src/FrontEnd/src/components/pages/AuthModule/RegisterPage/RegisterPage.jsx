@@ -91,7 +91,7 @@ const RegisterPage = ({history}) => {
                                            id='city'
                                            icon={Icons.map}
                                            data={Cities}
-                                           width={6}
+                                           width={12}
                                            onChange={handleChange}/>
                     </div>
                     <div className='text-center'>

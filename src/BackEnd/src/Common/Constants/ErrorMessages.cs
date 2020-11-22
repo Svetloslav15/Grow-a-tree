@@ -10,6 +10,8 @@ namespace Common.Constants
 
         public const string LoginFailureErrorMessage = "Невалиден имейл или парола";
 
+        public const string NotAllowedErrorMessage = "Нямате достъп до този ресурс";
+
         #endregion
 
         #region Email
@@ -36,7 +38,7 @@ namespace Common.Constants
 
         public const string UsernameMinLengthErrorMessage = "Потребителското име трябва да е поне 3 символа";
 
-        public const string UsernameMaxLengthErrorMessage = "Потребителското име трябва да е максимум 15 символа";
+        public const string UsernameMaxLengthErrorMessage = "Потребителското име трябва да е максимум 30 символа";
 
         #endregion
 
@@ -159,6 +161,12 @@ namespace Common.Constants
 
         #endregion
 
+        #region Image
+
+        public const string ImageRequiredErrorMessage = "Снимката липсва";
+
+        #endregion
+
         #region Tree
 
         public const string TreeNicknameRequiredErrorMessage = "Името на дървото е задължително";
@@ -176,6 +184,22 @@ namespace Common.Constants
         public const string TreeLocationRequiredErrorMessage = "Локацията на дървото е задължителна";
 
         public const string TreeNotFoundErrorMessage = "Не съществува такова дърво";
+
+        #endregion
+
+        #region Waterings
+
+        public const string WateringDelayErrorMessage = "Моля изчакайте преди да полеете дървото отново";
+
+        #endregion
+
+        #region TreeReports
+
+        public const string TreeReportSelfReportErrorMessage = "Не може да докладвате собственото си дърво";
+
+        public const string TreeReportDublicateErrorMessage = "Вече сте докладвали това дърво за този проблем";
+
+        public const string TreeReporNotFoundErrorMessage = "Вече сте докладвали това дърво за този проблем";
 
         #endregion
     }

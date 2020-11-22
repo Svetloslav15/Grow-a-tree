@@ -259,7 +259,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Auth/refresh-token": {
@@ -292,6 +297,390 @@
             }
           }
         }
+      }
+    },
+    "/api/Images/upload-image": {
+      "post": {
+        "tags": [
+          "Images"
+        ],
+        "operationId": "Images_UploadImage",
+        "parameters": [
+          {
+            "type": "file",
+            "name": "ImageFile",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "nullable": true
+            },
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfImageModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/active-reports-types": {
+      "get": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ActiveReportsTypes",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfICollectionOfTreeReportTypeModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/active-reports": {
+      "get": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ActiveReportsForTypes",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "ReportType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeReportListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/archived-reports-types": {
+      "get": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ArchivedReportsTypes",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfICollectionOfTreeReportTypeModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/archived-reports": {
+      "get": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ArchivedReports",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "ReportType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeReportListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/report-tree": {
+      "post": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ReportTree",
+        "parameters": [
+          {
+            "name": "Message",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Type",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "type": "file",
+            "name": "ImageFile",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "nullable": true
+            },
+            "nullable": true
+          },
+          {
+            "name": "UserId",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "TreeId",
+            "in": "formData",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/mark-as-spam": {
+      "post": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_MarkReportAsSpam",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkTreeReportAsSpamCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/archive-report": {
+      "post": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ArchiveReport",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArchiveTreeReportCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees/{id}": {
@@ -360,7 +749,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees": {
@@ -400,7 +794,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees/list-short-info": {
@@ -448,7 +847,7 @@
         "tags": [
           "Trees"
         ],
-        "operationId": "Trees_GetTreesShortInfo2",
+        "operationId": "Trees_GetTreeShortInfo",
         "parameters": [
           {
             "name": "id",
@@ -474,12 +873,47 @@
         }
       }
     },
-    "/api/Trees/deleted-images": {
+    "/api/Trees/random-images": {
       "get": {
         "tags": [
           "Trees"
         ],
         "operationId": "Trees_GetTreeDeletedImages",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/GetRandomTreesImagesQuery"
+                }
+              ]
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeImageListModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Trees/deleted-images": {
+      "get": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_GetTreeDeletedImages2",
         "parameters": [
           {
             "name": "Id",
@@ -520,7 +954,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees/user": {
@@ -569,7 +1008,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees/user/short-info": {
@@ -605,6 +1049,69 @@
               "format": "int32"
             },
             "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeListShortInfoModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Trees/closest-trees-short-info": {
+      "get": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_GetClosestTreesShortInfo",
+        "parameters": [
+          {
+            "name": "Latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 4
           }
         ],
         "responses": {
@@ -733,7 +1240,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees/update-tree-image": {
@@ -754,7 +1266,7 @@
           },
           {
             "type": "file",
-            "name": "newImageFile",
+            "name": "NewImageFile",
             "in": "formData",
             "schema": {
               "type": "string",
@@ -775,7 +1287,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees/add-tree-images": {
@@ -823,7 +1340,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees/delete-tree-image": {
@@ -855,7 +1377,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Trees/restore-tree-image": {
@@ -887,7 +1414,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Users/{id}": {
@@ -919,7 +1451,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Users/short-info/{id}": {
@@ -991,7 +1528,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Users/list-short-info": {
@@ -1034,6 +1576,55 @@
         }
       }
     },
+    "/api/Users/is-user-near-tree": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_IsUserShortToTree",
+        "parameters": [
+          {
+            "name": "Latitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Longitude",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Users/edit": {
       "post": {
         "tags": [
@@ -1063,7 +1654,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Users/change-profile-picture": {
@@ -1105,7 +1701,184 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Waterings/tree-waterings": {
+      "get": {
+        "tags": [
+          "Waterings"
+        ],
+        "operationId": "Waterings_GetWateringsForTree",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WateringListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Waterings/tree-waterings-count": {
+      "get": {
+        "tags": [
+          "Waterings"
+        ],
+        "operationId": "Waterings_TreeWateringsCount",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfInteger"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Waterings/can-user-water-tree": {
+      "get": {
+        "tags": [
+          "Waterings"
+        ],
+        "operationId": "Waterings_CanUserWaterTree",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "UserId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Waterings/water-tree": {
+      "post": {
+        "tags": [
+          "Waterings"
+        ],
+        "operationId": "Waterings_WaterTree",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WaterTreeCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     }
   },
@@ -1161,7 +1934,7 @@
           },
           "name": {
             "type": "string",
-            "maxLength": 15,
+            "maxLength": 30,
             "minLength": 3
           },
           "latitude": {
@@ -1206,7 +1979,7 @@
           },
           "username": {
             "type": "string",
-            "maxLength": 15,
+            "maxLength": 30,
             "minLength": 3
           },
           "password": {
@@ -1266,6 +2039,10 @@
           },
           "isStore": {
             "type": "boolean"
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -1313,11 +2090,6 @@
           },
           "profilePictureUrl": {
             "type": "string",
-            "nullable": true
-          },
-          "profilePictureFile": {
-            "type": "string",
-            "format": "binary",
             "nullable": true
           }
         }
@@ -1392,6 +2164,240 @@
           "refreshToken": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      },
+      "ResultOfImageModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ImageModel"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ImageModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ResultOfICollectionOfTreeReportTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreeReportTypeModel"
+            }
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreeReportTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportsCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TreeReportListModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MetaResultOfIListOfTreeReportModelAndPaginationMeta"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "MetaResultOfIListOfTreeReportModelAndPaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreeReportModel"
+            }
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreeReportModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/TreeReportType"
+          },
+          "treeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "treeNickname": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userProfilePictureUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "TreeReportType": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Broken",
+          "Dry",
+          "Damaged",
+          "Missing"
+        ],
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pagination": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Pagination"
+              }
+            ]
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perPage": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "MarkTreeReportAsSpamCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "treeReportId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ArchiveTreeReportCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "treeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "reportType": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -1509,6 +2515,14 @@
             "type": "string",
             "nullable": true
           },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
           "city": {
             "type": "string",
             "nullable": true
@@ -1518,20 +2532,6 @@
             "nullable": true
           },
           "profilePictureUrl": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "ImageModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "url": {
             "type": "string",
             "nullable": true
           }
@@ -1583,6 +2583,18 @@
           "city": {
             "type": "string",
             "nullable": true
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "metresAway": {
+            "type": "number",
+            "format": "double"
           },
           "owner": {
             "nullable": true,
@@ -1663,42 +2675,6 @@
             "items": {
               "type": "string"
             }
-          }
-        }
-      },
-      "PaginationMeta": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "pagination": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Pagination"
-              }
-            ]
-          }
-        }
-      },
-      "Pagination": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "totalItems": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "currentPage": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "perPage": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
@@ -1797,8 +2773,16 @@
           "url": {
             "type": "string",
             "nullable": true
+          },
+          "treeId": {
+            "type": "string",
+            "nullable": true
           }
         }
+      },
+      "GetRandomTreesImagesQuery": {
+        "type": "object",
+        "additionalProperties": false
       },
       "ResultOfString": {
         "type": "object",
@@ -2027,7 +3011,7 @@
           },
           "username": {
             "type": "string",
-            "maxLength": 15,
+            "maxLength": 30,
             "minLength": 3
           },
           "city": {
@@ -2036,7 +3020,105 @@
           },
           "phoneNumber": {
             "type": "string",
-            "pattern": "/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/",
+            "pattern": "\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})",
+            "nullable": true
+          }
+        }
+      },
+      "WateringListModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MetaResultOfIListOfWateringModelAndPaginationMeta"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "MetaResultOfIListOfWateringModelAndPaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/WateringModel"
+            }
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "WateringModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "userUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userProfilePictureUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "wateredOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ResultOfInteger": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "WaterTreeCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "treeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "watererId": {
+            "type": "string",
             "nullable": true
           }
         }

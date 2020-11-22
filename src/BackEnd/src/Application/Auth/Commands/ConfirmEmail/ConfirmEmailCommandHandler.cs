@@ -3,6 +3,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Web;
     using global::Common.Constants;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
@@ -31,7 +32,7 @@
             {
                 return Result<bool>.Failure(ErrorMessages.EmailAlreadyConfirmedErrorMessage);
             }
-
+            request.Token = HttpUtility.UrlDecode(request.Token);
             var result = await this.userManager.ConfirmEmailAsync(user, request.Token);
             if (!result.Succeeded)
             {

@@ -525,15 +525,497 @@ export class AuthClient implements IAuthClient {
     }
 }
 
+export interface IImagesClient {
+    uploadImage(imageFile: FileParameter | null | undefined): Observable<ResultOfImageModel>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ImagesClient implements IImagesClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    uploadImage(imageFile: FileParameter | null | undefined): Observable<ResultOfImageModel> {
+        let url_ = this.baseUrl + "/api/Images/upload-image";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (imageFile !== null && imageFile !== undefined)
+            content_.append("ImageFile", imageFile.data, imageFile.fileName ? imageFile.fileName : "ImageFile");
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUploadImage(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUploadImage(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfImageModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfImageModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUploadImage(response: HttpResponseBase): Observable<ResultOfImageModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfImageModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfImageModel>(<any>null);
+    }
+}
+
+export interface ITreeReportsClient {
+    activeReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
+    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
+    archivedReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
+    archivedReports(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
+    reportTree(message: string | null | undefined, type: string | null | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
+    markReportAsSpam(command: MarkTreeReportAsSpamCommand): Observable<ResultOfBoolean>;
+    archiveReport(command: ArchiveTreeReportCommand): Observable<ResultOfBoolean>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class TreeReportsClient implements ITreeReportsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    activeReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel> {
+        let url_ = this.baseUrl + "/api/TreeReports/active-reports-types?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processActiveReportsTypes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processActiveReportsTypes(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfICollectionOfTreeReportTypeModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfICollectionOfTreeReportTypeModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processActiveReportsTypes(response: HttpResponseBase): Observable<ResultOfICollectionOfTreeReportTypeModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfICollectionOfTreeReportTypeModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfICollectionOfTreeReportTypeModel>(<any>null);
+    }
+
+    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel> {
+        let url_ = this.baseUrl + "/api/TreeReports/active-reports?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        if (reportType !== undefined)
+            url_ += "ReportType=" + encodeURIComponent("" + reportType) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processActiveReportsForTypes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processActiveReportsForTypes(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeReportListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeReportListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processActiveReportsForTypes(response: HttpResponseBase): Observable<TreeReportListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeReportListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeReportListModel>(<any>null);
+    }
+
+    archivedReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel> {
+        let url_ = this.baseUrl + "/api/TreeReports/archived-reports-types?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processArchivedReportsTypes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processArchivedReportsTypes(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfICollectionOfTreeReportTypeModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfICollectionOfTreeReportTypeModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processArchivedReportsTypes(response: HttpResponseBase): Observable<ResultOfICollectionOfTreeReportTypeModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfICollectionOfTreeReportTypeModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfICollectionOfTreeReportTypeModel>(<any>null);
+    }
+
+    archivedReports(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel> {
+        let url_ = this.baseUrl + "/api/TreeReports/archived-reports?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        if (reportType !== undefined)
+            url_ += "ReportType=" + encodeURIComponent("" + reportType) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processArchivedReports(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processArchivedReports(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeReportListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeReportListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processArchivedReports(response: HttpResponseBase): Observable<TreeReportListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeReportListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeReportListModel>(<any>null);
+    }
+
+    reportTree(message: string | null | undefined, type: string | null | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/TreeReports/report-tree";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (message !== null && message !== undefined)
+            content_.append("Message", message.toString());
+        if (type !== null && type !== undefined)
+            content_.append("Type", type.toString());
+        if (imageFile !== null && imageFile !== undefined)
+            content_.append("ImageFile", imageFile.data, imageFile.fileName ? imageFile.fileName : "ImageFile");
+        if (userId !== null && userId !== undefined)
+            content_.append("UserId", userId.toString());
+        if (treeId !== null && treeId !== undefined)
+            content_.append("TreeId", treeId.toString());
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processReportTree(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processReportTree(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processReportTree(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+
+    markReportAsSpam(command: MarkTreeReportAsSpamCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/TreeReports/mark-as-spam";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processMarkReportAsSpam(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processMarkReportAsSpam(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processMarkReportAsSpam(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+
+    archiveReport(command: ArchiveTreeReportCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/TreeReports/archive-report";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processArchiveReport(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processArchiveReport(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processArchiveReport(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+}
+
 export interface ITreesClient {
     getById(id: string | null): Observable<ResultOfTreeModel>;
     getShortInfoById(id: string | null): Observable<ResultOfTreeShortInfoModel>;
     getTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getTreesShortInfo(page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
-    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
-    getTreeDeletedImages(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel>;
+    getTreeShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel>;
+    getTreeDeletedImages(query: GetRandomTreesImagesQuery | null | undefined): Observable<TreeImageListModel>;
+    getTreeDeletedImages2(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel>;
     getUserTrees(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
     getUserTreeShortInfo(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
+    getClosestTreesShortInfo(latitude: number | undefined, longitude: number | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel>;
     upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString>;
     editTreeImage(id: string | null | undefined, newImageFile: FileParameter | null | undefined): Observable<ResultOfString>;
     addTreeImages(treeId: string | null | undefined, imagesFiles: string[] | null | undefined): Observable<ResultOfListOfString>;
@@ -768,7 +1250,7 @@ export class TreesClient implements ITreesClient {
         return _observableOf<TreeListShortInfoModel>(<any>null);
     }
 
-    getTreesShortInfo2(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
+    getTreeShortInfo(id: string | null | undefined): Observable<ResultOfTreeShortInfoModel> {
         let url_ = this.baseUrl + "/api/Trees/short-info?";
         if (id !== undefined)
             url_ += "id=" + encodeURIComponent("" + id) + "&"; 
@@ -783,11 +1265,11 @@ export class TreesClient implements ITreesClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetTreesShortInfo2(response_);
+            return this.processGetTreeShortInfo(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetTreesShortInfo2(<any>response_);
+                    return this.processGetTreeShortInfo(<any>response_);
                 } catch (e) {
                     return <Observable<ResultOfTreeShortInfoModel>><any>_observableThrow(e);
                 }
@@ -796,7 +1278,7 @@ export class TreesClient implements ITreesClient {
         }));
     }
 
-    protected processGetTreesShortInfo2(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
+    protected processGetTreeShortInfo(response: HttpResponseBase): Observable<ResultOfTreeShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -818,18 +1300,10 @@ export class TreesClient implements ITreesClient {
         return _observableOf<ResultOfTreeShortInfoModel>(<any>null);
     }
 
-    getTreeDeletedImages(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel> {
-        let url_ = this.baseUrl + "/api/Trees/deleted-images?";
-        if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
-        if (perPage === null)
-            throw new Error("The parameter 'perPage' cannot be null.");
-        else if (perPage !== undefined)
-            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+    getTreeDeletedImages(query: GetRandomTreesImagesQuery | null | undefined): Observable<TreeImageListModel> {
+        let url_ = this.baseUrl + "/api/Trees/random-images?";
+        if (query !== undefined)
+            url_ += "query=" + encodeURIComponent("" + query) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -855,6 +1329,64 @@ export class TreesClient implements ITreesClient {
     }
 
     protected processGetTreeDeletedImages(response: HttpResponseBase): Observable<TreeImageListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeImageListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeImageListModel>(<any>null);
+    }
+
+    getTreeDeletedImages2(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeImageListModel> {
+        let url_ = this.baseUrl + "/api/Trees/deleted-images?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTreeDeletedImages2(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTreeDeletedImages2(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeImageListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeImageListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTreeDeletedImages2(response: HttpResponseBase): Observable<TreeImageListModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -992,6 +1524,70 @@ export class TreesClient implements ITreesClient {
         return _observableOf<TreeListShortInfoModel>(<any>null);
     }
 
+    getClosestTreesShortInfo(latitude: number | undefined, longitude: number | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeListShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Trees/closest-trees-short-info?";
+        if (latitude === null)
+            throw new Error("The parameter 'latitude' cannot be null.");
+        else if (latitude !== undefined)
+            url_ += "Latitude=" + encodeURIComponent("" + latitude) + "&"; 
+        if (longitude === null)
+            throw new Error("The parameter 'longitude' cannot be null.");
+        else if (longitude !== undefined)
+            url_ += "Longitude=" + encodeURIComponent("" + longitude) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetClosestTreesShortInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetClosestTreesShortInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeListShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeListShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetClosestTreesShortInfo(response: HttpResponseBase): Observable<TreeListShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeListShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeListShortInfoModel>(<any>null);
+    }
+
     upsert(id: string | null | undefined, nickname: string | null | undefined, type: string | null | undefined, latitude: number | null | undefined, longitude: number | null | undefined, city: string | null | undefined, category: string | null | undefined, ownerId: string | null | undefined, imageFiles: string[] | null | undefined): Observable<ResultOfString> {
         let url_ = this.baseUrl + "/api/Trees/upsert";
         url_ = url_.replace(/[?&]$/, "");
@@ -1069,7 +1665,7 @@ export class TreesClient implements ITreesClient {
         if (id !== null && id !== undefined)
             content_.append("Id", id.toString());
         if (newImageFile !== null && newImageFile !== undefined)
-            content_.append("newImageFile", newImageFile.data, newImageFile.fileName ? newImageFile.fileName : "newImageFile");
+            content_.append("NewImageFile", newImageFile.data, newImageFile.fileName ? newImageFile.fileName : "NewImageFile");
 
         let options_ : any = {
             body: content_,
@@ -1281,6 +1877,7 @@ export interface IUsersClient {
     getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel>;
     getList(page: number | undefined, perPage: number | undefined): Observable<UserListModel>;
     getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
+    isUserShortToTree(latitude: number | undefined, longitude: number | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
 }
@@ -1512,6 +2109,64 @@ export class UsersClient implements IUsersClient {
         return _observableOf<UserListShortInfoModel>(<any>null);
     }
 
+    isUserShortToTree(latitude: number | undefined, longitude: number | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Users/is-user-near-tree?";
+        if (latitude === null)
+            throw new Error("The parameter 'latitude' cannot be null.");
+        else if (latitude !== undefined)
+            url_ += "Latitude=" + encodeURIComponent("" + latitude) + "&"; 
+        if (longitude === null)
+            throw new Error("The parameter 'longitude' cannot be null.");
+        else if (longitude !== undefined)
+            url_ += "Longitude=" + encodeURIComponent("" + longitude) + "&"; 
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processIsUserShortToTree(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processIsUserShortToTree(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processIsUserShortToTree(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+
     edit(command: EditUserCommand): Observable<ResultOfUserModel> {
         let url_ = this.baseUrl + "/api/Users/edit";
         url_ = url_.replace(/[?&]$/, "");
@@ -1617,6 +2272,239 @@ export class UsersClient implements IUsersClient {
             }));
         }
         return _observableOf<ResultOfString>(<any>null);
+    }
+}
+
+export interface IWateringsClient {
+    getWateringsForTree(treeId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<WateringListModel>;
+    treeWateringsCount(treeId: string | null | undefined): Observable<ResultOfInteger>;
+    canUserWaterTree(treeId: string | null | undefined, userId: string | null | undefined): Observable<ResultOfBoolean>;
+    waterTree(command: WaterTreeCommand): Observable<ResultOfBoolean>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class WateringsClient implements IWateringsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getWateringsForTree(treeId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<WateringListModel> {
+        let url_ = this.baseUrl + "/api/Waterings/tree-waterings?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetWateringsForTree(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetWateringsForTree(<any>response_);
+                } catch (e) {
+                    return <Observable<WateringListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<WateringListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetWateringsForTree(response: HttpResponseBase): Observable<WateringListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = WateringListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<WateringListModel>(<any>null);
+    }
+
+    treeWateringsCount(treeId: string | null | undefined): Observable<ResultOfInteger> {
+        let url_ = this.baseUrl + "/api/Waterings/tree-waterings-count?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processTreeWateringsCount(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processTreeWateringsCount(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfInteger>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfInteger>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processTreeWateringsCount(response: HttpResponseBase): Observable<ResultOfInteger> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfInteger.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfInteger>(<any>null);
+    }
+
+    canUserWaterTree(treeId: string | null | undefined, userId: string | null | undefined): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Waterings/can-user-water-tree?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        if (userId !== undefined)
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCanUserWaterTree(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCanUserWaterTree(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCanUserWaterTree(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+
+    waterTree(command: WaterTreeCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Waterings/water-tree";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processWaterTree(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processWaterTree(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processWaterTree(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
     }
 }
 
@@ -1850,6 +2738,7 @@ export class TokenModel implements ITokenModel {
     expires?: Date;
     id?: string | undefined;
     isStore?: boolean;
+    username?: string | undefined;
 
     constructor(data?: ITokenModel) {
         if (data) {
@@ -1867,6 +2756,7 @@ export class TokenModel implements ITokenModel {
             this.expires = _data["expires"] ? new Date(_data["expires"].toString()) : <any>undefined;
             this.id = _data["id"];
             this.isStore = _data["isStore"];
+            this.username = _data["username"];
         }
     }
 
@@ -1884,6 +2774,7 @@ export class TokenModel implements ITokenModel {
         data["expires"] = this.expires ? this.expires.toISOString() : <any>undefined;
         data["id"] = this.id;
         data["isStore"] = this.isStore;
+        data["username"] = this.username;
         return data; 
     }
 }
@@ -1894,6 +2785,7 @@ export interface ITokenModel {
     expires?: Date;
     id?: string | undefined;
     isStore?: boolean;
+    username?: string | undefined;
 }
 
 export class LoginCommand implements ILoginCommand {
@@ -1944,7 +2836,6 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
     providerName?: string | undefined;
     providerKey?: string | undefined;
     profilePictureUrl?: string | undefined;
-    profilePictureFile?: string | undefined;
 
     constructor(data?: IExternalLoginCommand) {
         if (data) {
@@ -1964,7 +2855,6 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
             this.providerName = _data["providerName"];
             this.providerKey = _data["providerKey"];
             this.profilePictureUrl = _data["profilePictureUrl"];
-            this.profilePictureFile = _data["profilePictureFile"];
         }
     }
 
@@ -1984,7 +2874,6 @@ export class ExternalLoginCommand implements IExternalLoginCommand {
         data["providerName"] = this.providerName;
         data["providerKey"] = this.providerKey;
         data["profilePictureUrl"] = this.profilePictureUrl;
-        data["profilePictureFile"] = this.profilePictureFile;
         return data; 
     }
 }
@@ -1997,7 +2886,6 @@ export interface IExternalLoginCommand {
     providerName?: string | undefined;
     providerKey?: string | undefined;
     profilePictureUrl?: string | undefined;
-    profilePictureFile?: string | undefined;
 }
 
 export class ConfirmEmailCommand implements IConfirmEmailCommand {
@@ -2196,6 +3084,524 @@ export interface IRefreshTokenCommand {
     refreshToken: string;
 }
 
+export class ResultOfImageModel implements IResultOfImageModel {
+    data?: ImageModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfImageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"] ? ImageModel.fromJS(_data["data"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfImageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfImageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data ? this.data.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfImageModel {
+    data?: ImageModel | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class ImageModel implements IImageModel {
+    id?: string | undefined;
+    url?: string | undefined;
+
+    constructor(data?: IImageModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.url = _data["url"];
+        }
+    }
+
+    static fromJS(data: any): ImageModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ImageModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["url"] = this.url;
+        return data; 
+    }
+}
+
+export interface IImageModel {
+    id?: string | undefined;
+    url?: string | undefined;
+}
+
+export class ResultOfICollectionOfTreeReportTypeModel implements IResultOfICollectionOfTreeReportTypeModel {
+    data?: TreeReportTypeModel[] | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfICollectionOfTreeReportTypeModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreeReportTypeModel.fromJS(item));
+            }
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfICollectionOfTreeReportTypeModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfICollectionOfTreeReportTypeModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfICollectionOfTreeReportTypeModel {
+    data?: TreeReportTypeModel[] | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreeReportTypeModel implements ITreeReportTypeModel {
+    type?: string | undefined;
+    reportsCount?: number;
+
+    constructor(data?: ITreeReportTypeModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.type = _data["type"];
+            this.reportsCount = _data["reportsCount"];
+        }
+    }
+
+    static fromJS(data: any): TreeReportTypeModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeReportTypeModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["type"] = this.type;
+        data["reportsCount"] = this.reportsCount;
+        return data; 
+    }
+}
+
+export interface ITreeReportTypeModel {
+    type?: string | undefined;
+    reportsCount?: number;
+}
+
+export class MetaResultOfIListOfTreeReportModelAndPaginationMeta implements IMetaResultOfIListOfTreeReportModelAndPaginationMeta {
+    data?: TreeReportModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfTreeReportModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreeReportModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfTreeReportModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfTreeReportModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfTreeReportModelAndPaginationMeta {
+    data?: TreeReportModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreeReportListModel extends MetaResultOfIListOfTreeReportModelAndPaginationMeta implements ITreeReportListModel {
+
+    constructor(data?: ITreeReportListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): TreeReportListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeReportListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITreeReportListModel extends IMetaResultOfIListOfTreeReportModelAndPaginationMeta {
+}
+
+export class TreeReportModel implements ITreeReportModel {
+    id?: string | undefined;
+    message?: string | undefined;
+    imageUrl?: string | undefined;
+    type?: TreeReportType;
+    treeId?: string | undefined;
+    treeNickname?: string | undefined;
+    userId?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+
+    constructor(data?: ITreeReportModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.message = _data["message"];
+            this.imageUrl = _data["imageUrl"];
+            this.type = _data["type"];
+            this.treeId = _data["treeId"];
+            this.treeNickname = _data["treeNickname"];
+            this.userId = _data["userId"];
+            this.userUserName = _data["userUserName"];
+            this.userProfilePictureUrl = _data["userProfilePictureUrl"];
+        }
+    }
+
+    static fromJS(data: any): TreeReportModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeReportModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["message"] = this.message;
+        data["imageUrl"] = this.imageUrl;
+        data["type"] = this.type;
+        data["treeId"] = this.treeId;
+        data["treeNickname"] = this.treeNickname;
+        data["userId"] = this.userId;
+        data["userUserName"] = this.userUserName;
+        data["userProfilePictureUrl"] = this.userProfilePictureUrl;
+        return data; 
+    }
+}
+
+export interface ITreeReportModel {
+    id?: string | undefined;
+    message?: string | undefined;
+    imageUrl?: string | undefined;
+    type?: TreeReportType;
+    treeId?: string | undefined;
+    treeNickname?: string | undefined;
+    userId?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+}
+
+export enum TreeReportType {
+    Broken = 1,
+    Dry = 2,
+    Damaged = 3,
+    Missing = 4,
+}
+
+export class PaginationMeta implements IPaginationMeta {
+    pagination?: Pagination | undefined;
+
+    constructor(data?: IPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPaginationMeta {
+    pagination?: Pagination | undefined;
+}
+
+export class Pagination implements IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+
+    constructor(data?: IPagination) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalItems = _data["totalItems"];
+            this.totalPages = _data["totalPages"];
+            this.currentPage = _data["currentPage"];
+            this.perPage = _data["perPage"];
+        }
+    }
+
+    static fromJS(data: any): Pagination {
+        data = typeof data === 'object' ? data : {};
+        let result = new Pagination();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalItems"] = this.totalItems;
+        data["totalPages"] = this.totalPages;
+        data["currentPage"] = this.currentPage;
+        data["perPage"] = this.perPage;
+        return data; 
+    }
+}
+
+export interface IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+}
+
+export class MarkTreeReportAsSpamCommand implements IMarkTreeReportAsSpamCommand {
+    treeReportId?: string | undefined;
+
+    constructor(data?: IMarkTreeReportAsSpamCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.treeReportId = _data["treeReportId"];
+        }
+    }
+
+    static fromJS(data: any): MarkTreeReportAsSpamCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new MarkTreeReportAsSpamCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["treeReportId"] = this.treeReportId;
+        return data; 
+    }
+}
+
+export interface IMarkTreeReportAsSpamCommand {
+    treeReportId?: string | undefined;
+}
+
+export class ArchiveTreeReportCommand implements IArchiveTreeReportCommand {
+    treeId?: string | undefined;
+    reportType?: string | undefined;
+
+    constructor(data?: IArchiveTreeReportCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.treeId = _data["treeId"];
+            this.reportType = _data["reportType"];
+        }
+    }
+
+    static fromJS(data: any): ArchiveTreeReportCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArchiveTreeReportCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["treeId"] = this.treeId;
+        data["reportType"] = this.reportType;
+        return data; 
+    }
+}
+
+export interface IArchiveTreeReportCommand {
+    treeId?: string | undefined;
+    reportType?: string | undefined;
+}
+
 export class ResultOfTreeModel implements IResultOfTreeModel {
     data?: TreeModel | undefined;
     succeeded?: boolean;
@@ -2346,6 +3752,8 @@ export class UserModel implements IUserModel {
     id?: string | undefined;
     email?: string | undefined;
     userName?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
     city?: string | undefined;
     phoneNumber?: string | undefined;
     profilePictureUrl?: string | undefined;
@@ -2364,6 +3772,8 @@ export class UserModel implements IUserModel {
             this.id = _data["id"];
             this.email = _data["email"];
             this.userName = _data["userName"];
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
             this.city = _data["city"];
             this.phoneNumber = _data["phoneNumber"];
             this.profilePictureUrl = _data["profilePictureUrl"];
@@ -2382,6 +3792,8 @@ export class UserModel implements IUserModel {
         data["id"] = this.id;
         data["email"] = this.email;
         data["userName"] = this.userName;
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
         data["city"] = this.city;
         data["phoneNumber"] = this.phoneNumber;
         data["profilePictureUrl"] = this.profilePictureUrl;
@@ -2393,49 +3805,11 @@ export interface IUserModel {
     id?: string | undefined;
     email?: string | undefined;
     userName?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
     city?: string | undefined;
     phoneNumber?: string | undefined;
     profilePictureUrl?: string | undefined;
-}
-
-export class ImageModel implements IImageModel {
-    id?: string | undefined;
-    url?: string | undefined;
-
-    constructor(data?: IImageModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.url = _data["url"];
-        }
-    }
-
-    static fromJS(data: any): ImageModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new ImageModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["url"] = this.url;
-        return data; 
-    }
-}
-
-export interface IImageModel {
-    id?: string | undefined;
-    url?: string | undefined;
 }
 
 export class ResultOfTreeShortInfoModel implements IResultOfTreeShortInfoModel {
@@ -2496,6 +3870,9 @@ export class TreeShortInfoModel implements ITreeShortInfoModel {
     plantedOn?: Date;
     status?: TreeStatus;
     city?: string | undefined;
+    latitude?: number;
+    longitude?: number;
+    metresAway?: number;
     owner?: UserShortInfoModel | undefined;
     image?: ImageModel | undefined;
 
@@ -2515,6 +3892,9 @@ export class TreeShortInfoModel implements ITreeShortInfoModel {
             this.plantedOn = _data["plantedOn"] ? new Date(_data["plantedOn"].toString()) : <any>undefined;
             this.status = _data["status"];
             this.city = _data["city"];
+            this.latitude = _data["latitude"];
+            this.longitude = _data["longitude"];
+            this.metresAway = _data["metresAway"];
             this.owner = _data["owner"] ? UserShortInfoModel.fromJS(_data["owner"]) : <any>undefined;
             this.image = _data["image"] ? ImageModel.fromJS(_data["image"]) : <any>undefined;
         }
@@ -2534,6 +3914,9 @@ export class TreeShortInfoModel implements ITreeShortInfoModel {
         data["plantedOn"] = this.plantedOn ? this.plantedOn.toISOString() : <any>undefined;
         data["status"] = this.status;
         data["city"] = this.city;
+        data["latitude"] = this.latitude;
+        data["longitude"] = this.longitude;
+        data["metresAway"] = this.metresAway;
         data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
         data["image"] = this.image ? this.image.toJSON() : <any>undefined;
         return data; 
@@ -2546,6 +3929,9 @@ export interface ITreeShortInfoModel {
     plantedOn?: Date;
     status?: TreeStatus;
     city?: string | undefined;
+    latitude?: number;
+    longitude?: number;
+    metresAway?: number;
     owner?: UserShortInfoModel | undefined;
     image?: ImageModel | undefined;
 }
@@ -2687,90 +4073,6 @@ export class TreeListModel extends MetaResultOfIListOfTreeModelAndPaginationMeta
 }
 
 export interface ITreeListModel extends IMetaResultOfIListOfTreeModelAndPaginationMeta {
-}
-
-export class PaginationMeta implements IPaginationMeta {
-    pagination?: Pagination | undefined;
-
-    constructor(data?: IPaginationMeta) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): PaginationMeta {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginationMeta();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface IPaginationMeta {
-    pagination?: Pagination | undefined;
-}
-
-export class Pagination implements IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
-
-    constructor(data?: IPagination) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.totalItems = _data["totalItems"];
-            this.totalPages = _data["totalPages"];
-            this.currentPage = _data["currentPage"];
-            this.perPage = _data["perPage"];
-        }
-    }
-
-    static fromJS(data: any): Pagination {
-        data = typeof data === 'object' ? data : {};
-        let result = new Pagination();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalItems"] = this.totalItems;
-        data["totalPages"] = this.totalPages;
-        data["currentPage"] = this.currentPage;
-        data["perPage"] = this.perPage;
-        return data; 
-    }
-}
-
-export interface IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
 }
 
 export class MetaResultOfIListOfTreeShortInfoModelAndPaginationMeta implements IMetaResultOfIListOfTreeShortInfoModelAndPaginationMeta {
@@ -2958,6 +4260,7 @@ export interface ITreeImageListModel extends IMetaResultOfIListOfTreeImageModelA
 export class TreeImageModel implements ITreeImageModel {
     id?: string | undefined;
     url?: string | undefined;
+    treeId?: string | undefined;
 
     constructor(data?: ITreeImageModel) {
         if (data) {
@@ -2972,6 +4275,7 @@ export class TreeImageModel implements ITreeImageModel {
         if (_data) {
             this.id = _data["id"];
             this.url = _data["url"];
+            this.treeId = _data["treeId"];
         }
     }
 
@@ -2986,6 +4290,7 @@ export class TreeImageModel implements ITreeImageModel {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["url"] = this.url;
+        data["treeId"] = this.treeId;
         return data; 
     }
 }
@@ -2993,6 +4298,37 @@ export class TreeImageModel implements ITreeImageModel {
 export interface ITreeImageModel {
     id?: string | undefined;
     url?: string | undefined;
+    treeId?: string | undefined;
+}
+
+export class GetRandomTreesImagesQuery implements IGetRandomTreesImagesQuery {
+
+    constructor(data?: IGetRandomTreesImagesQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): GetRandomTreesImagesQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetRandomTreesImagesQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data; 
+    }
+}
+
+export interface IGetRandomTreesImagesQuery {
 }
 
 export class ResultOfString implements IResultOfString {
@@ -3519,6 +4855,237 @@ export interface IEditUserCommand {
     username: string;
     city: string;
     phoneNumber?: string | undefined;
+}
+
+export class MetaResultOfIListOfWateringModelAndPaginationMeta implements IMetaResultOfIListOfWateringModelAndPaginationMeta {
+    data?: WateringModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfWateringModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(WateringModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfWateringModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfWateringModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfWateringModelAndPaginationMeta {
+    data?: WateringModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class WateringListModel extends MetaResultOfIListOfWateringModelAndPaginationMeta implements IWateringListModel {
+
+    constructor(data?: IWateringListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): WateringListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new WateringListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface IWateringListModel extends IMetaResultOfIListOfWateringModelAndPaginationMeta {
+}
+
+export class WateringModel implements IWateringModel {
+    id?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+    wateredOn?: Date;
+
+    constructor(data?: IWateringModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.userUserName = _data["userUserName"];
+            this.userProfilePictureUrl = _data["userProfilePictureUrl"];
+            this.wateredOn = _data["wateredOn"] ? new Date(_data["wateredOn"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): WateringModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new WateringModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["userUserName"] = this.userUserName;
+        data["userProfilePictureUrl"] = this.userProfilePictureUrl;
+        data["wateredOn"] = this.wateredOn ? this.wateredOn.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IWateringModel {
+    id?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+    wateredOn?: Date;
+}
+
+export class ResultOfInteger implements IResultOfInteger {
+    data?: number;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IResultOfInteger) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.data = _data["data"];
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultOfInteger {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultOfInteger();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["data"] = this.data;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IResultOfInteger {
+    data?: number;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class WaterTreeCommand implements IWaterTreeCommand {
+    treeId?: string | undefined;
+    watererId?: string | undefined;
+
+    constructor(data?: IWaterTreeCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.treeId = _data["treeId"];
+            this.watererId = _data["watererId"];
+        }
+    }
+
+    static fromJS(data: any): WaterTreeCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new WaterTreeCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["treeId"] = this.treeId;
+        data["watererId"] = this.watererId;
+        return data; 
+    }
+}
+
+export interface IWaterTreeCommand {
+    treeId?: string | undefined;
+    watererId?: string | undefined;
 }
 
 export interface FileParameter {

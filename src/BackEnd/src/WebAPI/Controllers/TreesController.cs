@@ -15,9 +15,11 @@
     using GrowATree.Application.Trees.Commands.EditImage;
     using GrowATree.Application.Trees.Commands.RestoreImage;
     using GrowATree.Application.Trees.Commands.UpsertCommand;
+    using GrowATree.Application.Trees.Queries.GetClosestTrees;
     using GrowATree.Application.Trees.Queries.GetDeletedImages;
     using GrowATree.Application.Trees.Queries.GetList;
     using GrowATree.Application.Trees.Queries.GetListShortInfo;
+    using GrowATree.Application.Trees.Queries.GetRandomImages;
     using GrowATree.Application.Trees.Queries.GetShortInfoById;
     using GrowATree.Application.Trees.Queries.GetUserTreesShortInfo;
     using GrowATree.Application.Users.Queries.GetTrees;
@@ -28,9 +30,8 @@
 
     public class TreesController : ApiController
     {
-
-        [HttpGet("{id}")]
         [Authorize]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Result<TreeModel>>> GetById(string id)
         {
             try
@@ -57,6 +58,7 @@
             }
         }
 
+        [Authorize]
         [HttpGet("short-info/{id}")]
         public async Task<ActionResult<Result<TreeShortInfoModel>>> GetShortInfoById(string id)
         {
@@ -84,6 +86,7 @@
             }
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<TreeListModel>> GetTrees([FromQuery] GetTreeListQuery query)
         {
@@ -137,7 +140,7 @@
         }
 
         [HttpGet("short-info")]
-        public async Task<ActionResult<Result<TreeShortInfoModel>>> GetTreesShortInfo(string id)
+        public async Task<ActionResult<Result<TreeShortInfoModel>>> GetTreeShortInfo(string id)
         {
             try
             {
@@ -163,6 +166,22 @@
             }
         }
 
+        [HttpGet("random-images")]
+        public async Task<ActionResult<TreeImageListModel>> GetTreeDeletedImages([FromQuery] GetRandomTreesImagesQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeImageListModel.Failure<TreeImageListModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [Authorize]
         [HttpGet("deleted-images")]
         public async Task<ActionResult<TreeImageListModel>> GetTreeDeletedImages([FromQuery] GetTreeDeletedImagesQuery query)
         {
@@ -189,6 +208,7 @@
             }
         }
 
+        [Authorize]
         [HttpGet("user")]
         public async Task<ActionResult<TreeListModel>> GetUserTrees([FromQuery] GetUserTreesQuery query)
         {
@@ -215,8 +235,35 @@
             }
         }
 
+        [Authorize]
         [HttpGet("user/short-info")]
         public async Task<ActionResult<TreeListShortInfoModel>> GetUserTreeShortInfo([FromQuery] GetUserTreesShortInfoQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return TreeListShortInfoModel.Failure<TreeListShortInfoModel>(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeListShortInfoModel.Failure<TreeListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpGet("closest-trees-short-info")]
+        public async Task<ActionResult<TreeListShortInfoModel>> GetClosestTreesShortInfo([FromQuery] GetClosestTreesShortInfoQuery query)
         {
             try
             {
@@ -246,6 +293,7 @@
         /// </summary>
         /// <param name="upsertCommand">A tree data which.</param>
         /// <returns>Returns created tree id.</returns>
+        [Authorize]
         [HttpPost("upsert")]
         public async Task<ActionResult<Result<string>>> Upsert([FromForm] UpsertTreeCommand upsertCommand)
         {
@@ -277,6 +325,7 @@
         /// </summary>
         /// <param name="editTreeImageCommand">A command with image id and new image file. Both are required.</param>
         /// <returns>A result with data that represents the new image url.</returns>
+        [Authorize]
         [HttpPost("update-tree-image")]
         public async Task<ActionResult<Result<string>>> EditTreeImage([FromForm] EditTreeImageCommand editTreeImageCommand)
         {
@@ -308,6 +357,7 @@
         /// </summary>
         /// <param name="addTreeImagesCommand">A tree id for which the images are and the images files.</param>
         /// <returns>Returns all the added images urls.</returns>
+        [Authorize]
         [HttpPost("add-tree-images")]
         public async Task<ActionResult<Result<List<string>>>> AddTreeImages([FromForm] AddTreeImagesCommand addTreeImagesCommand)
         {
@@ -339,6 +389,7 @@
         /// </summary>
         /// <param name="deleteTreeImagesCommand">The id of the wanted to delete item.</param>
         /// <returns>Returns the id of the deleted image.</returns>
+        [Authorize]
         [HttpPost("delete-tree-image")]
         public async Task<ActionResult<Result<string>>> DeleteTreeImages([FromBody] DeleteTreeImageCommand deleteTreeImagesCommand)
         {
@@ -370,6 +421,7 @@
         /// </summary>
         /// <param name="restoreTreeImagesCommand">The restored entity id.</param>
         /// <returns>Returns the id of the restored entity.</returns>
+        [Authorize]
         [HttpPost("restore-tree-image")]
         public async Task<ActionResult<Result<string>>> RestoreTreeImages([FromBody] RestoreTreeImageCommand restoreTreeImagesCommand)
         {
@@ -395,6 +447,5 @@
                 return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
-
     }
 }

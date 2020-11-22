@@ -11,6 +11,7 @@
     using GrowATree.Infrastructure.Services;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -30,7 +31,7 @@
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(
-                        configuration.GetConnectionString("DefaultConnection"),
+                        configuration.GetConnectionString("SvetliConnection"),
                         b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             }
 
@@ -46,9 +47,12 @@
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddScoped<RoleManager<IdentityRole>>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddScoped<ILocationsService, LocationsService>();
+            services.AddScoped<IImageService, ImageService>();
 
             // Add clodinary
             var cloudinary = new Cloudinary(new Account()
