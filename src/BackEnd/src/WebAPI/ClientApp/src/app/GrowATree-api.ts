@@ -598,6 +598,7 @@ export class ImagesClient implements IImagesClient {
 
 export interface ITreeReportsClient {
     activeReportTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
+    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
     reportTree(message: string | null | undefined, type: string | null | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
     markReportAsSpam(command: MarkTreeReportAsSpamCommand): Observable<ResultOfBoolean>;
     archiveReport(command: ArchiveTreeReportCommand): Observable<ResultOfBoolean>;
@@ -617,7 +618,7 @@ export class TreeReportsClient implements ITreeReportsClient {
     }
 
     activeReportTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel> {
-        let url_ = this.baseUrl + "/api/TreeReports/active-report-types?";
+        let url_ = this.baseUrl + "/api/TreeReports/active-reports-types?";
         if (treeId !== undefined)
             url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
@@ -664,6 +665,66 @@ export class TreeReportsClient implements ITreeReportsClient {
             }));
         }
         return _observableOf<ResultOfICollectionOfTreeReportTypeModel>(<any>null);
+    }
+
+    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel> {
+        let url_ = this.baseUrl + "/api/TreeReports/active-reports?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        if (reportType !== undefined)
+            url_ += "ReportType=" + encodeURIComponent("" + reportType) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processActiveReportsForTypes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processActiveReportsForTypes(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeReportListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeReportListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processActiveReportsForTypes(response: HttpResponseBase): Observable<TreeReportListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeReportListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeReportListModel>(<any>null);
     }
 
     reportTree(message: string | null | undefined, type: string | null | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean> {
@@ -3103,6 +3164,256 @@ export interface ITreeReportTypeModel {
     reportsCount?: number;
 }
 
+export class MetaResultOfIListOfTreeReportModelAndPaginationMeta implements IMetaResultOfIListOfTreeReportModelAndPaginationMeta {
+    data?: TreeReportModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfTreeReportModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreeReportModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfTreeReportModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfTreeReportModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfTreeReportModelAndPaginationMeta {
+    data?: TreeReportModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreeReportListModel extends MetaResultOfIListOfTreeReportModelAndPaginationMeta implements ITreeReportListModel {
+
+    constructor(data?: ITreeReportListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): TreeReportListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeReportListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITreeReportListModel extends IMetaResultOfIListOfTreeReportModelAndPaginationMeta {
+}
+
+export class TreeReportModel implements ITreeReportModel {
+    id?: string | undefined;
+    message?: string | undefined;
+    imageUrl?: string | undefined;
+    type?: TreeReportType;
+    treeId?: string | undefined;
+    treeNickname?: string | undefined;
+    userId?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+
+    constructor(data?: ITreeReportModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.message = _data["message"];
+            this.imageUrl = _data["imageUrl"];
+            this.type = _data["type"];
+            this.treeId = _data["treeId"];
+            this.treeNickname = _data["treeNickname"];
+            this.userId = _data["userId"];
+            this.userUserName = _data["userUserName"];
+            this.userProfilePictureUrl = _data["userProfilePictureUrl"];
+        }
+    }
+
+    static fromJS(data: any): TreeReportModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreeReportModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["message"] = this.message;
+        data["imageUrl"] = this.imageUrl;
+        data["type"] = this.type;
+        data["treeId"] = this.treeId;
+        data["treeNickname"] = this.treeNickname;
+        data["userId"] = this.userId;
+        data["userUserName"] = this.userUserName;
+        data["userProfilePictureUrl"] = this.userProfilePictureUrl;
+        return data; 
+    }
+}
+
+export interface ITreeReportModel {
+    id?: string | undefined;
+    message?: string | undefined;
+    imageUrl?: string | undefined;
+    type?: TreeReportType;
+    treeId?: string | undefined;
+    treeNickname?: string | undefined;
+    userId?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+}
+
+export enum TreeReportType {
+    Broken = 1,
+    Dry = 2,
+    Damaged = 3,
+    Missing = 4,
+}
+
+export class PaginationMeta implements IPaginationMeta {
+    pagination?: Pagination | undefined;
+
+    constructor(data?: IPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPaginationMeta {
+    pagination?: Pagination | undefined;
+}
+
+export class Pagination implements IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+
+    constructor(data?: IPagination) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalItems = _data["totalItems"];
+            this.totalPages = _data["totalPages"];
+            this.currentPage = _data["currentPage"];
+            this.perPage = _data["perPage"];
+        }
+    }
+
+    static fromJS(data: any): Pagination {
+        data = typeof data === 'object' ? data : {};
+        let result = new Pagination();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalItems"] = this.totalItems;
+        data["totalPages"] = this.totalPages;
+        data["currentPage"] = this.currentPage;
+        data["perPage"] = this.perPage;
+        return data; 
+    }
+}
+
+export interface IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+}
+
 export class MarkTreeReportAsSpamCommand implements IMarkTreeReportAsSpamCommand {
     treeReportId?: string | undefined;
 
@@ -3650,90 +3961,6 @@ export class TreeListModel extends MetaResultOfIListOfTreeModelAndPaginationMeta
 }
 
 export interface ITreeListModel extends IMetaResultOfIListOfTreeModelAndPaginationMeta {
-}
-
-export class PaginationMeta implements IPaginationMeta {
-    pagination?: Pagination | undefined;
-
-    constructor(data?: IPaginationMeta) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): PaginationMeta {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginationMeta();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface IPaginationMeta {
-    pagination?: Pagination | undefined;
-}
-
-export class Pagination implements IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
-
-    constructor(data?: IPagination) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.totalItems = _data["totalItems"];
-            this.totalPages = _data["totalPages"];
-            this.currentPage = _data["currentPage"];
-            this.perPage = _data["perPage"];
-        }
-    }
-
-    static fromJS(data: any): Pagination {
-        data = typeof data === 'object' ? data : {};
-        let result = new Pagination();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalItems"] = this.totalItems;
-        data["totalPages"] = this.totalPages;
-        data["currentPage"] = this.currentPage;
-        data["perPage"] = this.perPage;
-        return data; 
-    }
-}
-
-export interface IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
 }
 
 export class MetaResultOfIListOfTreeShortInfoModelAndPaginationMeta implements IMetaResultOfIListOfTreeShortInfoModelAndPaginationMeta {

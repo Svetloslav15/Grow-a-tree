@@ -12,6 +12,7 @@
     using GrowATree.Application.TreeReportings.Commands.MarkReportAsSpam;
     using GrowATree.Application.TreeReportings.Commands.ReportTree;
     using GrowATree.Application.TreeReportings.Queries.GetActiveReportTypes;
+    using GrowATree.Application.TreeReportings.Queries.GetReportsForTypes;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -20,7 +21,7 @@
     public class TreeReportsController : ApiController
     {
         [Authorize]
-        [HttpGet("active-report-types")]
+        [HttpGet("active-reports-types")]
         public async Task<ActionResult<Result<ICollection<TreeReportTypeModel>>>> ActiveReportTypes([FromQuery] GetActiveTreeReportTypesQuery query)
         {
             try
@@ -32,6 +33,22 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<ICollection<TreeReportTypeModel>>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("active-reports")]
+        public async Task<ActionResult<TreeReportListModel>> ActiveReportsForTypes([FromQuery] GetActiveTreeReportsByTypeQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeReportListModel.Failure<TreeReportListModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
