@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-dom';
 
 import Layout from '../../../common/Layout/Layout';
 import TreeService from '../../../../services/treeService';
+import GeoCodingService from '../../../../services/geocodingService';
 import AlertService from '../../../../services/alertService';
 import ContentTypes from '../../../../static/contentTypes';
 import SuccessMessages from '../../../../static/successMessages';
@@ -42,7 +43,9 @@ const EditTreePage = ({history, match}) => {
         setData(data);
     };
 
-    const handleCoordinates = (latitude, longitute) => {
+    const handleCoordinates = async (latitude, longitute) => {
+        const res = await GeoCodingService.getCityByCoords(latitude, longitute)
+        data.city = res.data.address.municipality;
         data.latitude = latitude;
         data.longitude = longitute;
         setData({...data});
@@ -53,7 +56,6 @@ const EditTreePage = ({history, match}) => {
     };
 
     const handleSubmit = async () => {
-        console.log(Object.keys(data));
         if (Object.keys(data).length < 6) {
             return AlertService.error(ErrorMessages.allFieldsAreRequired);
         }

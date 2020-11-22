@@ -28,7 +28,7 @@ const AddTreePage = ({}) => {
     };
 
     const handleCoordinates = async (latitude, longitute) => {
-        let res = await GeoCodingService.getCityByCoords(latitude, longitute)
+        const res = await GeoCodingService.getCityByCoords(latitude, longitute)
         data.city = res.data.address.municipality;
         data.latitude = latitude;
         data.longitude = longitute;
