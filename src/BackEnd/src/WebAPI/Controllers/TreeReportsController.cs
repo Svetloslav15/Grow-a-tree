@@ -12,6 +12,8 @@
     using GrowATree.Application.TreeReportings.Commands.MarkReportAsSpam;
     using GrowATree.Application.TreeReportings.Commands.ReportTree;
     using GrowATree.Application.TreeReportings.Queries.GetActiveReportTypes;
+    using GrowATree.Application.TreeReportings.Queries.GetArchivedReportsForTypes;
+    using GrowATree.Application.TreeReportings.Queries.GetArchivedReportTypes;
     using GrowATree.Application.TreeReportings.Queries.GetReportsForTypes;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -22,7 +24,7 @@
     {
         [Authorize]
         [HttpGet("active-reports-types")]
-        public async Task<ActionResult<Result<ICollection<TreeReportTypeModel>>>> ActiveReportTypes([FromQuery] GetActiveTreeReportTypesQuery query)
+        public async Task<ActionResult<Result<ICollection<TreeReportTypeModel>>>> ActiveReportsTypes([FromQuery] GetActiveTreeReportTypesQuery query)
         {
             try
             {
@@ -39,6 +41,38 @@
         [Authorize]
         [HttpGet("active-reports")]
         public async Task<ActionResult<TreeReportListModel>> ActiveReportsForTypes([FromQuery] GetActiveTreeReportsByTypeQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeReportListModel.Failure<TreeReportListModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("archived-reports-types")]
+        public async Task<ActionResult<Result<ICollection<TreeReportTypeModel>>>> ArchivedReportsTypes([FromQuery] GetArchivedTreeReportTypesQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<ICollection<TreeReportTypeModel>>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("archived-reports")]
+        public async Task<ActionResult<TreeReportListModel>> ArchivedReports([FromQuery] GetArchivedTreeReportsByTypeQuery query)
         {
             try
             {

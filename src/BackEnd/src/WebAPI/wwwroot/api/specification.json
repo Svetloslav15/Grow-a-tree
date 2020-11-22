@@ -342,7 +342,7 @@
         "tags": [
           "TreeReports"
         ],
-        "operationId": "TreeReports_ActiveReportTypes",
+        "operationId": "TreeReports_ActiveReportsTypes",
         "parameters": [
           {
             "name": "TreeId",
@@ -379,6 +379,105 @@
           "TreeReports"
         ],
         "operationId": "TreeReports_ActiveReportsForTypes",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "ReportType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeReportListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/archived-reports-types": {
+      "get": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ArchivedReportsTypes",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfICollectionOfTreeReportTypeModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreeReports/archived-reports": {
+      "get": {
+        "tags": [
+          "TreeReports"
+        ],
+        "operationId": "TreeReports_ArchivedReports",
         "parameters": [
           {
             "name": "TreeId",

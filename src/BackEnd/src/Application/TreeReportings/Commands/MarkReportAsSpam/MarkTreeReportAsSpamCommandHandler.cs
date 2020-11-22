@@ -41,6 +41,7 @@
             }
 
             report.IsSpam = true;
+            report.IsActive = false;
             await this.context.SaveChangesAsync(CancellationToken.None);
 
             return Result<bool>.Success(true);

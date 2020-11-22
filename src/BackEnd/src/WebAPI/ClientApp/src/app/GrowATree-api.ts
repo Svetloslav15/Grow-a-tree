@@ -597,8 +597,10 @@ export class ImagesClient implements IImagesClient {
 }
 
 export interface ITreeReportsClient {
-    activeReportTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
+    activeReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
     activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
+    archivedReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
+    archivedReports(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
     reportTree(message: string | null | undefined, type: string | null | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
     markReportAsSpam(command: MarkTreeReportAsSpamCommand): Observable<ResultOfBoolean>;
     archiveReport(command: ArchiveTreeReportCommand): Observable<ResultOfBoolean>;
@@ -617,7 +619,7 @@ export class TreeReportsClient implements ITreeReportsClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    activeReportTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel> {
+    activeReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel> {
         let url_ = this.baseUrl + "/api/TreeReports/active-reports-types?";
         if (treeId !== undefined)
             url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
@@ -632,11 +634,11 @@ export class TreeReportsClient implements ITreeReportsClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processActiveReportTypes(response_);
+            return this.processActiveReportsTypes(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processActiveReportTypes(<any>response_);
+                    return this.processActiveReportsTypes(<any>response_);
                 } catch (e) {
                     return <Observable<ResultOfICollectionOfTreeReportTypeModel>><any>_observableThrow(e);
                 }
@@ -645,7 +647,7 @@ export class TreeReportsClient implements ITreeReportsClient {
         }));
     }
 
-    protected processActiveReportTypes(response: HttpResponseBase): Observable<ResultOfICollectionOfTreeReportTypeModel> {
+    protected processActiveReportsTypes(response: HttpResponseBase): Observable<ResultOfICollectionOfTreeReportTypeModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -706,6 +708,116 @@ export class TreeReportsClient implements ITreeReportsClient {
     }
 
     protected processActiveReportsForTypes(response: HttpResponseBase): Observable<TreeReportListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeReportListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeReportListModel>(<any>null);
+    }
+
+    archivedReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel> {
+        let url_ = this.baseUrl + "/api/TreeReports/archived-reports-types?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processArchivedReportsTypes(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processArchivedReportsTypes(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfICollectionOfTreeReportTypeModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfICollectionOfTreeReportTypeModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processArchivedReportsTypes(response: HttpResponseBase): Observable<ResultOfICollectionOfTreeReportTypeModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfICollectionOfTreeReportTypeModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfICollectionOfTreeReportTypeModel>(<any>null);
+    }
+
+    archivedReports(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel> {
+        let url_ = this.baseUrl + "/api/TreeReports/archived-reports?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
+        if (reportType !== undefined)
+            url_ += "ReportType=" + encodeURIComponent("" + reportType) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processArchivedReports(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processArchivedReports(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeReportListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeReportListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processArchivedReports(response: HttpResponseBase): Observable<TreeReportListModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 

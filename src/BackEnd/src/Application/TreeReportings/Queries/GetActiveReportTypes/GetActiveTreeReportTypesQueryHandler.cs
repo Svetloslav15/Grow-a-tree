@@ -22,7 +22,7 @@
         public async Task<Result<ICollection<TreeReportTypeModel>>> Handle(GetActiveTreeReportTypesQuery request, CancellationToken cancellationToken)
         {
             var types = await this.context.TreeReports
-                .Where(x => x.TreeId == request.TreeId && x.IsActive == true)
+                .Where(x => x.TreeId == request.TreeId && x.IsActive == true && x.IsSpam == false)
                 .GroupBy(x => x.Type)
                 .Select(x => new TreeReportTypeModel
                 {
