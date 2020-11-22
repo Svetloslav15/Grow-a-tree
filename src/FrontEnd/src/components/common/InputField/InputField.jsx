@@ -1,5 +1,4 @@
-import React, {useRef, useEffect} from 'react';
-import * as style from './InputField.module.scss';
+import React from 'react';
 import { MDBInput } from 'mdbreact';
 
 const InputField = ({label, type, id, icon, onChange, width, value, disabled}) => {

@@ -32,18 +32,16 @@ const ResetPasswordPage = ({location}) => {
             <div className={`col-md-12 ${style.sectionWrapper}`}>
                 <div className='col-md-4 my-5 mx-auto text-center'>
                     <h2 className={style.title}># Смени парола</h2>
-                    <InputField type='email'
-                                label={'Имейл'}
-                                id='email'
-                                icon={Icons.email}
-                                width={12}
-                                onChange={handleChange}/>
-                    <InputField type='password'
-                                label={'Нова парола'}
-                                id='password'
-                                icon={Icons.password}
-                                width={12}
-                                onChange={handleChange}/>
+                        <InputField type='email'
+                                    label={'Имейл'}
+                                    id='email'
+                                    width={12}
+                                    onChange={handleChange}/>
+                        <InputField type='password'
+                                    label={'Нова парола'}
+                                    id='password'
+                                    width={12}
+                                    onChange={handleChange}/>
                     <Button type={'DarkOutline'} className={'mb-5'} onClick={handleSubmit}>Смени</Button>
                 </div>
             </div>
