@@ -4,14 +4,16 @@ using GrowATree.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrowATree.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201128164316_RemoveUnusedEntity")]
+    partial class RemoveUnusedEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,6 +97,29 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.HasIndex("StoreId");
 
                     b.ToTable("PromoCodes");
+                });
+
+            modelBuilder.Entity("GrowATree.Domain.Entities.Reaction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TreeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TreeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reactions");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.Store", b =>
@@ -226,29 +251,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("TreePostReactions");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.TreeReaction", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TreeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TreeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TreeReactions");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.TreeReport", b =>
@@ -626,6 +628,17 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                         .HasForeignKey("StoreId");
                 });
 
+            modelBuilder.Entity("GrowATree.Domain.Entities.Reaction", b =>
+                {
+                    b.HasOne("GrowATree.Domain.Entities.Tree", "Tree")
+                        .WithMany("Reactions")
+                        .HasForeignKey("TreeId");
+
+                    b.HasOne("GrowATree.Domain.Entities.User", "User")
+                        .WithMany("Reactions")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("GrowATree.Domain.Entities.Store", b =>
                 {
                     b.HasOne("GrowATree.Domain.Entities.User", "ApplicationUser")
@@ -662,17 +675,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
 
                     b.HasOne("GrowATree.Domain.Entities.User", "User")
                         .WithMany("TreePostReactions")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.TreeReaction", b =>
-                {
-                    b.HasOne("GrowATree.Domain.Entities.Tree", "Tree")
-                        .WithMany("Reactions")
-                        .HasForeignKey("TreeId");
-
-                    b.HasOne("GrowATree.Domain.Entities.User", "User")
-                        .WithMany("Reactions")
                         .HasForeignKey("UserId");
                 });
 

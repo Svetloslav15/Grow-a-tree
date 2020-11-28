@@ -1,10 +1,10 @@
-﻿using GrowATree.Domain.Enums;
-using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace GrowATree.Domain.Entities
+﻿namespace GrowATree.Domain.Entities
 {
-    public class Reaction
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using GrowATree.Domain.Enums;
+
+    public class TreeReaction
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -16,7 +16,7 @@ namespace GrowATree.Domain.Entities
         public Tree Tree { get; set; }
 
         public string UserId { get; set; }
-        
+
         public User User { get; set; }
     }
 }

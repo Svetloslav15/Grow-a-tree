@@ -35,11 +35,6 @@
 
         public async Task<Result<bool>> Handle(ReportTreeCommand request, CancellationToken cancellationToken)
         {
-            if (request.UserId == request.TreeId)
-            {
-                return Result<bool>.Failure(ErrorMessages.TreeReportSelfReportErrorMessage);
-            }
-
             if (!this.cloudinaryService.IsFileValid(request.ImageFile))
             {
                 return Result<bool>.Failure(ErrorMessages.TreeImageInvalidFormatErrorMessage);
@@ -54,6 +49,11 @@
             if (user == null)
             {
                 return Result<bool>.Failure(ErrorMessages.UserNotFoundErrorMessage);
+            }
+
+            if (user.Trees.Any(x => x.Id == request.TreeId))
+            {
+                return Result<bool>.Failure(ErrorMessages.TreeReportSelfReportErrorMessage);
             }
 
             var duplicateReport = await this.context.TreeReports
