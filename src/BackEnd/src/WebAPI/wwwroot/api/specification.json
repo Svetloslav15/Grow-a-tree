@@ -337,12 +337,43 @@
         ]
       }
     },
+    "/api/TreeReactions/tree-reaction-types": {
+      "get": {
+        "tags": [
+          "TreeReactions"
+        ],
+        "operationId": "TreeReactions_Upsert",
+        "parameters": [
+          {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfICollectionOfTreeReactionTypeModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TreeReactions/upsert": {
       "post": {
         "tags": [
           "TreeReactions"
         ],
-        "operationId": "TreeReactions_Upsert",
+        "operationId": "TreeReactions_Upsert2",
         "requestBody": {
           "x-name": "upsertCommand",
           "content": {
@@ -2266,6 +2297,43 @@
           "url": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "ResultOfICollectionOfTreeReactionTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreeReactionTypeModel"
+            }
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreeReactionTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "reactionsCount": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

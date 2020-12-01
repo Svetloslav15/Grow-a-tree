@@ -34,8 +34,8 @@
         public async Task<string> GetCurrentUserId()
         {
             var userName = this.httpContext.HttpContext.User.Identity.Name;
-            var user = await this.userManager.Users.FirstAsync(x => x.UserName == userName);
-            return user.Id;
+            var user = await this.userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+            return user?.Id;
         }
 
         public async Task<string> GetUserNameAsync(string userId)

@@ -15,11 +15,13 @@
     public class UpsertTreeReactionCommandHandler : IRequestHandler<UpsertTreeReactionCommand, Result<bool>>
     {
         private readonly IApplicationDbContext context;
+        private readonly IIdentityService identityService;
         private readonly UserManager<User> userManager;
 
-        public UpsertTreeReactionCommandHandler(IApplicationDbContext context, UserManager<User> userManager)
+        public UpsertTreeReactionCommandHandler(IApplicationDbContext context, UserManager<User> userManager, IIdentityService identityService)
         {
             this.context = context;
+            this.identityService = identityService;
             this.userManager = userManager;
         }
 
@@ -34,6 +36,11 @@
             if (user == null)
             {
                 return Result<bool>.Failure(ErrorMessages.UserNotFoundErrorMessage);
+            }
+
+            if (await this.identityService.GetCurrentUserId() != request.UserId)
+            {
+                return Result<bool>.Failure(ErrorMessages.NotAllowedErrorMessage);
             }
 
             TreeReaction entity;
