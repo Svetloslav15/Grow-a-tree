@@ -10,6 +10,7 @@
     using GrowATree.Application.Models.TreeReactions;
     using GrowATree.Application.TreeReactions.Commands.DeleteReaction;
     using GrowATree.Application.TreeReactions.Commands.Upsert;
+    using GrowATree.Application.TreeReactions.Queries.GetList;
     using GrowATree.Application.TreeReactions.Queries.GetTreeReactionsByType;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,23 @@
     {
         [Authorize]
         [HttpGet("tree-reaction-types")]
-        public async Task<ActionResult<Result<ICollection<TreeReactionTypeModel>>>> Upsert([FromQuery] GetTreeReactionsByTypeForTreeCommand upsertCommand)
+        public async Task<ActionResult<Result<ICollection<TreeReactionTypeModel>>>> Upsert([FromQuery] GetTreeReactionsByTypeForTreeQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<ICollection<TreeReactionTypeModel>>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("tree-reactions")]
+        public async Task<ActionResult<TreeReactionListModel>> GetReactionsForTree([FromQuery] GetTreeReactionsListQuery upsertCommand)
         {
             try
             {
@@ -30,7 +47,7 @@
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<ICollection<TreeReactionTypeModel>>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+                return TreeReactionListModel.Failure<TreeReactionListModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 

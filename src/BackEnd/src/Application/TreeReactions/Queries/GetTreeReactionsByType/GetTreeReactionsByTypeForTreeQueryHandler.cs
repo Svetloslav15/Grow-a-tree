@@ -10,16 +10,16 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetTreeReactionsByTypeForTreeCommandHandler : IRequestHandler<GetTreeReactionsByTypeForTreeCommand, Result<ICollection<TreeReactionTypeModel>>>
+    public class GetTreeReactionsByTypeForTreeQueryHandler : IRequestHandler<GetTreeReactionsByTypeForTreeQuery, Result<ICollection<TreeReactionTypeModel>>>
     {
         private readonly IApplicationDbContext context;
 
-        public GetTreeReactionsByTypeForTreeCommandHandler(IApplicationDbContext context)
+        public GetTreeReactionsByTypeForTreeQueryHandler(IApplicationDbContext context)
         {
             this.context = context;
         }
 
-        public async Task<Result<ICollection<TreeReactionTypeModel>>> Handle(GetTreeReactionsByTypeForTreeCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ICollection<TreeReactionTypeModel>>> Handle(GetTreeReactionsByTypeForTreeQuery request, CancellationToken cancellationToken)
         {
             var reactionTypes = await this.context.TreeReactions
                 .Where(x => x.TreeId == request.TreeId)

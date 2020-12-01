@@ -65,6 +65,7 @@
                         TreeId = request.TreeId,
                         UserId = request.UserId,
                         Type = (ReactionType)Enum.Parse(typeof(ReactionType), request.Type),
+                        CreatedOn = DateTime.Now,
                     };
 
                     await this.context.TreeReactions.AddAsync(entity);
