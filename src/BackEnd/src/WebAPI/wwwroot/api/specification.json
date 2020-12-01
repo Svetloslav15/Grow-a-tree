@@ -369,6 +369,38 @@
         }
       }
     },
+    "/api/TreeReactions/delete": {
+      "post": {
+        "tags": [
+          "TreeReactions"
+        ],
+        "operationId": "TreeReactions_Delete",
+        "requestBody": {
+          "x-name": "upsertCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTreeReactionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TreeReports/active-reports-types": {
       "get": {
         "tags": [
@@ -2254,6 +2286,16 @@
             "nullable": true
           },
           "type": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DeleteTreeReactionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
             "type": "string",
             "nullable": true
           }

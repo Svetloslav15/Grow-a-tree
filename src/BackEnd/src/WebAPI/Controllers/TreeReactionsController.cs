@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using GrowATree.Application.Common.Models;
+    using GrowATree.Application.TreeReactions.Commands.DeleteReaction;
     using GrowATree.Application.TreeReactions.Commands.Upsert;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -29,6 +30,21 @@
                     return Result<bool>.Failure(errorMessage);
                 }
 
+                return await this.Mediator.Send(upsertCommand);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [HttpPost("delete")]
+        public async Task<ActionResult<Result<bool>>> Delete([FromBody] DeleteTreeReactionCommand upsertCommand)
+        {
+            try
+            {
                 return await this.Mediator.Send(upsertCommand);
             }
             catch (Exception ex)
