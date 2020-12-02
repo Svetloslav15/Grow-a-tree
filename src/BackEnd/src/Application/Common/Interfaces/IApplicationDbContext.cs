@@ -13,9 +13,7 @@
 
         public DbSet<TreeImage> TreeImages { get; set; }
 
-        public DbSet<Reaction> Reactions { get; set; }
-
-        public DbSet<ReactionImage> ReactionImages { get; set; }
+        public DbSet<TreeReaction> TreeReactions { get; set; }
 
         public DbSet<Tree> Trees { get; set; }
 

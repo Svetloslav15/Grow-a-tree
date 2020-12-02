@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2a4743f0-0d84-4d85-a95a-2f321201929c",
+		"_postman_id": "62a6714e-85f0-40ad-9208-a5347f5f1c5a",
 		"name": "GrowATree Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -47,7 +47,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "6bff3b1d-5784-48cf-9ac3-e83af9f2b811",
+								"id": "e773eb9a-e89d-413e-a260-617aae8dbc66",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", jsonData.data.accessToken);"
@@ -61,7 +61,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"user1@trees.com\",\r\n    \"password\": \"user1\"\r\n}",
+							"raw": "{\r\n    \"email\": \"user3@trees.com\",\r\n    \"password\": \"user3\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -141,7 +141,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "67d17b56-310d-49ee-ae84-e540ba2632e4",
+								"id": "a35110a6-45bf-470b-8fef-f9fab86249a4",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -1542,6 +1542,158 @@
 								{
 									"key": "reportType",
 									"value": "Missing"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "TreeReactions",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"92017285-4f7d-41bc-b314-09fc594f8b71\",\r\n    \"treeId\": \"4d5b5aac-4aec-45ef-a4a4-51f48b790a38\",\r\n    \"type\": \"Laugh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"1b05aa20-7047-4234-86f7-0df2420c6ffc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/delete",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTypesForTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/tree-reaction-types?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"tree-reaction-types"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTreeReactionsForTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/tree-reactions?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38&type=Heart",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"tree-reactions"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								},
+								{
+									"key": "type",
+									"value": "Heart"
 								}
 							]
 						}

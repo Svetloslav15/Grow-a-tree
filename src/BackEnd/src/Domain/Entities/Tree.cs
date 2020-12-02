@@ -32,7 +32,7 @@
 
         public ICollection<TreeImage> Images { get; set; } = new HashSet<TreeImage>();
 
-        public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
+        public ICollection<TreeReaction> Reactions { get; set; } = new List<TreeReaction>();
 
         public ICollection<TreeReport> Reports { get; set; } = new List<TreeReport>();
 
