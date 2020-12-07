@@ -2,7 +2,8 @@ import baseService from './baseService';
 
 const ROUTES = {
     postAuthorizedAddTree: '/trees/upsert',
-    getAuthorizedTreeById: '/trees/'
+    getAuthorizedTreeById: '/trees/',
+    getTreesForCarousel: '/trees/random-images'
 };
 
 export default new Proxy({}, {

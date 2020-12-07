@@ -20,7 +20,7 @@
 
         public ICollection<Tree> Trees { get; set; } = new List<Tree>();
 
-        public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
+        public ICollection<TreeReaction> Reactions { get; set; } = new List<TreeReaction>();
 
         public ICollection<TreePostReaction> TreePostReactions { get; set; } = new List<TreePostReaction>();
 
