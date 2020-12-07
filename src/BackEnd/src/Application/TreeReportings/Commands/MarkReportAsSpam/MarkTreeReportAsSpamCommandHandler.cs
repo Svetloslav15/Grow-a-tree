@@ -28,7 +28,7 @@
         {
             if (!await this.context.TreeReports.AnyAsync(x => x.Id == request.TreeReportId))
             {
-                return Result<bool>.Failure(ErrorMessages.TreeReporNotFoundErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.TreeReportNotFoundErrorMessage);
             }
 
             var report = await this.context.TreeReports

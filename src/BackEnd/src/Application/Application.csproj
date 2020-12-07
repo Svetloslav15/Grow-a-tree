@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <Folder Include="Images\Queries\" />
+    <Folder Include="TreePosts\Queries\" />
   </ItemGroup>
 
 </Project>

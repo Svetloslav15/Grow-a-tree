@@ -337,6 +337,43 @@
         ]
       }
     },
+    "/api/TreePosts/upsert": {
+      "post": {
+        "tags": [
+          "TreePosts"
+        ],
+        "operationId": "TreePosts_Upsert",
+        "requestBody": {
+          "x-name": "upsertCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertTreePostCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/TreeReactions/tree-reaction-types": {
       "get": {
         "tags": [
@@ -2373,6 +2410,28 @@
             "nullable": true
           },
           "url": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpsertTreePostCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 650,
+            "minLength": 1
+          },
+          "treeId": {
             "type": "string",
             "nullable": true
           }

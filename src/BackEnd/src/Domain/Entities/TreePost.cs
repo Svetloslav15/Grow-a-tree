@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace GrowATree.Domain.Entities
+﻿namespace GrowATree.Domain.Entities
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
     public class TreePost
     {
         [Key]
@@ -14,6 +14,12 @@ namespace GrowATree.Domain.Entities
         public string TreeId { get; set; }
 
         public Tree Tree { get; set; }
+
+        public string UserId { get; set; }
+
+        public User User { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public ICollection<TreePostReaction> Reactions { get; set; } = new List<TreePostReaction>();
     }
