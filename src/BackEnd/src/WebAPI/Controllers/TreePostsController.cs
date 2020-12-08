@@ -6,7 +6,9 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using GrowATree.Application.Common.Models;
+    using GrowATree.Application.Models.TreePosts;
     using GrowATree.Application.TreePosts.Commands.Upsert;
+    using GrowATree.Application.TreePosts.Queries.GetList;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -14,6 +16,22 @@
 
     public class TreePostsController : ApiController
     {
+        [HttpGet("list")]
+        [Authorize]
+        public async Task<ActionResult<TreePostListModel>> List([FromQuery] GetTreePostListQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreePostListModel.Failure<TreePostListModel>(ErrorMessages.AccountFailureErrorMessage);
+            }
+        }
+
         [HttpPost("upsert")]
         [Authorize]
         public async Task<ActionResult<Result<bool>>> Upsert([FromBody] UpsertTreePostCommand upsertCommand)

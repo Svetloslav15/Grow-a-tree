@@ -597,6 +597,7 @@ export class ImagesClient implements IImagesClient {
 }
 
 export interface ITreePostsClient {
+    list(page: number | undefined, perPage: number | undefined): Observable<TreePostListModel>;
     upsert(upsertCommand: UpsertTreePostCommand): Observable<ResultOfBoolean>;
 }
 
@@ -611,6 +612,62 @@ export class TreePostsClient implements ITreePostsClient {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    list(page: number | undefined, perPage: number | undefined): Observable<TreePostListModel> {
+        let url_ = this.baseUrl + "/api/TreePosts/list?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processList(<any>response_);
+                } catch (e) {
+                    return <Observable<TreePostListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreePostListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processList(response: HttpResponseBase): Observable<TreePostListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreePostListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreePostListModel>(<any>null);
     }
 
     upsert(upsertCommand: UpsertTreePostCommand): Observable<ResultOfBoolean> {
@@ -3481,6 +3538,233 @@ export interface IImageModel {
     url?: string | undefined;
 }
 
+export class MetaResultOfIListOfTreePostModelAndPaginationMeta implements IMetaResultOfIListOfTreePostModelAndPaginationMeta {
+    data?: TreePostModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfTreePostModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreePostModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfTreePostModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfTreePostModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfTreePostModelAndPaginationMeta {
+    data?: TreePostModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreePostListModel extends MetaResultOfIListOfTreePostModelAndPaginationMeta implements ITreePostListModel {
+
+    constructor(data?: ITreePostListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): TreePostListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreePostListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITreePostListModel extends IMetaResultOfIListOfTreePostModelAndPaginationMeta {
+}
+
+export class TreePostModel implements ITreePostModel {
+    id?: string | undefined;
+    content?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+    userId?: string | undefined;
+
+    constructor(data?: ITreePostModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.content = _data["content"];
+            this.userUserName = _data["userUserName"];
+            this.userProfilePictureUrl = _data["userProfilePictureUrl"];
+            this.userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any): TreePostModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreePostModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["content"] = this.content;
+        data["userUserName"] = this.userUserName;
+        data["userProfilePictureUrl"] = this.userProfilePictureUrl;
+        data["userId"] = this.userId;
+        return data; 
+    }
+}
+
+export interface ITreePostModel {
+    id?: string | undefined;
+    content?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+    userId?: string | undefined;
+}
+
+export class PaginationMeta implements IPaginationMeta {
+    pagination?: Pagination | undefined;
+
+    constructor(data?: IPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPaginationMeta {
+    pagination?: Pagination | undefined;
+}
+
+export class Pagination implements IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+
+    constructor(data?: IPagination) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalItems = _data["totalItems"];
+            this.totalPages = _data["totalPages"];
+            this.currentPage = _data["currentPage"];
+            this.perPage = _data["perPage"];
+        }
+    }
+
+    static fromJS(data: any): Pagination {
+        data = typeof data === 'object' ? data : {};
+        let result = new Pagination();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalItems"] = this.totalItems;
+        data["totalPages"] = this.totalPages;
+        data["currentPage"] = this.currentPage;
+        data["perPage"] = this.perPage;
+        return data; 
+    }
+}
+
+export interface IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+}
+
 export class UpsertTreePostCommand implements IUpsertTreePostCommand {
     id?: string | undefined;
     content!: string;
@@ -3767,90 +4051,6 @@ export interface ITreeReactionModel {
 export enum ReactionType {
     Heart = 1,
     Laugh = 2,
-}
-
-export class PaginationMeta implements IPaginationMeta {
-    pagination?: Pagination | undefined;
-
-    constructor(data?: IPaginationMeta) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): PaginationMeta {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginationMeta();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface IPaginationMeta {
-    pagination?: Pagination | undefined;
-}
-
-export class Pagination implements IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
-
-    constructor(data?: IPagination) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.totalItems = _data["totalItems"];
-            this.totalPages = _data["totalPages"];
-            this.currentPage = _data["currentPage"];
-            this.perPage = _data["perPage"];
-        }
-    }
-
-    static fromJS(data: any): Pagination {
-        data = typeof data === 'object' ? data : {};
-        let result = new Pagination();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalItems"] = this.totalItems;
-        data["totalPages"] = this.totalPages;
-        data["currentPage"] = this.currentPage;
-        data["perPage"] = this.perPage;
-        return data; 
-    }
-}
-
-export interface IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
 }
 
 export class UpsertTreeReactionCommand implements IUpsertTreeReactionCommand {
