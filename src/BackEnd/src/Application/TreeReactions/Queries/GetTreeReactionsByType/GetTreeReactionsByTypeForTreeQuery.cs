@@ -5,7 +5,7 @@
     using GrowATree.Application.Models.TreeReactions;
     using MediatR;
 
-    public class GetTreeReactionsByTypeForTreeQuery : IRequest<Result<ICollection<TreeReactionTypeModel>>>
+    public class GetTreeReactionsByTypeForTreeQuery : IRequest<Result<ICollection<ReactionTypeModel>>>
     {
         public string TreeId { get; set; }
     }

@@ -212,5 +212,13 @@ namespace Common.Constants
         public const string TreePostContentMaxLengthErrorMessage = "Постът е твърде дълъг";
 
         #endregion
+
+        #region TreePostReactions
+
+        public const string TreePostReactionNotFoundErrorMessage = "Реакцията не съществува";
+
+        public const string TreePostAlreadyReactedErrorMessage = "Потребителят вече е реагирал на поста";
+
+        #endregion
     }
 }

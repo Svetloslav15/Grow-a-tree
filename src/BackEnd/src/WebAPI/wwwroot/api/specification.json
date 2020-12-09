@@ -337,6 +337,43 @@
         ]
       }
     },
+    "/api/TreePostReactions/upsert": {
+      "post": {
+        "tags": [
+          "TreePostReactions"
+        ],
+        "operationId": "TreePostReactions_Upsert",
+        "requestBody": {
+          "x-name": "upsertCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertTreePostReactionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/TreePosts/list": {
       "get": {
         "tags": [
@@ -479,7 +516,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultOfICollectionOfTreeReactionTypeModel"
+                  "$ref": "#/components/schemas/ResultOfICollectionOfReactionTypeModel"
                 }
               }
             }
@@ -2497,6 +2534,44 @@
           }
         }
       },
+      "ResultOfString": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UpsertTreePostReactionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "treePostId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "TreePostListModel": {
         "allOf": [
           {
@@ -2633,7 +2708,7 @@
           }
         }
       },
-      "ResultOfICollectionOfTreeReactionTypeModel": {
+      "ResultOfICollectionOfReactionTypeModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2641,7 +2716,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/TreeReactionTypeModel"
+              "$ref": "#/components/schemas/ReactionTypeModel"
             }
           },
           "succeeded": {
@@ -2656,7 +2731,7 @@
           }
         }
       },
-      "TreeReactionTypeModel": {
+      "ReactionTypeModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -3319,26 +3394,6 @@
       "GetRandomTreesImagesQuery": {
         "type": "object",
         "additionalProperties": false
-      },
-      "ResultOfString": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "data": {
-            "type": "string",
-            "nullable": true
-          },
-          "succeeded": {
-            "type": "boolean"
-          },
-          "errors": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
-          }
-        }
       },
       "ResultOfListOfString": {
         "type": "object",
