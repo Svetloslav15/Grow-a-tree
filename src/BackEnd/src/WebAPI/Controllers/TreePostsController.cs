@@ -7,6 +7,7 @@
     using Common.Constants;
     using GrowATree.Application.Common.Models;
     using GrowATree.Application.Models.TreePosts;
+    using GrowATree.Application.TreePosts.Commands.Delete;
     using GrowATree.Application.TreePosts.Commands.Upsert;
     using GrowATree.Application.TreePosts.Queries.GetList;
     using Microsoft.AspNetCore.Authorization;
@@ -50,6 +51,22 @@
                 }
 
                 return await this.Mediator.Send(upsertCommand);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<bool>.Failure(ErrorMessages.AccountFailureErrorMessage);
+            }
+        }
+
+        [HttpPost("delete")]
+        [Authorize]
+        public async Task<ActionResult<Result<bool>>> Delete([FromBody] DeleteTreePostCommand deleteCommand)
+        {
+            try
+            {
+                return await this.Mediator.Send(deleteCommand);
             }
             catch (Exception ex)
             {

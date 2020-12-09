@@ -28,6 +28,7 @@
             var list = await this.context.TreePosts
                    .Skip(request.PerPage * (request.Page - 1))
                    .Take(request.PerPage)
+                   .Where(x => !x.IsDeleted)
                    .OrderByDescending(x => x.CreatedOn)
                    .ProjectTo<TreePostModel>(this.mapper.ConfigurationProvider)
                    .ToListAsync();
