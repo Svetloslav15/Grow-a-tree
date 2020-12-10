@@ -11,10 +11,28 @@ namespace GrowATree.WebAPI.Controllers
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading.Tasks;
+    using GrowATree.Application.Models.TreePostReactions;
+    using GrowATree.Application.TreePostReactions.Queries.GetList;
     using Serilog;
 
     public class TreePostReactionsController : ApiController
     {
+        [HttpGet("list")]
+        [Authorize]
+        public async Task<ActionResult<TreePostReactionListModel>> GetList([FromQuery] GetTreePostReactionListQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreePostReactionListModel.Failure<TreePostReactionListModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
         [HttpGet("types")]
         [Authorize]
         public async Task<ActionResult<Result<IList<ReactionTypeModel>>>> GetTypes([FromQuery] GetTreePostReactionTypesQuery query)

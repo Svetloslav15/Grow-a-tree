@@ -337,6 +337,69 @@
         ]
       }
     },
+    "/api/TreePostReactions/list": {
+      "get": {
+        "tags": [
+          "TreePostReactions"
+        ],
+        "operationId": "TreePostReactions_GetList",
+        "parameters": [
+          {
+            "name": "PostId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreePostReactionListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/TreePostReactions/types": {
       "get": {
         "tags": [
@@ -2570,6 +2633,117 @@
           }
         }
       },
+      "TreePostReactionListModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MetaResultOfIListOfTreePostReactionModelAndPaginationMeta"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "MetaResultOfIListOfTreePostReactionModelAndPaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreePostReactionModel"
+            }
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreePostReactionModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ReactionType"
+          },
+          "userUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ReactionType": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Heart",
+          "Laugh"
+        ],
+        "enum": [
+          1,
+          2
+        ]
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pagination": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Pagination"
+              }
+            ]
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perPage": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "ResultOfIListOfReactionTypeModel": {
         "type": "object",
         "additionalProperties": false,
@@ -2713,42 +2887,6 @@
           }
         }
       },
-      "PaginationMeta": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "pagination": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Pagination"
-              }
-            ]
-          }
-        }
-      },
-      "Pagination": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "totalItems": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "currentPage": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "perPage": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "UpsertTreePostCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -2866,18 +3004,6 @@
             "format": "date-time"
           }
         }
-      },
-      "ReactionType": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Heart",
-          "Laugh"
-        ],
-        "enum": [
-          1,
-          2
-        ]
       },
       "UpsertTreeReactionCommand": {
         "type": "object",

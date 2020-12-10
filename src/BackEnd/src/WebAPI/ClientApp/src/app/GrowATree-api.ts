@@ -597,6 +597,7 @@ export class ImagesClient implements IImagesClient {
 }
 
 export interface ITreePostReactionsClient {
+    getList(postId: string | null | undefined, type: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreePostReactionListModel>;
     getTypes(postId: string | null | undefined): Observable<ResultOfIListOfReactionTypeModel>;
     upsert(upsertCommand: UpsertTreePostReactionCommand): Observable<ResultOfString>;
 }
@@ -612,6 +613,66 @@ export class TreePostReactionsClient implements ITreePostReactionsClient {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getList(postId: string | null | undefined, type: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreePostReactionListModel> {
+        let url_ = this.baseUrl + "/api/TreePostReactions/list?";
+        if (postId !== undefined)
+            url_ += "PostId=" + encodeURIComponent("" + postId) + "&"; 
+        if (type !== undefined)
+            url_ += "Type=" + encodeURIComponent("" + type) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetList(<any>response_);
+                } catch (e) {
+                    return <Observable<TreePostReactionListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreePostReactionListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetList(response: HttpResponseBase): Observable<TreePostReactionListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreePostReactionListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreePostReactionListModel>(<any>null);
     }
 
     getTypes(postId: string | null | undefined): Observable<ResultOfIListOfReactionTypeModel> {
@@ -3712,6 +3773,234 @@ export interface IImageModel {
     url?: string | undefined;
 }
 
+export class MetaResultOfIListOfTreePostReactionModelAndPaginationMeta implements IMetaResultOfIListOfTreePostReactionModelAndPaginationMeta {
+    data?: TreePostReactionModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfTreePostReactionModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreePostReactionModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfTreePostReactionModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfTreePostReactionModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfTreePostReactionModelAndPaginationMeta {
+    data?: TreePostReactionModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreePostReactionListModel extends MetaResultOfIListOfTreePostReactionModelAndPaginationMeta implements ITreePostReactionListModel {
+
+    constructor(data?: ITreePostReactionListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): TreePostReactionListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreePostReactionListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITreePostReactionListModel extends IMetaResultOfIListOfTreePostReactionModelAndPaginationMeta {
+}
+
+export class TreePostReactionModel implements ITreePostReactionModel {
+    id?: string | undefined;
+    type?: ReactionType;
+    userUserName?: string | undefined;
+    createdOn?: Date;
+
+    constructor(data?: ITreePostReactionModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.type = _data["type"];
+            this.userUserName = _data["userUserName"];
+            this.createdOn = _data["createdOn"] ? new Date(_data["createdOn"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TreePostReactionModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreePostReactionModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["type"] = this.type;
+        data["userUserName"] = this.userUserName;
+        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ITreePostReactionModel {
+    id?: string | undefined;
+    type?: ReactionType;
+    userUserName?: string | undefined;
+    createdOn?: Date;
+}
+
+export enum ReactionType {
+    Heart = 1,
+    Laugh = 2,
+}
+
+export class PaginationMeta implements IPaginationMeta {
+    pagination?: Pagination | undefined;
+
+    constructor(data?: IPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): PaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IPaginationMeta {
+    pagination?: Pagination | undefined;
+}
+
+export class Pagination implements IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+
+    constructor(data?: IPagination) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalItems = _data["totalItems"];
+            this.totalPages = _data["totalPages"];
+            this.currentPage = _data["currentPage"];
+            this.perPage = _data["perPage"];
+        }
+    }
+
+    static fromJS(data: any): Pagination {
+        data = typeof data === 'object' ? data : {};
+        let result = new Pagination();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalItems"] = this.totalItems;
+        data["totalPages"] = this.totalPages;
+        data["currentPage"] = this.currentPage;
+        data["perPage"] = this.perPage;
+        return data; 
+    }
+}
+
+export interface IPagination {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    perPage?: number;
+}
+
 export class ResultOfIListOfReactionTypeModel implements IResultOfIListOfReactionTypeModel {
     data?: ReactionTypeModel[] | undefined;
     succeeded?: boolean;
@@ -4051,90 +4340,6 @@ export interface ITreePostModel {
     userId?: string | undefined;
 }
 
-export class PaginationMeta implements IPaginationMeta {
-    pagination?: Pagination | undefined;
-
-    constructor(data?: IPaginationMeta) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.pagination = _data["pagination"] ? Pagination.fromJS(_data["pagination"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): PaginationMeta {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginationMeta();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["pagination"] = this.pagination ? this.pagination.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-export interface IPaginationMeta {
-    pagination?: Pagination | undefined;
-}
-
-export class Pagination implements IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
-
-    constructor(data?: IPagination) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.totalItems = _data["totalItems"];
-            this.totalPages = _data["totalPages"];
-            this.currentPage = _data["currentPage"];
-            this.perPage = _data["perPage"];
-        }
-    }
-
-    static fromJS(data: any): Pagination {
-        data = typeof data === 'object' ? data : {};
-        let result = new Pagination();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalItems"] = this.totalItems;
-        data["totalPages"] = this.totalPages;
-        data["currentPage"] = this.currentPage;
-        data["perPage"] = this.perPage;
-        return data; 
-    }
-}
-
-export interface IPagination {
-    totalItems?: number;
-    totalPages?: number;
-    currentPage?: number;
-    perPage?: number;
-}
-
 export class UpsertTreePostCommand implements IUpsertTreePostCommand {
     id?: string | undefined;
     content!: string;
@@ -4412,11 +4617,6 @@ export interface ITreeReactionModel {
     type?: ReactionType;
     userUserName?: string | undefined;
     createdOn?: Date;
-}
-
-export enum ReactionType {
-    Heart = 1,
-    Laugh = 2,
 }
 
 export class UpsertTreeReactionCommand implements IUpsertTreeReactionCommand {
