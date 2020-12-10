@@ -1,4 +1,4 @@
-﻿namespace GrowATree.Application.TreeReactions.Queries.GetTreeReactionsByType
+﻿namespace GrowATree.Application.TreePostReactions.Queries.GetTypes
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -10,19 +10,19 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetTreeReactionsByTypeForTreeQueryHandler : IRequestHandler<GetTreeReactionsByTypeForTreeQuery, Result<ICollection<ReactionTypeModel>>>
+    public class GetTreePostReactionTypesQueryHandler : IRequestHandler<GetTreePostReactionTypesQuery, Result<IList<ReactionTypeModel>>>
     {
         private readonly IApplicationDbContext context;
 
-        public GetTreeReactionsByTypeForTreeQueryHandler(IApplicationDbContext context)
+        public GetTreePostReactionTypesQueryHandler(IApplicationDbContext context)
         {
             this.context = context;
         }
 
-        public async Task<Result<ICollection<ReactionTypeModel>>> Handle(GetTreeReactionsByTypeForTreeQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IList<ReactionTypeModel>>> Handle(GetTreePostReactionTypesQuery request, CancellationToken cancellationToken)
         {
-            var reactionTypes = await this.context.TreeReactions
-                .Where(x => x.TreeId == request.TreeId)
+            var reactionTypes = await this.context.TreePostReactions
+                .Where(x => x.PostId == request.PostId)
                 .GroupBy(x => x.Type)
                 .Select(x => new ReactionTypeModel
                 {
@@ -35,7 +35,7 @@
                 .OrderByDescending(x => x.ReactionsCount)
                 .ToList();
 
-            return Result<ICollection<ReactionTypeModel>>.Success(result);
+            return Result<IList<ReactionTypeModel>>.Success(result);
         }
     }
 }

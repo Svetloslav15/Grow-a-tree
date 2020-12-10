@@ -337,6 +337,42 @@
         ]
       }
     },
+    "/api/TreePostReactions/types": {
+      "get": {
+        "tags": [
+          "TreePostReactions"
+        ],
+        "operationId": "TreePostReactions_GetTypes",
+        "parameters": [
+          {
+            "name": "PostId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfIListOfReactionTypeModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/TreePostReactions/upsert": {
       "post": {
         "tags": [
@@ -2534,6 +2570,43 @@
           }
         }
       },
+      "ResultOfIListOfReactionTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ReactionTypeModel"
+            }
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ReactionTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "reactionsCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "ResultOfString": {
         "type": "object",
         "additionalProperties": false,
@@ -2728,20 +2801,6 @@
             "items": {
               "type": "string"
             }
-          }
-        }
-      },
-      "ReactionTypeModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "type": {
-            "type": "string",
-            "nullable": true
-          },
-          "reactionsCount": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },

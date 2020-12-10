@@ -1,17 +1,35 @@
 ﻿using Common.Constants;
 using GrowATree.Application.Common.Models;
+using GrowATree.Application.Models.TreeReactions;
 using GrowATree.Application.TreePostReactions.Commands.Upsert;
+using GrowATree.Application.TreePostReactions.Queries.GetTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-
 namespace GrowATree.WebAPI.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
+    using Serilog;
+
     public class TreePostReactionsController : ApiController
     {
+        [HttpGet("types")]
+        [Authorize]
+        public async Task<ActionResult<Result<IList<ReactionTypeModel>>>> GetTypes([FromQuery] GetTreePostReactionTypesQuery query)
+        {
+            try
+            {
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<IList<ReactionTypeModel>>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
 
         [HttpPost("upsert")]
         [Authorize]
@@ -25,7 +43,7 @@ namespace GrowATree.WebAPI.Controllers
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<string>.Failure(ErrorMessages.AccountFailureErrorMessage);
+                return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }

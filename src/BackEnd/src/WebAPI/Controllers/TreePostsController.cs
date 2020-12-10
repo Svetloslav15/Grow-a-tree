@@ -29,7 +29,7 @@
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return TreePostListModel.Failure<TreePostListModel>(ErrorMessages.AccountFailureErrorMessage);
+                return TreePostListModel.Failure<TreePostListModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
@@ -56,7 +56,7 @@
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<bool>.Failure(ErrorMessages.AccountFailureErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 
@@ -72,7 +72,7 @@
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<bool>.Failure(ErrorMessages.AccountFailureErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }
