@@ -199,7 +199,25 @@ namespace Common.Constants
 
         public const string TreeReportDublicateErrorMessage = "Вече сте докладвали това дърво за този проблем";
 
-        public const string TreeReporNotFoundErrorMessage = "Вече сте докладвали това дърво за този проблем";
+        public const string TreeReportNotFoundErrorMessage = "Вече сте докладвали това дърво за този проблем";
+
+        #endregion
+
+        #region TreePosts
+
+        public const string TreePostNotFoundErrorMessage = "Постът не беше намерен";
+
+        public const string TreePostContentRequiredErrorMessage = "Липсва съдържание на поста";
+
+        public const string TreePostContentMaxLengthErrorMessage = "Постът е твърде дълъг";
+
+        #endregion
+
+        #region TreePostReactions
+
+        public const string TreePostReactionNotFoundErrorMessage = "Реакцията не съществува";
+
+        public const string TreePostAlreadyReactedErrorMessage = "Потребителят вече е реагирал на поста";
 
         #endregion
     }
