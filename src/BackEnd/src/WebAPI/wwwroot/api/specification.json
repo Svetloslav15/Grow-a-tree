@@ -2951,7 +2951,7 @@
             "type": "string",
             "nullable": true
           },
-          "conent": {
+          "content": {
             "type": "string",
             "nullable": true
           },

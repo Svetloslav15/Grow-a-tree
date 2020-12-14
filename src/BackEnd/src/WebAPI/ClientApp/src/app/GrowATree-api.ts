@@ -4417,7 +4417,7 @@ export interface ITreePostReplyListModel extends IMetaResultOfIListOfTreePostRep
 
 export class TreePostReplyModel implements ITreePostReplyModel {
     id?: string | undefined;
-    conent?: string | undefined;
+    content?: string | undefined;
     createdOn?: Date;
     isDeleted?: boolean;
     userId?: string | undefined;
@@ -4437,7 +4437,7 @@ export class TreePostReplyModel implements ITreePostReplyModel {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.conent = _data["conent"];
+            this.content = _data["content"];
             this.createdOn = _data["createdOn"] ? new Date(_data["createdOn"].toString()) : <any>undefined;
             this.isDeleted = _data["isDeleted"];
             this.userId = _data["userId"];
@@ -4457,7 +4457,7 @@ export class TreePostReplyModel implements ITreePostReplyModel {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["conent"] = this.conent;
+        data["content"] = this.content;
         data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
         data["isDeleted"] = this.isDeleted;
         data["userId"] = this.userId;
@@ -4470,7 +4470,7 @@ export class TreePostReplyModel implements ITreePostReplyModel {
 
 export interface ITreePostReplyModel {
     id?: string | undefined;
-    conent?: string | undefined;
+    content?: string | undefined;
     createdOn?: Date;
     isDeleted?: boolean;
     userId?: string | undefined;

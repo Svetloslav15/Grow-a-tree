@@ -1,6 +1,7 @@
 ﻿namespace GrowATree.Domain.Entities
 {
     using System;
+    using System.Collections.Generic;
 
     public class TreePostReply
     {
@@ -19,5 +20,7 @@
         public string TreePostId { get; set; }
 
         public TreePost TreePost { get; set; }
+
+        public ICollection<TreePostReplyReaction> Reactions { get; set; } = new HashSet<TreePostReplyReaction>();
     }
 }
