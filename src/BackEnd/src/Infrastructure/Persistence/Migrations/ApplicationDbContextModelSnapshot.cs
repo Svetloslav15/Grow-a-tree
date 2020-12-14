@@ -97,42 +97,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.ToTable("PromoCodes");
                 });
 
-            modelBuilder.Entity("GrowATree.Domain.Entities.Reaction", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TreeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TreeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Reactions");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.ReactionImage", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ReactionType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReactionImages");
-                });
-
             modelBuilder.Entity("GrowATree.Domain.Entities.Store", b =>
                 {
                     b.Property<string>("Id")
@@ -264,16 +228,54 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.ToTable("TreePostReactions");
                 });
 
+            modelBuilder.Entity("GrowATree.Domain.Entities.TreeReaction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TreeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TreeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TreeReactions");
+                });
+
             modelBuilder.Entity("GrowATree.Domain.Entities.TreeReport", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Content")
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSpam")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TreeId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -627,17 +629,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                         .HasForeignKey("StoreId");
                 });
 
-            modelBuilder.Entity("GrowATree.Domain.Entities.Reaction", b =>
-                {
-                    b.HasOne("GrowATree.Domain.Entities.Tree", "Tree")
-                        .WithMany("Reactions")
-                        .HasForeignKey("TreeId");
-
-                    b.HasOne("GrowATree.Domain.Entities.User", "User")
-                        .WithMany("Reactions")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("GrowATree.Domain.Entities.Store", b =>
                 {
                     b.HasOne("GrowATree.Domain.Entities.User", "ApplicationUser")
@@ -674,6 +665,17 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
 
                     b.HasOne("GrowATree.Domain.Entities.User", "User")
                         .WithMany("TreePostReactions")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("GrowATree.Domain.Entities.TreeReaction", b =>
+                {
+                    b.HasOne("GrowATree.Domain.Entities.Tree", "Tree")
+                        .WithMany("Reactions")
+                        .HasForeignKey("TreeId");
+
+                    b.HasOne("GrowATree.Domain.Entities.User", "User")
+                        .WithMany("Reactions")
                         .HasForeignKey("UserId");
                 });
 
