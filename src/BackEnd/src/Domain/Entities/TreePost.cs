@@ -24,5 +24,7 @@
         public bool IsDeleted { get; set; }
 
         public ICollection<TreePostReaction> Reactions { get; set; } = new List<TreePostReaction>();
+
+        public ICollection<TreePostReply> Replies { get; set; } = new List<TreePostReply>();
     }
 }
