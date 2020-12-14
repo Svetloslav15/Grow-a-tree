@@ -1,4 +1,4 @@
-﻿namespace GrowATree.Application.TreePostReplyReactions.Commands.Delete
+﻿namespace GrowATree.Application.TreePostReplies.Commands.Delete
 {
     using System.Threading;
     using System.Threading.Tasks;
@@ -8,25 +8,25 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class DeleteTreePostReplyReactionCommandHandler : IRequestHandler<DeleteTreePostReplyReactionCommand, Result<bool>>
+    public class DeleteTreePostReplyCommandHandler : IRequestHandler<DeleteTreePostReplyCommand, Result<bool>>
     {
         private readonly IApplicationDbContext context;
         private readonly IIdentityService identityService;
 
-        public DeleteTreePostReplyReactionCommandHandler(IApplicationDbContext context, IIdentityService identityService)
+        public DeleteTreePostReplyCommandHandler(IApplicationDbContext context, IIdentityService identityService)
         {
             this.context = context;
             this.identityService = identityService;
         }
 
-        public async Task<Result<bool>> Handle(DeleteTreePostReplyReactionCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(DeleteTreePostReplyCommand request, CancellationToken cancellationToken)
         {
-            var entity = await this.context.TreePostReplyReactions
+            var entity = await this.context.TreePostReplies
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (entity == null)
             {
-                return Result<bool>.Failure(ErrorMessages.TreePostReplyReactionNotFoundErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.TreePostReplyNotFoundErrorMessage);
             }
 
             if (entity.UserId != await this.identityService.GetCurrentUserId())
@@ -34,7 +34,7 @@
                 return Result<bool>.Failure(ErrorMessages.NotAllowedErrorMessage);
             }
 
-            this.context.TreePostReplyReactions.Remove(entity);
+            entity.IsDeleted = true;
             await this.context.SaveChangesAsync(CancellationToken.None);
 
             return Result<bool>.Success(true);

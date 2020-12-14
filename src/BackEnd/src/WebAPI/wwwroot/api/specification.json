@@ -555,6 +555,43 @@
         ]
       }
     },
+    "/api/TreePostReplies/delete": {
+      "post": {
+        "tags": [
+          "TreePostReplies"
+        ],
+        "operationId": "TreePostReplies_Delete",
+        "requestBody": {
+          "x-name": "deleteCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTreePostReplyCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/TreePostReplyReactions/list": {
       "get": {
         "tags": [
@@ -3119,6 +3156,16 @@
             "minLength": 1
           },
           "treePostId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DeleteTreePostReplyCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
             "type": "string",
             "nullable": true
           }
