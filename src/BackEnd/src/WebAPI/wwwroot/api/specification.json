@@ -473,6 +473,43 @@
         ]
       }
     },
+    "/api/TreePostReplies/upsert": {
+      "post": {
+        "tags": [
+          "TreePostReplies"
+        ],
+        "operationId": "TreePostReplies_Upsert",
+        "requestBody": {
+          "x-name": "upsertCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertTreePostReplyCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/TreePosts/list": {
       "get": {
         "tags": [
@@ -2812,6 +2849,28 @@
           "type": {
             "type": "string",
             "nullable": true
+          },
+          "treePostId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpsertTreePostReplyCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 650,
+            "minLength": 1
           },
           "treePostId": {
             "type": "string",

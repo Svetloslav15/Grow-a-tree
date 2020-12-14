@@ -220,5 +220,15 @@ namespace Common.Constants
         public const string TreePostAlreadyReactedErrorMessage = "Потребителят вече е реагирал на поста";
 
         #endregion
+
+        #region TreePostReply
+
+        public const string TreePostReplyNotFoundErrorMessage = "Този отговор не съществува";
+
+        public const string TreePostReplyContentRequiredErrorMessage = "Липсва съдържание на отговора";
+
+        public const string TreePostReplyMaxLengthRequiredErrorMessage = "Отговора е твърде дълъг";
+
+        #endregion
     }
 }

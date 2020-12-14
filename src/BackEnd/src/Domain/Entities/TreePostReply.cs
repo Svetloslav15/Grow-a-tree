@@ -4,9 +4,9 @@
 
     public class TreePostReply
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public string Conent { get; set; }
+        public string Content { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
