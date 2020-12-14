@@ -555,6 +555,43 @@
         ]
       }
     },
+    "/api/TreePostReplyReactions/upsert": {
+      "post": {
+        "tags": [
+          "TreePostReplyReactions"
+        ],
+        "operationId": "TreePostReplyReactions_Upsert",
+        "requestBody": {
+          "x-name": "upsertCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertTreePostReplyReactionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/TreePosts/list": {
       "get": {
         "tags": [
@@ -2886,6 +2923,9 @@
       "UpsertTreePostReactionCommand": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "type"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -2893,7 +2933,7 @@
           },
           "type": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           },
           "treePostId": {
             "type": "string",
@@ -2997,6 +3037,27 @@
             "minLength": 1
           },
           "treePostId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpsertTreePostReplyReactionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "treePostReplyId": {
             "type": "string",
             "nullable": true
           }
@@ -3191,6 +3252,9 @@
       "UpsertTreeReactionCommand": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "type"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -3206,7 +3270,7 @@
           },
           "type": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           }
         }
       },

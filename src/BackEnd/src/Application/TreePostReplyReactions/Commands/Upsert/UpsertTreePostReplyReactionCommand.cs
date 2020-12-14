@@ -1,19 +1,17 @@
-﻿namespace GrowATree.Application.TreeReactions.Commands.Upsert
+﻿namespace GrowATree.Application.TreePostReplyReactions.Commands.Upsert
 {
     using System.ComponentModel.DataAnnotations;
     using global::Common.Constants;
     using GrowATree.Application.Common.Models;
     using MediatR;
 
-    public class UpsertTreeReactionCommand : IRequest<Result<bool>>
+    public class UpsertTreePostReplyReactionCommand : IRequest<Result<string>>
     {
         public string Id { get; set; }
 
-        public string UserId { get; set; }
-
-        public string TreeId { get; set; }
-
         [Required(ErrorMessage = ErrorMessages.ReactionRequiredErrorMessage)]
         public string Type { get; set; }
+
+        public string TreePostReplyId { get; set; }
     }
 }

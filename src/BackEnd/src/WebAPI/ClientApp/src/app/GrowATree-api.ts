@@ -905,6 +905,76 @@ export class TreePostRepliesClient implements ITreePostRepliesClient {
     }
 }
 
+export interface ITreePostReplyReactionsClient {
+    upsert(upsertCommand: UpsertTreePostReplyReactionCommand): Observable<ResultOfString>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class TreePostReplyReactionsClient implements ITreePostReplyReactionsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    upsert(upsertCommand: UpsertTreePostReplyReactionCommand): Observable<ResultOfString> {
+        let url_ = this.baseUrl + "/api/TreePostReplyReactions/upsert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(upsertCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpsert(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpsert(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfString>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfString>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpsert(response: HttpResponseBase): Observable<ResultOfString> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfString.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfString>(<any>null);
+    }
+}
+
 export interface ITreePostsClient {
     list(page: number | undefined, perPage: number | undefined): Observable<TreePostListModel>;
     upsert(upsertCommand: UpsertTreePostCommand): Observable<ResultOfBoolean>;
@@ -4282,7 +4352,7 @@ export interface IResultOfString {
 
 export class UpsertTreePostReactionCommand implements IUpsertTreePostReactionCommand {
     id?: string | undefined;
-    type?: string | undefined;
+    type!: string;
     treePostId?: string | undefined;
 
     constructor(data?: IUpsertTreePostReactionCommand) {
@@ -4320,7 +4390,7 @@ export class UpsertTreePostReactionCommand implements IUpsertTreePostReactionCom
 
 export interface IUpsertTreePostReactionCommand {
     id?: string | undefined;
-    type?: string | undefined;
+    type: string;
     treePostId?: string | undefined;
 }
 
@@ -4521,6 +4591,50 @@ export interface IUpsertTreePostReplyCommand {
     id?: string | undefined;
     content: string;
     treePostId?: string | undefined;
+}
+
+export class UpsertTreePostReplyReactionCommand implements IUpsertTreePostReplyReactionCommand {
+    id?: string | undefined;
+    type!: string;
+    treePostReplyId?: string | undefined;
+
+    constructor(data?: IUpsertTreePostReplyReactionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.type = _data["type"];
+            this.treePostReplyId = _data["treePostReplyId"];
+        }
+    }
+
+    static fromJS(data: any): UpsertTreePostReplyReactionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpsertTreePostReplyReactionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["type"] = this.type;
+        data["treePostReplyId"] = this.treePostReplyId;
+        return data; 
+    }
+}
+
+export interface IUpsertTreePostReplyReactionCommand {
+    id?: string | undefined;
+    type: string;
+    treePostReplyId?: string | undefined;
 }
 
 export class MetaResultOfIListOfTreePostModelAndPaginationMeta implements IMetaResultOfIListOfTreePostModelAndPaginationMeta {
@@ -4949,7 +5063,7 @@ export class UpsertTreeReactionCommand implements IUpsertTreeReactionCommand {
     id?: string | undefined;
     userId?: string | undefined;
     treeId?: string | undefined;
-    type?: string | undefined;
+    type!: string;
 
     constructor(data?: IUpsertTreeReactionCommand) {
         if (data) {
@@ -4990,7 +5104,7 @@ export interface IUpsertTreeReactionCommand {
     id?: string | undefined;
     userId?: string | undefined;
     treeId?: string | undefined;
-    type?: string | undefined;
+    type: string;
 }
 
 export class DeleteTreeReactionCommand implements IDeleteTreeReactionCommand {
