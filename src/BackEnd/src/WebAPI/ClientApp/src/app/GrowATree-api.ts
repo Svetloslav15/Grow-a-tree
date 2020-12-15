@@ -2474,7 +2474,7 @@ export interface IUsersClient {
     getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel>;
     getList(page: number | undefined, perPage: number | undefined): Observable<UserListModel>;
     getListShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
-    getReferrels(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
+    getReferrels(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
     isUserShortToTree(latitude: number | undefined, longitude: number | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
@@ -2707,8 +2707,10 @@ export class UsersClient implements IUsersClient {
         return _observableOf<UserListShortInfoModel>(<any>null);
     }
 
-    getReferrels(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
+    getReferrels(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
         let url_ = this.baseUrl + "/api/Users/referrals?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)

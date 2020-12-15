@@ -12,6 +12,7 @@
     using GrowATree.Application.Users.Queries.GetAll;
     using GrowATree.Application.Users.Queries.GetAllShortInfo;
     using GrowATree.Application.Users.Queries.GetById;
+    using GrowATree.Application.Users.Queries.GetReferrers;
     using GrowATree.Application.Users.Queries.GetShortInfoById;
     using GrowATree.Application.Users.Queries.GetTrees;
     using GrowATree.Application.Users.Queries.UserNearTree;
@@ -137,7 +138,7 @@
         }
 
         [HttpGet("referrals")]
-        public async Task<ActionResult<UserListShortInfoModel>> GetReferrels([FromQuery] GetUserListShortInfoQuery query)
+        public async Task<ActionResult<UserListShortInfoModel>> GetReferrels([FromQuery] GetUserReferralListQuery query)
         {
             try
             {
