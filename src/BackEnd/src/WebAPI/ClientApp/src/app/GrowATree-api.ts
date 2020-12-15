@@ -778,6 +778,366 @@ export class TreePostReactionsClient implements ITreePostReactionsClient {
     }
 }
 
+export interface ITreePostRepliesClient {
+    getList(page: number | undefined, perPage: number | undefined): Observable<TreePostReplyListModel>;
+    upsert(upsertCommand: UpsertTreePostReplyCommand): Observable<ResultOfString>;
+    delete(deleteCommand: DeleteTreePostReplyCommand): Observable<ResultOfBoolean>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class TreePostRepliesClient implements ITreePostRepliesClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getList(page: number | undefined, perPage: number | undefined): Observable<TreePostReplyListModel> {
+        let url_ = this.baseUrl + "/api/TreePostReplies/list?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetList(<any>response_);
+                } catch (e) {
+                    return <Observable<TreePostReplyListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreePostReplyListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetList(response: HttpResponseBase): Observable<TreePostReplyListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreePostReplyListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreePostReplyListModel>(<any>null);
+    }
+
+    upsert(upsertCommand: UpsertTreePostReplyCommand): Observable<ResultOfString> {
+        let url_ = this.baseUrl + "/api/TreePostReplies/upsert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(upsertCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpsert(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpsert(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfString>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfString>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpsert(response: HttpResponseBase): Observable<ResultOfString> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfString.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfString>(<any>null);
+    }
+
+    delete(deleteCommand: DeleteTreePostReplyCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/TreePostReplies/delete";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(deleteCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+}
+
+export interface ITreePostReplyReactionsClient {
+    getList(page: number | undefined, perPage: number | undefined): Observable<TreePostReplyReactionListModel>;
+    upsert(upsertCommand: UpsertTreePostReplyReactionCommand): Observable<ResultOfString>;
+    delete(deleteCommand: DeleteTreePostReplyReactionCommand): Observable<ResultOfBoolean>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class TreePostReplyReactionsClient implements ITreePostReplyReactionsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    getList(page: number | undefined, perPage: number | undefined): Observable<TreePostReplyReactionListModel> {
+        let url_ = this.baseUrl + "/api/TreePostReplyReactions/list?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetList(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetList(<any>response_);
+                } catch (e) {
+                    return <Observable<TreePostReplyReactionListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreePostReplyReactionListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetList(response: HttpResponseBase): Observable<TreePostReplyReactionListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreePostReplyReactionListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreePostReplyReactionListModel>(<any>null);
+    }
+
+    upsert(upsertCommand: UpsertTreePostReplyReactionCommand): Observable<ResultOfString> {
+        let url_ = this.baseUrl + "/api/TreePostReplyReactions/upsert";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(upsertCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpsert(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpsert(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfString>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfString>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processUpsert(response: HttpResponseBase): Observable<ResultOfString> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfString.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfString>(<any>null);
+    }
+
+    delete(deleteCommand: DeleteTreePostReplyReactionCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/TreePostReplyReactions/delete";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(deleteCommand);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
+    }
+}
+
 export interface ITreePostsClient {
     list(page: number | undefined, perPage: number | undefined): Observable<TreePostListModel>;
     upsert(upsertCommand: UpsertTreePostCommand): Observable<ResultOfBoolean>;
@@ -4155,7 +4515,7 @@ export interface IResultOfString {
 
 export class UpsertTreePostReactionCommand implements IUpsertTreePostReactionCommand {
     id?: string | undefined;
-    type?: string | undefined;
+    type!: string;
     treePostId?: string | undefined;
 
     constructor(data?: IUpsertTreePostReactionCommand) {
@@ -4193,8 +4553,470 @@ export class UpsertTreePostReactionCommand implements IUpsertTreePostReactionCom
 
 export interface IUpsertTreePostReactionCommand {
     id?: string | undefined;
-    type?: string | undefined;
+    type: string;
     treePostId?: string | undefined;
+}
+
+export class MetaResultOfIListOfTreePostReplyModelAndPaginationMeta implements IMetaResultOfIListOfTreePostReplyModelAndPaginationMeta {
+    data?: TreePostReplyModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfTreePostReplyModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreePostReplyModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfTreePostReplyModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfTreePostReplyModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfTreePostReplyModelAndPaginationMeta {
+    data?: TreePostReplyModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreePostReplyListModel extends MetaResultOfIListOfTreePostReplyModelAndPaginationMeta implements ITreePostReplyListModel {
+
+    constructor(data?: ITreePostReplyListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): TreePostReplyListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreePostReplyListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITreePostReplyListModel extends IMetaResultOfIListOfTreePostReplyModelAndPaginationMeta {
+}
+
+export class TreePostReplyModel implements ITreePostReplyModel {
+    id?: string | undefined;
+    content?: string | undefined;
+    createdOn?: Date;
+    isDeleted?: boolean;
+    userId?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+    treePostId?: string | undefined;
+
+    constructor(data?: ITreePostReplyModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.content = _data["content"];
+            this.createdOn = _data["createdOn"] ? new Date(_data["createdOn"].toString()) : <any>undefined;
+            this.isDeleted = _data["isDeleted"];
+            this.userId = _data["userId"];
+            this.userUserName = _data["userUserName"];
+            this.userProfilePictureUrl = _data["userProfilePictureUrl"];
+            this.treePostId = _data["treePostId"];
+        }
+    }
+
+    static fromJS(data: any): TreePostReplyModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreePostReplyModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["content"] = this.content;
+        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["userId"] = this.userId;
+        data["userUserName"] = this.userUserName;
+        data["userProfilePictureUrl"] = this.userProfilePictureUrl;
+        data["treePostId"] = this.treePostId;
+        return data; 
+    }
+}
+
+export interface ITreePostReplyModel {
+    id?: string | undefined;
+    content?: string | undefined;
+    createdOn?: Date;
+    isDeleted?: boolean;
+    userId?: string | undefined;
+    userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
+    treePostId?: string | undefined;
+}
+
+export class UpsertTreePostReplyCommand implements IUpsertTreePostReplyCommand {
+    id?: string | undefined;
+    content!: string;
+    treePostId?: string | undefined;
+
+    constructor(data?: IUpsertTreePostReplyCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.content = _data["content"];
+            this.treePostId = _data["treePostId"];
+        }
+    }
+
+    static fromJS(data: any): UpsertTreePostReplyCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpsertTreePostReplyCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["content"] = this.content;
+        data["treePostId"] = this.treePostId;
+        return data; 
+    }
+}
+
+export interface IUpsertTreePostReplyCommand {
+    id?: string | undefined;
+    content: string;
+    treePostId?: string | undefined;
+}
+
+export class DeleteTreePostReplyCommand implements IDeleteTreePostReplyCommand {
+    id?: string | undefined;
+
+    constructor(data?: IDeleteTreePostReplyCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): DeleteTreePostReplyCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeleteTreePostReplyCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IDeleteTreePostReplyCommand {
+    id?: string | undefined;
+}
+
+export class MetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta implements IMetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta {
+    data?: TreePostReplyReactionModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(TreePostReplyReactionModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta {
+    data?: TreePostReplyReactionModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class TreePostReplyReactionListModel extends MetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta implements ITreePostReplyReactionListModel {
+
+    constructor(data?: ITreePostReplyReactionListModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): TreePostReplyReactionListModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreePostReplyReactionListModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ITreePostReplyReactionListModel extends IMetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta {
+}
+
+export class TreePostReplyReactionModel implements ITreePostReplyReactionModel {
+    id?: string | undefined;
+    type?: ReactionType;
+    createdOn?: Date;
+    userId?: string | undefined;
+    userUserName?: string | undefined;
+    treePostReplyId?: string | undefined;
+
+    constructor(data?: ITreePostReplyReactionModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.type = _data["type"];
+            this.createdOn = _data["createdOn"] ? new Date(_data["createdOn"].toString()) : <any>undefined;
+            this.userId = _data["userId"];
+            this.userUserName = _data["userUserName"];
+            this.treePostReplyId = _data["treePostReplyId"];
+        }
+    }
+
+    static fromJS(data: any): TreePostReplyReactionModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreePostReplyReactionModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["type"] = this.type;
+        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+        data["userId"] = this.userId;
+        data["userUserName"] = this.userUserName;
+        data["treePostReplyId"] = this.treePostReplyId;
+        return data; 
+    }
+}
+
+export interface ITreePostReplyReactionModel {
+    id?: string | undefined;
+    type?: ReactionType;
+    createdOn?: Date;
+    userId?: string | undefined;
+    userUserName?: string | undefined;
+    treePostReplyId?: string | undefined;
+}
+
+export class UpsertTreePostReplyReactionCommand implements IUpsertTreePostReplyReactionCommand {
+    id?: string | undefined;
+    type!: string;
+    treePostReplyId?: string | undefined;
+
+    constructor(data?: IUpsertTreePostReplyReactionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.type = _data["type"];
+            this.treePostReplyId = _data["treePostReplyId"];
+        }
+    }
+
+    static fromJS(data: any): UpsertTreePostReplyReactionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpsertTreePostReplyReactionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["type"] = this.type;
+        data["treePostReplyId"] = this.treePostReplyId;
+        return data; 
+    }
+}
+
+export interface IUpsertTreePostReplyReactionCommand {
+    id?: string | undefined;
+    type: string;
+    treePostReplyId?: string | undefined;
+}
+
+export class DeleteTreePostReplyReactionCommand implements IDeleteTreePostReplyReactionCommand {
+    id?: string | undefined;
+
+    constructor(data?: IDeleteTreePostReplyReactionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): DeleteTreePostReplyReactionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeleteTreePostReplyReactionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IDeleteTreePostReplyReactionCommand {
+    id?: string | undefined;
 }
 
 export class MetaResultOfIListOfTreePostModelAndPaginationMeta implements IMetaResultOfIListOfTreePostModelAndPaginationMeta {
@@ -4623,7 +5445,7 @@ export class UpsertTreeReactionCommand implements IUpsertTreeReactionCommand {
     id?: string | undefined;
     userId?: string | undefined;
     treeId?: string | undefined;
-    type?: string | undefined;
+    type!: string;
 
     constructor(data?: IUpsertTreeReactionCommand) {
         if (data) {
@@ -4664,7 +5486,7 @@ export interface IUpsertTreeReactionCommand {
     id?: string | undefined;
     userId?: string | undefined;
     treeId?: string | undefined;
-    type?: string | undefined;
+    type: string;
 }
 
 export class DeleteTreeReactionCommand implements IDeleteTreeReactionCommand {

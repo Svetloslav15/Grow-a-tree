@@ -4,14 +4,16 @@ using GrowATree.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrowATree.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201214181501_AddCollection")]
+    partial class AddCollection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,32 +271,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("TreePostReplies");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.TreePostReplyReaction", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TreePostReplyId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TreePostReplyId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TreePostReplyReactions");
                 });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.TreeReaction", b =>
@@ -749,17 +725,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
 
                     b.HasOne("GrowATree.Domain.Entities.User", "User")
                         .WithMany("TreePostReplies")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.TreePostReplyReaction", b =>
-                {
-                    b.HasOne("GrowATree.Domain.Entities.TreePostReply", "TreePostReply")
-                        .WithMany("Reactions")
-                        .HasForeignKey("TreePostReplyId");
-
-                    b.HasOne("GrowATree.Domain.Entities.User", "User")
-                        .WithMany()
                         .HasForeignKey("UserId");
                 });
 
