@@ -337,6 +337,499 @@
         ]
       }
     },
+    "/api/TreePostReactions/list": {
+      "get": {
+        "tags": [
+          "TreePostReactions"
+        ],
+        "operationId": "TreePostReactions_GetList",
+        "parameters": [
+          {
+            "name": "PostId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 3
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreePostReactionListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePostReactions/types": {
+      "get": {
+        "tags": [
+          "TreePostReactions"
+        ],
+        "operationId": "TreePostReactions_GetTypes",
+        "parameters": [
+          {
+            "name": "PostId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfIListOfReactionTypeModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePostReactions/upsert": {
+      "post": {
+        "tags": [
+          "TreePostReactions"
+        ],
+        "operationId": "TreePostReactions_Upsert",
+        "requestBody": {
+          "x-name": "upsertCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertTreePostReactionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePostReplies/list": {
+      "get": {
+        "tags": [
+          "TreePostReplies"
+        ],
+        "operationId": "TreePostReplies_GetList",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreePostReplyListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePostReplies/upsert": {
+      "post": {
+        "tags": [
+          "TreePostReplies"
+        ],
+        "operationId": "TreePostReplies_Upsert",
+        "requestBody": {
+          "x-name": "upsertCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertTreePostReplyCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePostReplies/delete": {
+      "post": {
+        "tags": [
+          "TreePostReplies"
+        ],
+        "operationId": "TreePostReplies_Delete",
+        "requestBody": {
+          "x-name": "deleteCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTreePostReplyCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePostReplyReactions/list": {
+      "get": {
+        "tags": [
+          "TreePostReplyReactions"
+        ],
+        "operationId": "TreePostReplyReactions_GetList",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreePostReplyReactionListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePostReplyReactions/upsert": {
+      "post": {
+        "tags": [
+          "TreePostReplyReactions"
+        ],
+        "operationId": "TreePostReplyReactions_Upsert",
+        "requestBody": {
+          "x-name": "upsertCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertTreePostReplyReactionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePostReplyReactions/delete": {
+      "post": {
+        "tags": [
+          "TreePostReplyReactions"
+        ],
+        "operationId": "TreePostReplyReactions_Delete",
+        "requestBody": {
+          "x-name": "deleteCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTreePostReplyReactionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePosts/list": {
+      "get": {
+        "tags": [
+          "TreePosts"
+        ],
+        "operationId": "TreePosts_List",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreePostListModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePosts/upsert": {
+      "post": {
+        "tags": [
+          "TreePosts"
+        ],
+        "operationId": "TreePosts_Upsert",
+        "requestBody": {
+          "x-name": "upsertCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertTreePostCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TreePosts/delete": {
+      "post": {
+        "tags": [
+          "TreePosts"
+        ],
+        "operationId": "TreePosts_Delete",
+        "requestBody": {
+          "x-name": "deleteCommand",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTreePostCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/api/TreeReactions/tree-reaction-types": {
       "get": {
         "tags": [
@@ -360,7 +853,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResultOfICollectionOfTreeReactionTypeModel"
+                  "$ref": "#/components/schemas/ResultOfICollectionOfReactionTypeModel"
                 }
               }
             }
@@ -2378,47 +2871,10 @@
           }
         }
       },
-      "ResultOfICollectionOfTreeReactionTypeModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "data": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/TreeReactionTypeModel"
-            }
-          },
-          "succeeded": {
-            "type": "boolean"
-          },
-          "errors": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "TreeReactionTypeModel": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "type": {
-            "type": "string",
-            "nullable": true
-          },
-          "reactionsCount": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "TreeReactionListModel": {
+      "TreePostReactionListModel": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/MetaResultOfIListOfTreeReactionModelAndPaginationMeta"
+            "$ref": "#/components/schemas/MetaResultOfIListOfTreePostReactionModelAndPaginationMeta"
           },
           {
             "type": "object",
@@ -2426,7 +2882,7 @@
           }
         ]
       },
-      "MetaResultOfIListOfTreeReactionModelAndPaginationMeta": {
+      "MetaResultOfIListOfTreePostReactionModelAndPaginationMeta": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2434,7 +2890,7 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/TreeReactionModel"
+              "$ref": "#/components/schemas/TreePostReactionModel"
             }
           },
           "meta": {
@@ -2457,7 +2913,7 @@
           }
         }
       },
-      "TreeReactionModel": {
+      "TreePostReactionModel": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2526,9 +2982,489 @@
           }
         }
       },
+      "ResultOfIListOfReactionTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ReactionTypeModel"
+            }
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ReactionTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "reactionsCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ResultOfString": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "string",
+            "nullable": true
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UpsertTreePostReactionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "treePostId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "TreePostReplyListModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MetaResultOfIListOfTreePostReplyModelAndPaginationMeta"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "MetaResultOfIListOfTreePostReplyModelAndPaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreePostReplyModel"
+            }
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreePostReplyModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDeleted": {
+            "type": "boolean"
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userProfilePictureUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "treePostId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpsertTreePostReplyCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 650,
+            "minLength": 1
+          },
+          "treePostId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DeleteTreePostReplyCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "TreePostReplyReactionListModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "MetaResultOfIListOfTreePostReplyReactionModelAndPaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreePostReplyReactionModel"
+            }
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreePostReplyReactionModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ReactionType"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          },
+          "userUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "treePostReplyId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpsertTreePostReplyReactionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "treePostReplyId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DeleteTreePostReplyReactionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "TreePostListModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MetaResultOfIListOfTreePostModelAndPaginationMeta"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "MetaResultOfIListOfTreePostModelAndPaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreePostModel"
+            }
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreePostModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "userUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userProfilePictureUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpsertTreePostCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 650,
+            "minLength": 1
+          },
+          "treeId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DeleteTreePostCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ResultOfICollectionOfReactionTypeModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ReactionTypeModel"
+            }
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreeReactionListModel": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MetaResultOfIListOfTreeReactionModelAndPaginationMeta"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "MetaResultOfIListOfTreeReactionModelAndPaginationMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/TreeReactionModel"
+            }
+          },
+          "meta": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaginationMeta"
+              }
+            ]
+          },
+          "succeeded": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TreeReactionModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ReactionType"
+          },
+          "userUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "UpsertTreeReactionCommand": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "type"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -2544,7 +3480,7 @@
           },
           "type": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           }
         }
       },
@@ -3100,26 +4036,6 @@
       "GetRandomTreesImagesQuery": {
         "type": "object",
         "additionalProperties": false
-      },
-      "ResultOfString": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "data": {
-            "type": "string",
-            "nullable": true
-          },
-          "succeeded": {
-            "type": "boolean"
-          },
-          "errors": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "string"
-            }
-          }
-        }
       },
       "ResultOfListOfString": {
         "type": "object",

@@ -10,7 +10,7 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetTreeReactionsByTypeForTreeQueryHandler : IRequestHandler<GetTreeReactionsByTypeForTreeQuery, Result<ICollection<TreeReactionTypeModel>>>
+    public class GetTreeReactionsByTypeForTreeQueryHandler : IRequestHandler<GetTreeReactionsByTypeForTreeQuery, Result<ICollection<ReactionTypeModel>>>
     {
         private readonly IApplicationDbContext context;
 
@@ -19,20 +19,23 @@
             this.context = context;
         }
 
-        public async Task<Result<ICollection<TreeReactionTypeModel>>> Handle(GetTreeReactionsByTypeForTreeQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ICollection<ReactionTypeModel>>> Handle(GetTreeReactionsByTypeForTreeQuery request, CancellationToken cancellationToken)
         {
             var reactionTypes = await this.context.TreeReactions
                 .Where(x => x.TreeId == request.TreeId)
                 .GroupBy(x => x.Type)
-                .Select(x => new TreeReactionTypeModel
+                .Select(x => new ReactionTypeModel
                 {
                     Type = x.Key.ToString(),
                     ReactionsCount = x.Count(),
                 })
-                .OrderByDescending(x => x.ReactionsCount)
                 .ToListAsync();
 
-            return Result<ICollection<TreeReactionTypeModel>>.Success(reactionTypes);
+            var result = reactionTypes
+                .OrderByDescending(x => x.ReactionsCount)
+                .ToList();
+
+            return Result<ICollection<ReactionTypeModel>>.Success(result);
         }
     }
 }

@@ -31,6 +31,10 @@
 
         public DbSet<Store> Stores { get; set; }
 
+        public DbSet<TreePostReply> TreePostReplies { get; set; }
+
+        public DbSet<TreePostReplyReaction> TreePostReplyReactions { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

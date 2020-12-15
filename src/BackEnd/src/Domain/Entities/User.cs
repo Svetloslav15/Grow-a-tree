@@ -27,5 +27,9 @@
         public ICollection<TreeReport> TreeReports { get; set; } = new List<TreeReport>();
 
         public ICollection<TreeWatering> TreeWaterings { get; set; } = new List<TreeWatering>();
+
+        public ICollection<TreePost> TreePosts { get; set; } = new List<TreePost>();
+
+        public ICollection<TreePostReply> TreePostReplies { get; set; } = new List<TreePostReply>();
     }
 }

@@ -21,7 +21,7 @@
     {
         [Authorize]
         [HttpGet("tree-reaction-types")]
-        public async Task<ActionResult<Result<ICollection<TreeReactionTypeModel>>>> Upsert([FromQuery] GetTreeReactionsByTypeForTreeQuery query)
+        public async Task<ActionResult<Result<ICollection<ReactionTypeModel>>>> Upsert([FromQuery] GetTreeReactionsByTypeForTreeQuery query)
         {
             try
             {
@@ -31,7 +31,7 @@
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return Result<ICollection<TreeReactionTypeModel>>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+                return Result<ICollection<ReactionTypeModel>>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 

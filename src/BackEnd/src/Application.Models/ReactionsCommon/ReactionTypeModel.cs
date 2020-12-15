@@ -1,6 +1,6 @@
 ﻿namespace GrowATree.Application.Models.TreeReactions
 {
-    public class TreeReactionTypeModel
+    public class ReactionTypeModel
     {
         public string Type { get; set; }
 

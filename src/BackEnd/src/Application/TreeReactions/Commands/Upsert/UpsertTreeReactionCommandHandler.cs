@@ -27,11 +27,6 @@
 
         public async Task<Result<bool>> Handle(UpsertTreeReactionCommand request, CancellationToken cancellationToken)
         {
-            if (!await this.context.Trees.AnyAsync(x => x.Id == request.TreeId))
-            {
-                return Result<bool>.Failure(ErrorMessages.TreeNotFoundErrorMessage);
-            }
-
             var user = await this.userManager.FindByIdAsync(request.UserId);
             if (user == null)
             {
@@ -53,6 +48,11 @@
             }
             else
             {
+                if (!await this.context.Trees.AnyAsync(x => x.Id == request.TreeId))
+                {
+                    return Result<bool>.Failure(ErrorMessages.TreeNotFoundErrorMessage);
+                }
+
                 entity = await this.context.TreeReactions.FirstOrDefaultAsync(x => x.TreeId == request.TreeId && x.UserId == request.UserId);
                 if (entity != null)
                 {
