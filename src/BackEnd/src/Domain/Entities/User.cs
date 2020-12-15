@@ -18,6 +18,10 @@
 
         public DateTime RefreshTokenExpiryTime { get; set; }
 
+        public string ReferrerId { get; set; }
+
+        public User Referer { get; set; }
+
         public ICollection<Tree> Trees { get; set; } = new List<Tree>();
 
         public ICollection<TreeReaction> Reactions { get; set; } = new List<TreeReaction>();
@@ -29,5 +33,7 @@
         public ICollection<TreeWatering> TreeWaterings { get; set; } = new List<TreeWatering>();
 
         public ICollection<TreePost> TreePosts { get; set; } = new List<TreePost>();
+
+        public ICollection<User> Referals { get; set; } = new List<User>();
     }
 }

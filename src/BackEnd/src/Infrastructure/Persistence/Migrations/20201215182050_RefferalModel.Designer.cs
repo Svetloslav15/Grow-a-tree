@@ -4,14 +4,16 @@ using GrowATree.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrowATree.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201215182050_RefferalModel")]
+    partial class RefferalModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -380,11 +382,11 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.Property<string>("ProfilePictureUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RefererId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ReferrerId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReffererId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
@@ -412,7 +414,7 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("RefererId");
+                    b.HasIndex("ReffererId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -729,9 +731,9 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("GrowATree.Domain.Entities.User", b =>
                 {
-                    b.HasOne("GrowATree.Domain.Entities.User", "Referer")
-                        .WithMany("Referals")
-                        .HasForeignKey("RefererId");
+                    b.HasOne("GrowATree.Domain.Entities.User", "Refferer")
+                        .WithMany("Refferals")
+                        .HasForeignKey("ReffererId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

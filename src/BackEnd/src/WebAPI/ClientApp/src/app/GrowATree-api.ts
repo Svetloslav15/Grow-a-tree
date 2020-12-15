@@ -2473,7 +2473,8 @@ export interface IUsersClient {
     getById(id: string | null): Observable<ResultOfUserModel>;
     getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel>;
     getList(page: number | undefined, perPage: number | undefined): Observable<UserListModel>;
-    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
+    getListShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
+    getReferrels(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
     isUserShortToTree(latitude: number | undefined, longitude: number | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
@@ -2650,7 +2651,7 @@ export class UsersClient implements IUsersClient {
         return _observableOf<UserListModel>(<any>null);
     }
 
-    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
+    getListShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
         let url_ = this.baseUrl + "/api/Users/list-short-info?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
@@ -2671,11 +2672,11 @@ export class UsersClient implements IUsersClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllShortInfo(response_);
+            return this.processGetListShortInfo(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAllShortInfo(<any>response_);
+                    return this.processGetListShortInfo(<any>response_);
                 } catch (e) {
                     return <Observable<UserListShortInfoModel>><any>_observableThrow(e);
                 }
@@ -2684,7 +2685,63 @@ export class UsersClient implements IUsersClient {
         }));
     }
 
-    protected processGetAllShortInfo(response: HttpResponseBase): Observable<UserListShortInfoModel> {
+    protected processGetListShortInfo(response: HttpResponseBase): Observable<UserListShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserListShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UserListShortInfoModel>(<any>null);
+    }
+
+    getReferrels(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Users/referrals?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetReferrels(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetReferrels(<any>response_);
+                } catch (e) {
+                    return <Observable<UserListShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UserListShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetReferrels(response: HttpResponseBase): Observable<UserListShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -3234,6 +3291,7 @@ export class RegisterCommand implements IRegisterCommand {
     username!: string;
     password!: string;
     city?: string | undefined;
+    referrerId?: string | undefined;
 
     constructor(data?: IRegisterCommand) {
         if (data) {
@@ -3250,6 +3308,7 @@ export class RegisterCommand implements IRegisterCommand {
             this.username = _data["username"];
             this.password = _data["password"];
             this.city = _data["city"];
+            this.referrerId = _data["referrerId"];
         }
     }
 
@@ -3266,6 +3325,7 @@ export class RegisterCommand implements IRegisterCommand {
         data["username"] = this.username;
         data["password"] = this.password;
         data["city"] = this.city;
+        data["referrerId"] = this.referrerId;
         return data; 
     }
 }
@@ -3275,6 +3335,7 @@ export interface IRegisterCommand {
     username: string;
     password: string;
     city?: string | undefined;
+    referrerId?: string | undefined;
 }
 
 export class ResultOfTokenModel implements IResultOfTokenModel {

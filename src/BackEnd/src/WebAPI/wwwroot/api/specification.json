@@ -1969,7 +1969,47 @@
         "tags": [
           "Users"
         ],
-        "operationId": "Users_GetAllShortInfo",
+        "operationId": "Users_GetListShortInfo",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListShortInfoModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Users/referrals": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_GetReferrels",
         "parameters": [
           {
             "name": "Page",
@@ -2416,6 +2456,10 @@
             "minLength": 5
           },
           "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "referrerId": {
             "type": "string",
             "nullable": true
           }

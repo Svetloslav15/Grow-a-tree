@@ -111,7 +111,7 @@
         }
 
         [HttpGet("list-short-info")]
-        public async Task<ActionResult<UserListShortInfoModel>> GetAllShortInfo([FromQuery] GetUserListShortInfoQuery query)
+        public async Task<ActionResult<UserListShortInfoModel>> GetListShortInfo([FromQuery] GetUserListShortInfoQuery query)
         {
             try
             {
@@ -135,6 +135,33 @@
                 return UserListShortInfoModel.Failure<UserListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
+
+        [HttpGet("referrals")]
+        public async Task<ActionResult<UserListShortInfoModel>> GetReferrels([FromQuery] GetUserListShortInfoQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return UserListShortInfoModel.Failure<UserListShortInfoModel>(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return UserListShortInfoModel.Failure<UserListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
 
         [HttpGet("is-user-near-tree")]
         public async Task<ActionResult<Result<bool>>> IsUserShortToTree([FromQuery] IsUserNearTreeQuery query)

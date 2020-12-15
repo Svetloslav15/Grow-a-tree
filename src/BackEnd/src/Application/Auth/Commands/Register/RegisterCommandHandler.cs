@@ -36,13 +36,15 @@
                 return Result<bool>.Failure(ErrorMessages.UsernameInUseErrorMessage);
             }
 
-            var user = new User()
+            var referrer = await this.userManager.FindByIdAsync(request.ReferrerId);
+            var user = new User
             {
                 UserName = request.Username,
                 Email = request.Email,
                 EmailConfirmed = false,
                 LockoutEnabled = false,
                 City = request.City,
+                ReferrerId = referrer != null ? referrer.Id : null,
             };
 
             var identityResult = await this.userManager.CreateAsync(user, request.Password);
