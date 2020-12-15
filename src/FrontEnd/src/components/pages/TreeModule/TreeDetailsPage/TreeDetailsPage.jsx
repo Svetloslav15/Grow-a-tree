@@ -7,6 +7,12 @@ const TreeDetailsPage = ({}) => {
 
     return (
         <Layout>
+            <section></section>
+            <section>
+                <h1># Яворчо</h1>
+                <p>Статус: здраво</p>
+                <p>Засадено от: Светлослав Новоселски</p>
+            </section>
         </Layout>
     )
 };
