@@ -51,7 +51,7 @@
 
             if (!identityResult.Succeeded)
             {
-                return Result<bool>.Failure(ErrorMessages.AccountFailureErrorMessage);
+                return Result<bool>.Failure(ErrorMessages.PasswordRequirmentsErrorMessage);
             }
 
             string token = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
