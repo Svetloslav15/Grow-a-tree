@@ -1,7 +1,6 @@
-﻿namespace GrowATree.Application.TreePostReactions.Commands.Upsert
+﻿namespace GrowATree.Application.TreePostReplyReactions.Commands.Upsert
 {
     using System;
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using global::Common.Constants;
@@ -10,33 +9,30 @@
     using GrowATree.Domain.Entities;
     using GrowATree.Domain.Enums;
     using MediatR;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
-    public class UpsertTreePostReactionCommandHandler : IRequestHandler<UpsertTreePostReactionCommand, Result<string>>
+    public class UpsertTreePostReplyReactionCommandHandler : IRequestHandler<UpsertTreePostReplyReactionCommand, Result<string>>
     {
         private readonly IApplicationDbContext context;
         private readonly IIdentityService identityService;
-        private readonly UserManager<User> userManager;
 
-        public UpsertTreePostReactionCommandHandler(IApplicationDbContext context, IIdentityService identityService, UserManager<User> userManager)
+        public UpsertTreePostReplyReactionCommandHandler(IApplicationDbContext context, IIdentityService identityService)
         {
             this.context = context;
             this.identityService = identityService;
-            this.userManager = userManager;
         }
 
-        public async Task<Result<string>> Handle(UpsertTreePostReactionCommand request, CancellationToken cancellationToken)
+        public async Task<Result<string>> Handle(UpsertTreePostReplyReactionCommand request, CancellationToken cancellationToken)
         {
-            TreePostReaction entity;
+            TreePostReplyReaction entity;
             if (!string.IsNullOrEmpty(request.Id))
             {
-                entity = await this.context.TreePostReactions
+                entity = await this.context.TreePostReplyReactions
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 if (entity == null)
                 {
-                    return Result<string>.Failure(ErrorMessages.TreePostReactionNotFoundErrorMessage);
+                    return Result<string>.Failure(ErrorMessages.TreePostReplyReactionNotFoundErrorMessage);
                 }
 
                 if (entity.UserId != await this.identityService.GetCurrentUserId())
@@ -48,40 +44,30 @@
             }
             else
             {
-                if (!await this.context.TreePosts.AnyAsync(x => x.Id == request.TreePostId))
+                if (!await this.context.TreePostReplies.AnyAsync(x => x.Id == request.TreePostReplyId))
                 {
-                    return Result<string>.Failure(ErrorMessages.TreePostReactionNotFoundErrorMessage);
+                    return Result<string>.Failure(ErrorMessages.TreePostReplyNotFoundErrorMessage);
                 }
 
                 var userId = await this.identityService.GetCurrentUserId();
-                var user = await this.context.Users
-                    .Include(x => x.TreePostReactions)
-                    .FirstOrDefaultAsync(x => x.Id == userId);
-
-                if (user.TreePostReactions.Any(x => x.PostId == request.TreePostId))
-                {
-                    return Result<string>.Failure(ErrorMessages.TreePostAlreadyReactedErrorMessage);
-                }
-
-                entity = await this.context.TreePostReactions.FirstOrDefaultAsync(x => x.UserId == userId
-                && x.PostId == request.TreePostId);
+                entity = await this.context.TreePostReplyReactions.FirstOrDefaultAsync(x => x.UserId == userId
+                && x.TreePostReplyId == request.TreePostReplyId);
                 if (entity != null)
                 {
                     entity.Type = (ReactionType)Enum.Parse(typeof(ReactionType), request.Type);
                 }
                 else
                 {
-                    entity = new TreePostReaction
+                    entity = new TreePostReplyReaction
                     {
+                        TreePostReplyId = request.TreePostReplyId,
                         CreatedOn = DateTime.Now,
-                        PostId = request.TreePostId,
-                        UserId = await this.identityService.GetCurrentUserId(),
                         Type = (ReactionType)Enum.Parse(typeof(ReactionType), request.Type),
+                        UserId = await this.identityService.GetCurrentUserId(),
                     };
 
+                    await this.context.TreePostReplyReactions.AddAsync(entity);
                 }
-
-                await this.context.TreePostReactions.AddAsync(entity);
             }
 
             await this.context.SaveChangesAsync(CancellationToken.None);

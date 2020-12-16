@@ -34,6 +34,8 @@
 
         public ICollection<TreePost> TreePosts { get; set; } = new List<TreePost>();
 
+        public ICollection<TreePostReply> TreePostReplies { get; set; } = new List<TreePostReply>();
+
         public ICollection<User> Referals { get; set; } = new List<User>();
 
         public ICollection<LoginHistory> Logins { get; set; } = new List<LoginHistory>();

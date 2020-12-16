@@ -4,44 +4,22 @@ using GrowATree.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GrowATree.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201214184107_AddTreePostReplyReaction")]
+    partial class AddTreePostReplyReaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.LoginHistory", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeviceName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ip")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("LoginHistory");
-                });
 
             modelBuilder.Entity("GrowATree.Domain.Entities.Product", b =>
                 {
@@ -459,12 +437,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.Property<string>("ProfilePictureUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RefererId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ReferrerId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
 
@@ -490,8 +462,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("RefererId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -709,13 +679,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("GrowATree.Domain.Entities.LoginHistory", b =>
-                {
-                    b.HasOne("GrowATree.Domain.Entities.User", "User")
-                        .WithMany("Logins")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("GrowATree.Domain.Entities.Product", b =>
                 {
                     b.HasOne("GrowATree.Domain.Entities.Store", "Store")
@@ -833,13 +796,6 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.HasOne("GrowATree.Domain.Entities.User", "User")
                         .WithMany("TreeWaterings")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("GrowATree.Domain.Entities.User", b =>
-                {
-                    b.HasOne("GrowATree.Domain.Entities.User", "Referer")
-                        .WithMany("Referals")
-                        .HasForeignKey("RefererId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -218,5 +218,27 @@
         public const string TreePostAlreadyReactedErrorMessage = "Потребителят вече е реагирал на поста";
 
         #endregion
+
+        #region TreePostReply
+
+        public const string TreePostReplyNotFoundErrorMessage = "Този отговор не съществува";
+
+        public const string TreePostReplyContentRequiredErrorMessage = "Липсва съдържание на отговора";
+
+        public const string TreePostReplyMaxLengthRequiredErrorMessage = "Отговора е твърде дълъг";
+
+        #endregion
+
+        #region TreePostReplyReaction
+
+        public const string TreePostReplyReactionNotFoundErrorMessage = "Тази реакция не съществува";
+
+        #endregion
+
+        #region Reactions
+
+        public const string ReactionRequiredErrorMessage = "Реакцията ви няма тип";
+
+        #endregion
     }
 }
