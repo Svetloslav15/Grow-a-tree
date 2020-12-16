@@ -6,12 +6,14 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using GrowATree.Application.Common.Models;
+    using GrowATree.Application.Models.LoginHistory;
     using GrowATree.Application.Models.Users;
     using GrowATree.Application.Users.Commands.ChangeProfilePicture;
     using GrowATree.Application.Users.Commands.Edit;
     using GrowATree.Application.Users.Queries.GetAll;
     using GrowATree.Application.Users.Queries.GetAllShortInfo;
     using GrowATree.Application.Users.Queries.GetById;
+    using GrowATree.Application.Users.Queries.GetLoginHistory;
     using GrowATree.Application.Users.Queries.GetReferrers;
     using GrowATree.Application.Users.Queries.GetShortInfoById;
     using GrowATree.Application.Users.Queries.GetTrees;
@@ -108,8 +110,9 @@
             }
         }
 
+        [Authorize]
         [HttpGet("login-history")]
-        public async Task<ActionResult<UserListShortInfoModel>> GetLoginHistory([FromQuery] GetUserReferralListQuery query)
+        public async Task<ActionResult<LoginHistoryModel>> GetLoginHistory([FromQuery] GetUserLoginHistoryQuery query)
         {
             try
             {
@@ -119,7 +122,7 @@
             {
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
-                return UserListShortInfoModel.Failure<UserListShortInfoModel>(ErrorMessages.GeneralSomethingWentWrong);
+                return LoginHistoryModel.Failure<LoginHistoryModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
 

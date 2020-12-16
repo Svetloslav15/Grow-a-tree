@@ -30,7 +30,6 @@
 
         public async Task<UserListShortInfoModel> Handle(GetUserReferralListQuery request, CancellationToken cancellationToken)
         {
-
             if (await this.userManager.FindByIdAsync(request.Id) == null)
             {
                 return UserListShortInfoModel.Failure<UserListShortInfoModel>(ErrorMessages.UserNotFoundErrorMessage);
