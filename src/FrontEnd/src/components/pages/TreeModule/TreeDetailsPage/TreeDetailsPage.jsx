@@ -8,6 +8,8 @@ import TreeService from "../../../../services/treeService";
 import Map from '../../../common/Map/Map';
 import GeoCodingService from '../../../../services/geocodingService';
 
+const ReportButton = require('../../../../assets/report-button.svg');
+
 const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
     const [treeLocation, setLocation] = useState('');
@@ -25,7 +27,7 @@ const TreeDetailsPage = ({history, match}) => {
                     .filter(x => x !== undefined)
                     .map(x => `${x} `);
                 setLocation(result);
-                console.log(result);
+                console.log(treeInfo);
             })
     }, []);
 
@@ -36,8 +38,10 @@ const TreeDetailsPage = ({history, match}) => {
                 <section className='info-section__wrapper'>
                     <h1 className='info-section__wrapper__title'># {tree.nickname}</h1>
                     <p className='info-section__wrapper__status'>Статус: здраво</p>
+                    <p className='info-section__wrapper__status'>Вид: {tree.type}</p>
                     <p className='info-section__wrapper__owner'>Засадено от: {tree.owner && tree.owner.userName}</p>
                 </section>
+                <img className='info-section__report-button' src={ReportButton} alt="Report Problem Button"/>
             </section>
             <section className='info-section__map'>
                 <p className='info-section__map__location-text'>{treeLocation}</p>
