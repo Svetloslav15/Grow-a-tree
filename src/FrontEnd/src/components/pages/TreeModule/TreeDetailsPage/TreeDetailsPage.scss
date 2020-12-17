@@ -10,6 +10,7 @@
     height: 100%;
 
     &__title {
+      margin-bottom: 20px;
     }
 
     &__status {
@@ -81,6 +82,7 @@
     top: 70px;
     right: 20px;
     transition: 2s;
+    z-index: 2;
   }
 
   &__report-button:hover {

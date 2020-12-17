@@ -2,14 +2,13 @@ import React, {useState, useRef, useEffect} from 'react';
 import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import * as style from './Map.module.scss';
 
-const MapContainer = ({handleCoordinates, coordinates}) => {
+const MapContainer = ({handleCoordinates, coordinates, isStatic}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
 
     useEffect(() => {
         if (coordinates) {
             setMarker({position: {lat: coordinates.latitude, lng: coordinates.longitude}});
-        }
-        else {
+        } else {
             navigator.geolocation.getCurrentPosition(getCurrentUserLocation);
         }
     }, []);
@@ -19,13 +18,18 @@ const MapContainer = ({handleCoordinates, coordinates}) => {
     };
 
     const getNewCoordinates = async (t, map, coord) => {
+        if (isStatic) { return }
+
         const {latLng} = coord;
         const lat = await latLng.lat();
         const lng = await latLng.lng();
         setMarker({
             position: {lat, lng}
         });
-        handleCoordinates(lat.toString(), lng.toString());
+
+        if (handleCoordinates) {
+            handleCoordinates(lat.toString(), lng.toString());
+        }
     };
     return (
         <>

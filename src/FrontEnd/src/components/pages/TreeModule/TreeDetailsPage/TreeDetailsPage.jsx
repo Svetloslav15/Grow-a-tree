@@ -69,7 +69,7 @@ const TreeDetailsPage = ({history, match}) => {
                     </div>
                 </div>
                 <p className='info-section__map__location-text'>{treeLocation}</p>
-                <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}/>
+                <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}} isStatic={true}/>
             </section>
             <div className='info-section__posts'>
                 <Editor
