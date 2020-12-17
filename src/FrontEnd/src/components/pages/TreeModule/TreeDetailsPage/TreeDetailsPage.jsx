@@ -14,6 +14,7 @@ const TreeDetailsPage = ({history, match}) => {
         TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken)
             .then((data) => {
                 setTree(data.data.data);
+                console.log(data.data.data);
             })
     }, []);
 
@@ -22,9 +23,9 @@ const TreeDetailsPage = ({history, match}) => {
             <section className='info-section'>
                 {tree.images && <Carousel images={tree.images}/>}
                 <section className='info-section__wrapper'>
-                    <h1 className='info-section__wrapper__title'># Яворчо</h1>
+                    <h1 className='info-section__wrapper__title'># {tree.nickname}</h1>
                     <p className='info-section__wrapper__status'>Статус: здраво</p>
-                    <p className='info-section__wrapper__owner'>Засадено от: Светлослав Новоселски</p>
+                    <p className='info-section__wrapper__owner'>Засадено от: {tree.owner && tree.owner.userName}</p>
                 </section>
             </section>
         </Layout>
