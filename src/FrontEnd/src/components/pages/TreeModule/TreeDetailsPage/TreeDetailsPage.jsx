@@ -1,17 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
-import * as style from './TreeDetailsPage.module.scss';
+import './TreeDetailsPage.scss';
 
 import Layout from '../../../common/Layout/Layout';
-const TreeDetailsPage = ({}) => {
+import Carousel from './Carousel/Carousel';
+import TreeService from "../../../../services/treeService";
+
+const TreeDetailsPage = ({history, match}) => {
+    const [tree, setTree] = useState([]);
+    const currUser = useSelector(state => state.auth);
+
+    useEffect(() => {
+        TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken)
+            .then((data) => {
+                setTree(data.data.data);
+            })
+    }, []);
 
     return (
         <Layout>
-            <section></section>
-            <section>
-                <h1># Яворчо</h1>
-                <p>Статус: здраво</p>
-                <p>Засадено от: Светлослав Новоселски</p>
+            <section className='info-section'>
+                {tree.images && <Carousel images={tree.images}/>}
+                <section className='info-section__wrapper'>
+                    <h1 className='info-section__wrapper__title'># Яворчо</h1>
+                    <p className='info-section__wrapper__status'>Статус: здраво</p>
+                    <p className='info-section__wrapper__owner'>Засадено от: Светлослав Новоселски</p>
+                </section>
             </section>
         </Layout>
     )

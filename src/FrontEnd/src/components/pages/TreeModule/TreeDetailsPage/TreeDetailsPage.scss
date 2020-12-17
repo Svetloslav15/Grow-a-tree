@@ -1,0 +1,23 @@
+.info-section {
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+  padding: 40px 0;
+
+  &__wrapper {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+
+    &__title {
+    }
+
+    &__status {
+
+    }
+
+    &__owner {
+
+    }
+  }
+}

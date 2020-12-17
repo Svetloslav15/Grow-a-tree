@@ -26,7 +26,6 @@ const CarouselComponent = () => {
         TreeService.getTreesForCarousel('')
             .then((data) => {
                 setTrees(data.data.data);
-                console.log(data.data.data);
             })
     }, []);
 
