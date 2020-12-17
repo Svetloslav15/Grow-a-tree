@@ -49,6 +49,25 @@ const TreeDetailsPage = ({history, match}) => {
                 <img className='info-section__report-button' src={ReportButton} alt="Report Problem Button"/>
             </section>
             <section className='info-section__map'>
+                <div className='info-section__timer'>
+                    <h4 className='info-section__timer__title'>Време от последно поливане</h4>
+                    <div className='info-section__timer__section'>
+                        <div className='info-section__timer__section__item'>
+                            <span className='info-section__timer__section__value'>4</span>
+                            <span className='info-section__timer__section__key'>часа</span>
+                        </div>
+                        <span className='info-section__timer__section__delimiter'>:</span>
+                        <div className='info-section__timer__section__item'>
+                            <span className='info-section__timer__section__value'>30</span>
+                            <span className='info-section__timer__section__key'>минути</span>
+                        </div>
+                        <span className='info-section__timer__section__delimiter'>:</span>
+                        <div className='info-section__timer__section__item'>
+                            <span className='info-section__timer__section__value'>59</span>
+                            <span className='info-section__timer__section__key'>секунди</span>
+                        </div>
+                    </div>
+                </div>
                 <p className='info-section__map__location-text'>{treeLocation}</p>
                 <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}/>
             </section>
