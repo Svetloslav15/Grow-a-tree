@@ -60,12 +60,12 @@ const TreeDetailsPage = ({history, match}) => {
                         plugins: [
                             'advlist autolink lists link image charmap print preview anchor',
                             'searchreplace visualblocks code fullscreen',
-                            'insertdatetime media table paste code help wordcount'
+                            'insertdatetime media table paste code help wordcount imagetools'
                         ],
                         toolbar:
-                            'undo redo | formatselect | bold italic backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist outdent indent | removeformat | help'
+                            'formatselect  | image link | bold italic backcolor | \
+                            alignleft aligncenter alignright alignjustify',
+                        file_picker_types: 'file image',
                     }}
                     onEditorChange={handleEditorChange}
                 />
