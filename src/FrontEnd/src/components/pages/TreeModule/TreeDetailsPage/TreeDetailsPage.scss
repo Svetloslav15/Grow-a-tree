@@ -2,7 +2,7 @@
   display: flex;
   width: 100%;
   align-items: flex-end;
-  padding: 40px 0;
+  padding: 40px;
 
   &__wrapper {
     display: flex;
@@ -18,6 +18,18 @@
 
     &__owner {
 
+    }
+  }
+
+  &__map {
+    height: 400px;
+    width: 50%;
+    position: relative;
+    left: 40px;
+
+    &__location-text {
+      color: #002F3E;
+      font-weight: bold;
     }
   }
 }

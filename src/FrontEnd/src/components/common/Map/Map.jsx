@@ -2,11 +2,16 @@ import React, {useState, useRef, useEffect} from 'react';
 import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import * as style from './Map.module.scss';
 
-const MapContainer = ({handleCoordinates}) => {
+const MapContainer = ({handleCoordinates, coordinates}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(getCurrentUserLocation);
+        if (coordinates) {
+            setMarker({position: {lat: coordinates.latitude, lng: coordinates.longitude}});
+        }
+        else {
+            navigator.geolocation.getCurrentPosition(getCurrentUserLocation);
+        }
     }, []);
 
     const getCurrentUserLocation = (position) => {
@@ -22,7 +27,6 @@ const MapContainer = ({handleCoordinates}) => {
         });
         handleCoordinates(lat.toString(), lng.toString());
     };
-
     return (
         <>
             {marker.position.lat !== 0 ? <Map google={window.google}
