@@ -2833,7 +2833,9 @@ export interface IUsersClient {
     getById(id: string | null): Observable<ResultOfUserModel>;
     getShortInfoById(id: string | null): Observable<ResultOfUserShortInfoModel>;
     getList(page: number | undefined, perPage: number | undefined): Observable<UserListModel>;
-    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
+    getListShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
+    getReferrels(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel>;
+    getLoginHistory(page: number | undefined, perPage: number | undefined): Observable<LoginHistoryModel>;
     isUserShortToTree(latitude: number | undefined, longitude: number | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
@@ -3010,7 +3012,7 @@ export class UsersClient implements IUsersClient {
         return _observableOf<UserListModel>(<any>null);
     }
 
-    getAllShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
+    getListShortInfo(page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
         let url_ = this.baseUrl + "/api/Users/list-short-info?";
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
@@ -3031,11 +3033,11 @@ export class UsersClient implements IUsersClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllShortInfo(response_);
+            return this.processGetListShortInfo(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAllShortInfo(<any>response_);
+                    return this.processGetListShortInfo(<any>response_);
                 } catch (e) {
                     return <Observable<UserListShortInfoModel>><any>_observableThrow(e);
                 }
@@ -3044,7 +3046,7 @@ export class UsersClient implements IUsersClient {
         }));
     }
 
-    protected processGetAllShortInfo(response: HttpResponseBase): Observable<UserListShortInfoModel> {
+    protected processGetListShortInfo(response: HttpResponseBase): Observable<UserListShortInfoModel> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -3064,6 +3066,120 @@ export class UsersClient implements IUsersClient {
             }));
         }
         return _observableOf<UserListShortInfoModel>(<any>null);
+    }
+
+    getReferrels(id: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<UserListShortInfoModel> {
+        let url_ = this.baseUrl + "/api/Users/referrals?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetReferrels(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetReferrels(<any>response_);
+                } catch (e) {
+                    return <Observable<UserListShortInfoModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UserListShortInfoModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetReferrels(response: HttpResponseBase): Observable<UserListShortInfoModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserListShortInfoModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UserListShortInfoModel>(<any>null);
+    }
+
+    getLoginHistory(page: number | undefined, perPage: number | undefined): Observable<LoginHistoryModel> {
+        let url_ = this.baseUrl + "/api/Users/login-history?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetLoginHistory(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetLoginHistory(<any>response_);
+                } catch (e) {
+                    return <Observable<LoginHistoryModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<LoginHistoryModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetLoginHistory(response: HttpResponseBase): Observable<LoginHistoryModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = LoginHistoryModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<LoginHistoryModel>(<any>null);
     }
 
     isUserShortToTree(latitude: number | undefined, longitude: number | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean> {
@@ -3594,6 +3710,7 @@ export class RegisterCommand implements IRegisterCommand {
     username!: string;
     password!: string;
     city?: string | undefined;
+    referrerId?: string | undefined;
 
     constructor(data?: IRegisterCommand) {
         if (data) {
@@ -3610,6 +3727,7 @@ export class RegisterCommand implements IRegisterCommand {
             this.username = _data["username"];
             this.password = _data["password"];
             this.city = _data["city"];
+            this.referrerId = _data["referrerId"];
         }
     }
 
@@ -3626,6 +3744,7 @@ export class RegisterCommand implements IRegisterCommand {
         data["username"] = this.username;
         data["password"] = this.password;
         data["city"] = this.city;
+        data["referrerId"] = this.referrerId;
         return data; 
     }
 }
@@ -3635,6 +3754,7 @@ export interface IRegisterCommand {
     username: string;
     password: string;
     city?: string | undefined;
+    referrerId?: string | undefined;
 }
 
 export class ResultOfTokenModel implements IResultOfTokenModel {
@@ -3748,6 +3868,8 @@ export interface ITokenModel {
 export class LoginCommand implements ILoginCommand {
     email?: string | undefined;
     password?: string | undefined;
+    ip?: string | undefined;
+    deviceName?: string | undefined;
 
     constructor(data?: ILoginCommand) {
         if (data) {
@@ -3762,6 +3884,8 @@ export class LoginCommand implements ILoginCommand {
         if (_data) {
             this.email = _data["email"];
             this.password = _data["password"];
+            this.ip = _data["ip"];
+            this.deviceName = _data["deviceName"];
         }
     }
 
@@ -3776,6 +3900,8 @@ export class LoginCommand implements ILoginCommand {
         data = typeof data === 'object' ? data : {};
         data["email"] = this.email;
         data["password"] = this.password;
+        data["ip"] = this.ip;
+        data["deviceName"] = this.deviceName;
         return data; 
     }
 }
@@ -3783,6 +3909,8 @@ export class LoginCommand implements ILoginCommand {
 export interface ILoginCommand {
     email?: string | undefined;
     password?: string | undefined;
+    ip?: string | undefined;
+    deviceName?: string | undefined;
 }
 
 export class ExternalLoginCommand implements IExternalLoginCommand {
@@ -7012,6 +7140,145 @@ export class UserListShortInfoModel extends MetaResultOfIListOfUserShortInfoMode
 }
 
 export interface IUserListShortInfoModel extends IMetaResultOfIListOfUserShortInfoModelAndPaginationMeta {
+}
+
+export class MetaResultOfIListOfUserLoginModelAndPaginationMeta implements IMetaResultOfIListOfUserLoginModelAndPaginationMeta {
+    data?: UserLoginModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+
+    constructor(data?: IMetaResultOfIListOfUserLoginModelAndPaginationMeta) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(UserLoginModel.fromJS(item));
+            }
+            this.meta = _data["meta"] ? PaginationMeta.fromJS(_data["meta"]) : <any>undefined;
+            this.succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                this.errors = [] as any;
+                for (let item of _data["errors"])
+                    this.errors!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MetaResultOfIListOfUserLoginModelAndPaginationMeta {
+        data = typeof data === 'object' ? data : {};
+        let result = new MetaResultOfIListOfUserLoginModelAndPaginationMeta();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item.toJSON());
+        }
+        data["meta"] = this.meta ? this.meta.toJSON() : <any>undefined;
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IMetaResultOfIListOfUserLoginModelAndPaginationMeta {
+    data?: UserLoginModel[] | undefined;
+    meta?: PaginationMeta | undefined;
+    succeeded?: boolean;
+    errors?: string[] | undefined;
+}
+
+export class LoginHistoryModel extends MetaResultOfIListOfUserLoginModelAndPaginationMeta implements ILoginHistoryModel {
+
+    constructor(data?: ILoginHistoryModel) {
+        super(data);
+    }
+
+    init(_data?: any) {
+        super.init(_data);
+    }
+
+    static fromJS(data: any): LoginHistoryModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new LoginHistoryModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        super.toJSON(data);
+        return data; 
+    }
+}
+
+export interface ILoginHistoryModel extends IMetaResultOfIListOfUserLoginModelAndPaginationMeta {
+}
+
+export class UserLoginModel implements IUserLoginModel {
+    id?: string | undefined;
+    deviceName?: string | undefined;
+    ip?: string | undefined;
+    date?: Date;
+
+    constructor(data?: IUserLoginModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.deviceName = _data["deviceName"];
+            this.ip = _data["ip"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): UserLoginModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserLoginModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["deviceName"] = this.deviceName;
+        data["ip"] = this.ip;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IUserLoginModel {
+    id?: string | undefined;
+    deviceName?: string | undefined;
+    ip?: string | undefined;
+    date?: Date;
 }
 
 export class EditUserCommand implements IEditUserCommand {

@@ -45,6 +45,8 @@
 
         public DbSet<TreePostReplyReaction> TreePostReplyReactions { get; set; }
 
+        public DbSet<LoginHistory> LoginHistory { get; set; }
+
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions,

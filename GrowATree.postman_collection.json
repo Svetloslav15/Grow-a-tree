@@ -61,7 +61,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"user3@trees.com\",\r\n    \"password\": \"user3\"\r\n}",
+							"raw": "{\r\n    \"email\": \"user3@trees.com\",\r\n    \"password\": \"user3\",\r\n    \"deviceName\": \"Samsung Galaxy S7 Edge\",\r\n    \"ip\": \"192.201.101.101\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -575,6 +575,86 @@
 								{
 									"key": "treeId",
 									"value": "48e81e20-7e16-4550-92bd-c56b6b9dab49"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetReferrals",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/referrals?id=64297ed8-cb49-497c-aed3-74e7ebcd502f&page=1&perPage=15",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"referrals"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "64297ed8-cb49-497c-aed3-74e7ebcd502f"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginHistory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/login-history?page=1&perPage=15",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"login-history"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "15"
 								}
 							]
 						}
