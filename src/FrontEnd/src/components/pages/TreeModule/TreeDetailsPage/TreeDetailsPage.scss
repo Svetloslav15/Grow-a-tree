@@ -33,6 +33,11 @@
     }
   }
 
+  &__posts {
+    width: 43%;
+    margin-left: 60px;
+  }
+
   &__report-button {
     cursor: pointer;
     position: fixed;

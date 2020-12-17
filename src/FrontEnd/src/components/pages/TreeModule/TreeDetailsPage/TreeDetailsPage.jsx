@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
+import { Editor } from '@tinymce/tinymce-react';
+
 import './TreeDetailsPage.scss';
 
 import Layout from '../../../common/Layout/Layout';
@@ -27,9 +29,12 @@ const TreeDetailsPage = ({history, match}) => {
                     .filter(x => x !== undefined)
                     .map(x => `${x} `);
                 setLocation(result);
-                console.log(treeInfo);
             })
     }, []);
+
+    const handleEditorChange = () => {
+
+    }
 
     return (
         <Layout>
@@ -47,6 +52,24 @@ const TreeDetailsPage = ({history, match}) => {
                 <p className='info-section__map__location-text'>{treeLocation}</p>
                 <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}/>
             </section>
+            <div className='info-section__posts'>
+                <Editor
+                    init={{
+                        height: 200,
+                        menubar: false,
+                        plugins: [
+                            'advlist autolink lists link image charmap print preview anchor',
+                            'searchreplace visualblocks code fullscreen',
+                            'insertdatetime media table paste code help wordcount'
+                        ],
+                        toolbar:
+                            'undo redo | formatselect | bold italic backcolor | \
+                            alignleft aligncenter alignright alignjustify | \
+                            bullist numlist outdent indent | removeformat | help'
+                    }}
+                    onEditorChange={handleEditorChange}
+                />
+            </div>
         </Layout>
     )
 };
