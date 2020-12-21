@@ -12,6 +12,7 @@ import AlertService from '../../../../services/alertService';
 import SuccessMessages from '../../../../static/successMessages';
 import Map from '../../../common/Map/Map';
 import Timer from './Timer/Timer';
+import TreePost from './TreePost/TreePost';
 
 import GeoCodingService from '../../../../services/geocodingService';
 
@@ -114,11 +115,10 @@ const TreeDetailsPage = ({history, match}) => {
                 />
                 <Button type='DarkOutline' onClick={addPost}>Добави</Button>
                 {
-                    posts.map(x => <div className='my-5 py-5'>{x.content}</div>)
+                    posts.map((data, index) => <TreePost key={index} data={data}/>)
                 }
             </div>
         </Layout>
     )
 };
-
 export default TreeDetailsPage;
