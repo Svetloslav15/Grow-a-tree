@@ -4,6 +4,7 @@ const ROUTES = {
     postAuthorizedAddTree: '/trees/upsert',
     getAuthorizedTreeById: '/trees/',
     getTreesForCarousel: '/trees/random-images',
+    postAuthorizedUpsertTreePost: '/treePosts/upsert'
 };
 
 export default new Proxy({}, {

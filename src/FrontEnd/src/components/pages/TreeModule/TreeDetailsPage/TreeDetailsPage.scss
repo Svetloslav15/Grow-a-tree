@@ -38,42 +38,6 @@
     position: unset;
   }
 
-  &__timer {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    padding-bottom: 35px;
-
-    &__section {
-      display: flex;
-
-      &__item {
-        display: flex;
-        flex-flow: column;
-        margin: 0 10px;
-      }
-
-      &__value {
-        color: #002F3E;
-        font-size: 30px;
-        font-weight: bold;
-        align-self: center;
-      }
-
-      &__key {
-        color: #002F3E;
-        font-size: 20px;
-        align-self: center;
-      }
-
-      &__delimiter {
-        align-items: center;
-        display: flex;
-        font-size: 30px;
-        font-weight: bold;
-      }
-    }
-  }
 
   &__posts {
     width: 43%;
@@ -94,6 +58,6 @@
     transition: 2s;
   }
 }
-.testttt > div{
+.map-container-section > div{
   position: unset !important;
 }

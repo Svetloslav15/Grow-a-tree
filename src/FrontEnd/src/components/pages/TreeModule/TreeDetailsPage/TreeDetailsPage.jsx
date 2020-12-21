@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
-import { Editor } from '@tinymce/tinymce-react';
+import {Editor} from '@tinymce/tinymce-react';
 
 import './TreeDetailsPage.scss';
 
 import Layout from '../../../common/Layout/Layout';
+import Button from '../../../common/Button/Button';
 import Carousel from './Carousel/Carousel';
-import TreeService from "../../../../services/treeService";
+import TreeService from '../../../../services/treeService';
 import Map from '../../../common/Map/Map';
+import Timer from './Timer/Timer';
+
 import GeoCodingService from '../../../../services/geocodingService';
 
 const ReportButton = require('../../../../assets/report-button.svg');
@@ -15,6 +18,7 @@ const ReportButton = require('../../../../assets/report-button.svg');
 const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
     const [treeLocation, setLocation] = useState('');
+    const [currPost, setCurrPost] = useState({id: ''});
 
     const currUser = useSelector(state => state.auth);
 
@@ -23,6 +27,7 @@ const TreeDetailsPage = ({history, match}) => {
             .then(async (data) => {
                 const treeInfo = data.data.data;
                 setTree(treeInfo);
+                setCurrPost({treeId: treeInfo.id, ...currPost});
                 const res = await GeoCodingService.getCityByCoords(treeInfo.latitude, treeInfo.longitude);
                 const {municipality, suburb, village} = res.data.address;
                 const result = [municipality, suburb, village]
@@ -32,8 +37,13 @@ const TreeDetailsPage = ({history, match}) => {
             })
     }, []);
 
-    const handleEditorChange = () => {
+    const addPost = async () => {
+        const response = await TreeService.postAuthorizedUpsertTreePost(currPost, currUser.accessToken);
+        console.log(response);
+    }
 
+    const handleEditorChange = async (data) => {
+        setCurrPost({content: data, ...currPost});
     }
 
     return (
@@ -49,32 +59,15 @@ const TreeDetailsPage = ({history, match}) => {
                 <img className='info-section__report-button' src={ReportButton} alt="Report Problem Button"/>
             </section>
             <section className='info-section__map'>
-                <div className='info-section__timer'>
-                    <h4 className='info-section__timer__title'>Време от последно поливане</h4>
-                    <div className='info-section__timer__section'>
-                        <div className='info-section__timer__section__item'>
-                            <span className='info-section__timer__section__value'>4</span>
-                            <span className='info-section__timer__section__key'>часа</span>
-                        </div>
-                        <span className='info-section__timer__section__delimiter'>:</span>
-                        <div className='info-section__timer__section__item'>
-                            <span className='info-section__timer__section__value'>30</span>
-                            <span className='info-section__timer__section__key'>минути</span>
-                        </div>
-                        <span className='info-section__timer__section__delimiter'>:</span>
-                        <div className='info-section__timer__section__item'>
-                            <span className='info-section__timer__section__value'>59</span>
-                            <span className='info-section__timer__section__key'>секунди</span>
-                        </div>
-                    </div>
-                </div>
+                <Timer/>
                 <p className='info-section__map__location-text'>{treeLocation}</p>
                 <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}
                      isStatic={true}
-                    className='testttt'/>
+                     className='map-container-section'/>
             </section>
             <div className='info-section__posts'>
                 <Editor
+                    apiKey="e6k1kg0bmgdif8788ck1k320wefwovv7sll2ynujx30327lk"
                     init={{
                         height: 200,
                         menubar: false,
@@ -90,6 +83,7 @@ const TreeDetailsPage = ({history, match}) => {
                     }}
                     onEditorChange={handleEditorChange}
                 />
+                <Button type='DarkOutline' onClick={addPost}>Добави</Button>
             </div>
         </Layout>
     )
