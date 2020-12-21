@@ -8,6 +8,8 @@ import Layout from '../../../common/Layout/Layout';
 import Button from '../../../common/Button/Button';
 import Carousel from './Carousel/Carousel';
 import TreeService from '../../../../services/treeService';
+import AlertService from '../../../../services/alertService';
+import SuccessMessages from '../../../../static/successMessages';
 import Map from '../../../common/Map/Map';
 import Timer from './Timer/Timer';
 
@@ -17,6 +19,7 @@ const ReportButton = require('../../../../assets/report-button.svg');
 
 const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
+    const [editorKey, setEditorKey] = useState(4);
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
 
@@ -39,7 +42,18 @@ const TreeDetailsPage = ({history, match}) => {
 
     const addPost = async () => {
         const response = await TreeService.postAuthorizedUpsertTreePost(currPost, currUser.accessToken);
-        console.log(response);
+
+        if (response.succeeded) {
+            await AlertService.success(SuccessMessages.successAddedTreePost);
+            setCurrPost({id: ''});
+
+            //Clear editor content
+            const newKey = editorKey * 43;
+            setEditorKey(newKey);
+        } else {
+            await AlertService.error(response.errors[0]);
+        }
+
     }
 
     const handleEditorChange = async (data) => {
@@ -67,6 +81,7 @@ const TreeDetailsPage = ({history, match}) => {
             </section>
             <div className='info-section__posts'>
                 <Editor
+                    key={editorKey}
                     apiKey="e6k1kg0bmgdif8788ck1k320wefwovv7sll2ynujx30327lk"
                     init={{
                         height: 200,

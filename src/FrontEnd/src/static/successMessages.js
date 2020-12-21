@@ -7,5 +7,6 @@ export default {
     successResetPassword: 'Успешно сменихте вашата парола!',
     successEditYourInfo: 'Успешно променихте вашите данни!',
     successChangeProfilePicture: 'Успешно сменихте вашата профилна снимка!',
-    successAddedTree: 'Успешно добавихте дърво!'
+    successAddedTree: 'Успешно добавихте дърво!',
+    successAddedTreePost: 'Успешно добавихте пост за дървото!'
 }
