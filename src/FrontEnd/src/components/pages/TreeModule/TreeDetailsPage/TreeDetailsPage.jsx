@@ -19,6 +19,7 @@ const ReportButton = require('../../../../assets/report-button.svg');
 
 const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
+    const [treePosts, setTreePosts] = useState([]);
     const [editorKey, setEditorKey] = useState(4);
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
@@ -26,19 +27,25 @@ const TreeDetailsPage = ({history, match}) => {
     const currUser = useSelector(state => state.auth);
 
     useEffect(() => {
-        TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken)
-            .then(async (data) => {
-                const treeInfo = data.data.data;
-                setTree(treeInfo);
-                setCurrPost({treeId: treeInfo.id, ...currPost});
-                const res = await GeoCodingService.getCityByCoords(treeInfo.latitude, treeInfo.longitude);
-                const {municipality, suburb, village} = res.data.address;
-                const result = [municipality, suburb, village]
-                    .filter(x => x !== undefined)
-                    .map(x => `${x} `);
-                setLocation(result);
-            })
+        Promise.all([fetchTreeInfo(), fetchTreePosts()])
     }, []);
+
+    const fetchTreeInfo = async () => {
+        const data = await TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken);
+        const treeInfo = data.data.data;
+        setTree(treeInfo);
+        setCurrPost({treeId: treeInfo.id, ...currPost});
+        const res = await GeoCodingService.getCityByCoords(treeInfo.latitude, treeInfo.longitude);
+        const {municipality, suburb, village} = res.data.address;
+        const result = [municipality, suburb, village]
+            .filter(x => x !== undefined)
+            .map(x => `${x} `);
+        setLocation(result);
+    }
+
+    const fetchTreePosts = async () => {
+
+    }
 
     const addPost = async () => {
         const response = await TreeService.postAuthorizedUpsertTreePost(currPost, currUser.accessToken);
@@ -82,7 +89,7 @@ const TreeDetailsPage = ({history, match}) => {
             <div className='info-section__posts'>
                 <Editor
                     key={editorKey}
-                    apiKey="e6k1kg0bmgdif8788ck1k320wefwovv7sll2ynujx30327lk"
+                    apiKey={process.env.REACT_APP_TINYMCE_KEY}
                     init={{
                         height: 200,
                         menubar: false,
