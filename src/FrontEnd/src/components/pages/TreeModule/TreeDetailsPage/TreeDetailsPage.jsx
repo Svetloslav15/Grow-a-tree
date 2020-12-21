@@ -19,6 +19,9 @@ const ReportButton = require('../../../../assets/report-button.svg');
 
 const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
+    const [posts, setPosts] = useState([]);
+    const [currPostPage, setCurrPostPage] = useState(1);
+    const [postsLimitPerPage, setPostsLimitPerPage] = useState(5);
     const [treePosts, setTreePosts] = useState([]);
     const [editorKey, setEditorKey] = useState(4);
     const [treeLocation, setLocation] = useState('');
@@ -26,8 +29,9 @@ const TreeDetailsPage = ({history, match}) => {
 
     const currUser = useSelector(state => state.auth);
 
-    useEffect(() => {
-        Promise.all([fetchTreeInfo(), fetchTreePosts()])
+    useEffect(async () => {
+        await fetchTreeInfo();
+        await fetchTreePosts();
     }, []);
 
     const fetchTreeInfo = async () => {
@@ -44,7 +48,10 @@ const TreeDetailsPage = ({history, match}) => {
     }
 
     const fetchTreePosts = async () => {
-
+        const response = await TreeService.getAuthorizedTreePosts(`?page=${currPostPage}&perPage=${postsLimitPerPage}`, currUser.accessToken);
+        if (response.data.succeeded) {
+            setPosts([...response.data.data]);
+        }
     }
 
     const addPost = async () => {
@@ -106,6 +113,9 @@ const TreeDetailsPage = ({history, match}) => {
                     onEditorChange={handleEditorChange}
                 />
                 <Button type='DarkOutline' onClick={addPost}>Добави</Button>
+                {
+                    posts.map(x => <div className='my-5 py-5'>{x.content}</div>)
+                }
             </div>
         </Layout>
     )
