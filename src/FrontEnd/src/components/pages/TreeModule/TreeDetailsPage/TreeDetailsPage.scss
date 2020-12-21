@@ -34,6 +34,10 @@
     }
   }
 
+  &__map:nth-child(3){
+    position: unset;
+  }
+
   &__timer {
     display: flex;
     flex-flow: column;
@@ -89,4 +93,7 @@
     transform: scale(1.5);
     transition: 2s;
   }
+}
+.testttt > div{
+  position: unset !important;
 }

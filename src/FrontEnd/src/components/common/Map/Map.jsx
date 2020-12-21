@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import * as style from './Map.module.scss';
 
-const MapContainer = ({handleCoordinates, coordinates, isStatic}) => {
+const MapContainer = ({handleCoordinates, coordinates, isStatic, className}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
 
     useEffect(() => {
@@ -31,8 +31,9 @@ const MapContainer = ({handleCoordinates, coordinates, isStatic}) => {
             handleCoordinates(lat.toString(), lng.toString());
         }
     };
+
     return (
-        <>
+        <div className={className}>
             {marker.position.lat !== 0 ? <Map google={window.google}
                                               zoom={14}
                                               onClick={getNewCoordinates}
@@ -42,7 +43,7 @@ const MapContainer = ({handleCoordinates, coordinates, isStatic}) => {
                                               }}>
                 <Marker position={marker.position}/>
             </Map> : ''}
-        </>
+        </div>
     );
 };
 
