@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
+$dark: #002F3E;
+$green: #4CA771;
+$red: #EF325A;
+$yellow: #F0B241;
+$white: #ffffff;
+$black: #262626;
+
 * {
   font-family: 'Raleway', sans-serif;
 }
@@ -79,4 +86,3 @@ h1, h2, h3 {
 .ExternalLoginSection_googleButton__107my > div {
   background: none !important;
 }
-
