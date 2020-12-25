@@ -1,2 +1,36 @@
 @import '../../../index';
 
+.wrapper {
+  border-top: 1px solid #002F3E;
+  position: relative;
+
+  &__popup {
+    flex-flow: row;
+    display: none;
+    position: absolute;
+    z-index: 2;
+    background-color: #B7DCC6;
+    border-radius: 10px;
+    top: -39px;
+    left: 4px;
+    width: 200px;
+    padding: 0 15px;
+
+    &__image {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      cursor: pointer;
+      padding: 0 10px;
+    }
+
+    &__image:hover {
+      transform: scale(1.4);
+      transition: all .5s;
+    }
+  }
+}
+
+.wrapper:hover .wrapper__popup{
+  display: flex;
+}
