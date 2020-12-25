@@ -31,10 +31,14 @@ const TreeDetailsPage = ({history, match}) => {
 
     const currUser = useSelector(state => state.auth);
 
-    useEffect(async () => {
+    useEffect( () => {
+        loadData();
+    }, []);
+
+    const loadData = async () => {
         await fetchTreeInfo();
         await fetchTreePosts();
-    }, []);
+    }
 
     const fetchTreeInfo = async () => {
         const data = await TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken);
