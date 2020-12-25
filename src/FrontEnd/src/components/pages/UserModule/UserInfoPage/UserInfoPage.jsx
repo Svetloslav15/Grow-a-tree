@@ -56,7 +56,6 @@ const UserInfoPage = () => {
                     <div className='col-md-7'>
                         {currUser.userName ? <p className={style.username}>@{currUser.userName}</p> : <Skeleton/>}
                         {currUser.firstName ? <p className={style.name}>({currUser.firstName} {currUser.lastName})</p> : <Skeleton/>}
-
                         <div className='col-md-12 row'>
                             <InputField type='text'
                                         label={'Име'}

@@ -3045,11 +3045,15 @@
         "description": "",
         "x-enumNames": [
           "Heart",
-          "Laugh"
+          "Laugh",
+          "Like",
+          "Sad"
         ],
         "enum": [
           1,
-          2
+          2,
+          3,
+          4
         ]
       },
       "PaginationMeta": {

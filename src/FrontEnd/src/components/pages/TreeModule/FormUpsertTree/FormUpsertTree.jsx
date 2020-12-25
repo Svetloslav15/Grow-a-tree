@@ -46,7 +46,7 @@ const FormUpsertTree = ({title, data, type, location, handleChange, handleFilesU
                                    values={TreeCategories}
                                    defaultValue={data.category}
                                    onChange={handleChange}/>
-                    <FileInput onChange={handleFilesUpload}/>
+                    <FileInput onChange={handleFilesUpload} isMultiple={true}/>
                     <div className='text-right mt-3'>
                         <Button type='DarkOutline' onClick={handleSubmit}>{type}</Button>
                     </div>

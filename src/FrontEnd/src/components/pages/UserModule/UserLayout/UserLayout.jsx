@@ -17,7 +17,7 @@ const Layout = ({children}) => {
     }, []);
 
     return (
-        <div className='mx-0 row'>
+        <div className='mx-0 row py-5'>
             <img src={BgShape3} className='shape3'/>
             <img src={BgShape4} className='shape4'/>
             <Sidebar/>

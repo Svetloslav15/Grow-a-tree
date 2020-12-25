@@ -2,11 +2,15 @@ import React, {useState, useRef, useEffect} from 'react';
 import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import * as style from './Map.module.scss';
 
-const MapContainer = ({handleCoordinates}) => {
+const MapContainer = ({handleCoordinates, coordinates, isStatic, className}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(getCurrentUserLocation);
+        if (coordinates) {
+            setMarker({position: {lat: coordinates.latitude, lng: coordinates.longitude}});
+        } else {
+            navigator.geolocation.getCurrentPosition(getCurrentUserLocation);
+        }
     }, []);
 
     const getCurrentUserLocation = (position) => {
@@ -14,17 +18,22 @@ const MapContainer = ({handleCoordinates}) => {
     };
 
     const getNewCoordinates = async (t, map, coord) => {
+        if (isStatic) { return }
+
         const {latLng} = coord;
         const lat = await latLng.lat();
         const lng = await latLng.lng();
         setMarker({
             position: {lat, lng}
         });
-        handleCoordinates(lat.toString(), lng.toString());
+
+        if (handleCoordinates) {
+            handleCoordinates(lat.toString(), lng.toString());
+        }
     };
 
     return (
-        <>
+        <div className={className}>
             {marker.position.lat !== 0 ? <Map google={window.google}
                                               zoom={14}
                                               onClick={getNewCoordinates}
@@ -34,7 +43,7 @@ const MapContainer = ({handleCoordinates}) => {
                                               }}>
                 <Marker position={marker.position}/>
             </Map> : ''}
-        </>
+        </div>
     );
 };
 

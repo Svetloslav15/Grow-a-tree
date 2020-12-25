@@ -1,0 +1,29 @@
+.post {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #4CA771;
+  padding: 10px;
+  margin: 12px 0;
+
+  &__user-section {
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+    border-bottom: 1px solid #002F3E;
+
+    &__avatar {
+      width: 30px;
+      height: 30px;
+    }
+
+    &__username {
+      color: #002F3E;
+      margin-left: 10px;
+    }
+  }
+
+  &__content {
+    color: #002F3E;
+    padding: 12px 0;
+  }
+}
