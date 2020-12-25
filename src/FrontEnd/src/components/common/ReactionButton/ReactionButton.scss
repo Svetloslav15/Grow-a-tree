@@ -3,6 +3,7 @@
 .wrapper {
   border-top: 1px solid #002F3E;
   position: relative;
+  width: fit-content;
 
   &__popup {
     flex-flow: row;
