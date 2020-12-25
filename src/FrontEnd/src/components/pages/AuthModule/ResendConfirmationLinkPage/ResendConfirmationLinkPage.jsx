@@ -22,7 +22,7 @@ const ResendConfirmationLinkPage = () => {
         return result.succeeded ? AlertService.success(SuccessMessages.successConfirmEmailLinkSent) : AlertService.error(result.errors[0]);
     };
     return (
-        <>
+        <div className='pt-5 mt-5'>
             <img src={BgShape3} className='shape3'/>
             <img src={BgShape4} className='shape4'/>
             <div className={`col-md-12 ${style.sectionWrapper}`}>
@@ -44,7 +44,7 @@ const ResendConfirmationLinkPage = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 };
 

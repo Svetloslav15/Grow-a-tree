@@ -2,6 +2,7 @@ import React from 'react';
 import parse from 'html-react-parser';
 
 import './TreePost.scss';
+import ReactionButton from "../../../../common/ReactionButton/ReactionButton";
 
 const TreePost = ({data}) => {
     return (
@@ -12,6 +13,9 @@ const TreePost = ({data}) => {
             </div>
             <div className='post__content'>
                 {parse(data.content)}
+            </div>
+            <div>
+                <ReactionButton/>
             </div>
         </div>
     );

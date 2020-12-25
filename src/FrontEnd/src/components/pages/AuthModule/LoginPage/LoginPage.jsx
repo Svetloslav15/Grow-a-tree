@@ -47,7 +47,7 @@ const LoginPage = ({history}) => {
     };
 
     return (
-        <>
+        <div className='pt-5 mt-5'>
             <img src={BgShape1} className='shape1'/>
             <img src={BgShape2} className='shape2'/>
             <img src={BgShape3} className='shape3'/>
@@ -84,7 +84,7 @@ const LoginPage = ({history}) => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 };
 

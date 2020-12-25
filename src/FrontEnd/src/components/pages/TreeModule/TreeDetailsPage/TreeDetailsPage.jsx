@@ -23,7 +23,7 @@ const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
     const [posts, setPosts] = useState([]);
     const [currPostPage, setCurrPostPage] = useState(1);
-    const [postsLimitPerPage, setPostsLimitPerPage] = useState(5);
+    const [postsLimitPerPage, setPostsLimitPerPage] = useState(15);
     const [treePosts, setTreePosts] = useState([]);
     const [editorKey, setEditorKey] = useState(4);
     const [treeLocation, setLocation] = useState('');
@@ -62,7 +62,7 @@ const TreeDetailsPage = ({history, match}) => {
         if (response.succeeded) {
             await AlertService.success(SuccessMessages.successAddedTreePost);
             setCurrPost({id: ''});
-
+            await fetchTreePosts();
             //Clear editor content
             const newKey = editorKey * 43;
             setEditorKey(newKey);
@@ -92,9 +92,11 @@ const TreeDetailsPage = ({history, match}) => {
             <section className='info-section__map'>
                 <Timer/>
                 <p className='info-section__map__location-text'>{treeLocation}</p>
-                <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}
-                     isStatic={true}
-                     className='map-container-section'/>
+               <div className='info-section__map-wrapper'>
+                   <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}
+                        isStatic={true}
+                        className='map-container-section'/>
+               </div>
             </section>
             <div className='info-section__posts'>
                 <Editor

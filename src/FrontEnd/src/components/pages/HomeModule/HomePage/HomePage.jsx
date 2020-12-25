@@ -12,7 +12,7 @@ const TreeBgImage = require('../../../../assets/tree-for-bg.png');
 
 const HomePage = () => {
     return (
-        <>
+        <div className='pt-5 mt-5'>
             <div className={`${style.wrapper} page-wrapper`}>
                 <div className='col-md-12 text-center'>
                     <img src={TreeBgImage} className={style.treeBg} alt="Grow A Tree Bg Image"/>
@@ -28,7 +28,7 @@ const HomePage = () => {
                 </div>
             </div>
             <Carousel/>
-        </>
+        </div>
     );
 };
 
