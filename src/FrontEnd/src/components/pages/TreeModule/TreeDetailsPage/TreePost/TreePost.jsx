@@ -1,10 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import parse from 'html-react-parser';
 
 import './TreePost.scss';
-import ReactionButton from "../../../../common/ReactionButton/ReactionButton";
+import ReactionButton from '../../../../common/ReactionButton/ReactionButton';
+import ReactionTypes from '../../../../../static/reactionTypes';
 
 const TreePost = ({data}) => {
+    const [selectedReactionType, setSelectedReactionType] = useState('');
+    const reactToPost = () => {
+
+    }
+
     return (
         <div className='post'>
             <div className='post__user-section'>
@@ -15,7 +21,7 @@ const TreePost = ({data}) => {
                 {parse(data.content)}
             </div>
             <div>
-                <ReactionButton/>
+                <ReactionButton {...setSelectedReactionType}/>
             </div>
         </div>
     );
