@@ -23,8 +23,7 @@ const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
     const [posts, setPosts] = useState([]);
     const [currPostPage, setCurrPostPage] = useState(1);
-    const [postsLimitPerPage, setPostsLimitPerPage] = useState(15);
-    const [treePosts, setTreePosts] = useState([]);
+    const [postsLimitPerPage, setPostsLimitPerPage] = useState(1000);
     const [editorKey, setEditorKey] = useState(4);
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
@@ -57,7 +56,8 @@ const TreeDetailsPage = ({history, match}) => {
         const response = await TreeService.getAuthorizedTreePosts(`?page=${currPostPage}&perPage=${postsLimitPerPage}`, currUser.accessToken);
         if (response.data.succeeded) {
             const postsWithReactions = await fetchTreePostReactions(response.data.data);
-            setPosts([...postsWithReactions]);
+            console.log(postsWithReactions);
+            setPosts(postsWithReactions);
         }
     }
 
@@ -88,7 +88,6 @@ const TreeDetailsPage = ({history, match}) => {
     const handleEditorChange = async (data) => {
         setCurrPost({content: data, ...currPost});
     }
-
     return (
         <Layout>
             <section className='info-section'>

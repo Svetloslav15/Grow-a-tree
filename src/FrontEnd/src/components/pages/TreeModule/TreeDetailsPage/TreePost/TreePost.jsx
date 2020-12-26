@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import parse from 'html-react-parser';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import './TreePost.scss';
 import ReactionButton from '../../../../common/ReactionButton/ReactionButton';
@@ -10,8 +10,8 @@ import SuccessMessages from '../../../../../static/successMessages';
 
 const TreePost = ({data}) => {
     const [post, setPost] = useState(data);
-
     const currUser = useSelector(state => state.auth);
+
     const reactToPost = async (reaction) => {
         const bodyData = {
             type: reaction,
