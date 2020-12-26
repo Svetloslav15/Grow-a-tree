@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './ReactionButton.scss';
 import Button from '../Button/Button';
 import {Reactions} from '../../../static/reactionTypes';
@@ -8,7 +8,33 @@ const HeartImage = require('../../../assets/reaction-heart.png');
 const SadImage = require('../../../assets/reaction-sad.png');
 const LaughImage = require('../../../assets/reaction-laugh.png');
 
-const ReactionButton = ({reactToPost}) => {
+const ReactionButton = ({reactToPost, data}) => {
+    const [reactions, setReactions] = useState(data.reactions);
+    const [currPostReactionTypes, setCurrPostReactionTypes] = useState([]);
+
+    useEffect(() => {
+        setReactions(data.reactions);
+        checkReactionTypes();
+    }, [data]);
+
+    const checkReactionTypes = () => {
+        console.log(reactions);
+        const currImages = [];
+        if (reactions.filter(x => x.type === 1).length > 0) {
+            currImages.push(HeartImage);
+        }
+        if (reactions.filter(x => x.type === 2).length > 0) {
+            currImages.push(LaughImage);
+        }
+        if (reactions.filter(x => x.type === 3).length > 0) {
+            currImages.push(LikeImage);
+        }
+        if (reactions.filter(x => x.type === 4).length > 0) {
+            currImages.push(SadImage);
+        }
+        setCurrPostReactionTypes(currImages);
+    }
+
     return (
         <div className='wrapper'>
             <div className='wrapper__popup'>
@@ -28,6 +54,12 @@ const ReactionButton = ({reactToPost}) => {
                      src={SadImage}
                      alt="Sad Reaction Image"
                      onClick={() => reactToPost(Reactions.Sad)}/>
+            </div>
+            <div className='wrapper__reactions'>
+                <span className='wrapper__reactions__count'>{reactions && reactions.length}</span>
+                {currPostReactionTypes.map(x => (<img className='wrapper__reactions__image'
+                                                     src={x}
+                                                     alt='Reaction Image'/>))}
             </div>
             <div className='wrapper__button'>
                 <Button type='OutlineGreen'>Реагирай</Button>

@@ -31,7 +31,7 @@ const TreeDetailsPage = ({history, match}) => {
 
     const currUser = useSelector(state => state.auth);
 
-    useEffect( () => {
+    useEffect(() => {
         loadData();
     }, []);
 
@@ -56,8 +56,17 @@ const TreeDetailsPage = ({history, match}) => {
     const fetchTreePosts = async () => {
         const response = await TreeService.getAuthorizedTreePosts(`?page=${currPostPage}&perPage=${postsLimitPerPage}`, currUser.accessToken);
         if (response.data.succeeded) {
-            setPosts([...response.data.data]);
+            const postsWithReactions = await fetchTreePostReactions(response.data.data);
+            setPosts([...postsWithReactions]);
         }
+    }
+
+    const fetchTreePostReactions = async (data) => {
+        for (const post of data) {
+            const response = await TreeService.getAuthorizedTreePostReactions(`?postId=${post.id}`, currUser.accessToken);
+            post.reactions = response.data.data;
+        }
+        return data;
     }
 
     const addPost = async () => {
@@ -90,16 +99,18 @@ const TreeDetailsPage = ({history, match}) => {
                     <p className='info-section__wrapper__status'>Вид: {tree.type}</p>
                     <p className='info-section__wrapper__owner'>Засадено от: {tree.owner && tree.owner.userName}</p>
                 </section>
-                <img className='info-section__report-button' src={ReportButton} alt="Report Problem Button"/>
+                <img className='info-section__report-button'
+                     src={ReportButton}
+                     alt="Report Problem Button"/>
             </section>
             <section className='info-section__map'>
                 <Timer/>
                 <p className='info-section__map__location-text'>{treeLocation}</p>
-               <div className='info-section__map-wrapper'>
-                   <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}
-                        isStatic={true}
-                        className='map-container-section'/>
-               </div>
+                <div className='info-section__map-wrapper'>
+                    <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}
+                         isStatic={true}
+                         className='map-container-section'/>
+                </div>
             </section>
             <div className='info-section__posts'>
                 <Editor

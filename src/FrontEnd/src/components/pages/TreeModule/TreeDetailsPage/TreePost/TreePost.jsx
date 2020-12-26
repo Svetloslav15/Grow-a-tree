@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import parse from 'html-react-parser';
 import {useSelector} from 'react-redux';
 
@@ -7,29 +7,32 @@ import ReactionButton from '../../../../common/ReactionButton/ReactionButton';
 import TreeService from '../../../../../services/treeService';
 
 const TreePost = ({data}) => {
-    const currUser = useSelector(state => state.auth);
+    const [post, setPost] = useState(data);
+    useEffect(() => {
+        setPost(data);
+    }, [data]);
 
+    const currUser = useSelector(state => state.auth);
     const reactToPost = async (reaction) => {
-        console.log(data.id);
         const bodyData = {
             type: reaction,
             treePostId: data.id
         }
         const response = await TreeService.postAuthorizedUpsertTreeReaction(bodyData, currUser.accessToken);
-        console.log(response);
+        //TODO add toaster message
     }
 
     return (
         <div className='post'>
             <div className='post__user-section'>
-                <img className='post__user-section__avatar' src={data.userProfilePictureUrl} alt={data.userUserName}/>
-                <p className='post__user-section__username' >{data.userUserName}</p>
+                <img className='post__user-section__avatar' src={post.userProfilePictureUrl} alt={post.userUserName}/>
+                <p className='post__user-section__username' >{post.userUserName}</p>
             </div>
             <div className='post__content'>
-                {parse(data.content)}
+                {parse(post.content)}
             </div>
             <div>
-                <ReactionButton reactToPost={reactToPost}/>
+                <ReactionButton reactToPost={reactToPost} data={post}/>
             </div>
         </div>
     );
