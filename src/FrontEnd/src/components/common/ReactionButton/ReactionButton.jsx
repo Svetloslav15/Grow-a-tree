@@ -61,7 +61,7 @@ const ReactionButton = ({reactToPost, data}) => {
                                                      src={x}
                                                      alt='Reaction Image'/>))}
             </div>
-            <div className='wrapper__button'>
+            <div className='wrapper__buttonSection'>
                 <Button type='OutlineGreen'>Реагирай</Button>
             </div>
         </div>

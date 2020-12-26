@@ -20,6 +20,7 @@ const TreePost = ({data}) => {
         }
         const response = await TreeService.postAuthorizedUpsertTreeReaction(bodyData, currUser.accessToken);
         //TODO add toaster message
+        console.log(response);
     }
 
     return (
