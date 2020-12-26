@@ -1,14 +1,22 @@
 import React, {useState} from 'react';
 import parse from 'html-react-parser';
+import {useSelector} from 'react-redux';
 
 import './TreePost.scss';
 import ReactionButton from '../../../../common/ReactionButton/ReactionButton';
-import ReactionTypes from '../../../../../static/reactionTypes';
+import TreeService from '../../../../../services/treeService';
 
 const TreePost = ({data}) => {
-    const [selectedReactionType, setSelectedReactionType] = useState('');
-    const reactToPost = () => {
+    const currUser = useSelector(state => state.auth);
 
+    const reactToPost = async (reaction) => {
+        console.log(data.id);
+        const bodyData = {
+            type: reaction,
+            treePostId: data.id
+        }
+        const response = await TreeService.postAuthorizedUpsertTreeReaction(bodyData, currUser.accessToken);
+        console.log(response);
     }
 
     return (
@@ -21,7 +29,7 @@ const TreePost = ({data}) => {
                 {parse(data.content)}
             </div>
             <div>
-                <ReactionButton {...setSelectedReactionType}/>
+                <ReactionButton reactToPost={reactToPost}/>
             </div>
         </div>
     );
