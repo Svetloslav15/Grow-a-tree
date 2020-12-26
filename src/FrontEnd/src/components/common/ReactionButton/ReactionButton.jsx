@@ -18,7 +18,6 @@ const ReactionButton = ({reactToPost, data}) => {
     }, [data]);
 
     const checkReactionTypes = () => {
-        console.log(reactions);
         const currImages = [];
         if (reactions.filter(x => x.type === 1).length > 0) {
             currImages.push(HeartImage);

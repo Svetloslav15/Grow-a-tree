@@ -5,6 +5,8 @@ import {useSelector} from 'react-redux';
 import './TreePost.scss';
 import ReactionButton from '../../../../common/ReactionButton/ReactionButton';
 import TreeService from '../../../../../services/treeService';
+import AlertService from '../../../../../services/alertService';
+import SuccessMessages from '../../../../../static/successMessages';
 
 const TreePost = ({data}) => {
     const [post, setPost] = useState(data);
@@ -20,7 +22,7 @@ const TreePost = ({data}) => {
         }
         const response = await TreeService.postAuthorizedUpsertTreeReaction(bodyData, currUser.accessToken);
         //TODO add toaster message
-        console.log(response);
+        response.succeeded ? await AlertService.success(SuccessMessages.successAddedPostReaction) : await AlertService.error(response.errors[0]);
     }
 
     return (
