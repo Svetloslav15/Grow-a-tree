@@ -13,9 +13,9 @@ const ReactionButton = ({reactToPost, reactionsData}) => {
     const [currPostReactionTypes, setCurrPostReactionTypes] = useState([]);
 
     useEffect(() => {
-        setReactions(reactions);
+        setReactions(reactionsData);
         checkReactionTypes();
-    }, [reactions]);
+    }, [reactionsData]);
 
     const checkReactionTypes = () => {
         const currImages = [];
