@@ -68,22 +68,24 @@ const TreeDetailsPage = ({history, match}) => {
         return data;
     }
 
-    const addPost = async () => {
-        const response = await TreeService.postAuthorizedUpsertTreePost(currPost, currUser.accessToken);
-        if (response.succeeded) {
-            await AlertService.success(SuccessMessages.successAddedTreePost);
-            setCurrPost({id: ''});
-            await fetchTreePosts();
-            //Clear editor content
-            const newKey = editorKey * 43;
-            setEditorKey(newKey);
-        } else {
-            await AlertService.error(response.errors[0]);
-        }
+    const addPost = () => {
+        TreeService.postAuthorizedUpsertTreePost(currPost, currUser.accessToken)
+            .then((response) => {
+                if (response.succeeded) {
+                    AlertService.success(SuccessMessages.successAddedTreePost);
+                    setCurrPost({id: ''});
+                    fetchTreePosts();
+                    //Clear editor content
+                    const newKey = editorKey * 43;
+                    setEditorKey(newKey);
+                } else {
+                    AlertService.error(response.errors[0]);
+                }
+            });
     }
 
     const handleEditorChange = async (data) => {
-        setCurrPost({ ...currPost, content: data});
+        setCurrPost({...currPost, content: data});
     }
     return (
         <Layout>

@@ -8,14 +8,22 @@ const HeartImage = require('../../../assets/reaction-heart.png');
 const SadImage = require('../../../assets/reaction-sad.png');
 const LaughImage = require('../../../assets/reaction-laugh.png');
 
-const ReactionButton = ({reactToPost, reactionsData}) => {
-    const [reactions, setReactions] = useState(reactionsData);
+const ReactionButton = ({reactToPost, post}) => {
+    const [reactions, setReactions] = useState(post.reactions);
     const [currPostReactionTypes, setCurrPostReactionTypes] = useState([]);
+    const [isDataFetched, setIsDataFetched] = useState(false);
 
     useEffect(() => {
-        setReactions(reactionsData);
-        checkReactionTypes();
-    }, [reactionsData]);
+        if (!isDataFetched) {
+            setReactions(post.reactions)
+            setIsDataFetched(true);
+        }
+        else {
+            checkReactionTypes();
+            setIsDataFetched(false);
+        }
+
+    }, [post, reactions]);
 
     const checkReactionTypes = () => {
         const currImages = [];

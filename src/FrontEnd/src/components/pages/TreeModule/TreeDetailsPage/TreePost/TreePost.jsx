@@ -27,8 +27,8 @@ const TreePost = ({data, fetchTreePosts}) => {
 
         response = await TreeService.getAuthorizedTreePostReactions(`?postId=${post.id}`, currUser.accessToken);
         post.reactions = response.data.data;
-        fetchTreePosts();
         setPost(post);
+        fetchTreePosts();
     }
 
     return (
@@ -41,7 +41,7 @@ const TreePost = ({data, fetchTreePosts}) => {
                 {parse(post.content)}
             </div>
             <div>
-                <ReactionButton reactToPost={reactToPost} reactionsData={post.reactions}/>
+                <ReactionButton reactToPost={reactToPost} post={post}/>
             </div>
         </div>
     );
