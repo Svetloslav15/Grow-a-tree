@@ -8,7 +8,7 @@ import TreeService from '../../../../../services/treeService';
 import AlertService from '../../../../../services/alertService';
 import SuccessMessages from '../../../../../static/successMessages';
 
-const TreePost = ({data}) => {
+const TreePost = ({data, fetchTreePosts}) => {
     const [post, setPost] = useState(data);
     const currUser = useSelector(state => state.auth);
 
@@ -22,7 +22,7 @@ const TreePost = ({data}) => {
 
         response = await TreeService.getAuthorizedTreePostReactions(`?postId=${post.id}`, currUser.accessToken);
         post.reactions = response.data.data;
-        console.log(post);
+        fetchTreePosts();
         setPost(post);
     }
 

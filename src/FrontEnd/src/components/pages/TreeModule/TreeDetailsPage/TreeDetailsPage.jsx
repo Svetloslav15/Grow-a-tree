@@ -70,6 +70,7 @@ const TreeDetailsPage = ({history, match}) => {
     }
 
     const addPost = async () => {
+        console.log(currPost);
         const response = await TreeService.postAuthorizedUpsertTreePost(currPost, currUser.accessToken);
 
         if (response.succeeded) {
@@ -86,7 +87,7 @@ const TreeDetailsPage = ({history, match}) => {
     }
 
     const handleEditorChange = async (data) => {
-        setCurrPost({content: data, ...currPost});
+        setCurrPost({ ...currPost, content: data});
     }
     return (
         <Layout>
@@ -132,7 +133,9 @@ const TreeDetailsPage = ({history, match}) => {
                 />
                 <Button type='DarkOutline' onClick={addPost}>Добави</Button>
                 {
-                    posts.map((data, index) => <TreePost key={index} data={data}/>)
+                    posts.map((data, index) => <TreePost key={index}
+                                                         data={data}
+                                                         fetchTreePosts={fetchTreePosts}/>)
                 }
             </div>
         </Layout>
