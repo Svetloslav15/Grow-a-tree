@@ -31,34 +31,37 @@ const TreeDetailsPage = ({history, match}) => {
     const currUser = useSelector(state => state.auth);
 
     useEffect(() => {
-        loadData();
+        fetchTreeInfo();
+        fetchTreePosts();
     }, []);
 
-    const loadData = async () => {
-        await fetchTreeInfo();
-        await fetchTreePosts();
+    const fetchTreeInfo =() => {
+        TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken)
+            .then((data) => {
+                const treeInfo = data.data.data;
+                setTree(treeInfo);
+                setCurrPost({treeId: treeInfo.id, ...currPost});
+                GeoCodingService.getCityByCoords(treeInfo.latitude, treeInfo.longitude)
+                    .then((res) => {
+                        const {municipality, suburb, village} = res.data.address;
+                        const result = [municipality, suburb, village]
+                            .filter(x => x !== undefined)
+                            .map(x => `${x} `);
+                        setLocation(result);
+                    });
+            });
     }
 
-    const fetchTreeInfo = async () => {
-        const data = await TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken);
-        const treeInfo = data.data.data;
-        setTree(treeInfo);
-        setCurrPost({treeId: treeInfo.id, ...currPost});
-        const res = await GeoCodingService.getCityByCoords(treeInfo.latitude, treeInfo.longitude);
-        const {municipality, suburb, village} = res.data.address;
-        const result = [municipality, suburb, village]
-            .filter(x => x !== undefined)
-            .map(x => `${x} `);
-        setLocation(result);
-    }
-
-    const fetchTreePosts = async () => {
-        const response = await TreeService.getAuthorizedTreePosts(`?page=${currPostPage}&perPage=${postsLimitPerPage}`, currUser.accessToken);
-        if (response.data.succeeded) {
-            const postsWithReactions = await fetchTreePostReactions(response.data.data);
-            console.log(postsWithReactions);
-            setPosts(postsWithReactions);
-        }
+    const fetchTreePosts = () => {
+        TreeService.getAuthorizedTreePosts(`?page=${currPostPage}&perPage=${postsLimitPerPage}`, currUser.accessToken)
+            .then((response) => {
+                if (response.data.succeeded) {
+                    fetchTreePostReactions(response.data.data)
+                        .then((postsWithReactions) => {
+                            setPosts([...postsWithReactions]);
+                        });
+                }
+            });
     }
 
     const fetchTreePostReactions = async (data) => {
@@ -69,21 +72,20 @@ const TreeDetailsPage = ({history, match}) => {
         return data;
     }
 
-    const addPost = async () => {
-        console.log(currPost);
-        const response = await TreeService.postAuthorizedUpsertTreePost(currPost, currUser.accessToken);
-
-        if (response.succeeded) {
-            await AlertService.success(SuccessMessages.successAddedTreePost);
-            setCurrPost({id: ''});
-            await fetchTreePosts();
-            //Clear editor content
-            const newKey = editorKey * 43;
-            setEditorKey(newKey);
-        } else {
-            await AlertService.error(response.errors[0]);
-        }
-
+    const addPost = () => {
+        TreeService.postAuthorizedUpsertTreePost(currPost, currUser.accessToken)
+            .then((response) => {
+                if (response.succeeded) {
+                    AlertService.success(SuccessMessages.successAddedTreePost);
+                    setCurrPost({id: ''});
+                    fetchTreePosts();
+                    //Clear editor content
+                    const newKey = editorKey * 43;
+                    setEditorKey(newKey);
+                } else {
+                    AlertService.error(response.errors[0]);
+                }
+            });
     }
 
     const handleEditorChange = async (data) => {
@@ -132,10 +134,11 @@ const TreeDetailsPage = ({history, match}) => {
                     onEditorChange={handleEditorChange}
                 />
                 <Button type='DarkOutline' onClick={addPost}>Добави</Button>
+                {posts.length}
                 {
-                    posts.map((data, index) => <TreePost key={index}
-                                                         data={data}
-                                                         fetchTreePosts={fetchTreePosts}/>)
+                    posts && posts.map((data, index) => <TreePost key={index}
+                                                                 data={data}
+                                                                 fetchTreePosts={fetchTreePosts}/>)
                 }
             </div>
         </Layout>

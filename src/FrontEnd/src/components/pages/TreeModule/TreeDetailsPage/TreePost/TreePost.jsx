@@ -10,6 +10,11 @@ import SuccessMessages from '../../../../../static/successMessages';
 
 const TreePost = ({data, fetchTreePosts}) => {
     const [post, setPost] = useState(data);
+
+    useEffect(() => {
+        setPost(data);
+    }, [data]);
+
     const currUser = useSelector(state => state.auth);
 
     const reactToPost = async (reaction) => {
