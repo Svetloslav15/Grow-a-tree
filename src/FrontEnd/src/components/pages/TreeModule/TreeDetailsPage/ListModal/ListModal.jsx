@@ -5,14 +5,15 @@ const DefaultProfilePicture = require('../../../../../assets/user-profile.png');
 const BgShapeTwo = require('../../../../../assets/bg-shape-2.png');
 const BgShapeThree = require('../../../../../assets/bg-shape-3.png');
 
-const ListModal = () => {
-
+const ListModal = ({closeModal}) => {
     return (
         <div className='wrapper'>
-            <div className='overlay-bg'></div>
+            <div className='overlay-bg' onClick={closeModal}></div>
             <div className='wrapper__modal'>
                 <img className='bg-shape-image' src={BgShapeTwo} alt="Background Shape Image"/>
                 <img className='bg-shape-image' src={BgShapeThree} alt="Background Shape Image"/>
+                <i className="fas fa-times close-button" onClick={closeModal}></i>
+
                 <p className='wrapper__modal__title'>Последни поливания</p>
                 <ul className='wrapper__modal__items'>
                     <li className='wrapper__modal__items__item'>

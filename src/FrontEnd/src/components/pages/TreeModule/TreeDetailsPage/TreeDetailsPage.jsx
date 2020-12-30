@@ -30,7 +30,7 @@ const TreeDetailsPage = ({history, match}) => {
     const [editorKey, setEditorKey] = useState(4);
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
-    const [isWateringModalOpen, toggleIsWateringModalOpen] = useState(true);
+    const [isWateringModalOpen, toggleIsWateringModalOpen] = useState(false);
 
     const currUser = useSelector(state => state.auth);
 
@@ -115,7 +115,7 @@ const TreeDetailsPage = ({history, match}) => {
                             </div>
                             <Button type='DarkOutline'>Полей</Button>
                             {
-                                isWateringModalOpen && (<ListModal/>)
+                                isWateringModalOpen && (<ListModal closeModal={() => toggleIsWateringModalOpen(false)}/>)
                             }
                         </div>
                     </div>

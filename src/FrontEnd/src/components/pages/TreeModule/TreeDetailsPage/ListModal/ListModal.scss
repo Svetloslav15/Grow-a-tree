@@ -19,6 +19,15 @@
     border: 2px solid #002F3E;
     height: 400px;
 
+    .close-button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      cursor: pointer;
+      z-index: 2;
+      font-size: 20px;
+    }
+
     .bg-shape-image {
       width: 70%;
     }
