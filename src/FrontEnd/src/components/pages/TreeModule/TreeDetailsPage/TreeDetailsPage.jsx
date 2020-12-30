@@ -97,8 +97,15 @@ const TreeDetailsPage = ({history, match}) => {
                     <p className='info-section__wrapper__status'>Статус: здраво</p>
                     <p className='info-section__wrapper__status'>Вид: {tree.type}</p>
                     <p className='info-section__wrapper__owner'>Засадено от: {tree.owner && tree.owner.userName}</p>
-                    <div>
-                        <div className='action-section'>
+                    <div className='row'>
+                        <div className='action-section mr-4'>
+                            <div className='action-section__item'>
+                                <span className='action-section__item__counter'>89</span>
+                                <img  className='action-section__item__image' src={HeartIcon} alt=""/>
+                            </div>
+                            <Button type='DarkOutline'>Реагирай</Button>
+                        </div>
+                        <div className='action-section ml-4'>
                             <div className='action-section__item'>
                                 <span className='action-section__item__counter'>89</span>
                                 <img  className='action-section__item__image' src={HeartIcon} alt=""/>
