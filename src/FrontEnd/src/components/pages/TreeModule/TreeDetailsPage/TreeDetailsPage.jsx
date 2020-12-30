@@ -47,6 +47,7 @@ const TreeDetailsPage = ({history, match}) => {
         const data = await TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken);
         const treeInfo = data.data.data;
         setTree(treeInfo);
+        document.title = `Grow A Tree - ${treeInfo.nickname}`
         setCurrPost({treeId: treeInfo.id, ...currPost});
         const res = await GeoCodingService.getCityByCoords(treeInfo.latitude, treeInfo.longitude);
         const {municipality, suburb, village} = res.data.address;
