@@ -16,9 +16,11 @@ import TreePost from './TreePost/TreePost';
 
 import GeoCodingService from '../../../../services/geocodingService';
 import ReactionButton from '../../../common/ReactionButton/ReactionButton';
+import ListModal from "./ListModal/ListModal";
 
 const ReportButton = require('../../../../assets/report-button.svg');
 const HeartIcon = require('../../../../assets/reaction-heart.png');
+const DropIcon = require('../../../../assets/drop.png');
 
 const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
@@ -28,6 +30,7 @@ const TreeDetailsPage = ({history, match}) => {
     const [editorKey, setEditorKey] = useState(4);
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
+    const [isWateringModalOpen, toggleIsWateringModalOpen] = useState(true);
 
     const currUser = useSelector(state => state.auth);
 
@@ -106,11 +109,14 @@ const TreeDetailsPage = ({history, match}) => {
                             <Button type='DarkOutline'>Реагирай</Button>
                         </div>
                         <div className='action-section ml-4'>
-                            <div className='action-section__item'>
+                            <div className='action-section__item' onClick={() => toggleIsWateringModalOpen(!isWateringModalOpen)}>
                                 <span className='action-section__item__counter'>89</span>
-                                <img  className='action-section__item__image' src={HeartIcon} alt=""/>
+                                <img  className='action-section__item__image' src={DropIcon} alt=""/>
                             </div>
                             <Button type='DarkOutline'>Полей</Button>
+                            {
+                                isWateringModalOpen && (<ListModal/>)
+                            }
                         </div>
                     </div>
                 </section>

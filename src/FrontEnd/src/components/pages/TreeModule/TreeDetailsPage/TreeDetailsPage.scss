@@ -26,13 +26,15 @@
     text-align: center;
 
     &__item {
+      cursor: pointer;
+
       &__counter {
         font-size: 32px;
         font-weight: bold;
       }
 
       &__image {
-        width: 50px;
+        width: 40px;
       }
     }
   }
