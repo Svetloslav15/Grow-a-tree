@@ -12,11 +12,16 @@ const ReactionButton = ({reactToPost, post}) => {
     const [reactions, setReactions] = useState(post.reactions);
     const [currPostReactionTypes, setCurrPostReactionTypes] = useState([]);
     const [isDataFetched, setIsDataFetched] = useState(false);
+    const [isFirstTime, setFirstTime] = useState(true);
 
     useEffect(() => {
         if (!isDataFetched) {
             setReactions(post.reactions)
             setIsDataFetched(true);
+            if (isFirstTime) {
+                checkReactionTypes();
+                setFirstTime(false);
+            }
         }
         else {
             checkReactionTypes();
