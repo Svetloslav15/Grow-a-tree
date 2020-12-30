@@ -22,6 +22,21 @@
     }
   }
 
+  .action-section {
+    text-align: center;
+
+    &__item {
+      &__counter {
+        font-size: 32px;
+        font-weight: bold;
+      }
+
+      &__image {
+        width: 50px;
+      }
+    }
+  }
+
   &__map-wrapper {
     position: relative;
     width: 100%;
@@ -43,7 +58,6 @@
   &__map:nth-child(3) {
     position: unset;
   }
-
 
   &__posts {
     width: 43%;

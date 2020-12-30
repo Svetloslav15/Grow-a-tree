@@ -18,6 +18,7 @@ import GeoCodingService from '../../../../services/geocodingService';
 import ReactionButton from '../../../common/ReactionButton/ReactionButton';
 
 const ReportButton = require('../../../../assets/report-button.svg');
+const HeartIcon = require('../../../../assets/reaction-heart.png');
 
 const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
@@ -96,6 +97,15 @@ const TreeDetailsPage = ({history, match}) => {
                     <p className='info-section__wrapper__status'>Статус: здраво</p>
                     <p className='info-section__wrapper__status'>Вид: {tree.type}</p>
                     <p className='info-section__wrapper__owner'>Засадено от: {tree.owner && tree.owner.userName}</p>
+                    <div>
+                        <div className='action-section'>
+                            <div className='action-section__item'>
+                                <span className='action-section__item__counter'>89</span>
+                                <img  className='action-section__item__image' src={HeartIcon} alt=""/>
+                            </div>
+                            <Button type='DarkOutline'>Полей</Button>
+                        </div>
+                    </div>
                 </section>
                 <img className='info-section__report-button'
                      src={ReportButton}
