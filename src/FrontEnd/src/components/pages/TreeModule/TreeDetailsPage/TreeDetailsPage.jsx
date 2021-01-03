@@ -22,6 +22,8 @@ const ReportButton = require('../../../../assets/report-button.svg');
 const HeartIcon = require('../../../../assets/reaction-heart.png');
 const DropIcon = require('../../../../assets/drop.png');
 
+const WATERINGS_PER_PAGE = 20;
+
 const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
     const [posts, setPosts] = useState([]);
@@ -31,8 +33,9 @@ const TreeDetailsPage = ({history, match}) => {
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
     const [isWateringModalOpen, toggleIsWateringModalOpen] = useState(false);
-
     const currUser = useSelector(state => state.auth);
+    const [currWateringPage, setCurrWateringPage] = useState(1);
+    const [treeWaterings, setTreeWaterings] = useState([]);
 
     useEffect(() => {
         loadData();
@@ -55,6 +58,8 @@ const TreeDetailsPage = ({history, match}) => {
             .filter(x => x !== undefined)
             .map(x => `${x} `);
         setLocation(result);
+
+        await fetchTreeWaterings(treeInfo.id);
     }
 
     const fetchTreePosts = async () => {
@@ -65,8 +70,16 @@ const TreeDetailsPage = ({history, match}) => {
         }
     }
 
-    const fetchTreeWaterings = async () => {
-        const waterings = await TreeService.getAuthorizedTreeWaterings(`?treeId=${tree.id}&perPage=20&page=1`, currUser.accessToken)
+    const fetchTreeWaterings = async (treeId) => {
+        const response = await TreeService.getAuthorizedTreeWaterings(`?treeId=${treeId}&perPage=${WATERINGS_PER_PAGE}&page=${currWateringPage}`, currUser.accessToken);
+
+        if (response.data.succeeded) {
+            console.log(response.data.data);
+            setTreeWaterings(response.data.data);
+        }
+        else {
+            await AlertService.error(response.errors[0]);
+        }
     }
 
     const fetchTreePostReactions = async (data) => {
@@ -136,7 +149,7 @@ const TreeDetailsPage = ({history, match}) => {
                             </div>
                             <Button type='DarkOutline' onClick={waterTree}>Полей</Button>
                             {
-                                isWateringModalOpen && (<ListModal closeModal={() => toggleIsWateringModalOpen(false)}/>)
+                                isWateringModalOpen && (<ListModal data={treeWaterings} closeModal={() => toggleIsWateringModalOpen(false)}/>)
                             }
                         </div>
                     </div>

@@ -5,7 +5,7 @@ const DefaultProfilePicture = require('../../../../../assets/user-profile.png');
 const BgShapeTwo = require('../../../../../assets/bg-shape-2.png');
 const BgShapeThree = require('../../../../../assets/bg-shape-3.png');
 
-const ListModal = ({closeModal}) => {
+const ListModal = ({data, closeModal}) => {
     return (
         <div className='wrapper'>
             <div className='overlay-bg' onClick={closeModal}></div>
@@ -16,66 +16,15 @@ const ListModal = ({closeModal}) => {
 
                 <p className='wrapper__modal__title'>Последни поливания</p>
                 <ul className='wrapper__modal__items'>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
-                    <li className='wrapper__modal__items__item'>
-                        <img src={DefaultProfilePicture} alt="" className='wrapper__modal__items__item__image'/>
-                        <p className='wrapper__modal__items__item__name'>Svetloslav</p>
-                        <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
-                    </li>
+                    {
+                        data.map(x => (
+                            <li className='wrapper__modal__items__item'>
+                                <img src={x.userProfilePictureUrl} alt={x.userUserName} className='wrapper__modal__items__item__image'/>
+                                <p className='wrapper__modal__items__item__name'>{x.userUserName}</p>
+                                <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
+                            </li>
+                        ))
+                    }
                 </ul>
             </div>
         </div>
