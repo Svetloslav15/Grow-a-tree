@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './ListModal.scss';
+import {getDifference} from '../../../../../helpers/getDifferenceBetweenDates';
 
 const DefaultProfilePicture = require('../../../../../assets/user-profile.png');
 const BgShapeTwo = require('../../../../../assets/bg-shape-2.png');
@@ -19,9 +20,13 @@ const ListModal = ({data, closeModal}) => {
                     {
                         data.map(x => (
                             <li className='wrapper__modal__items__item'>
-                                <img src={x.userProfilePictureUrl} alt={x.userUserName} className='wrapper__modal__items__item__image'/>
+                                <img src={x.userProfilePictureUrl} alt={x.userUserName}
+                                     className='wrapper__modal__items__item__image'/>
                                 <p className='wrapper__modal__items__item__name'>{x.userUserName}</p>
-                                <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>4 мин</b></p>
+                                <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>
+                                         {getDifference(new Date(x.wateredOn), new Date())}
+                                    </b>
+                                </p>
                             </li>
                         ))
                     }
