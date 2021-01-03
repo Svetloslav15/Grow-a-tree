@@ -92,6 +92,22 @@ const TreeDetailsPage = ({history, match}) => {
     const handleEditorChange = async (data) => {
         setCurrPost({...currPost, content: data});
     }
+
+    const waterTree = async () => {
+        const waterTreeData = {
+            treeId: tree.id,
+            watererId: currUser.id
+        };
+
+        const response = await TreeService.postAuthorizedWaterTree(waterTreeData, currUser.accessToken);
+        if (response.succeeded) {
+            await AlertService.success(SuccessMessages.successWaterTree);
+        }
+        else {
+            await AlertService.error(response.errors[0]);
+        }
+    }
+
     return (
         <Layout>
             <section className='info-section'>
@@ -114,7 +130,7 @@ const TreeDetailsPage = ({history, match}) => {
                                 <span className='action-section__item__counter'>89</span>
                                 <img  className='action-section__item__image' src={DropIcon} alt=""/>
                             </div>
-                            <Button type='DarkOutline'>Полей</Button>
+                            <Button type='DarkOutline' onClick={waterTree}>Полей</Button>
                             {
                                 isWateringModalOpen && (<ListModal closeModal={() => toggleIsWateringModalOpen(false)}/>)
                             }

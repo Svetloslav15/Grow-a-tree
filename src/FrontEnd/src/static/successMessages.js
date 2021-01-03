@@ -9,5 +9,6 @@ export default {
     successChangeProfilePicture: 'Успешно сменихте вашата профилна снимка!',
     successAddedTree: 'Успешно добавихте дърво!',
     successAddedTreePost: 'Успешно добавихте пост за дървото!',
-    successAddedPostReaction: 'Успешно реагирахте на пост!'
+    successAddedPostReaction: 'Успешно реагирахте на пост!',
+    successWaterTree: 'Успешно поляхте дърво!'
 }
