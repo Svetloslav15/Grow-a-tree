@@ -74,7 +74,6 @@ const TreeDetailsPage = ({history, match}) => {
         const response = await TreeService.getAuthorizedTreeWaterings(`?treeId=${treeId}&perPage=${WATERINGS_PER_PAGE}&page=${currWateringPage}`, currUser.accessToken);
 
         if (response.data.succeeded) {
-            console.log(response.data.data);
             setTreeWaterings(response.data.data);
         }
         else {
@@ -159,7 +158,7 @@ const TreeDetailsPage = ({history, match}) => {
                      alt="Report Problem Button"/>
             </section>
             <section className='info-section__map'>
-                <Timer/>
+                <Timer data={treeWaterings[0]}/>
                 <p className='info-section__map__location-text'>{treeLocation}</p>
                 <div className='info-section__map-wrapper'>
                     <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}

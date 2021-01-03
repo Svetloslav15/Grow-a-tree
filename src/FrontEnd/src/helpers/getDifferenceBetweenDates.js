@@ -4,7 +4,7 @@ function getDifferenceBettweenDatesInMinutes(dt2, dt1) {
     return Math.abs(Math.round(diff));
 }
 
-function getDifference(dateFuture, dateNow) {
+function getDifference(dateFuture, dateNow, isJson) {
     let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
 
     // calculate days
@@ -19,6 +19,8 @@ function getDifference(dateFuture, dateNow) {
     const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
     diffInMilliSeconds -= minutes * 60;
 
+    const seconds = Math.floor(diffInMilliSeconds % 60);
+
     let difference = '';
     if (days > 0) {
         difference += (days === 1) ? `${days} ден, ` : `${days} дни, `;
@@ -30,7 +32,12 @@ function getDifference(dateFuture, dateNow) {
 
     difference += (minutes === 0 || hours === 1) ? `${minutes} минута` : `${minutes} минути`;
 
-    return difference;
+    return isJson ? {
+        days,
+        hours,
+        minutes,
+        seconds
+    } : difference;
 }
 
 export {getDifferenceBettweenDatesInMinutes, getDifference};
