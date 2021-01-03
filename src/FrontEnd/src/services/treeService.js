@@ -8,7 +8,8 @@ const ROUTES = {
     getAuthorizedTreePosts: '/treePosts/list',
     getAuthorizedTreePostReactions: '/treePostReactions/list',
     postAuthorizedUpsertTreeReaction: '/treePostReactions/upsert',
-    postAuthorizedWaterTree: '/waterings/water-tree'
+    postAuthorizedWaterTree: '/waterings/water-tree',
+    getAuthorizedTreeWaterings: '/waterings/tree-waterings'
 };
 
 export default new Proxy({}, {

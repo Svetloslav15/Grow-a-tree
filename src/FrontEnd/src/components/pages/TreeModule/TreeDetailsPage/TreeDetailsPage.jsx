@@ -65,6 +65,10 @@ const TreeDetailsPage = ({history, match}) => {
         }
     }
 
+    const fetchTreeWaterings = async () => {
+        const waterings = await TreeService.getAuthorizedTreeWaterings(`?treeId=${tree.id}&perPage=20&page=1`, currUser.accessToken)
+    }
+
     const fetchTreePostReactions = async (data) => {
         for (const post of data) {
             const response = await TreeService.getAuthorizedTreePostReactions(`?postId=${post.id}`, currUser.accessToken);
