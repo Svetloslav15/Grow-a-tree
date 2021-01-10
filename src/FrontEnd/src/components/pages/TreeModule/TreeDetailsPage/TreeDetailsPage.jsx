@@ -267,7 +267,8 @@ const TreeDetailsPage = ({history, match}) => {
                      src={ReportButton}
                      alt="Report Problem Button"
                      onClick={() => toggleIsReportModalOpen(true)}/>
-                {isReportModalOpen ? <ReportModal closeModal={() => toggleIsReportModalOpen(false)}/> : ''}
+                {isReportModalOpen ? <ReportModal treeId={tree.id}
+                                                  closeModal={() => toggleIsReportModalOpen(false)}/> : ''}
             </section>
             <section className={styles.infoSection__map}>
                 <Timer data={treeWaterings[0]}/>
