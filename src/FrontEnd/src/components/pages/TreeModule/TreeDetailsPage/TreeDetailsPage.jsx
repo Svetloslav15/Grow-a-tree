@@ -34,10 +34,12 @@ const TreeDetailsPage = ({history, match}) => {
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
     const [isWateringModalOpen, toggleIsWateringModalOpen] = useState(false);
-    const [isSuccessWateringModalOpen, toggleIsSuccessWateringModalOpen] = useState(true);
+    const [isSuccessWateringModalOpen, toggleIsSuccessWateringModalOpen] = useState(false);
+    const [isUndoOpen, setUndoIsOpen] = useState(false);
     const currUser = useSelector(state => state.auth);
     const [currWateringPage, setCurrWateringPage] = useState(1);
     const [treeWaterings, setTreeWaterings] = useState([]);
+    let timerFunction;
 
     useEffect(() => {
         loadData();
@@ -77,8 +79,7 @@ const TreeDetailsPage = ({history, match}) => {
 
         if (response.data.succeeded) {
             setTreeWaterings(response.data.data);
-        }
-        else {
+        } else {
             await AlertService.error(response.errors[0]);
         }
     }
@@ -111,20 +112,29 @@ const TreeDetailsPage = ({history, match}) => {
         setCurrPost({...currPost, content: data});
     }
 
-    const waterTree = async () => {
-        const waterTreeData = {
-            treeId: tree.id,
-            watererId: currUser.id
-        };
+    const undoWateringATree = async () => {
+        clearTimeout(timerFunction);
+        setUndoIsOpen(false);
+    }
 
-        const response = await TreeService.postAuthorizedWaterTree(waterTreeData, currUser.accessToken);
-        if (response.succeeded) {
-            await AlertService.success(SuccessMessages.successWaterTree);
-            await fetchTreeWaterings();
-        }
-        else {
-            await AlertService.error(response.errors[0]);
-        }
+    const waterTree = async () => {
+        setUndoIsOpen(true);
+        timerFunction = setTimeout(async () => {
+            const waterTreeData = {
+                treeId: tree.id,
+                watererId: currUser.id
+            };
+
+            const response = await TreeService.postAuthorizedWaterTree(waterTreeData, currUser.accessToken);
+            if (response.succeeded) {
+                await AlertService.success(SuccessMessages.successWaterTree);
+                await fetchTreeWaterings();
+                toggleIsSuccessWateringModalOpen(true);
+            } else {
+                await AlertService.error(response.errors[0]);
+            }
+            setUndoIsOpen(false);
+        }, 5000);
     }
 
     return (
@@ -140,21 +150,29 @@ const TreeDetailsPage = ({history, match}) => {
                         <div className='action-section mr-4'>
                             <div className='action-section__item'>
                                 <span className='action-section__item__counter'>89</span>
-                                <img  className='action-section__item__image' src={HeartIcon} alt=""/>
+                                <img className='action-section__item__image' src={HeartIcon} alt=""/>
                             </div>
                             <Button type='DarkOutline'>Реагирай</Button>
                         </div>
                         <div className='action-section ml-4'>
-                            <div className='action-section__item' onClick={() => toggleIsWateringModalOpen(!isWateringModalOpen)}>
+                            <div className='action-section__item'
+                                 onClick={() => toggleIsWateringModalOpen(!isWateringModalOpen)}>
                                 <span className='action-section__item__counter'>{treeWaterings.length}</span>
-                                <img  className='action-section__item__image' src={DropIcon} alt=""/>
+                                <img className='action-section__item__image' src={DropIcon} alt=""/>
                             </div>
-                            <Button type='DarkOutline' onClick={waterTree}>Полей</Button>
                             {
-                                isWateringModalOpen && (<ListModal data={treeWaterings} closeModal={() => toggleIsWateringModalOpen(false)}/>)
+                                isUndoOpen ?
+                                    <Button type='DarkOutline' onClick={undoWateringATree}>Спри поливането</Button>
+                                    :
+                                    <Button type='DarkOutline' onClick={waterTree}>Полей</Button>
                             }
                             {
-                                isSuccessWateringModalOpen && (<WateringModal xp={45} closeModal={() => toggleIsSuccessWateringModalOpen(false)}/>)
+                                isWateringModalOpen && (<ListModal data={treeWaterings}
+                                                                   closeModal={() => toggleIsWateringModalOpen(false)}/>)
+                            }
+                            {
+                                isSuccessWateringModalOpen && (
+                                    <WateringModal xp={45} closeModal={() => toggleIsSuccessWateringModalOpen(false)}/>)
                             }
                         </div>
                     </div>
