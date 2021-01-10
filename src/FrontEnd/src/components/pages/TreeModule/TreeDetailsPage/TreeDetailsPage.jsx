@@ -21,6 +21,9 @@ import WateringModal from "./WateringModal/WateringModal";
 
 const ReportButton = require('../../../../assets/report-button.svg');
 const HeartIcon = require('../../../../assets/reaction-heart.png');
+const SadIcon = require('../../../../assets/reaction-sad.png');
+const LikeIcon = require('../../../../assets/reaction-like.png');
+const LaughIcon = require('../../../../assets/reaction-laugh.png');
 const DropIcon = require('../../../../assets/drop.png');
 
 const WATERINGS_PER_PAGE = 20;
@@ -37,27 +40,34 @@ const TreeDetailsPage = ({history, match}) => {
     const [isWateringModalOpen, toggleIsWateringModalOpen] = useState(false);
     const [isSuccessWateringModalOpen, toggleIsSuccessWateringModalOpen] = useState(false);
     const [isUndoOpen, setUndoIsOpen] = useState(false);
+    const [isPageLoaded, setPageLoaded] = useState(false);
     const currUser = useSelector(state => state.auth);
     const [currWateringPage, setCurrWateringPage] = useState(1);
     const [treeWaterings, setTreeWaterings] = useState([]);
     const [treeReactions, setTreeReactions] = useState([]);
+    const [reactionTypes, setCurrReactionTypes] = useState([]);
 
     useEffect(() => {
-        loadData();
-    }, []);
+        if (!isPageLoaded) {
+            loadData();
+            setPageLoaded(true);
+        }
+        checkReactionTypes();
+    }, [treeReactions]);
 
     const loadData = async () => {
         await fetchTreeInfo();
         await fetchTreePosts();
-        await fetchTreeReactions();
     }
 
     const fetchTreeInfo = async () => {
         const data = await TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken);
         const treeInfo = data.data.data;
+
         setTree(treeInfo);
         document.title = `Grow A Tree - ${treeInfo.nickname}`
         setCurrPost({treeId: treeInfo.id, ...currPost});
+
         const res = await GeoCodingService.getCityByCoords(treeInfo.latitude, treeInfo.longitude);
         const {municipality, suburb, village} = res.data.address;
         const result = [municipality, suburb, village]
@@ -66,6 +76,7 @@ const TreeDetailsPage = ({history, match}) => {
         setLocation(result);
 
         await fetchTreeWaterings(treeInfo.id);
+        await fetchTreeReactions(treeInfo.id);
     }
 
     const fetchTreePosts = async () => {
@@ -76,10 +87,11 @@ const TreeDetailsPage = ({history, match}) => {
         }
     }
 
-    const fetchTreeReactions = async () => {
-        const response = await TreeService.getAuthorizedTreeReactons(`?treeId=${tree.id}&perPage=2000`, currUser.accessToken);
+    const fetchTreeReactions = async (treeId) => {
+        const response = await TreeService.getAuthorizedTreeReactons(`?treeId=${treeId}&perPage=2000`, currUser.accessToken);
         if (response.data.succeeded) {
             setTreeReactions(response.data.data);
+            checkReactionTypes();
         }
     }
 
@@ -162,10 +174,29 @@ const TreeDetailsPage = ({history, match}) => {
         const response = await TreeService.postAuthorizedReactToTree(data, currUser.accessToken);
         if (response.succeeded) {
             AlertService.success(SuccessMessages.successReactedToTree);
-            fetchTreeReactions();
+            await fetchTreeReactions(tree.id);
         } else {
             AlertService.error(response.errors[0]);
         }
+    }
+
+    const checkReactionTypes = () => {
+        const currImages = [];
+        if (treeReactions) {
+            if (treeReactions.filter(x => x.type === 1).length > 0) {
+                currImages.push(HeartIcon);
+            }
+            if (treeReactions.filter(x => x.type === 2).length > 0) {
+                currImages.push(LaughIcon);
+            }
+            if (treeReactions.filter(x => x.type === 3).length > 0) {
+                currImages.push(LikeIcon);
+            }
+            if (treeReactions.filter(x => x.type === 4).length > 0) {
+                currImages.push(SadIcon);
+            }
+        }
+        setCurrReactionTypes(currImages);
     }
 
     return (
@@ -181,9 +212,11 @@ const TreeDetailsPage = ({history, match}) => {
                         <div className='action-section mr-4'>
                             <div className='action-section__item'>
                                 <span className='action-section__item__counter'>{treeReactions.length}</span>
-                                <img className='action-section__item__image' src={HeartIcon} alt=""/>
+                                {
+                                    reactionTypes && reactionTypes.map(x => <img className='action-section__item__image' src={x} alt="Reaction Icon"/>)
+                                }
                             </div>
-                            <ReactionButton reactTo={reactToTree} item={{reactons: treeReactions}}
+                            <ReactionButton reactTo={reactToTree} item={{reactions: treeReactions}}
                                             reactionsVisible={false}>Реагирай</ReactionButton>
                         </div>
                         <div className='action-section ml-4'>

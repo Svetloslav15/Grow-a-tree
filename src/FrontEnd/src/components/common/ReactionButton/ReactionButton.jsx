@@ -10,7 +10,7 @@ const LaughImage = require('../../../assets/reaction-laugh.png');
 
 const ReactionButton = ({reactTo, item, reactionsVisible}) => {
     const [reactions, setReactions] = useState(item.reactions);
-    const [currPostReactionTypes, setCurrPostReactionTypes] = useState([]);
+    const [currReactionTypes, setCurrReactionTypes] = useState([]);
     const [isDataFetched, setIsDataFetched] = useState(false);
     const [isFirstTime, setFirstTime] = useState(true);
     const [areReactionsVisible, setReactionVisible] = useState(reactionsVisible);
@@ -48,7 +48,7 @@ const ReactionButton = ({reactTo, item, reactionsVisible}) => {
             }
         }
 
-        setCurrPostReactionTypes(currImages);
+        setCurrReactionTypes(currImages);
     }
 
     return (
@@ -73,7 +73,7 @@ const ReactionButton = ({reactTo, item, reactionsVisible}) => {
             </div>
             <div className='wrapper__reactions'>
                 {areReactionsVisible ? <span className='wrapper__reactions__count'>{reactions && reactions.length}</span> : '' }
-                {areReactionsVisible ? currPostReactionTypes.map(x => (<img className='wrapper__reactions__image'
+                {areReactionsVisible ? currReactionTypes.map(x => (<img className='wrapper__reactions__image'
                                                      src={x}
                                                      alt='Reaction Image'/>)) : ''}
             </div>
