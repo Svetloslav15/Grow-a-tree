@@ -43,7 +43,7 @@ const AddTreePage = ({}) => {
     };
 
     const handleFilesUpload = (event) => {
-        setData({files: event.target.files, ...data})
+        setData({...data, files: event.target.files})
     };
 
     const handleSubmit = async () => {

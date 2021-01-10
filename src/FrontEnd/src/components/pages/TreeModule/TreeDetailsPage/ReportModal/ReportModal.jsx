@@ -23,7 +23,7 @@ const ReportModal = ({closeModal, treeId}) => {
 
     const addReport = async () => {
         const formData = new FormData();
-
+        console.log(data.imageFile);
         formData.append('type', treeReportTypes[data.type]);
         formData.append('message', data.message);
         formData.append('imageFile', data.imageFile);
@@ -34,6 +34,7 @@ const ReportModal = ({closeModal, treeId}) => {
 
         if (response.succeeded) {
             setData({});
+            closeModal();
             return await AlertService.success(SuccessMessages.successReportTree);
         }
         return await AlertService.error(response.errors[0]);
@@ -43,7 +44,7 @@ const ReportModal = ({closeModal, treeId}) => {
         setData(data);
     };
     const handleFilesUpload = (event) => {
-        setData({imageFile: event.target.files[0], ...data});
+        setData({...data, imageFile: event.target.files[0]});
     }
 
     return (
