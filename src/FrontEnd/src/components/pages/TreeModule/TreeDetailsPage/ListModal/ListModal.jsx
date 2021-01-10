@@ -1,30 +1,44 @@
 import React, {useEffect, useState} from 'react';
-import './ListModal.scss';
+import styles from './ListModal.module.scss';
 import {getDifference} from '../../../../../helpers/getDifferenceBetweenDates';
 
 const DefaultProfilePicture = require('../../../../../assets/user-profile.png');
 const BgShapeTwo = require('../../../../../assets/bg-shape-2.png');
 const BgShapeThree = require('../../../../../assets/bg-shape-3.png');
 
-const ListModal = ({data, closeModal}) => {
-    return (
-        <div className='wrapper'>
-            <div className='overlay-bg' onClick={closeModal}></div>
-            <div className='wrapper__modal'>
-                <img className='bg-shape-image' src={BgShapeTwo} alt="Background Shape Image"/>
-                <img className='bg-shape-image' src={BgShapeThree} alt="Background Shape Image"/>
-                <i className="fas fa-times close-button" onClick={closeModal}></i>
+const BgAltTag = 'Background Shape Image';
 
-                <p className='wrapper__modal__title'>Последни поливания</p>
-                <ul className='wrapper__modal__items'>
+const ListModal = ({data, closeModal, hasReaction, title}) => {
+    const [message, setMessage] = useState('поля дърво преди');
+
+    useEffect(() => {
+        console.log(data);
+        if (hasReaction) {
+            setMessage('реагира преди');
+        }
+    }, []);
+
+    return (
+        <div className={styles.wrapper}>
+            <div className={styles.overlayBg} onClick={closeModal}></div>
+            <div className={styles.wrapper__modal}>
+                <img className={styles.bgShapeImage} src={BgShapeTwo} alt={BgAltTag}/>
+                <img className={styles.bgShapeImage} src={BgShapeThree} alt={BgAltTag}/>
+                <i className={`fas fa-times ${styles.closeButton}`} onClick={closeModal}/>
+
+                <p className={styles.wrapper__modal__title}>{title}</p>
+                <ul className={styles.wrapper__modal__items}>
                     {
                         data.map(x => (
-                            <li className='wrapper__modal__items__item'>
-                                <img src={x.userProfilePictureUrl} alt={x.userUserName}
-                                     className='wrapper__modal__items__item__image'/>
-                                <p className='wrapper__modal__items__item__name'>{x.userUserName}</p>
-                                <p className='wrapper__modal__items__item__description'> - поля дърво преди <b>
-                                         {getDifference(new Date(x.wateredOn), new Date())}
+                            <li className={styles.wrapper__modal__items__item}>
+                                {
+                                    x.userProfilePictureUrl && <img src={x.userProfilePictureUrl} alt={x.userUserName}
+                                                                    className={styles.wrapper__modal__items__item__image}/>
+                                }
+
+                                <p className={styles.wrapper__modal__items__item__name}>{x.userUserName}</p>
+                                <p className={styles.wrapper__modal__items__item__description}> - {message} <b>
+                                         {hasReaction ? getDifference(new Date(x.createdOn), new Date()) : getDifference(new Date(x.wateredOn), new Date())}
                                     </b>
                                 </p>
                             </li>

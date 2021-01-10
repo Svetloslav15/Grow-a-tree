@@ -38,6 +38,7 @@ const TreeDetailsPage = ({history, match}) => {
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
     const [isWateringModalOpen, toggleIsWateringModalOpen] = useState(false);
+    const [isReactionsModalOpen, toggleIsReactionsModalOpen] = useState(false);
     const [isSuccessWateringModalOpen, toggleIsSuccessWateringModalOpen] = useState(false);
     const [isUndoOpen, setUndoIsOpen] = useState(false);
     const [isPageLoaded, setPageLoaded] = useState(false);
@@ -207,19 +208,30 @@ const TreeDetailsPage = ({history, match}) => {
                     <h1 className={styles.infoSection__wrapper__title}># {tree.nickname}</h1>
                     <p className={styles.infoSection__wrapper__status}>Статус: здраво</p>
                     <p className={styles.infoSection__wrapper__status}>Вид: {tree.type}</p>
-                    <p className={styles.infoSection__wrapper__owner}>Засадено от: {tree.owner && tree.owner.userName}</p>
+                    <p className={styles.infoSection__wrapper__owner}>Засадено
+                        от: {tree.owner && tree.owner.userName}</p>
                     <div className='row'>
                         <div className={`${styles.actionSection} mr-4`}>
-                            <div className={styles.actionSection__item}>
+                            <div className={styles.actionSection__item}
+                                 onClick={() => toggleIsReactionsModalOpen(!isWateringModalOpen)}>
                                 <span className={styles.actionSection__item__counter}>{treeReactions.length}</span>
                                 <div className={styles.actionSection__item__imagesSection}>
                                     {
-                                        reactionTypes && reactionTypes.map(x => <img className={styles.actionSection__item__image__reaction} src={x} alt="Reaction Icon"/>)
+                                        reactionTypes && reactionTypes.map(x => <img
+                                            className={styles.actionSection__item__image__reaction} src={x}
+                                            alt="Reaction Icon"/>)
                                     }
                                 </div>
                             </div>
                             <ReactionButton reactTo={reactToTree} item={{reactions: treeReactions}}
                                             reactionsVisible={false} hasBorder={false}>Реагирай</ReactionButton>
+                            {
+                                isReactionsModalOpen && (<ListModal data={treeReactions}
+                                                                   closeModal={() => toggleIsReactionsModalOpen(false)}
+                                                                   hasReaction={true}
+                                                                   title={`Реакции за ${tree.nickname}`}
+                                />)
+                            }
                         </div>
                         <div className={`${styles.actionSection} ml-4`}>
                             <div className={styles.actionSection__item}
@@ -235,11 +247,16 @@ const TreeDetailsPage = ({history, match}) => {
                             }
                             {
                                 isWateringModalOpen && (<ListModal data={treeWaterings}
-                                                                   closeModal={() => toggleIsWateringModalOpen(false)}/>)
+                                                                   closeModal={() => toggleIsWateringModalOpen(false)}
+                                                                   hasReaction={false}
+                                                                   title='Последни поливания'
+                                                        />)
                             }
                             {
                                 isSuccessWateringModalOpen && (
-                                    <WateringModal xp={45} closeModal={() => toggleIsSuccessWateringModalOpen(false)}/>)
+                                    <WateringModal xp={45}
+                                                   closeModal={() => toggleIsSuccessWateringModalOpen(false)}
+                                    />)
                             }
                         </div>
                     </div>
@@ -276,7 +293,8 @@ const TreeDetailsPage = ({history, match}) => {
                     }}
                     onEditorChange={handleEditorChange}
                 />
-                <Button type='DarkOutline' onClick={addPost}>Добави</Button>
+                <Button type='DarkOutline'
+                        onClick={addPost}>Добави</Button>
                 {
                     posts.map((data, index) => <TreePost key={index}
                                                          data={data}

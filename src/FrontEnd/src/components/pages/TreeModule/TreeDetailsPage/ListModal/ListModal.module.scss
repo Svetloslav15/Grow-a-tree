@@ -9,7 +9,7 @@
 }
 
 .wrapper {
-  .overlay-bg {
+  .overlayBg {
     background-color: black;
     width: 100vw;
     height: 100vh;
@@ -30,7 +30,7 @@
     height: 400px;
     animation: fadeIn 1s 0ms forwards;
 
-    .close-button {
+    .closeButton {
       position: absolute;
       top: 15px;
       right: 15px;
@@ -39,16 +39,16 @@
       font-size: 20px;
     }
 
-    .bg-shape-image {
+    .bgShapeImage {
       width: 70%;
     }
-    .bg-shape-image:nth-child(1) {
+    .bgShapeImage:nth-child(1) {
       position: absolute;
       top: 0;
       right: 0;
     }
 
-    .bg-shape-image:nth-child(2) {
+    .bgShapeImage:nth-child(2) {
       position: absolute;
       bottom: 0;
       left: 0;
