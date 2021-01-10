@@ -22,8 +22,12 @@ const RepliesSection = ({replies, postId}) => {
         setPostId(postId);
     }, [postId]);
 
-    const reactToReply = () => {
-
+    const reactToReply = async (type) => {
+        //TODO add reaction to reply
+        /*let response = await TreeService.postAuthorizedUpsertTreeReaction({
+            type,
+            treePostReplyId: data.id
+        }, currUser.accessToken);*/
     }
 
     const fetchTreePostReplies = async () => {
