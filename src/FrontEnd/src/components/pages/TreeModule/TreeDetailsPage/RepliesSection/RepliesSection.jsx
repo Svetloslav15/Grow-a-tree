@@ -1,11 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './RepliesSection.module.scss';
 import ReactionButton from "../../../../common/ReactionButton/ReactionButton";
 
 const DefaultUserImage = require('../../../../../assets/user-profile.png');
 
-const RepliesSection = () => {
-    const [replies, setReplies] = useState([]);
+const RepliesSection = ({replies, postId}) => {
+    const [repliesData, setReplies] = useState(replies);
+
+    useEffect(() => {
+        setReplies(replies.filter(x => x.treePostId === postId));
+    }, [replies]);
 
     const reactToReply = () => {
 
@@ -14,23 +18,20 @@ const RepliesSection = () => {
     return (
         <div className={styles.wrapper}>
             <ul className={styles.wrapper__items}>
-                <li className={styles.wrapper__items__item}>
+                {repliesData.map(x => <li className={styles.wrapper__items__item}>
                     <div className={styles.wrapper__items__item__userWrapper}>
-                        <img src={DefaultUserImage} alt=""/>
-                        <span>Svetli Novoselski</span>
+                        <img src={x.userProfilePictureUrl} alt={x.userUserName}/>
+                        <span>{x.userUserName}</span>
                     </div>
-                    <p className={styles.wrapper__items__item__content}>Lorem ipsum dolor sit amet, consectetur
-                        adipisicing elit. Ad asperiores aspernatur, corporis esse laborum maxime, neque quasi qui,
-                        ratione sapiente tempora temporibus vel vitae. Assumenda excepturi facilis iste magnam
-                        porro!</p>
+                    <p className={styles.wrapper__items__item__content}>{x.content}</p>
                     <ReactionButton hasBorder={false}
                                     reactionsVisible={true}
                                     hasCustomButton={true}
                                     reactTo={reactToReply}
-                                    item={{reactions: []}}>
+                                    item={x}>
                         <i className={`${styles.fontAwesomeIcon} far fa-heart`}/>
                     </ReactionButton>
-                </li>
+                </li>)}
             </ul>
         </div>
     )

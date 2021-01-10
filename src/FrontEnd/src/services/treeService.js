@@ -12,7 +12,8 @@ const ROUTES = {
     getAuthorizedTreeWaterings: '/waterings/tree-waterings',
     getAuthorizedTreeReactons: '/treeReactions/tree-reactions',
     postAuthorizedReactToTree: '/treeReactions/upsert',
-    postAuthorizedReportTree: '/treeReports/report-tree'
+    postAuthorizedReportTree: '/treeReports/report-tree',
+    getAuthorizedTreePostReplies: '/treePostReplies/list'
 };
 
 export default new Proxy({}, {

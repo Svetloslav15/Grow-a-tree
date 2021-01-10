@@ -48,6 +48,7 @@ const TreeDetailsPage = ({history, match}) => {
     const [currWateringPage, setCurrWateringPage] = useState(1);
     const [treeWaterings, setTreeWaterings] = useState([]);
     const [treeReactions, setTreeReactions] = useState([]);
+    const [treePostReplies, setTreePostReplies] = useState([]);
     const [reactionTypes, setCurrReactionTypes] = useState([]);
 
     useEffect(() => {
@@ -61,6 +62,7 @@ const TreeDetailsPage = ({history, match}) => {
     const loadData = async () => {
         await fetchTreeInfo();
         await fetchTreePosts();
+        await fetchTreePostReplies();
     }
 
     const fetchTreeInfo = async () => {
@@ -114,6 +116,13 @@ const TreeDetailsPage = ({history, match}) => {
             post.reactions = response.data.data;
         }
         return data;
+    }
+
+    const fetchTreePostReplies = async () => {
+        const response = await TreeService.getAuthorizedTreePostReplies(`?page=1&perPage=10000`, currUser.accessToken);
+        if (response.data.succeeded) {
+            setTreePostReplies(response.data.data);
+        }
     }
 
     const addPost = () => {
@@ -303,7 +312,8 @@ const TreeDetailsPage = ({history, match}) => {
                 {
                     posts.map((data, index) => <TreePost key={index}
                                                          data={data}
-                                                         fetchTreePosts={fetchTreePosts}/>)
+                                                         fetchTreePosts={fetchTreePosts}
+                                                         replies={treePostReplies}/>)
                 }
             </div>
         </Layout>

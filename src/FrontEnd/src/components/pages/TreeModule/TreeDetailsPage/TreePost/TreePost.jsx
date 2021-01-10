@@ -9,7 +9,7 @@ import AlertService from '../../../../../services/alertService';
 import SuccessMessages from '../../../../../static/successMessages';
 import RepliesSection from "../RepliesSection/RepliesSection";
 
-const TreePost = ({data, fetchTreePosts}) => {
+const TreePost = ({data, fetchTreePosts, replies}) => {
     const [post, setPost] = useState(data);
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const TreePost = ({data, fetchTreePosts}) => {
                                 reactionsVisible={true}
                                 hasBorder={true}/>
             </div>
-            <RepliesSection/>
+            {post && <RepliesSection replies={replies} postId={post.id}/>}
         </div>
     );
 }
