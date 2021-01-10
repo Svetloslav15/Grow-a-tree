@@ -219,7 +219,7 @@ const TreeDetailsPage = ({history, match}) => {
                                 </div>
                             </div>
                             <ReactionButton reactTo={reactToTree} item={{reactions: treeReactions}}
-                                            reactionsVisible={false}>Реагирай</ReactionButton>
+                                            reactionsVisible={false} hasBorder={false}>Реагирай</ReactionButton>
                         </div>
                         <div className={`${styles.actionSection} ml-4`}>
                             <div className={styles.actionSection__item}

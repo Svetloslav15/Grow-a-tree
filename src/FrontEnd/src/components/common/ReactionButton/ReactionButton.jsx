@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import './ReactionButton.scss';
+import styles from './ReactionButton.module.scss';
 import Button from '../Button/Button';
 import {Reactions} from '../../../static/reactionTypes';
 
@@ -8,7 +8,14 @@ const HeartImage = require('../../../assets/reaction-heart.png');
 const SadImage = require('../../../assets/reaction-sad.png');
 const LaughImage = require('../../../assets/reaction-laugh.png');
 
-const ReactionButton = ({reactTo, item, reactionsVisible}) => {
+const ImagesAltTags = {
+    SadImage: 'Sad Reaction Image',
+    HeartImage: 'Heart Reaction Image',
+    LikeImage: 'Like Reaction Image',
+    LaughImage: 'Laugh Reaction Image',
+}
+
+const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder}) => {
     const [reactions, setReactions] = useState(item.reactions);
     const [currReactionTypes, setCurrReactionTypes] = useState([]);
     const [isDataFetched, setIsDataFetched] = useState(false);
@@ -52,32 +59,32 @@ const ReactionButton = ({reactTo, item, reactionsVisible}) => {
     }
 
     return (
-        <div className='wrapper'>
-            <div className='wrapper__popup'>
-                <img className='wrapper__popup__image'
+        <div className={`${styles.wrapper} ${(!hasBorder ? styles.noBorder : '')}`}>
+            <div className={styles.wrapper__popup}>
+                <img className={styles.wrapper__popup__image}
                      src={LikeImage}
-                     alt="Like Reaction Image"
+                     alt={ImagesAltTags.LikeImage}
                      onClick={() => reactTo(Reactions.Like)}/>
-                <img className='wrapper__popup__image'
+                <img className={styles.wrapper__popup__image}
                      src={HeartImage}
-                     alt="Heart Reaction Image"
+                     alt={ImagesAltTags.HeartImage}
                      onClick={() => reactTo(Reactions.Heart)}/>
-                <img className='wrapper__popup__image'
+                <img className={styles.wrapper__popup__image}
                      src={LaughImage}
-                     alt="Laugh Reaction Image"
+                     alt={ImagesAltTags.LaughImage}
                      onClick={() => reactTo(Reactions.Laugh)}/>
-                <img className='wrapper__popup__image'
+                <img className={styles.wrapper__popup__image}
                      src={SadImage}
-                     alt="Sad Reaction Image"
+                     alt={ImagesAltTags.SadImage}
                      onClick={() => reactTo(Reactions.Sad)}/>
             </div>
-            <div className='wrapper__reactions'>
-                {areReactionsVisible ? <span className='wrapper__reactions__count'>{reactions && reactions.length}</span> : '' }
-                {areReactionsVisible ? currReactionTypes.map(x => (<img className='wrapper__reactions__image'
+            <div className={styles.wrapper__reactions}>
+                {areReactionsVisible ? <span className={styles.wrapper__reactions__count}>{reactions && reactions.length}</span> : '' }
+                {areReactionsVisible ? currReactionTypes.map(x => (<img className={styles.wrapper__reactions__image}
                                                      src={x}
                                                      alt='Reaction Image'/>)) : ''}
             </div>
-            <div className='wrapper__buttonSection'>
+            <div className={styles.wrapper__buttonSection}>
                 <Button type='OutlineGreen'>Реагирай</Button>
             </div>
         </div>
