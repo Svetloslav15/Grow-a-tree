@@ -27,7 +27,13 @@
 
     &__item {
       cursor: pointer;
+      position: relative;
 
+      &__imagesSection {
+        position: absolute;
+        right: 90px;
+        top: 8px;
+      }
       &__counter {
         font-size: 32px;
         font-weight: bold;
@@ -35,6 +41,29 @@
 
       &__image {
         width: 40px;
+
+        &__reaction {
+          width: 50px;
+          height: 50px;
+          object-fit: contain;
+          cursor: pointer;
+          padding: 0 10px;
+          position: absolute;
+          top: -6px;
+        }
+
+        &__reaction:first-child {
+          left: 0;
+        }
+        &__reaction:nth-child(2) {
+          left: 20px;
+        }
+        &__reaction:nth-child(3) {
+          left: 35px;
+        }
+        &__reaction:nth-child(4) {
+          left: 40px;
+        }
       }
     }
   }

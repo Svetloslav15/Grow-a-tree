@@ -212,9 +212,11 @@ const TreeDetailsPage = ({history, match}) => {
                         <div className={`${styles.actionSection} mr-4`}>
                             <div className={styles.actionSection__item}>
                                 <span className={styles.actionSection__item__counter}>{treeReactions.length}</span>
-                                {
-                                    reactionTypes && reactionTypes.map(x => <img className={styles.actionSection__item__image} src={x} alt="Reaction Icon"/>)
-                                }
+                                <div className={styles.actionSection__item__imagesSection}>
+                                    {
+                                        reactionTypes && reactionTypes.map(x => <img className={styles.actionSection__item__image__reaction} src={x} alt="Reaction Icon"/>)
+                                    }
+                                </div>
                             </div>
                             <ReactionButton reactTo={reactToTree} item={{reactions: treeReactions}}
                                             reactionsVisible={false}>Реагирай</ReactionButton>
