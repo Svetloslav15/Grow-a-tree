@@ -118,6 +118,7 @@ const TreeDetailsPage = ({history, match}) => {
         const response = await TreeService.postAuthorizedWaterTree(waterTreeData, currUser.accessToken);
         if (response.succeeded) {
             await AlertService.success(SuccessMessages.successWaterTree);
+            await fetchTreeWaterings();
         }
         else {
             await AlertService.error(response.errors[0]);
