@@ -13,7 +13,8 @@ const ROUTES = {
     getAuthorizedTreeReactons: '/treeReactions/tree-reactions',
     postAuthorizedReactToTree: '/treeReactions/upsert',
     postAuthorizedReportTree: '/treeReports/report-tree',
-    getAuthorizedTreePostReplies: '/treePostReplies/list'
+    getAuthorizedTreePostReplies: '/treePostReplies/list',
+    postAuthorizedUpsertTreeReply: '/treePostReplies/upsert'
 };
 
 export default new Proxy({}, {

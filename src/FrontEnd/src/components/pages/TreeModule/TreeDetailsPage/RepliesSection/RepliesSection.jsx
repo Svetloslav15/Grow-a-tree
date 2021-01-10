@@ -4,43 +4,59 @@ import ReactionButton from "../../../../common/ReactionButton/ReactionButton";
 import Button from "../../../../common/Button/Button";
 import {Editor} from "@tinymce/tinymce-react";
 import parse from 'html-react-parser';
+import TreeService from '../../../../../services/treeService';
+import AlertService from '../../../../../services/alertService';
+import SuccessMessages from '../../../../../static/successMessages';
+import {useSelector} from 'react-redux';
 
 const RepliesSection = ({replies, postId}) => {
     const [repliesData, setReplies] = useState(replies);
-    const [isAddCommentInputOpen, setIsAddCommentInputOpen] = useState(false);
+    const [currPostId, setPostId] = useState(postId);
+    const [isAddReplyInputOpen, setIsAddReplyInputOpen] = useState(false);
     const [editorKey, setEditorKey] = useState(4);
-    const [currentComment, setCurrentComment] = useState('');
+    const [currentReply, setCurrentReply] = useState('');
+    const currUser = useSelector(state => state.auth);
 
     useEffect(() => {
         setReplies(replies.filter(x => x.treePostId === postId));
-    }, [replies]);
+        setPostId(postId);
+    }, [replies, postId]);
 
     const reactToReply = () => {
 
     }
 
-    const openAddCommentInput = () => {
-        if (isAddCommentInputOpen) {
-            addComment();
-            setIsAddCommentInputOpen(false);
+    const openAddReplyInput = () => {
+        if (isAddReplyInputOpen) {
+            addReply();
+            setIsAddReplyInputOpen(false);
         } else {
-            setIsAddCommentInputOpen(true);
+            setIsAddReplyInputOpen(true);
         }
     }
 
     const handleEditorChange = (data) => {
-        setCurrentComment(data);
+        setCurrentReply(data);
     }
 
-    const addComment = () => {
-        console.log(currentComment);
+    const addReply = async () => {
+        const response = await TreeService.postAuthorizedUpsertTreeReply({
+            content: currentReply,
+            treePostId: currPostId
+        }, currUser.accessToken);
+
+        if (response.succeeded) {
+            setReplies([...repliesData, response.data]);
+            return await AlertService.success(SuccessMessages.successPostReply);
+        }
+        return await AlertService.error(response.errors[0]);
     }
 
     return (
         <div className={styles.wrapper}>
             <ul className={styles.wrapper__items}>
-                <Button type='Green' onClick={openAddCommentInput}>Коментирай</Button>
-                {isAddCommentInputOpen && <Editor
+                <Button type='Green' onClick={openAddReplyInput}>Коментирай</Button>
+                {isAddReplyInputOpen && <Editor
                     key={editorKey}
                     apiKey={process.env.REACT_APP_TINYMCE_KEY}
                     init={{
