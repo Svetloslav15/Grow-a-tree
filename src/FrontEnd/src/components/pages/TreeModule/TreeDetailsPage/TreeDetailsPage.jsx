@@ -24,6 +24,7 @@ const HeartIcon = require('../../../../assets/reaction-heart.png');
 const DropIcon = require('../../../../assets/drop.png');
 
 const WATERINGS_PER_PAGE = 20;
+let openUndoIsOpen = false;
 
 const TreeDetailsPage = ({history, match}) => {
     const [tree, setTree] = useState([]);
@@ -113,28 +114,34 @@ const TreeDetailsPage = ({history, match}) => {
     }
 
     const undoWateringATree = async () => {
-        clearTimeout(timerFunction);
         setUndoIsOpen(false);
+        openUndoIsOpen = false;
     }
 
     const waterTree = async () => {
         setUndoIsOpen(true);
-        timerFunction = setTimeout(async () => {
+        openUndoIsOpen = true;
+
+        setTimeout(async () => {
             const waterTreeData = {
                 treeId: tree.id,
                 watererId: currUser.id
             };
 
-            const response = await TreeService.postAuthorizedWaterTree(waterTreeData, currUser.accessToken);
-            if (response.succeeded) {
-                await AlertService.success(SuccessMessages.successWaterTree);
-                await fetchTreeWaterings();
-                toggleIsSuccessWateringModalOpen(true);
-            } else {
-                await AlertService.error(response.errors[0]);
+            if (openUndoIsOpen) {
+                const response = await TreeService.postAuthorizedWaterTree(waterTreeData, currUser.accessToken);
+                if (response.succeeded) {
+                    await AlertService.success(SuccessMessages.successWaterTree);
+                    await fetchTreeWaterings();
+                    toggleIsSuccessWateringModalOpen(true);
+                } else {
+                    await AlertService.error(response.errors[0]);
+                }
+                setUndoIsOpen(false);
             }
-            setUndoIsOpen(false);
-        }, 5000);
+
+            openUndoIsOpen = false;
+        }, 5000)
     }
 
     return (
