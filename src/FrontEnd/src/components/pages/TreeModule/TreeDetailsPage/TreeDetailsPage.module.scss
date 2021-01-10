@@ -34,6 +34,7 @@
         right: 90px;
         top: 8px;
       }
+
       &__counter {
         font-size: 32px;
         font-weight: bold;
@@ -55,12 +56,15 @@
         &__reaction:first-child {
           left: 0;
         }
+
         &__reaction:nth-child(2) {
           left: 20px;
         }
+
         &__reaction:nth-child(3) {
           left: 35px;
         }
+
         &__reaction:nth-child(4) {
           left: 40px;
         }
@@ -105,7 +109,7 @@
   }
 
   &__reportButton:hover {
-    transform: scale(1.5);
+    transform: scale(1.1);
     transition: 2s;
   }
 }

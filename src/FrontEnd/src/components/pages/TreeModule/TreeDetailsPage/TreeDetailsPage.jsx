@@ -13,11 +13,12 @@ import SuccessMessages from '../../../../static/successMessages';
 import Map from '../../../common/Map/Map';
 import Timer from './Timer/Timer';
 import TreePost from './TreePost/TreePost';
+import ReportModal from './ReportModal/ReportModal';
+import ListModal from './ListModal/ListModal';
+import WateringModal from './WateringModal/WateringModal';
 
 import GeoCodingService from '../../../../services/geocodingService';
 import ReactionButton from '../../../common/ReactionButton/ReactionButton';
-import ListModal from "./ListModal/ListModal";
-import WateringModal from "./WateringModal/WateringModal";
 
 const ReportButton = require('../../../../assets/report-button.svg');
 const HeartIcon = require('../../../../assets/reaction-heart.png');
@@ -38,6 +39,7 @@ const TreeDetailsPage = ({history, match}) => {
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
     const [isWateringModalOpen, toggleIsWateringModalOpen] = useState(false);
+    const [isReportModalOpen, toggleIsReportModalOpen] = useState(false);
     const [isReactionsModalOpen, toggleIsReactionsModalOpen] = useState(false);
     const [isSuccessWateringModalOpen, toggleIsSuccessWateringModalOpen] = useState(false);
     const [isUndoOpen, setUndoIsOpen] = useState(false);
@@ -227,9 +229,9 @@ const TreeDetailsPage = ({history, match}) => {
                                             reactionsVisible={false} hasBorder={false}>Реагирай</ReactionButton>
                             {
                                 isReactionsModalOpen && (<ListModal data={treeReactions}
-                                                                   closeModal={() => toggleIsReactionsModalOpen(false)}
-                                                                   hasReaction={true}
-                                                                   title={`Реакции за ${tree.nickname}`}
+                                                                    closeModal={() => toggleIsReactionsModalOpen(false)}
+                                                                    hasReaction={true}
+                                                                    title={`Реакции за ${tree.nickname}`}
                                 />)
                             }
                         </div>
@@ -250,7 +252,7 @@ const TreeDetailsPage = ({history, match}) => {
                                                                    closeModal={() => toggleIsWateringModalOpen(false)}
                                                                    hasReaction={false}
                                                                    title='Последни поливания'
-                                                        />)
+                                />)
                             }
                             {
                                 isSuccessWateringModalOpen && (
@@ -263,7 +265,9 @@ const TreeDetailsPage = ({history, match}) => {
                 </section>
                 <img className={styles.infoSection__reportButton}
                      src={ReportButton}
-                     alt="Report Problem Button"/>
+                     alt="Report Problem Button"
+                     onClick={() => toggleIsReportModalOpen(true)}/>
+                {isReportModalOpen ? <ReportModal closeModal={() => toggleIsReportModalOpen(false)}/> : ''}
             </section>
             <section className={styles.infoSection__map}>
                 <Timer data={treeWaterings[0]}/>
