@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Editor} from '@tinymce/tinymce-react';
 
-import './TreeDetailsPage.scss';
+import styles from './TreeDetailsPage.module.scss';
 
 import Layout from '../../../common/Layout/Layout';
 import Button from '../../../common/Button/Button';
@@ -201,29 +201,29 @@ const TreeDetailsPage = ({history, match}) => {
 
     return (
         <Layout>
-            <section className='info-section'>
+            <section className={styles.infoSection}>
                 {tree.images && <Carousel images={tree.images}/>}
-                <section className='info-section__wrapper'>
-                    <h1 className='info-section__wrapper__title'># {tree.nickname}</h1>
-                    <p className='info-section__wrapper__status'>Статус: здраво</p>
-                    <p className='info-section__wrapper__status'>Вид: {tree.type}</p>
-                    <p className='info-section__wrapper__owner'>Засадено от: {tree.owner && tree.owner.userName}</p>
+                <section className={styles.infoSection__wrapper}>
+                    <h1 className={styles.infoSection__wrapper__title}># {tree.nickname}</h1>
+                    <p className={styles.infoSection__wrapper__status}>Статус: здраво</p>
+                    <p className={styles.infoSection__wrapper__status}>Вид: {tree.type}</p>
+                    <p className={styles.infoSection__wrapper__owner}>Засадено от: {tree.owner && tree.owner.userName}</p>
                     <div className='row'>
-                        <div className='action-section mr-4'>
-                            <div className='action-section__item'>
-                                <span className='action-section__item__counter'>{treeReactions.length}</span>
+                        <div className={`${styles.actionSection} mr-4`}>
+                            <div className={styles.actionSection__item}>
+                                <span className={styles.actionSection__item__counter}>{treeReactions.length}</span>
                                 {
-                                    reactionTypes && reactionTypes.map(x => <img className='action-section__item__image' src={x} alt="Reaction Icon"/>)
+                                    reactionTypes && reactionTypes.map(x => <img className={styles.actionSection__item__image} src={x} alt="Reaction Icon"/>)
                                 }
                             </div>
                             <ReactionButton reactTo={reactToTree} item={{reactions: treeReactions}}
                                             reactionsVisible={false}>Реагирай</ReactionButton>
                         </div>
-                        <div className='action-section ml-4'>
-                            <div className='action-section__item'
+                        <div className={`${styles.actionSection} ml-4`}>
+                            <div className={styles.actionSection__item}
                                  onClick={() => toggleIsWateringModalOpen(!isWateringModalOpen)}>
-                                <span className='action-section__item__counter'>{treeWaterings.length}</span>
-                                <img className='action-section__item__image' src={DropIcon} alt=""/>
+                                <span className={styles.actionSection__item__counter}>{treeWaterings.length}</span>
+                                <img className={styles.actionSection__item__image} src={DropIcon} alt=""/>
                             </div>
                             {
                                 isUndoOpen ?
@@ -242,20 +242,20 @@ const TreeDetailsPage = ({history, match}) => {
                         </div>
                     </div>
                 </section>
-                <img className='info-section__report-button'
+                <img className={styles.infoSection__reportButton}
                      src={ReportButton}
                      alt="Report Problem Button"/>
             </section>
-            <section className='info-section__map'>
+            <section className={styles.infoSection__map}>
                 <Timer data={treeWaterings[0]}/>
-                <p className='info-section__map__location-text'>{treeLocation}</p>
-                <div className='info-section__map-wrapper'>
+                <p className={styles.infoSection__map__locationText}>{treeLocation}</p>
+                <div className={styles.infoSection__mapWrapper}>
                     <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}
                          isStatic={true}
-                         className='map-container-section'/>
+                         className={styles.mapContainerSection}/>
                 </div>
             </section>
-            <div className='info-section__posts'>
+            <div className={styles.infoSection__posts}>
                 <Editor
                     key={editorKey}
                     apiKey={process.env.REACT_APP_TINYMCE_KEY}
