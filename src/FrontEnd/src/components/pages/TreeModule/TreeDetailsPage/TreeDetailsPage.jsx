@@ -40,7 +40,7 @@ const TreeDetailsPage = ({history, match}) => {
     const currUser = useSelector(state => state.auth);
     const [currWateringPage, setCurrWateringPage] = useState(1);
     const [treeWaterings, setTreeWaterings] = useState([]);
-    let timerFunction;
+    const [treeReactions, setTreeReactions] = useState([]);
 
     useEffect(() => {
         loadData();
@@ -49,6 +49,7 @@ const TreeDetailsPage = ({history, match}) => {
     const loadData = async () => {
         await fetchTreeInfo();
         await fetchTreePosts();
+        await fetchTreeReactions();
     }
 
     const fetchTreeInfo = async () => {
@@ -72,6 +73,13 @@ const TreeDetailsPage = ({history, match}) => {
         if (response.data.succeeded) {
             const postsWithReactions = await fetchTreePostReactions(response.data.data);
             setPosts(postsWithReactions);
+        }
+    }
+
+    const fetchTreeReactions = async () => {
+        const response = await TreeService.getAuthorizedTreeReactons(`?treeId=${tree.id}&perPage=2000`, currUser.accessToken);
+        if (response.data.succeeded) {
+            setTreeReactions(response.data.data);
         }
     }
 
@@ -144,6 +152,10 @@ const TreeDetailsPage = ({history, match}) => {
         }, 5000)
     }
 
+    const reactToTree = async () => {
+
+    }
+
     return (
         <Layout>
             <section className='info-section'>
@@ -156,10 +168,11 @@ const TreeDetailsPage = ({history, match}) => {
                     <div className='row'>
                         <div className='action-section mr-4'>
                             <div className='action-section__item'>
-                                <span className='action-section__item__counter'>89</span>
+                                <span className='action-section__item__counter'>{treeReactions.length}</span>
                                 <img className='action-section__item__image' src={HeartIcon} alt=""/>
                             </div>
-                            <Button type='DarkOutline'>Реагирай</Button>
+                            <ReactionButton reactTo={reactToTree} item={{reactons: treeReactions}}
+                                            reactionsVisible={false}>Реагирай</ReactionButton>
                         </div>
                         <div className='action-section ml-4'>
                             <div className='action-section__item'

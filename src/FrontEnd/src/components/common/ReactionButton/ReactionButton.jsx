@@ -8,15 +8,16 @@ const HeartImage = require('../../../assets/reaction-heart.png');
 const SadImage = require('../../../assets/reaction-sad.png');
 const LaughImage = require('../../../assets/reaction-laugh.png');
 
-const ReactionButton = ({reactToPost, post}) => {
-    const [reactions, setReactions] = useState(post.reactions);
+const ReactionButton = ({reactTo, item, reactionsVisible}) => {
+    const [reactions, setReactions] = useState(item.reactions);
     const [currPostReactionTypes, setCurrPostReactionTypes] = useState([]);
     const [isDataFetched, setIsDataFetched] = useState(false);
     const [isFirstTime, setFirstTime] = useState(true);
+    const [areReactionsVisible, setReactionVisible] = useState(reactionsVisible);
 
     useEffect(() => {
         if (!isDataFetched) {
-            setReactions(post.reactions)
+            setReactions(item.reactions)
             setIsDataFetched(true);
             if (isFirstTime) {
                 checkReactionTypes();
@@ -28,22 +29,25 @@ const ReactionButton = ({reactToPost, post}) => {
             setIsDataFetched(false);
         }
 
-    }, [post, reactions]);
+    }, [item, reactions]);
 
     const checkReactionTypes = () => {
         const currImages = [];
-        if (reactions.filter(x => x.type === 1).length > 0) {
-            currImages.push(HeartImage);
+        if (reactions) {
+            if (reactions.filter(x => x.type === 1).length > 0) {
+                currImages.push(HeartImage);
+            }
+            if (reactions.filter(x => x.type === 2).length > 0) {
+                currImages.push(LaughImage);
+            }
+            if (reactions.filter(x => x.type === 3).length > 0) {
+                currImages.push(LikeImage);
+            }
+            if (reactions.filter(x => x.type === 4).length > 0) {
+                currImages.push(SadImage);
+            }
         }
-        if (reactions.filter(x => x.type === 2).length > 0) {
-            currImages.push(LaughImage);
-        }
-        if (reactions.filter(x => x.type === 3).length > 0) {
-            currImages.push(LikeImage);
-        }
-        if (reactions.filter(x => x.type === 4).length > 0) {
-            currImages.push(SadImage);
-        }
+
         setCurrPostReactionTypes(currImages);
     }
 
@@ -53,25 +57,25 @@ const ReactionButton = ({reactToPost, post}) => {
                 <img className='wrapper__popup__image'
                      src={LikeImage}
                      alt="Like Reaction Image"
-                     onClick={() => reactToPost(Reactions.Like)}/>
+                     onClick={() => reactTo(Reactions.Like)}/>
                 <img className='wrapper__popup__image'
                      src={HeartImage}
                      alt="Heart Reaction Image"
-                     onClick={() => reactToPost(Reactions.Heart)}/>
+                     onClick={() => reactTo(Reactions.Heart)}/>
                 <img className='wrapper__popup__image'
                      src={LaughImage}
                      alt="Laugh Reaction Image"
-                     onClick={() => reactToPost(Reactions.Laugh)}/>
+                     onClick={() => reactTo(Reactions.Laugh)}/>
                 <img className='wrapper__popup__image'
                      src={SadImage}
                      alt="Sad Reaction Image"
-                     onClick={() => reactToPost(Reactions.Sad)}/>
+                     onClick={() => reactTo(Reactions.Sad)}/>
             </div>
             <div className='wrapper__reactions'>
-                <span className='wrapper__reactions__count'>{reactions && reactions.length}</span>
-                {currPostReactionTypes.map(x => (<img className='wrapper__reactions__image'
+                {areReactionsVisible ? <span className='wrapper__reactions__count'>{reactions && reactions.length}</span> : '' }
+                {areReactionsVisible ? currPostReactionTypes.map(x => (<img className='wrapper__reactions__image'
                                                      src={x}
-                                                     alt='Reaction Image'/>))}
+                                                     alt='Reaction Image'/>)) : ''}
             </div>
             <div className='wrapper__buttonSection'>
                 <Button type='OutlineGreen'>Реагирай</Button>

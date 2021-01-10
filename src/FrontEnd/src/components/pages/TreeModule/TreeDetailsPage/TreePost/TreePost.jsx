@@ -41,7 +41,7 @@ const TreePost = ({data, fetchTreePosts}) => {
                 {parse(post.content)}
             </div>
             <div>
-                <ReactionButton reactToPost={reactToPost} post={post}/>
+                <ReactionButton reactTo={reactToPost} item={post} reactionsVisible={true}/>
             </div>
         </div>
     );
