@@ -30,6 +30,16 @@
     height: 400px;
     animation: fadeIn 1s 0ms forwards;
 
+    &__item {
+      border-right: 1px solid #002F3E;
+      padding: 0 16px;
+      cursor: pointer;
+
+      img {
+        width: 30px;
+        margin-left: 5px;
+      }
+    }
     .closeButton {
       position: absolute;
       top: 15px;
