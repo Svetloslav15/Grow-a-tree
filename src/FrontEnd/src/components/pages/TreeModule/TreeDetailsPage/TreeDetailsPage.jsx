@@ -152,8 +152,20 @@ const TreeDetailsPage = ({history, match}) => {
         }, 5000)
     }
 
-    const reactToTree = async () => {
+    const reactToTree = async (reactionType) => {
+        const data = {
+            type: reactionType,
+            userId: currUser.id,
+            treeId: tree.id
+        };
 
+        const response = await TreeService.postAuthorizedReactToTree(data, currUser.accessToken);
+        if (response.succeeded) {
+            AlertService.success(SuccessMessages.successReactedToTree);
+            fetchTreeReactions();
+        } else {
+            AlertService.error(response.errors[0]);
+        }
     }
 
     return (
