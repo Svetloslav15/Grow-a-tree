@@ -15,11 +15,12 @@
     background-color: white;
     z-index: 101;
     width: 50%;
-    top: 20%;
+    top: 10%;
     left: 25%;
     border: 2px solid #002F3E;
-    height: 400px;
+    height: fit-content;
     animation: fadeIn 1s 0ms forwards;
+    justify-content: center;
 
     &__title {
       color: #002F3E;
@@ -32,6 +33,10 @@
       border-bottom: 1px solid #002F3E;
       margin-bottom: 0;
     }
+
+    &__form {
+      padding: 1rem 2rem;
+    }
   }
 }
 
@@ -43,12 +48,14 @@
   position: absolute;
   top: 0;
   right: 0;
+  z-index: -1;
 }
 
 .bgShapeImage:nth-child(2) {
   position: absolute;
   bottom: 0;
   left: 0;
+  z-index: -1;
 }
 
 .closeButton {
