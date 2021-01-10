@@ -27,7 +27,7 @@ function getDifference(dateFuture, dateNow, isJson) {
     }
 
     if (hours > 0) {
-        difference += (hours === 1) ? `${hours} час, ` : `${hours} часове, `;
+        difference += (hours === 1) ? `${hours} час, ` : `${hours} часа, `;
     }
 
     difference += (minutes === 0 || hours === 1) ? `${minutes} минута` : `${minutes} минути`;

@@ -17,6 +17,7 @@ import TreePost from './TreePost/TreePost';
 import GeoCodingService from '../../../../services/geocodingService';
 import ReactionButton from '../../../common/ReactionButton/ReactionButton';
 import ListModal from "./ListModal/ListModal";
+import WateringModal from "./WateringModal/WateringModal";
 
 const ReportButton = require('../../../../assets/report-button.svg');
 const HeartIcon = require('../../../../assets/reaction-heart.png');
@@ -33,6 +34,7 @@ const TreeDetailsPage = ({history, match}) => {
     const [treeLocation, setLocation] = useState('');
     const [currPost, setCurrPost] = useState({id: ''});
     const [isWateringModalOpen, toggleIsWateringModalOpen] = useState(false);
+    const [isSuccessWateringModalOpen, toggleIsSuccessWateringModalOpen] = useState(true);
     const currUser = useSelector(state => state.auth);
     const [currWateringPage, setCurrWateringPage] = useState(1);
     const [treeWaterings, setTreeWaterings] = useState([]);
@@ -144,12 +146,15 @@ const TreeDetailsPage = ({history, match}) => {
                         </div>
                         <div className='action-section ml-4'>
                             <div className='action-section__item' onClick={() => toggleIsWateringModalOpen(!isWateringModalOpen)}>
-                                <span className='action-section__item__counter'>89</span>
+                                <span className='action-section__item__counter'>{treeWaterings.length}</span>
                                 <img  className='action-section__item__image' src={DropIcon} alt=""/>
                             </div>
                             <Button type='DarkOutline' onClick={waterTree}>Полей</Button>
                             {
                                 isWateringModalOpen && (<ListModal data={treeWaterings} closeModal={() => toggleIsWateringModalOpen(false)}/>)
+                            }
+                            {
+                                isSuccessWateringModalOpen && (<WateringModal xp={45} closeModal={() => toggleIsSuccessWateringModalOpen(false)}/>)
                             }
                         </div>
                     </div>
