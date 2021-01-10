@@ -7,6 +7,7 @@ import ReactionButton from '../../../../common/ReactionButton/ReactionButton';
 import TreeService from '../../../../../services/treeService';
 import AlertService from '../../../../../services/alertService';
 import SuccessMessages from '../../../../../static/successMessages';
+import RepliesSection from "../RepliesSection/RepliesSection";
 
 const TreePost = ({data, fetchTreePosts}) => {
     const [post, setPost] = useState(data);
@@ -46,6 +47,7 @@ const TreePost = ({data, fetchTreePosts}) => {
                                 reactionsVisible={true}
                                 hasBorder={true}/>
             </div>
+            <RepliesSection/>
         </div>
     );
 }

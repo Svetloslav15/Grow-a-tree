@@ -15,7 +15,7 @@ const ImagesAltTags = {
     LaughImage: 'Laugh Reaction Image',
 }
 
-const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder}) => {
+const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder, hasCustomButton, children}) => {
     const [reactions, setReactions] = useState(item.reactions);
     const [currReactionTypes, setCurrReactionTypes] = useState([]);
     const [isDataFetched, setIsDataFetched] = useState(false);
@@ -85,7 +85,7 @@ const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder}) => {
                                                      alt='Reaction Image'/>)) : ''}
             </div>
             <div className={styles.wrapper__buttonSection}>
-                <Button type='OutlineGreen'>Реагирай</Button>
+                {hasCustomButton ? children : <Button type='OutlineGreen'>Реагирай</Button>}
             </div>
         </div>
     )

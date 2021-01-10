@@ -4,6 +4,9 @@
   border-top: 1px solid #002F3E;
   position: relative;
   width: fit-content;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 
   &__popup {
     flex-flow: row;
@@ -12,8 +15,8 @@
     z-index: 2;
     background-color: #B7DCC6;
     border-radius: 10px;
-    top: -10px;
-    left: 4px;
+    top: -35px;
+    right: 0;
     width: 200px;
     padding: 0 15px;
 
@@ -44,7 +47,7 @@
       cursor: pointer;
       padding: 0 10px;
       position: absolute;
-      top: -6px;
+      top: 6px;
     }
 
     &__image:first-child {
