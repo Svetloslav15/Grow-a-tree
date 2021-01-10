@@ -11,6 +11,7 @@ import AlertService from '../../../../../services/alertService';
 
 import ContentTypes from '../../../../../static/contentTypes';
 import SuccessMessages from "../../../../../static/successMessages";
+import treeReportTypes from "../../../../../static/treeReportType";
 
 const BgShapeTwo = require('../../../../../assets/bg-shape-2.png');
 const BgShapeThree = require('../../../../../assets/bg-shape-3.png');
@@ -22,7 +23,8 @@ const ReportModal = ({closeModal, treeId}) => {
 
     const addReport = async () => {
         const formData = new FormData();
-        formData.append('type', data.type);
+
+        formData.append('type', treeReportTypes[data.type]);
         formData.append('message', data.message);
         formData.append('imageFile', data.imageFile);
         formData.append('treeId', data.treeId);
@@ -32,7 +34,7 @@ const ReportModal = ({closeModal, treeId}) => {
 
         if (response.succeeded) {
             setData({});
-            return await AlertService.success(SuccessMessages.successAddedTree);
+            return await AlertService.success(SuccessMessages.successReportTree);
         }
         return await AlertService.error(response.errors[0]);
     }
@@ -58,7 +60,7 @@ const ReportModal = ({closeModal, treeId}) => {
                                 onChange={handleChange}
                                 id='message'/>
                     <DropdownField defaultValue='Липсващо'
-                                   values={['Счупено', 'Увехнало']}
+                                   values={['Счупено', 'Изсъхнало', 'Наранено']}
                                    onChange={handleChange}
                                    id='type'/>
                     <FileInput onChange={handleFilesUpload} isMultiple={false}/>

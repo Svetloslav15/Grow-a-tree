@@ -62,7 +62,6 @@ const AddTreePage = ({}) => {
         formData.append('longitude', data.longitude);
         formData.append('City', data.city);
         formData.append('ownerId', currUser.id);
-
         const res = await TreeService.postAuthorizedAddTree(formData, currUser.accessToken, ContentTypes.FormData);
 
         if (res.succeeded) {

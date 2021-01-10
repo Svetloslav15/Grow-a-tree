@@ -11,5 +11,6 @@ export default {
     successAddedTreePost: 'Успешно добавихте пост за дървото!',
     successAddedPostReaction: 'Успешно реагирахте на пост!',
     successWaterTree: 'Успешно поляхте дърво!',
-    successReactedToTree: 'Успешно реагирахте на дърво!'
+    successReactedToTree: 'Успешно реагирахте на дърво!',
+    successReportTree: 'Успешно докладвахте проблем!'
 }
