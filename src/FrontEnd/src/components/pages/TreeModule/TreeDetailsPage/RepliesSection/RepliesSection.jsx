@@ -18,12 +18,19 @@ const RepliesSection = ({replies, postId}) => {
     const currUser = useSelector(state => state.auth);
 
     useEffect(() => {
-        setReplies(replies.filter(x => x.treePostId === postId));
+        fetchTreePostReplies();
         setPostId(postId);
-    }, [replies, postId]);
+    }, [postId]);
 
     const reactToReply = () => {
 
+    }
+
+    const fetchTreePostReplies = async () => {
+        const response = await TreeService.getAuthorizedTreePostReplies(`?page=1&perPage=10000`, currUser.accessToken);
+        if (response.data.succeeded) {
+            setReplies(response.data.data.filter(x => x.treePostId === postId));
+        }
     }
 
     const openAddReplyInput = () => {
@@ -46,7 +53,7 @@ const RepliesSection = ({replies, postId}) => {
         }, currUser.accessToken);
 
         if (response.succeeded) {
-            setReplies([...repliesData, response.data]);
+            await fetchTreePostReplies();
             return await AlertService.success(SuccessMessages.successPostReply);
         }
         return await AlertService.error(response.errors[0]);
@@ -74,7 +81,7 @@ const RepliesSection = ({replies, postId}) => {
                     }}
                     onEditorChange={handleEditorChange}
                 />}
-                {repliesData.map(x => <li className={styles.wrapper__items__item}>
+                {repliesData && repliesData.map(x => <li className={styles.wrapper__items__item}>
                     <div className={styles.wrapper__items__item__userWrapper}>
                         <img src={x.userProfilePictureUrl} alt={x.userUserName}/>
                         <span>{x.userUserName}</span>
