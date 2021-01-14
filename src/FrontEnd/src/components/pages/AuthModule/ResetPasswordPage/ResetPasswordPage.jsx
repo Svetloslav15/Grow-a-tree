@@ -27,7 +27,7 @@ const ResetPasswordPage = ({location}) => {
     };
 
     return (
-        <>
+        <div className='pt-5 mt-5'>
             <img src={BgShape3} className='shape3'/>
             <img src={BgShape4} className='shape4'/>
             <div className={`col-md-12 ${style.sectionWrapper}`}>
@@ -46,7 +46,7 @@ const ResetPasswordPage = ({location}) => {
                     <Button type={'DarkOutline'} className={'mb-5'} onClick={handleSubmit}>Смени</Button>
                 </div>
             </div>
-        </>
+        </div>
     )
 };
 

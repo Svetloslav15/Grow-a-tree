@@ -43,7 +43,7 @@ const AddTreePage = ({}) => {
     };
 
     const handleFilesUpload = (event) => {
-        setData({files: event.target.files, ...data})
+        setData({...data, files: event.target.files})
     };
 
     const handleSubmit = async () => {
@@ -62,7 +62,6 @@ const AddTreePage = ({}) => {
         formData.append('longitude', data.longitude);
         formData.append('City', data.city);
         formData.append('ownerId', currUser.id);
-
         const res = await TreeService.postAuthorizedAddTree(formData, currUser.accessToken, ContentTypes.FormData);
 
         if (res.succeeded) {

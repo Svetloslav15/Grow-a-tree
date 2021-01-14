@@ -5,7 +5,17 @@ const ROUTES = {
     getAuthorizedTreeById: '/trees/',
     getTreesForCarousel: '/trees/random-images',
     postAuthorizedUpsertTreePost: '/treePosts/upsert',
-    getAuthorizedTreePosts: '/treePosts/list'
+    getAuthorizedTreePosts: '/treePosts/list',
+    getAuthorizedTreePostReactions: '/treePostReactions/list',
+    postAuthorizedUpsertTreeReaction: '/treePostReactions/upsert',
+    postAuthorizedWaterTree: '/waterings/water-tree',
+    getAuthorizedTreeWaterings: '/waterings/tree-waterings',
+    getAuthorizedTreeReactons: '/treeReactions/tree-reactions',
+    postAuthorizedReactToTree: '/treeReactions/upsert',
+    postAuthorizedReportTree: '/treeReports/report-tree',
+    getAuthorizedTreePostReplies: '/treePostReplies/list',
+    postAuthorizedUpsertTreeReply: '/treePostReplies/upsert',
+    postAuthorizedUpsertTreeReplyReact: '/treePostReplyReactions/upsert'
 };
 
 export default new Proxy({}, {
