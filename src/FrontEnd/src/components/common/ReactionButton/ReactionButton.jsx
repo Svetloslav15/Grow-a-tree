@@ -20,7 +20,7 @@ const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder, hasCustomBu
     const [currReactionTypes, setCurrReactionTypes] = useState([]);
     const [isDataFetched, setIsDataFetched] = useState(false);
     const [isFirstTime, setFirstTime] = useState(true);
-    const [areReactionsVisible, setReactionVisible] = useState(reactionsVisible);
+    const [areaReactionsVisible, setReactionVisible] = useState(reactionsVisible);
 
     useEffect(() => {
         if (!isDataFetched) {
@@ -35,8 +35,8 @@ const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder, hasCustomBu
             checkReactionTypes();
             setIsDataFetched(false);
         }
-
-    }, [item, reactions]);
+        setReactionVisible(reactionsVisible);
+    }, [item, reactions, reactionsVisible]);
 
     const checkReactionTypes = () => {
         const currImages = [];
@@ -57,7 +57,6 @@ const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder, hasCustomBu
 
         setCurrReactionTypes(currImages);
     }
-
     return (
         <div className={`${styles.wrapper} ${(!hasBorder ? styles.noBorder : '')}`}>
             <div className={styles.wrapper__popup}>
@@ -79,8 +78,8 @@ const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder, hasCustomBu
                      onClick={() => reactTo(Reactions.Sad, item)}/>
             </div>
             <div className={styles.wrapper__reactions}>
-                {areReactionsVisible ? <span className={styles.wrapper__reactions__count}>{reactions && reactions.length}</span> : '' }
-                {areReactionsVisible ? currReactionTypes.map(x => (<img className={styles.wrapper__reactions__image}
+                {areaReactionsVisible ? <span className={styles.wrapper__reactions__count}>{reactions && reactions.length}</span> : '' }
+                {areaReactionsVisible ? currReactionTypes.map(x => (<img className={styles.wrapper__reactions__image}
                                                      src={x}
                                                      alt='Reaction Image'/>)) : ''}
             </div>

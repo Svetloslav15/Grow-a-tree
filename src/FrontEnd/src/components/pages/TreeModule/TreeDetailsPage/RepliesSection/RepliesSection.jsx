@@ -9,6 +9,18 @@ import AlertService from '../../../../../services/alertService';
 import SuccessMessages from '../../../../../static/successMessages';
 import {useSelector} from 'react-redux';
 
+const LikeImage = require('../../../../../assets/reaction-like.png');
+const HeartImage = require('../../../../../assets/reaction-heart.png');
+const SadImage = require('../../../../../assets/reaction-sad.png');
+const LaughImage = require('../../../../../assets/reaction-laugh.png');
+
+const ImagesAltTags = {
+    SadImage: 'Sad Reaction Image',
+    HeartImage: 'Heart Reaction Image',
+    LikeImage: 'Like Reaction Image',
+    LaughImage: 'Laugh Reaction Image',
+}
+
 const RepliesSection = ({replies, postId}) => {
     const [repliesData, setReplies] = useState(replies);
     const [repliesReactionsData, setRepliesReactions] = useState([]);
@@ -77,7 +89,7 @@ const RepliesSection = ({replies, postId}) => {
         }
         return await AlertService.error(response.errors[0]);
     }
-    console.log(repliesReactionsData);
+
     return (
         <div className={styles.wrapper}>
             <ul className={styles.wrapper__items}>
