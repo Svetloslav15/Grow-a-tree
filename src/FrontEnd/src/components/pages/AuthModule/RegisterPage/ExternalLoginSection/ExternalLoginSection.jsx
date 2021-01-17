@@ -15,6 +15,7 @@ const ExternalLoginSection = ({history}) => {
     const dispatch = useDispatch();
 
     const responseGoogle = async (response) => {
+        //TODO Check if response is valid
         const model = {
             "providerKey": process.env.REACT_APP_GOOGLE_PROVIDER_ID,
             "providerName": "Google",
@@ -27,6 +28,7 @@ const ExternalLoginSection = ({history}) => {
         await processData(model);
     };
     const responseFacebook = async (response) => {
+        //TODO Check if response is valid
         const model = {
             "providerKey": process.env.REACT_APP_FACEBOOK_ID,
             "providerName": "Facebook",
