@@ -11,6 +11,7 @@ import {useSelector} from 'react-redux';
 
 const RepliesSection = ({replies, postId}) => {
     const [repliesData, setReplies] = useState(replies);
+    const [repliesReactionsData, setRepliesReactions] = useState([]);
     const [currPostId, setPostId] = useState(postId);
     const [isAddReplyInputOpen, setIsAddReplyInputOpen] = useState(false);
     const [editorKey, setEditorKey] = useState(4);
@@ -29,15 +30,25 @@ const RepliesSection = ({replies, postId}) => {
         }, currUser.accessToken);
 
         if (response.succeeded) {
-            return await AlertService.success(SuccessMessages.successPostReplyReact);
+            await AlertService.success(SuccessMessages.successPostReplyReact);
+            return await fetchTreePostReplyReactions();
         }
         return await AlertService.error(response.errors[0]);
     }
 
     const fetchTreePostReplies = async () => {
-        const response = await TreeService.getAuthorizedTreePostReplies(`?page=1&perPage=10000`, currUser.accessToken);
+        let response = await TreeService.getAuthorizedTreePostReplies(`?page=1&perPage=10000`, currUser.accessToken);
         if (response.data.succeeded) {
             setReplies(response.data.data.filter(x => x.treePostId === postId));
+        }
+
+        await fetchTreePostReplyReactions();
+    }
+
+    const fetchTreePostReplyReactions = async () => {
+        const response = await TreeService.getAuthorizedTreePostReplyReactions(`?page=1&perPage=10000`, currUser.accessToken)
+        if (response.data.succeeded) {
+            setRepliesReactions(response.data.data);
         }
     }
 
@@ -66,7 +77,7 @@ const RepliesSection = ({replies, postId}) => {
         }
         return await AlertService.error(response.errors[0]);
     }
-
+    console.log(repliesReactionsData);
     return (
         <div className={styles.wrapper}>
             <ul className={styles.wrapper__items}>
@@ -100,6 +111,9 @@ const RepliesSection = ({replies, postId}) => {
                                     hasCustomButton={true}
                                     reactTo={reactToReply}
                                     item={x}>
+                        <span className={styles.wrapper__items__item__reactionsCount}>
+                            {repliesReactionsData && repliesReactionsData.filter(y => y.treePostReplyId === x.id).length}
+                        </span>
                         <i className={`${styles.fontAwesomeIcon} far fa-heart`}/>
                     </ReactionButton>
                 </li>)}

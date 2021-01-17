@@ -16,7 +16,7 @@ const ROUTES = {
     getAuthorizedTreePostReplies: '/treePostReplies/list',
     postAuthorizedUpsertTreeReply: '/treePostReplies/upsert',
     postAuthorizedUpsertTreeReplyReact: '/treePostReplyReactions/upsert',
-    getAuthorizedTreePostReplyReactions: '/treePostReplyReactions/'
+    getAuthorizedTreePostReplyReactions: '/treePostReplyReactions/list'
 };
 
 export default new Proxy({}, {
