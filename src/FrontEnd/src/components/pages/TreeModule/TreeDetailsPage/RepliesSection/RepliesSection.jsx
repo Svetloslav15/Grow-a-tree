@@ -22,12 +22,16 @@ const RepliesSection = ({replies, postId}) => {
         setPostId(postId);
     }, [postId]);
 
-    const reactToReply = async (type) => {
-        //TODO add reaction to reply
-        /*let response = await TreeService.postAuthorizedUpsertTreeReaction({
+    const reactToReply = async (type, data) => {
+        let response = await TreeService.postAuthorizedUpsertTreeReplyReact({
             type,
             treePostReplyId: data.id
-        }, currUser.accessToken);*/
+        }, currUser.accessToken);
+
+        if (response.succeeded) {
+            return await AlertService.success(SuccessMessages.successPostReplyReact);
+        }
+        return await AlertService.error(response.errors[0]);
     }
 
     const fetchTreePostReplies = async () => {

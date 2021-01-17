@@ -64,19 +64,19 @@ const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder, hasCustomBu
                 <img className={styles.wrapper__popup__image}
                      src={LikeImage}
                      alt={ImagesAltTags.LikeImage}
-                     onClick={() => reactTo(Reactions.Like)}/>
+                     onClick={() => reactTo(Reactions.Like, item)}/>
                 <img className={styles.wrapper__popup__image}
                      src={HeartImage}
                      alt={ImagesAltTags.HeartImage}
-                     onClick={() => reactTo(Reactions.Heart)}/>
+                     onClick={() => reactTo(Reactions.Heart, item)}/>
                 <img className={styles.wrapper__popup__image}
                      src={LaughImage}
                      alt={ImagesAltTags.LaughImage}
-                     onClick={() => reactTo(Reactions.Laugh)}/>
+                     onClick={() => reactTo(Reactions.Laugh, item)}/>
                 <img className={styles.wrapper__popup__image}
                      src={SadImage}
                      alt={ImagesAltTags.SadImage}
-                     onClick={() => reactTo(Reactions.Sad)}/>
+                     onClick={() => reactTo(Reactions.Sad, item)}/>
             </div>
             <div className={styles.wrapper__reactions}>
                 {areReactionsVisible ? <span className={styles.wrapper__reactions__count}>{reactions && reactions.length}</span> : '' }
