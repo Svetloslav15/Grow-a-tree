@@ -12,11 +12,17 @@ const UserImage = require('../../../../../assets/user-profile.png');
 const MapSection = () => {
     const currUser = useSelector(state => state.auth);
     const [trees, setTrees] = useState([]);
+    const [markers, setMarkers] = useState([]);
 
     useEffect(() => {
         TreeService.getAuthorizedTreeById(`?&perPage=8000000`, currUser.accessToken)
             .then(data => {
                 setTrees(data.data.data);
+                let currMarkers = [];
+                data.data.data.forEach(x => {
+                    currMarkers.push({latitude: x.latitude, longitude: x.longitude});
+                });
+                setMarkers(currMarkers);
             })
     }, []);
     return (
@@ -29,7 +35,7 @@ const MapSection = () => {
                     </Button>
                 </div>
                 <div className={style.wrapper__mapSection__wrapper}>
-                    <Map/>
+                    <Map markers={markers}/>
                 </div>
             </div>
             <div className={`col-md-4 ${style.wrapper__treesSection}`}>

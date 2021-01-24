@@ -277,7 +277,8 @@ const TreeDetailsPage = ({history, match}) => {
                 <div className={styles.infoSection__mapWrapper}>
                     <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}
                          isStatic={true}
-                         className={styles.mapContainerSection}/>
+                         className={styles.mapContainerSection}
+                         markers={[]}/>
                 </div>
             </section>
             <div className={styles.infoSection__posts}>
