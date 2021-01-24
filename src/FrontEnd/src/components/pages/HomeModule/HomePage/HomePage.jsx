@@ -8,6 +8,7 @@ import Button from '../../../common/Button/Button';
 import Carousel from './Carousel/Carousel';
 import TreesAroundMe from './TreesAroundMe/TreesAroundMe';
 import RecentTrees from './RecentTrees/RecentTrees';
+import MapSection from './MapSection/MapSection';
 
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
 const BgShape2 = require('../../../../assets/bg-shape-2.png');
@@ -18,6 +19,7 @@ const HomePage = () => {
     const currUser = useSelector(state => state.auth);
     return (
         <div className='pt-5 mt-5'>
+            {!currUser.id && <MapSection/>}
             {!currUser.id ? <div className={`${style.wrapper} page-wrapper`}>
                 <div className='col-md-12 text-center'>
                     <img src={TreeBgImage} className={style.treeBg} alt="Grow A Tree Bg Image"/>
