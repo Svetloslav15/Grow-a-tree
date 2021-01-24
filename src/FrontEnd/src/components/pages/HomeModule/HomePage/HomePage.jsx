@@ -19,7 +19,7 @@ const HomePage = () => {
     const currUser = useSelector(state => state.auth);
     return (
         <div className='pt-5 mt-5'>
-            {!currUser.id && <MapSection/>}
+            {currUser.id && <MapSection/>}
             {!currUser.id ? <div className={`${style.wrapper} page-wrapper`}>
                 <div className='col-md-12 text-center'>
                     <img src={TreeBgImage} className={style.treeBg} alt="Grow A Tree Bg Image"/>

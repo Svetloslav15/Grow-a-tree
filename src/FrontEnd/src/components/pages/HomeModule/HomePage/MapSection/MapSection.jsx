@@ -1,17 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+
 import style from './MapSection.module.scss';
 import Button from '../../../../common/Button/Button';
-import Map from "../../../../common/Map/Map";
+import Map from '../../../../common/Map/Map';
+import TreeService from '../../../../../services/treeService';
 
 const UserImage = require('../../../../../assets/user-profile.png');
 
 const MapSection = () => {
+    const currUser = useSelector(state => state.auth);
+    const [trees, setTrees] = useState([]);
+
+    useEffect(() => {
+        TreeService.getAuthorizedTreeById(`?&perPage=8000000`, currUser.accessToken)
+            .then(data => {
+                setTrees(data.data.data);
+            })
+    }, []);
     return (
         <div className={`col-md-12 row ${style.wrapper}`}>
             <div className={`col-md-8 ${style.wrapper__mapSection}`}>
                 <div className={style.wrapper__mapSection__info}>
                     <h1 className={style.wrapper__mapSection__info__title}>Карта на дървета</h1>
-                    <Button type='DarkOutline'># Засади дърво</Button>
+                    <Button type='DarkOutline'>
+                        <Link to='/trees/add'># Засади дърво</Link>
+                    </Button>
                 </div>
                 <div className={style.wrapper__mapSection__wrapper}>
                     <Map/>
