@@ -2,11 +2,10 @@ import React, {useState, useRef, useEffect} from 'react';
 import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 import * as style from './Map.module.scss';
 
-const MapContainer = ({handleCoordinates, coordinates, isStatic, className, markers}) => {
+const MapContainer = ({handleCoordinates, coordinates, isStatic, className, markers, canSetMarker, onMarkerClick}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});
 
     useEffect(() => {
-        console.log(markers);
         if (coordinates) {
             setMarker({position: {lat: coordinates.latitude, lng: coordinates.longitude}});
         } else {
@@ -19,13 +18,14 @@ const MapContainer = ({handleCoordinates, coordinates, isStatic, className, mark
     };
 
     const getNewCoordinates = async (t, map, coord) => {
-        if (isStatic) {
-            return
+        if (isStatic || !canSetMarker) {
+            return;
         }
 
         const {latLng} = coord;
         const lat = await latLng.lat();
         const lng = await latLng.lng();
+
         setMarker({
             position: {lat, lng}
         });
@@ -45,11 +45,15 @@ const MapContainer = ({handleCoordinates, coordinates, isStatic, className, mark
                                                   lat: marker.position.lat,
                                                   lng: marker.position.lng
                                               }}>
-                <Marker position={marker.position}/>
-                {markers.map((mark, index) => <Marker key={index} position={{
-                    lat: mark.latitude,
-                    lng: mark.longitude
-                }}/>)}
+                {canSetMarker && <Marker position={marker.position}/>}
+                {markers.map((mark, index) =>
+                    <Marker key={index}
+                            position={{
+                                lat: mark.latitude,
+                                lng: mark.longitude
+                            }}
+                            onClick={() => onMarkerClick(mark)}
+                    />)}
             </Map> : ''}
         </div>
     );

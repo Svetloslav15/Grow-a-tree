@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, withRouter } from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
 import style from './MapSection.module.scss';
@@ -9,7 +9,7 @@ import TreeService from '../../../../../services/treeService';
 
 const UserImage = require('../../../../../assets/user-profile.png');
 
-const MapSection = () => {
+const MapSection = ({history}) => {
     const currUser = useSelector(state => state.auth);
     const [trees, setTrees] = useState([]);
     const [markers, setMarkers] = useState([]);
@@ -25,6 +25,12 @@ const MapSection = () => {
                 setMarkers(currMarkers);
             })
     }, []);
+
+    const navigateToTreePage = (mark) => {
+        const currTree = trees.filter(x => x.latitude === mark.latitude && x.longitude === mark.longitude)[0];
+        history.push(`/trees/details/${currTree.id}`);
+    }
+
     return (
         <div className={`col-md-12 row ${style.wrapper}`}>
             <div className={`col-md-8 ${style.wrapper__mapSection}`}>
@@ -35,7 +41,7 @@ const MapSection = () => {
                     </Button>
                 </div>
                 <div className={style.wrapper__mapSection__wrapper}>
-                    <Map markers={markers}/>
+                    <Map markers={markers} onMarkerClick={navigateToTreePage}/>
                 </div>
             </div>
             <div className={`col-md-4 ${style.wrapper__treesSection}`}>
@@ -55,4 +61,4 @@ const MapSection = () => {
     )
 }
 
-export default MapSection;
+export default withRouter(MapSection);

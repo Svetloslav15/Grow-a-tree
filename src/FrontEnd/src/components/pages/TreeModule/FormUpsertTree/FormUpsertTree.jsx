@@ -54,7 +54,8 @@ const FormUpsertTree = ({title, data, type, location, handleChange, handleFilesU
                 <div className={`${style.mapContainer} col-md-5`}>
                     <p>Местоположение: <span className='font-weight-bold'>{location}</span></p>
                     <Map handleCoordinates={handleCoordinates}
-                         markers={[]}/>
+                         markers={[]}
+                         canSetMarker={true}/>
                 </div>
             </div>
         </div>
