@@ -1,4 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
+
 import {Link} from 'react-router-dom';
 import * as style from './HomePage.module.scss';
 
@@ -13,9 +15,10 @@ const BgShape5 = require('../../../../assets/bg-shape-5.png');
 const TreeBgImage = require('../../../../assets/tree-for-bg.png');
 
 const HomePage = () => {
+    const currUser = useSelector(state => state.auth);
     return (
         <div className='pt-5 mt-5'>
-            <div className={`${style.wrapper} page-wrapper`}>
+            {!currUser.id ? <div className={`${style.wrapper} page-wrapper`}>
                 <div className='col-md-12 text-center'>
                     <img src={TreeBgImage} className={style.treeBg} alt="Grow A Tree Bg Image"/>
                 </div>
@@ -28,10 +31,10 @@ const HomePage = () => {
                         <Button type='Dark' className={style.button}>Започни своето приключение</Button>
                     </Link>
                 </div>
-            </div>
+            </div> : ''}
             <Carousel/>
-            <RecentTrees/>
-            <TreesAroundMe/>
+            {!currUser.id && <RecentTrees/>}
+            {currUser.id && <TreesAroundMe/>}
         </div>
     );
 };
