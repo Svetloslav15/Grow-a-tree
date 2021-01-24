@@ -3,12 +3,13 @@ import {Link} from 'react-router-dom';
 import style from './RecentTrees.module.scss';
 
 const BgImage = require('../../../../../assets/recent-trees-bg.png');
+const UserImage = require('../../../../../assets/user-profile.png');
 
 const RecentTrees = () => {
 
     return (
         <div className={`col-md-12 row ${style.wrapper}`}>
-            <div className={`col-md-6 ${style.wrapper__infoSection}`}>
+            <div className={`col-md-8 ${style.wrapper__infoSection}`}>
                 <img className={style.wrapper__infoSection__bgImage} src={BgImage} alt="Trees Forest Home"/>
                 <Link to='/trees/add'>
                     <span className={style.wrapper__infoSection__button}># ЗАСАДИ ДЪРВО</span>
@@ -17,11 +18,11 @@ const RecentTrees = () => {
                     dolor earum esse, magni maxime neque nulla optio, pariatur perferendis quis rem voluptate. At
                     commodi laborum sequi.</p>
             </div>
-            <div className={style.wrapper__treesSection}>
+            <div className={`col-md-4 ${style.wrapper__treesSection}`}>
                 <h3 className={style.wrapper__treesSection__title}>Последно засадени</h3>
                 <ul className={style.wrapper__treesSection__items}>
                     <li className={style.wrapper__treesSection__items__item}>
-                        <img className={style.wrapper__treesSection__items__item__userImage} src="" alt=""/>
+                        <img className={style.wrapper__treesSection__items__item__userImage} src={UserImage} alt=""/>
                         <div className={style.wrapper__treesSection__items__item__user}>
                             <p className={style.wrapper__treesSection__items__item__user__name}>Svetloslav Novoselski</p>
                             <p className={style.wrapper__treesSection__items__item__user__date}>10/10/2020, 1:49:39 PM</p>

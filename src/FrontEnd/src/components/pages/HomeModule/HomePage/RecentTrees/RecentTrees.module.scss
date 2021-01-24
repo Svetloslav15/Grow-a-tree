@@ -8,9 +8,11 @@
     min-height: 100vh;
     flex-flow: column;
     justify-content: space-evenly;
+
     a {
       margin: 0 auto;
     }
+
     &__bgImage {
       position: absolute;
       width: 100%;
@@ -35,26 +37,50 @@
   }
 
   &__treesSection {
+    font-family: "Raleway", sans-serif;
+    background-color: white;
+    border: 2px solid #002F3E;
+    padding: 0 !important;
+
     &__title {
-
+      border-bottom: 2px solid #002F3E;
+      padding: 1rem;
+      font-size: 20px;
+      font-weight: bold;
     }
-    &__items {
-      &__item {
-        &__userImage {
 
+    &__items {
+      max-height: 100vh;
+      overflow-y: scroll;
+      &__item {
+        list-style: none;
+        display: flex;
+        padding: 1rem 0;
+        justify-content: space-around;
+        border-bottom: 2px solid #002F3E;
+        margin: 0 1rem;
+
+        &__userImage {
+          width: 50px;
+          height: 50px;
         }
 
         &__user {
           &__name {
-
+            font-size: 18px;
+            font-weight: bold;
           }
 
           &__date {
-
+            font-size: 14px;
           }
 
           &__tree {
-
+            background: #A9CE4C;
+            height: fit-content;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
           }
         }
       }
