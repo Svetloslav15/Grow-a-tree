@@ -1,0 +1,63 @@
+.wrapper {
+  min-height: 100vh;
+
+  &__infoSection {
+    position: relative;
+    height: 100%;
+    display: flex;
+    min-height: 100vh;
+    flex-flow: column;
+    justify-content: space-evenly;
+    a {
+      margin: 0 auto;
+    }
+    &__bgImage {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    &__button {
+      background-color: rgba(62, 143, 22, 0.8);
+      color: white;
+      padding: 1rem 3rem;
+      font-size: 40px;
+      border-top-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      border: 2px solid white;
+    }
+
+    &__text {
+      color: white;
+      padding: 1rem;
+    }
+  }
+
+  &__treesSection {
+    &__title {
+
+    }
+    &__items {
+      &__item {
+        &__userImage {
+
+        }
+
+        &__user {
+          &__name {
+
+          }
+
+          &__date {
+
+          }
+
+          &__tree {
+
+          }
+        }
+      }
+    }
+  }
+}

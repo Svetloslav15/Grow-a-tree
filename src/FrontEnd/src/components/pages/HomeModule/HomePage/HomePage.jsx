@@ -4,7 +4,8 @@ import * as style from './HomePage.module.scss';
 
 import Button from '../../../common/Button/Button';
 import Carousel from './Carousel/Carousel';
-import TreesAroundMe from "./TreesAroundMe/TreesAroundMe";
+import TreesAroundMe from './TreesAroundMe/TreesAroundMe';
+import RecentTrees from './RecentTrees/RecentTrees';
 
 const BgShape1 = require('../../../../assets/bg-shape-1.png');
 const BgShape2 = require('../../../../assets/bg-shape-2.png');
@@ -29,6 +30,7 @@ const HomePage = () => {
                 </div>
             </div>
             <Carousel/>
+            <RecentTrees/>
             <TreesAroundMe/>
         </div>
     );
