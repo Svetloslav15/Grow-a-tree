@@ -9,8 +9,21 @@ import AlertService from '../../../../../services/alertService';
 import SuccessMessages from '../../../../../static/successMessages';
 import {useSelector} from 'react-redux';
 
+const LikeImage = require('../../../../../assets/reaction-like.png');
+const HeartImage = require('../../../../../assets/reaction-heart.png');
+const SadImage = require('../../../../../assets/reaction-sad.png');
+const LaughImage = require('../../../../../assets/reaction-laugh.png');
+
+const ImagesAltTags = {
+    SadImage: 'Sad Reaction Image',
+    HeartImage: 'Heart Reaction Image',
+    LikeImage: 'Like Reaction Image',
+    LaughImage: 'Laugh Reaction Image',
+}
+
 const RepliesSection = ({replies, postId}) => {
     const [repliesData, setReplies] = useState(replies);
+    const [repliesReactionsData, setRepliesReactions] = useState([]);
     const [currPostId, setPostId] = useState(postId);
     const [isAddReplyInputOpen, setIsAddReplyInputOpen] = useState(false);
     const [editorKey, setEditorKey] = useState(4);
@@ -22,18 +35,32 @@ const RepliesSection = ({replies, postId}) => {
         setPostId(postId);
     }, [postId]);
 
-    const reactToReply = async (type) => {
-        //TODO add reaction to reply
-        /*let response = await TreeService.postAuthorizedUpsertTreeReaction({
+    const reactToReply = async (type, data) => {
+        let response = await TreeService.postAuthorizedUpsertTreeReplyReact({
             type,
             treePostReplyId: data.id
-        }, currUser.accessToken);*/
+        }, currUser.accessToken);
+
+        if (response.succeeded) {
+            await AlertService.success(SuccessMessages.successPostReplyReact);
+            return await fetchTreePostReplyReactions();
+        }
+        return await AlertService.error(response.errors[0]);
     }
 
     const fetchTreePostReplies = async () => {
-        const response = await TreeService.getAuthorizedTreePostReplies(`?page=1&perPage=10000`, currUser.accessToken);
+        let response = await TreeService.getAuthorizedTreePostReplies(`?page=1&perPage=10000`, currUser.accessToken);
         if (response.data.succeeded) {
             setReplies(response.data.data.filter(x => x.treePostId === postId));
+        }
+
+        await fetchTreePostReplyReactions();
+    }
+
+    const fetchTreePostReplyReactions = async () => {
+        const response = await TreeService.getAuthorizedTreePostReplyReactions(`?page=1&perPage=10000`, currUser.accessToken)
+        if (response.data.succeeded) {
+            setRepliesReactions(response.data.data);
         }
     }
 
@@ -96,6 +123,9 @@ const RepliesSection = ({replies, postId}) => {
                                     hasCustomButton={true}
                                     reactTo={reactToReply}
                                     item={x}>
+                        <span className={styles.wrapper__items__item__reactionsCount}>
+                            {repliesReactionsData && repliesReactionsData.filter(y => y.treePostReplyId === x.id).length}
+                        </span>
                         <i className={`${styles.fontAwesomeIcon} far fa-heart`}/>
                     </ReactionButton>
                 </li>)}

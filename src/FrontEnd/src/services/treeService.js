@@ -15,7 +15,9 @@ const ROUTES = {
     postAuthorizedReportTree: '/treeReports/report-tree',
     getAuthorizedTreePostReplies: '/treePostReplies/list',
     postAuthorizedUpsertTreeReply: '/treePostReplies/upsert',
-    postAuthorizedUpsertTreeReplyReact: '/treePostReplyReactions/upsert'
+    postAuthorizedUpsertTreeReplyReact: '/treePostReplyReactions/upsert',
+    getAuthorizedTreePostReplyReactions: '/treePostReplyReactions/list',
+    getNearestTrees: '/trees/closest-trees-short-info'
 };
 
 export default new Proxy({}, {

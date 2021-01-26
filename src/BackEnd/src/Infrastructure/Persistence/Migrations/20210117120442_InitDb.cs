@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GrowATree.Infrastructure.Migrations
+namespace GrowATree.Infrastructure.Persistence.Migrations
 {
     public partial class InitDb : Migration
     {

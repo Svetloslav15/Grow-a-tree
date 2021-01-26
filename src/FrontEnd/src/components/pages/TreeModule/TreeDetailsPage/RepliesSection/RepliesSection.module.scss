@@ -21,6 +21,37 @@
         }
       }
 
+      &__reactionsCount {
+        font-size: 20px;
+        font-weight: bold;
+        margin-right: 6px;
+      }
+
+      &__image {
+        width: 45px;
+        height: 45px;
+        object-fit: contain;
+        cursor: pointer;
+        padding: 0 10px;
+        position: absolute;
+        top: 6px;
+      }
+
+      &__reactions {
+        &__image:first-child {
+          left: 0;
+        }
+        &__image:nth-child(2) {
+          left: 15px;
+        }
+        &__image:nth-child(3) {
+          left: 30px;
+        }
+        &__image:nth-child(4) {
+          left: 45px;
+        }
+      }
+
       &__content {
         font-size: 14px;
         padding: 5px 0;

@@ -20,7 +20,7 @@ const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder, hasCustomBu
     const [currReactionTypes, setCurrReactionTypes] = useState([]);
     const [isDataFetched, setIsDataFetched] = useState(false);
     const [isFirstTime, setFirstTime] = useState(true);
-    const [areReactionsVisible, setReactionVisible] = useState(reactionsVisible);
+    const [areaReactionsVisible, setReactionVisible] = useState(reactionsVisible);
 
     useEffect(() => {
         if (!isDataFetched) {
@@ -35,8 +35,8 @@ const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder, hasCustomBu
             checkReactionTypes();
             setIsDataFetched(false);
         }
-
-    }, [item, reactions]);
+        setReactionVisible(reactionsVisible);
+    }, [item, reactions, reactionsVisible]);
 
     const checkReactionTypes = () => {
         const currImages = [];
@@ -57,30 +57,29 @@ const ReactionButton = ({reactTo, item, reactionsVisible, hasBorder, hasCustomBu
 
         setCurrReactionTypes(currImages);
     }
-
     return (
         <div className={`${styles.wrapper} ${(!hasBorder ? styles.noBorder : '')}`}>
             <div className={styles.wrapper__popup}>
                 <img className={styles.wrapper__popup__image}
                      src={LikeImage}
                      alt={ImagesAltTags.LikeImage}
-                     onClick={() => reactTo(Reactions.Like)}/>
+                     onClick={() => reactTo(Reactions.Like, item)}/>
                 <img className={styles.wrapper__popup__image}
                      src={HeartImage}
                      alt={ImagesAltTags.HeartImage}
-                     onClick={() => reactTo(Reactions.Heart)}/>
+                     onClick={() => reactTo(Reactions.Heart, item)}/>
                 <img className={styles.wrapper__popup__image}
                      src={LaughImage}
                      alt={ImagesAltTags.LaughImage}
-                     onClick={() => reactTo(Reactions.Laugh)}/>
+                     onClick={() => reactTo(Reactions.Laugh, item)}/>
                 <img className={styles.wrapper__popup__image}
                      src={SadImage}
                      alt={ImagesAltTags.SadImage}
-                     onClick={() => reactTo(Reactions.Sad)}/>
+                     onClick={() => reactTo(Reactions.Sad, item)}/>
             </div>
             <div className={styles.wrapper__reactions}>
-                {areReactionsVisible ? <span className={styles.wrapper__reactions__count}>{reactions && reactions.length}</span> : '' }
-                {areReactionsVisible ? currReactionTypes.map(x => (<img className={styles.wrapper__reactions__image}
+                {areaReactionsVisible ? <span className={styles.wrapper__reactions__count}>{reactions && reactions.length}</span> : '' }
+                {areaReactionsVisible ? currReactionTypes.map(x => (<img className={styles.wrapper__reactions__image}
                                                      src={x}
                                                      alt='Reaction Image'/>)) : ''}
             </div>
