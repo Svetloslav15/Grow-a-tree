@@ -39,7 +39,7 @@ const Sidebar = ({history}) => {
             <div>
                 <Item link='/users/my-info' text='Моят профил' icon='user'/>
                 <Item link='/auth/reset-password' text='Смени парола' icon='user'/>
-                <Item link='/' text='Моите дървета' icon='user'/>
+                <Item link='/users/my-trees' text='Моите дървета' icon='user'/>
                 <Item link='/' text='Моите събития' icon='user'/>
                 <Item link='/' text='Предизвикателства' icon='user'/>
                 <Item link='/' text='Сертификати' icon='user'/>

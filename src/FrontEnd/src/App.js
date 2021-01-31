@@ -23,6 +23,7 @@ import AnonymousRoute from './components/common/AnonymousRoute/AnonymousRoute';
 import AddTreePage from './components/pages/TreeModule/AddTreePage/AddTreePage';
 import EditTreePage from './components/pages/TreeModule/EditTreePage/EditTreePage';
 import TreeDetailsPage from "./components/pages/TreeModule/TreeDetailsPage/TreeDetailsPage";
+import MyTreesPage from "./components/pages/UserModule/MyTreesPage/MyTreesPage";
 
 const App = () => (
     <>
@@ -38,6 +39,7 @@ const App = () => (
             <AnonymousRoute exact path='/auth/forgotten-password' component={ForgottenPassword}/>
             <Route exact path='/auth/resend-confirmation-link' component={ResendConfirmationLinkPage}/>
             <PrivateRoute exact path='/users/my-info' component={UserInfoPage}/>
+            <PrivateRoute exact path='/users/my-trees' component={MyTreesPage}/>
             <PrivateRoute exact path='/users/referral' component={ReferralPage}/>
             <PrivateRoute exact path='/trees/add' component={AddTreePage}/>
             <PrivateRoute exact path='/trees/edit/:id' component={EditTreePage}/>
