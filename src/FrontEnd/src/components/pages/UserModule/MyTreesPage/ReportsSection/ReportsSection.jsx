@@ -1,8 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import * as style from './ReportsSection.module.scss';
 import Button from '../../../../common/Button/Button';
+import TreeService from '../../../../../services/treeService';
 
 const ReportsSection = () => {
+    const [activeReportTypes, setActiveReportsTypes] = useState([]);
+
+    useEffect(() => {
+TreeService.getAuthorizedActiveReportTypes(`?treeId`)
+    }, []);
     return (
         <div className={`col-md-12 p-3 row ${style.wrapper}`}>
             <div className={`col-md-5 ${style.wrapper__typesSection}`}>
@@ -27,6 +33,57 @@ const ReportsSection = () => {
                 </div>
                 <div className={style.wrapper__reports__list}>
 
+                    <div className={style.wrapper__reports__list__item}>
+                        <div className={style.wrapper__reports__list__item__info}>
+                            <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt=""/>
+                            <span>Svetloslav</span>
+                        </div>
+                        <div className={style.wrapper__reports__list__item__description}>
+                            <p className={style.wrapper__reports__list__item__description__subtitle}>Описание на
+                                проблема</p>
+                            <p className={style.wrapper__reports__list__item__description__content}>Lorem ipsum dolor
+                                sit amet, consectetur adipisicing elit.
+                                Asperiores beataconsequuntur
+                                corporis ea eligendi est illo illum nam nemo pariatur,
+                                perspiciatis quis rem saepe.
+                                Dolorem esse qui quibusdam quisquam velit.
+                            </p>
+                        </div>
+                    </div>
+                    <div className={style.wrapper__reports__list__item}>
+                        <div className={style.wrapper__reports__list__item__info}>
+                            <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt=""/>
+                            <span>Svetloslav</span>
+                        </div>
+                        <div className={style.wrapper__reports__list__item__description}>
+                            <p className={style.wrapper__reports__list__item__description__subtitle}>Описание на
+                                проблема</p>
+                            <p className={style.wrapper__reports__list__item__description__content}>Lorem ipsum dolor
+                                sit amet, consectetur adipisicing elit.
+                                Asperiores beataconsequuntur
+                                corporis ea eligendi est illo illum nam nemo pariatur,
+                                perspiciatis quis rem saepe.
+                                Dolorem esse qui quibusdam quisquam velit.
+                            </p>
+                        </div>
+                    </div>
+                    <div className={style.wrapper__reports__list__item}>
+                        <div className={style.wrapper__reports__list__item__info}>
+                            <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt=""/>
+                            <span>Svetloslav</span>
+                        </div>
+                        <div className={style.wrapper__reports__list__item__description}>
+                            <p className={style.wrapper__reports__list__item__description__subtitle}>Описание на
+                                проблема</p>
+                            <p className={style.wrapper__reports__list__item__description__content}>Lorem ipsum dolor
+                                sit amet, consectetur adipisicing elit.
+                                Asperiores beataconsequuntur
+                                corporis ea eligendi est illo illum nam nemo pariatur,
+                                perspiciatis quis rem saepe.
+                                Dolorem esse qui quibusdam quisquam velit.
+                            </p>
+                        </div>
+                    </div>
                     <div className={style.wrapper__reports__list__item}>
                         <div className={style.wrapper__reports__list__item__info}>
                             <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt=""/>
