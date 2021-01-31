@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import * as style from './MyTreesPage.module.scss';
 import Layout from '../UserLayout/UserLayout';
+import ReportsSection from './ReportsSection/ReportsSection';
 
 const MyTreesPage = () => {
     return (
@@ -12,6 +13,7 @@ const MyTreesPage = () => {
                 <div className={'col-md-4'}>
                     <h3 className={style.pageTitle}>Общо 56 дървета</h3>
                 </div>
+                <ReportsSection/>
             </div>
         </Layout>
     )
