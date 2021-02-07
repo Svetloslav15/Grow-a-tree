@@ -7,7 +7,7 @@ const ReportsSection = () => {
     const [activeReportTypes, setActiveReportsTypes] = useState([]);
 
     useEffect(() => {
-TreeService.getAuthorizedActiveReportTypes(`?treeId`)
+        TreeService.getAuthorizedActiveReportTypes(`?treeId=`)
     }, []);
     return (
         <div className={`col-md-12 p-3 row ${style.wrapper}`}>
