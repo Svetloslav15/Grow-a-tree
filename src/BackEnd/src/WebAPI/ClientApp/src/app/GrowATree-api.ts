@@ -1555,7 +1555,7 @@ export class TreeReactionsClient implements ITreeReactionsClient {
 
 export interface ITreeReportsClient {
     activeReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
-    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
+    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, userId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
     archivedReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
     archivedReports(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
     reportTree(message: string | null | undefined, type: string | null | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
@@ -1626,12 +1626,14 @@ export class TreeReportsClient implements ITreeReportsClient {
         return _observableOf<ResultOfICollectionOfTreeReportTypeModel>(<any>null);
     }
 
-    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel> {
+    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, userId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel> {
         let url_ = this.baseUrl + "/api/TreeReports/active-reports?";
         if (treeId !== undefined)
             url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
         if (reportType !== undefined)
             url_ += "ReportType=" + encodeURIComponent("" + reportType) + "&"; 
+        if (userId !== undefined)
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&"; 
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
