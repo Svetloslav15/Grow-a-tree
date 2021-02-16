@@ -1,7 +1,6 @@
 ﻿namespace GrowATree.Application.Trees.Queries.GetRecentTrees
 {
     using System;
-    using System.Data.Entity;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -11,6 +10,7 @@
     using GrowATree.Application.Models.Common.Models;
     using GrowATree.Application.Models.Trees;
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
 
     class GetRecentTreesQueryHandler : IRequestHandler<GetRecentTreesQuery, TreeListModel>
     {
