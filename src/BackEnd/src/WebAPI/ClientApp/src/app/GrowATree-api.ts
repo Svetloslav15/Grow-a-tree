@@ -5586,6 +5586,7 @@ export class TreeReactionModel implements ITreeReactionModel {
     id?: string | undefined;
     type?: ReactionType;
     userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
     createdOn?: Date;
 
     constructor(data?: ITreeReactionModel) {
@@ -5602,6 +5603,7 @@ export class TreeReactionModel implements ITreeReactionModel {
             this.id = _data["id"];
             this.type = _data["type"];
             this.userUserName = _data["userUserName"];
+            this.userProfilePictureUrl = _data["userProfilePictureUrl"];
             this.createdOn = _data["createdOn"] ? new Date(_data["createdOn"].toString()) : <any>undefined;
         }
     }
@@ -5618,6 +5620,7 @@ export class TreeReactionModel implements ITreeReactionModel {
         data["id"] = this.id;
         data["type"] = this.type;
         data["userUserName"] = this.userUserName;
+        data["userProfilePictureUrl"] = this.userProfilePictureUrl;
         data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
         return data; 
     }
@@ -5627,6 +5630,7 @@ export interface ITreeReactionModel {
     id?: string | undefined;
     type?: ReactionType;
     userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
     createdOn?: Date;
 }
 

@@ -3617,6 +3617,10 @@
             "type": "string",
             "nullable": true
           },
+          "userProfilePictureUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "createdOn": {
             "type": "string",
             "format": "date-time"
