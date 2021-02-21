@@ -6,5 +6,6 @@
 
     public class GetTreePostListQuery : PagedQuery, IRequest<TreePostListModel>
     {
+        public string TreeId { get; set; }
     }
 }

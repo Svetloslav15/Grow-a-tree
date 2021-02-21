@@ -1139,7 +1139,7 @@ export class TreePostReplyReactionsClient implements ITreePostReplyReactionsClie
 }
 
 export interface ITreePostsClient {
-    list(page: number | undefined, perPage: number | undefined): Observable<TreePostListModel>;
+    list(treeId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreePostListModel>;
     upsert(upsertCommand: UpsertTreePostCommand): Observable<ResultOfBoolean>;
     delete(deleteCommand: DeleteTreePostCommand): Observable<ResultOfBoolean>;
 }
@@ -1157,8 +1157,10 @@ export class TreePostsClient implements ITreePostsClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    list(page: number | undefined, perPage: number | undefined): Observable<TreePostListModel> {
+    list(treeId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreePostListModel> {
         let url_ = this.baseUrl + "/api/TreePosts/list?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
