@@ -5,20 +5,20 @@ import * as styles from './StaticPage.module.scss';
 import SectionComponent from './SectionComponent/SectionComponent';
 import staticPagesData from '../../../../static/staticPagesData';
 
-const StaticPage = () => {
+const StaticPage = (props) => {
     const location = useLocation();
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        setData(staticPagesData[0]);
         const currentUrlPage = location.pathname.split('/').reverse()[0];
         for (let index = 0; index < staticPagesData.length; index++) {
+            console.table(staticPagesData[index].route, currentUrlPage)
             if (staticPagesData[index].route === currentUrlPage) {
                 setData(staticPagesData[index]);
                 break;
             }
         }
-    }, []);
+    }, [props]);
     return (
         <div className={styles.wrapper}>
             <h1>{data && data.title}</h1>

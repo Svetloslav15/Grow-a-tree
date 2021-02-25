@@ -4,13 +4,15 @@ import {useSelector, useDispatch} from 'react-redux';
 import Cookies from 'js-cookie';
 
 import UserNavigation from '../UserNavigation/UserNavigation';
+import NavItemDropdown from "../NavItemDropdown/NavItemDropdown";
 import NavItem from './NavItem/NavItem';
 import NavCollapseButton from './NavCollapseButton/NavCollapseButton';
 import * as style from './Navigation.module.scss';
 import Button from '../../common/Button/Button';
 import {CHANGE_IS_USER_NAV_OPENED} from "../../../store/actions/actionTypes";
 import CookieNames from "../../../static/cookieNames";
-
+import DropdownField from "../DropdownField/DropdownField";
+import staticPagesData from "../../../static/staticPagesData";
 const Logo = require('../../../assets/logo.png');
 
 const Navigation = () => {
@@ -30,10 +32,8 @@ const Navigation = () => {
                 <ul className="navbar-nav mr-auto">
                     <NavItem link='/map'>Карта</NavItem>
                     <NavItem link='/about'>За платформата</NavItem>
-                    <NavItem link='/ranking'>Класация</NavItem>
-                    <NavItem link='/shop'>Магазин</NavItem>
-                    <NavItem link='/events'>Събития</NavItem>
-                    <NavItem link='/forum'>Форум</NavItem>
+                    <NavItemDropdown mainTitle='Информация' links={staticPagesData}/>
+                    <NavItem link='/about'>За платформата</NavItem>
                     {
                         !currUser.accessToken ?
                             (
