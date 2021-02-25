@@ -1,10 +1,33 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {useLocation} from 'react-router-dom';
+
+import * as styles from './StaticPage.module.scss';
+import SectionComponent from './SectionComponent/SectionComponent';
+import staticPagesData from '../../../../static/staticPagesData';
 
 const StaticPage = () => {
+    const location = useLocation();
+    const [data, setData] = useState(null);
 
+    useEffect(() => {
+        setData(staticPagesData[0]);
+        const currentUrlPage = location.pathname.split('/').reverse()[0];
+        for (let index = 0; index < staticPagesData.length; index++) {
+            if (staticPagesData[index].route === currentUrlPage) {
+                setData(staticPagesData[index]);
+                break;
+            }
+        }
+    }, []);
     return (
-        <div></div>
+        <div className={styles.wrapper}>
+            <h1>{data && data.title}</h1>
+            <p>{data && data.headerText}</p>
+            <div>
+                {data && data.data.map(section => <SectionComponent {...section}/>)}
+            </div>
+        </div>
     )
-};
+}
 
 export default StaticPage;
