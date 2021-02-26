@@ -15,24 +15,33 @@ const MyTreesPage = () => {
     useEffect(() => {
         TreeService.getAuthorizedTreesByUser(`?id=${stateUserData.id}`, stateUserData.accessToken)
             .then((data) => {
-                setUserTrees(data.data.data);
-                getActiveReportTypes(data.data.data);
-                getArchivedReportTypes(data.data.data);
+                data = data.data.data;
+                setUserTrees(data);
+                getActiveReportTypes(data);
+                getArchivedReportTypes(data);
             });
     }, []);
 
-    const getActiveReportTypes = (trees) => {
+    const getActiveReportTypes = async (trees) => {
+        const finalData = [];
         for (const tree of trees) {
-            TreeService.getAuthorizedActiveReportTypes(`?treeId=${tree.id}`, stateUserData.accessToken)
-                .then((data) => setActiveReportTypes(data.data.data));
+            let data = await TreeService.getAuthorizedActiveReportTypes(`?treeId=${tree.id}`, stateUserData.accessToken);
+            data = data.data.data;
+            data.forEach(x => x.tree = tree);
+            finalData.push(...data);
         }
+        setActiveReportTypes(finalData);
     }
 
-    const getArchivedReportTypes = (trees) => {
+    const getArchivedReportTypes = async (trees) => {
+        const finalData = [];
         for (const tree of trees) {
-            TreeService.getAuthorizedArchivedReportTypes(`?treeId=${tree.id}`, stateUserData.accessToken)
-                .then((data) => setArchivedReportTypes(data.data.data));
+            let data = await TreeService.getAuthorizedArchivedReportTypes(`?treeId=${tree.id}`, stateUserData.accessToken);
+            data = data.data.data;
+            data.forEach(x => x.tree = tree);
+            finalData.push(...data);
         }
+        setArchivedReportTypes(finalData);
     }
 
     return (

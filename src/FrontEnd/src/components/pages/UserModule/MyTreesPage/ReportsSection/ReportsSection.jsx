@@ -15,6 +15,7 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
 
     useEffect(() => {
         toggleActiveTypes(true);
+        console.log(activeTypes);
     }, [activeTypes, archivedTypes]);
 
     const toggleActiveTypes = (activeSelected) => {
@@ -22,8 +23,16 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
         activeSelected ? setCurrentTypes(activeTypes) : setCurrentTypes(archivedTypes);
     }
 
-    const toggleActiveCurrentData = () => {
+    const toggleActiveCurrentData = (treeId) => {
+        if (areActiveReportsSelected) {
+            TreeService.getAuthorizedActiveReports(`?treeId=${treeId}&userId=${stateUserData.userId}`, stateUserData.accessToken)
+                .then(data => {
+                    console.log(data);
+                })
+        }
+        else {
 
+        }
     }
 
     return (
@@ -48,7 +57,7 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
                             {
                                 areActiveReportsSelected ?
                                     activeTypes.map(x => <li className={style.wrapper__typesSection__list__item}>
-                                        # Вашето дърво е {treeTypesHelper[x.type]} {x.reportsCount} пъти
+                                        # Вашето дърво {x.tree.nickname} е {treeTypesHelper[x.type]} {x.reportsCount} пъти
                                     </li>) :
                                     archivedTypes.map(x => <li className={style.wrapper__typesSection__list__item}>
                                         # Вашето дърво е {treeTypesHelper[x.type]} {x.reportsCount} пъти
@@ -61,7 +70,7 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
             <div className={`col-md-7 ${style.wrapper__reports}`}>
                 <div className='col-md-12 row'>
                     <Button type='DarkOutline'>
-                        <Link to={`trees/details/${tree.id}`}>Виж дървото</Link>
+                        <Link to={`trees/details/${''}`}>Виж дървото</Link>
                     </Button>
                     <Button type='Green'>Одобри всички</Button>
                 </div>

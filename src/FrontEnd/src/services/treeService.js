@@ -20,6 +20,8 @@ const ROUTES = {
     getNearestTrees: '/trees/closest-trees-short-info',
     getAuthorizedActiveReportTypes: '/treeReports/active-reports-types',
     getAuthorizedArchivedReportTypes: '/treeReports/archived-reports-types',
+    getAuthorizedActiveReports: '/treeReports/active-reports',
+    getAuthorizedArchivedReports: '/treeReports/archived-reports',
     getAuthorizedTreesByUser: '/trees/user'
 };
 
