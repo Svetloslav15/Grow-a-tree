@@ -19,6 +19,7 @@ const ROUTES = {
     getAuthorizedTreePostReplyReactions: '/treePostReplyReactions/list',
     getNearestTrees: '/trees/closest-trees-short-info',
     getAuthorizedActiveReportTypes: '/treeReports/active-reports-types',
+    getAuthorizedArchivedReportTypes: '/treeReports/archived-reports-types',
     getAuthorizedTreesByUser: '/trees/user'
 };
 
