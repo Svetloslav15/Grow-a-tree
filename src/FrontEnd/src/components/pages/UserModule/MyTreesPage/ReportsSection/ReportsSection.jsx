@@ -6,6 +6,7 @@ import * as style from './ReportsSection.module.scss';
 import Button from '../../../../common/Button/Button';
 import TreeService from '../../../../../services/treeService';
 import AlertService from '../../../../../services/alertService';
+import successMessages from '../../../../../static/successMessages';
 import treeTypesHelper from '../../../../../static/treeReportTypesEn';
 import treeTypesHelperNums from '../../../../../static/treeReportTypesNum';
 
@@ -39,7 +40,7 @@ const ReportsSection = ({activeTypes, archivedTypes, fetchData}) => {
 
     const markAsSpam = async (treeReportId) => {
         const response = await TreeService.postAuthorizedMakeSpamReport({treeReportId: treeReportId}, stateUserData.accessToken);
-        response.succeeded ? AlertService.success('Успешно маркирахте доклада като спам!') : AlertService.error(response.errors[0]);
+        response.succeeded ? AlertService.success(successMessages.successMarkReportSpam) : AlertService.error(response.errors[0]);
         await fetchData();
         setCurrentActiveData(activeTypes);
     }
@@ -50,7 +51,7 @@ const ReportsSection = ({activeTypes, archivedTypes, fetchData}) => {
             reportType: treeTypesHelperNums[currActiveData[0].type]
         };
         const response = await TreeService.postAuthorizedArchiveReports(data, stateUserData.accessToken);
-        response.succeeded ? AlertService.success('Успешно архивирахте докладите!') : AlertService.error(response.errors[0]);
+        response.succeeded ? AlertService.success(successMessages.successReportArchive) : AlertService.error(response.errors[0]);
         await fetchData();
         setCurrentActiveData(activeTypes);
     }
