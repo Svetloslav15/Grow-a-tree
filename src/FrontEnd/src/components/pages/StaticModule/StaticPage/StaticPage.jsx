@@ -12,7 +12,6 @@ const StaticPage = (props) => {
     useEffect(() => {
         const currentUrlPage = location.pathname.split('/').reverse()[0];
         for (let index = 0; index < staticPagesData.length; index++) {
-            console.table(staticPagesData[index].route, currentUrlPage)
             if (staticPagesData[index].route === currentUrlPage) {
                 setData(staticPagesData[index]);
                 break;
