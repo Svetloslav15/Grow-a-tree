@@ -12,10 +12,10 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
     const [currentTypes, setCurrentTypes] = useState(activeTypes);
     const stateUserData = useSelector(state => state.auth);
     const [currActiveData, setCurrentActiveData] = useState([]);
+    const [activeTree, setActiveTree] = useState(null);
 
     useEffect(() => {
         toggleActiveTypes(true);
-        console.log(activeTypes);
     }, [activeTypes, archivedTypes]);
 
     const toggleActiveTypes = (activeSelected) => {
@@ -23,16 +23,15 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
         activeSelected ? setCurrentTypes(activeTypes) : setCurrentTypes(archivedTypes);
     }
 
-    const toggleActiveCurrentData = (treeId) => {
+    const toggleActiveCurrentData = async (treeId, type) => {
         if (areActiveReportsSelected) {
-            TreeService.getAuthorizedActiveReports(`?treeId=${treeId}&userId=${stateUserData.userId}`, stateUserData.accessToken)
-                .then(data => {
-                    console.log(data);
-                })
+            const data = await TreeService.getAuthorizedActiveReports(`?treeId=${treeId}&userId=${stateUserData.id}&reportType=${type}`, stateUserData.accessToken);
+            setCurrentActiveData(data.data.data);
+        } else {
+            const data = await TreeService.getAuthorizedArchivedReports(`?treeId=${treeId}&userId=${stateUserData.id}&reportType=${type}`, stateUserData.accessToken);
+            setCurrentActiveData(data.data.data);
         }
-        else {
-
-        }
+        setActiveTree(treeId);
     }
 
     return (
@@ -56,12 +55,17 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
                         <ul className={`px-4 ${style.wrapper__typesSection__list}`}>
                             {
                                 areActiveReportsSelected ?
-                                    activeTypes.map(x => <li className={style.wrapper__typesSection__list__item}>
-                                        # Вашето дърво {x.tree.nickname} е {treeTypesHelper[x.type]} {x.reportsCount} пъти
-                                    </li>) :
-                                    archivedTypes.map(x => <li className={style.wrapper__typesSection__list__item}>
-                                        # Вашето дърво е {treeTypesHelper[x.type]} {x.reportsCount} пъти
-                                    </li>)
+                                    activeTypes.map(x =>
+                                        <li className={style.wrapper__typesSection__list__item}
+                                            onClick={() => toggleActiveCurrentData(x.tree.id, x.type)}>
+                                            # Вашето
+                                            дърво {x.tree.nickname} е {treeTypesHelper[x.type]} {x.reportsCount} пъти
+                                        </li>) :
+                                    archivedTypes.map(x =>
+                                        <li className={style.wrapper__typesSection__list__item}
+                                            onClick={() => toggleActiveCurrentData(x.tree.id, x.type)}>
+                                            # Вашето дърво е {treeTypesHelper[x.type]} {x.reportsCount} пъти
+                                        </li>)
                             }
                         </ul>
                 }
@@ -69,82 +73,31 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
             </div>
             <div className={`col-md-7 ${style.wrapper__reports}`}>
                 <div className='col-md-12 row'>
-                    <Button type='DarkOutline'>
-                        <Link to={`trees/details/${''}`}>Виж дървото</Link>
-                    </Button>
+                    {
+                        activeTree && <Button type='DarkOutline'>
+                            <Link to={`/trees/details/${activeTree}`}>Виж дървото</Link>
+                        </Button>
+                    }
+
                     <Button type='Green'>Одобри всички</Button>
                 </div>
                 <div className={style.wrapper__reports__list}>
-
-                    <div className={style.wrapper__reports__list__item}>
-                        <div className={style.wrapper__reports__list__item__info}>
-                            <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt=""/>
-                            <span>Svetloslav</span>
-                        </div>
-                        <div className={style.wrapper__reports__list__item__description}>
-                            <p className={style.wrapper__reports__list__item__description__subtitle}>Описание на
-                                проблема</p>
-                            <p className={style.wrapper__reports__list__item__description__content}>Lorem ipsum dolor
-                                sit amet, consectetur adipisicing elit.
-                                Asperiores beataconsequuntur
-                                corporis ea eligendi est illo illum nam nemo pariatur,
-                                perspiciatis quis rem saepe.
-                                Dolorem esse qui quibusdam quisquam velit.
-                            </p>
-                        </div>
-                    </div>
-                    <div className={style.wrapper__reports__list__item}>
-                        <div className={style.wrapper__reports__list__item__info}>
-                            <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt=""/>
-                            <span>Svetloslav</span>
-                        </div>
-                        <div className={style.wrapper__reports__list__item__description}>
-                            <p className={style.wrapper__reports__list__item__description__subtitle}>Описание на
-                                проблема</p>
-                            <p className={style.wrapper__reports__list__item__description__content}>Lorem ipsum dolor
-                                sit amet, consectetur adipisicing elit.
-                                Asperiores beataconsequuntur
-                                corporis ea eligendi est illo illum nam nemo pariatur,
-                                perspiciatis quis rem saepe.
-                                Dolorem esse qui quibusdam quisquam velit.
-                            </p>
-                        </div>
-                    </div>
-                    <div className={style.wrapper__reports__list__item}>
-                        <div className={style.wrapper__reports__list__item__info}>
-                            <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt=""/>
-                            <span>Svetloslav</span>
-                        </div>
-                        <div className={style.wrapper__reports__list__item__description}>
-                            <p className={style.wrapper__reports__list__item__description__subtitle}>Описание на
-                                проблема</p>
-                            <p className={style.wrapper__reports__list__item__description__content}>Lorem ipsum dolor
-                                sit amet, consectetur adipisicing elit.
-                                Asperiores beataconsequuntur
-                                corporis ea eligendi est illo illum nam nemo pariatur,
-                                perspiciatis quis rem saepe.
-                                Dolorem esse qui quibusdam quisquam velit.
-                            </p>
-                        </div>
-                    </div>
-                    <div className={style.wrapper__reports__list__item}>
-                        <div className={style.wrapper__reports__list__item__info}>
-                            <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" alt=""/>
-                            <span>Svetloslav</span>
-                        </div>
-                        <div className={style.wrapper__reports__list__item__description}>
-                            <p className={style.wrapper__reports__list__item__description__subtitle}>Описание на
-                                проблема</p>
-                            <p className={style.wrapper__reports__list__item__description__content}>Lorem ipsum dolor
-                                sit amet, consectetur adipisicing elit.
-                                Asperiores beataconsequuntur
-                                corporis ea eligendi est illo illum nam nemo pariatur,
-                                perspiciatis quis rem saepe.
-                                Dolorem esse qui quibusdam quisquam velit.
-                            </p>
-                        </div>
-                    </div>
-
+                    {
+                        currActiveData.map(report => <div className={style.wrapper__reports__list__item}>
+                            <div className={style.wrapper__reports__list__item__info}>
+                                <img src={report.userProfilePictureUrl} alt={report.userUserName}/>
+                                <span>{report.userUserName}</span>
+                            </div>
+                            <div className={style.wrapper__reports__list__item__description}>
+                                <p className={style.wrapper__reports__list__item__description__subtitle}>Описание на
+                                    проблема</p>
+                                <p className={style.wrapper__reports__list__item__description__content}>
+                                    {report.message}
+                                </p>
+                                <img className='w-85' src={report.imageUrl} alt={report.message}/>
+                            </div>
+                        </div>)
+                    }
                 </div>
             </div>
         </div>
