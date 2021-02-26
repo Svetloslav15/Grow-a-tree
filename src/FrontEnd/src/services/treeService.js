@@ -22,7 +22,8 @@ const ROUTES = {
     getAuthorizedArchivedReportTypes: '/treeReports/archived-reports-types',
     getAuthorizedActiveReports: '/treeReports/active-reports',
     getAuthorizedArchivedReports: '/treeReports/archived-reports',
-    getAuthorizedTreesByUser: '/trees/user'
+    getAuthorizedTreesByUser: '/trees/user',
+    postAuthorizedArchiveReports: '/treeReports/archive-report'
 };
 
 export default new Proxy({}, {

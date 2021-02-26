@@ -28,7 +28,10 @@
         public async Task<TreeReportListModel> Handle(GetArchivedTreeReportsByTypeQuery request, CancellationToken cancellationToken)
         {
             var reports = await this.context.TreeReports
-                .Where(x => x.TreeId == request.TreeId && x.IsActive == false && x.Type == (TreeReportType)Enum.Parse(typeof(TreeReportType), request.ReportType) && x.IsSpam == false)
+                .Where(x => x.TreeId == request.TreeId && 
+                x.IsActive == false && 
+                x.Type == (TreeReportType)Enum.Parse(typeof(TreeReportType), request.ReportType) && 
+                x.IsSpam == false)
                 .ProjectTo<TreeReportModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 

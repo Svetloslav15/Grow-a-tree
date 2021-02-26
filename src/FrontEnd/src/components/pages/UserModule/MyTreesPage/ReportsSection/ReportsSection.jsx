@@ -6,6 +6,7 @@ import * as style from './ReportsSection.module.scss';
 import Button from '../../../../common/Button/Button';
 import TreeService from '../../../../../services/treeService';
 import treeTypesHelper from '../../../../../static/treeReportTypesEn';
+import treeTypesHelperNums from '../../../../../static/treeReportTypesNum';
 
 const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
     const [areActiveReportsSelected, selectActiveReports] = useState(true);
@@ -32,6 +33,19 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
             setCurrentActiveData(data.data.data);
         }
         setActiveTree(treeId);
+    }
+
+    const markAsSpam = async () => {
+
+    }
+
+    const archiveReports = async () => {
+        const data = {
+            treeId: currActiveData[0].treeId,
+            reportType: treeTypesHelperNums[currActiveData[0].type]
+        };
+        const response = await TreeService.postAuthorizedArchiveReports(data, stateUserData.accessToken);
+        console.log(response);
     }
 
     return (
@@ -78,23 +92,29 @@ const ReportsSection = ({tree, activeTypes, archivedTypes}) => {
                             <Link to={`/trees/details/${activeTree}`}>Виж дървото</Link>
                         </Button>
                     }
-
-                    <Button type='Green'>Одобри всички</Button>
+                    <Button type='Green'
+                            onClick={archiveReports}>
+                        Одобри всички
+                    </Button>
                 </div>
                 <div className={style.wrapper__reports__list}>
                     {
                         currActiveData.map(report => <div className={style.wrapper__reports__list__item}>
                             <div className={style.wrapper__reports__list__item__info}>
-                                <img src={report.userProfilePictureUrl} alt={report.userUserName}/>
+                                <img src={report.userProfilePictureUrl}
+                                     alt={report.userUserName}/>
                                 <span>{report.userUserName}</span>
                             </div>
                             <div className={style.wrapper__reports__list__item__description}>
-                                <p className={style.wrapper__reports__list__item__description__subtitle}>Описание на
-                                    проблема</p>
+                                <p className={style.wrapper__reports__list__item__description__subtitle}>
+                                    Описание на проблема
+                                </p>
                                 <p className={style.wrapper__reports__list__item__description__content}>
                                     {report.message}
                                 </p>
-                                <img className='w-85' src={report.imageUrl} alt={report.message}/>
+                                <img className='w-85'
+                                     src={report.imageUrl}
+                                     alt={report.message}/>
                             </div>
                         </div>)
                     }
