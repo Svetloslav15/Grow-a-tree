@@ -45,8 +45,8 @@ const MyTreesPage = () => {
     }
 
     const fetchData = async () => {
-        getActiveReportTypes(userTrees);
-        getArchivedReportTypes(userTrees);
+        await getActiveReportTypes(userTrees);
+        await getArchivedReportTypes(userTrees);
     }
 
     return (

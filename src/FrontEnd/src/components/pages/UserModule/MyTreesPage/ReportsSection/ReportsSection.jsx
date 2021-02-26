@@ -9,7 +9,7 @@ import AlertService from '../../../../../services/alertService';
 import treeTypesHelper from '../../../../../static/treeReportTypesEn';
 import treeTypesHelperNums from '../../../../../static/treeReportTypesNum';
 
-const ReportsSection = ({tree, activeTypes, archivedTypes, fetchData}) => {
+const ReportsSection = ({activeTypes, archivedTypes, fetchData}) => {
     const [areActiveReportsSelected, selectActiveReports] = useState(true);
     const [currentTypes, setCurrentTypes] = useState(activeTypes);
     const stateUserData = useSelector(state => state.auth);
@@ -17,7 +17,8 @@ const ReportsSection = ({tree, activeTypes, archivedTypes, fetchData}) => {
     const [activeTree, setActiveTree] = useState(null);
 
     useEffect(() => {
-        toggleActiveTypes(true);
+        toggleActiveCurrentData(true);
+        setCurrentTypes(activeTypes);
     }, [activeTypes, archivedTypes]);
 
     const toggleActiveTypes = (activeSelected) => {
@@ -36,8 +37,11 @@ const ReportsSection = ({tree, activeTypes, archivedTypes, fetchData}) => {
         setActiveTree(treeId);
     }
 
-    const markAsSpam = async () => {
-
+    const markAsSpam = async (treeReportId) => {
+        const response = await TreeService.postAuthorizedMakeSpamReport({treeReportId: treeReportId}, stateUserData.accessToken);
+        response.succeeded ? AlertService.success('Успешно маркирахте доклада като спам!') : AlertService.error(response.errors[0]);
+        await fetchData();
+        setCurrentActiveData(activeTypes);
     }
 
     const archiveReports = async () => {
@@ -48,6 +52,7 @@ const ReportsSection = ({tree, activeTypes, archivedTypes, fetchData}) => {
         const response = await TreeService.postAuthorizedArchiveReports(data, stateUserData.accessToken);
         response.succeeded ? AlertService.success('Успешно архивирахте докладите!') : AlertService.error(response.errors[0]);
         await fetchData();
+        setCurrentActiveData(activeTypes);
     }
 
     return (
@@ -95,7 +100,7 @@ const ReportsSection = ({tree, activeTypes, archivedTypes, fetchData}) => {
                         </Button>
                     }
                     {
-                        areActiveReportsSelected &&
+                        currentTypes.length > 0 && areActiveReportsSelected &&
                         <Button type='Green'
                                 onClick={archiveReports}>
                             Одобри всички
@@ -105,11 +110,18 @@ const ReportsSection = ({tree, activeTypes, archivedTypes, fetchData}) => {
                 </div>
                 <div className={style.wrapper__reports__list}>
                     {
-                        currActiveData.map(report => <div className={style.wrapper__reports__list__item}>
+                        currActiveData && currActiveData.map(report => <div className={style.wrapper__reports__list__item}>
                             <div className={style.wrapper__reports__list__item__info}>
                                 <img src={report.userProfilePictureUrl}
                                      alt={report.userUserName}/>
-                                <span>{report.userUserName}</span>
+                                <span>
+                                    {report.userUserName}
+                                    <button className='btn btn-danger'
+                                            onClick={() => markAsSpam(report.id)}>
+                                        <i className="fas fa-exclamation-triangle mr-2"></i>
+                                        Спам
+                                    </button>
+                                </span>
                             </div>
                             <div className={style.wrapper__reports__list__item__description}>
                                 <p className={style.wrapper__reports__list__item__description__subtitle}>
