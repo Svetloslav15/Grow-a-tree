@@ -25,6 +25,7 @@ import EditTreePage from './components/pages/TreeModule/EditTreePage/EditTreePag
 import TreeDetailsPage from './components/pages/TreeModule/TreeDetailsPage/TreeDetailsPage';
 import MyTreesPage from './components/pages/UserModule/MyTreesPage/MyTreesPage';
 import StaticPage from './components/pages/StaticModule/StaticPage/StaticPage';
+import NotFoundPage from './components/pages/StaticModule/NotFoundPage/NotFoundPage';
 
 import staticPagesData from './static/staticPagesData';
 
@@ -50,6 +51,7 @@ const App = () => (
             {
                 staticPagesData.map(page => <Route exact path={`/static/${page.route}`} component={StaticPage}/>)
             }
+            <Route component={NotFoundPage}/>
         </Switch>
         <Footer/>
     </>
