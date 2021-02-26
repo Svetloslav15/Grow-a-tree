@@ -29,11 +29,10 @@ const Navigation = () => {
             <NavCollapseButton/>
             <Link to="/"><img src={Logo} className={style.logo} alt="Grow A Tree Logo"/></Link>
             <div className="collapse navbar-collapse" id="basicExampleNav">
-                <ul className="navbar-nav mr-auto">
-                    <NavItem link='/map'>Карта</NavItem>
+                <ul className={`navbar-nav mr-auto ${style.customNavWrapper}`}>
+                    <NavItem link='/'>Карта</NavItem>
                     <NavItem link='/about'>За платформата</NavItem>
                     <NavItemDropdown mainTitle='Информация' links={staticPagesData}/>
-                    <NavItem link='/about'>За платформата</NavItem>
                     {
                         !currUser.accessToken ?
                             (

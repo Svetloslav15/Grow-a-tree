@@ -40,13 +40,7 @@ const Sidebar = ({history}) => {
                 <Item link='/users/my-info' text='Моят профил' icon='user'/>
                 <Item link='/auth/reset-password' text='Смени парола' icon='user'/>
                 <Item link='/users/my-trees' text='Моите дървета' icon='user'/>
-                <Item link='/' text='Моите събития' icon='user'/>
-                <Item link='/' text='Предизвикателства' icon='user'/>
-                <Item link='/' text='Сертификати' icon='user'/>
                 <Item link='/users/referral' text='Покани приятел' icon='user'/>
-                <Item link='/' text='Активност' icon='user'/>
-                <Item link='/' text='Форум' icon='user'/>
-                <Item link='/' text='Дарения' icon='user'/>
                 <Item link='/' text='Последни влизания' icon='user'/>
                 <Item link='#' onClick={logoutUser} text='Изход' icon='door-open'/>
             </div>
