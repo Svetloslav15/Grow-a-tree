@@ -44,6 +44,11 @@ const MyTreesPage = () => {
         setArchivedReportTypes(finalData);
     }
 
+    const fetchData = async () => {
+        getActiveReportTypes(userTrees);
+        getArchivedReportTypes(userTrees);
+    }
+
     return (
         <Layout>
             <div className={'col-md-9 row mt-5'}>
@@ -56,6 +61,7 @@ const MyTreesPage = () => {
                 <ReportsSection
                     activeTypes={activeReportTypes}
                     archivedTypes={archivedReportTypes}
+                    fetchData={fetchData}
                 />
             </div>
         </Layout>
