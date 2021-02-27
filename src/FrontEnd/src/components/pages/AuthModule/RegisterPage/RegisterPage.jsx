@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 
 import * as style from './RegisterPage.module.scss';
@@ -18,9 +18,18 @@ const BgShape1 = require('../../../../assets/bg-shape-1.png');
 const BgShape2 = require('../../../../assets/bg-shape-2.png');
 const BgShape3 = require('../../../../assets/bg-shape-3.png');
 
+const referralRegexPattern = /\?referral=([^&]+)/;
+
 const RegisterPage = ({history}) => {
     const [user, setUser] = useState({});
 
+    useEffect(() => {
+        if (history.location.search) {
+            let copyUser = user;
+            copyUser.referrerId = history.location.search.match(referralRegexPattern)[1];
+            setUser(copyUser);
+        }
+    }, []);
     const handleChange = (event) => {
         let copyData = user;
         copyData[event.target.id] = event.target.value;
