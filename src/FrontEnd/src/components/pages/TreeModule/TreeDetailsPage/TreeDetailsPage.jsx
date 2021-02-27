@@ -66,7 +66,7 @@ const TreeDetailsPage = ({history, match}) => {
     const fetchTreeInfo = async () => {
         const data = await TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken);
         const treeInfo = data.data.data;
-
+        console.log(treeInfo);
         setTree(treeInfo);
         document.title = `Grow A Tree - ${treeInfo.nickname}`
         setCurrPost({treeId: treeInfo.id, ...currPost});
@@ -278,7 +278,7 @@ const TreeDetailsPage = ({history, match}) => {
                     {<Map
                          isStatic={true}
                          className={styles.mapContainerSection}
-                         markers={[]}
+                         markers={[{latitude: tree.latitude, longitude: tree.longitude}]}
                          canSetMarker={false}/>}
                 </div>
             </section>

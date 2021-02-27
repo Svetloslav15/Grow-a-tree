@@ -47,13 +47,19 @@ const MapContainer = ({handleCoordinates, coordinates, isStatic, className, mark
                                               }}>
                 {canSetMarker && <Marker position={marker.position}/>}
                 {markers.map((mark, index) =>
+                    onMarkerClick ?
                     <Marker key={index}
                             position={{
                                 lat: mark.latitude,
                                 lng: mark.longitude
                             }}
                             onClick={() => onMarkerClick(mark)}
-                    />)}
+                    /> : <Marker key={index}
+                                 position={{
+                                     lat: mark.latitude,
+                                     lng: mark.longitude
+                                 }}
+                        />)}
             </Map> : ''}
         </div>
     );
