@@ -275,11 +275,11 @@ const TreeDetailsPage = ({history, match}) => {
                 <Timer data={treeWaterings[0]}/>
                 <p className={styles.infoSection__map__locationText}>{treeLocation}</p>
                 <div className={styles.infoSection__mapWrapper}>
-                    <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}
+                    {<Map
                          isStatic={true}
                          className={styles.mapContainerSection}
                          markers={[]}
-                         canSetMarker={false}/>
+                         canSetMarker={false}/>}
                 </div>
             </section>
             <div className={styles.infoSection__posts}>
