@@ -3511,6 +3511,10 @@
           "userId": {
             "type": "string",
             "nullable": true
+          },
+          "treeId": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

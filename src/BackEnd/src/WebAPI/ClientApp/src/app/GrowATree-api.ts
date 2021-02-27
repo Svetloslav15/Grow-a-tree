@@ -5307,6 +5307,7 @@ export class TreePostModel implements ITreePostModel {
     userUserName?: string | undefined;
     userProfilePictureUrl?: string | undefined;
     userId?: string | undefined;
+    treeId?: string | undefined;
 
     constructor(data?: ITreePostModel) {
         if (data) {
@@ -5324,6 +5325,7 @@ export class TreePostModel implements ITreePostModel {
             this.userUserName = _data["userUserName"];
             this.userProfilePictureUrl = _data["userProfilePictureUrl"];
             this.userId = _data["userId"];
+            this.treeId = _data["treeId"];
         }
     }
 
@@ -5341,6 +5343,7 @@ export class TreePostModel implements ITreePostModel {
         data["userUserName"] = this.userUserName;
         data["userProfilePictureUrl"] = this.userProfilePictureUrl;
         data["userId"] = this.userId;
+        data["treeId"] = this.treeId;
         return data; 
     }
 }
@@ -5351,6 +5354,7 @@ export interface ITreePostModel {
     userUserName?: string | undefined;
     userProfilePictureUrl?: string | undefined;
     userId?: string | undefined;
+    treeId?: string | undefined;
 }
 
 export class UpsertTreePostCommand implements IUpsertTreePostCommand {

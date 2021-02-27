@@ -9,7 +9,7 @@ import AlertService from '../../../../../services/alertService';
 import SuccessMessages from '../../../../../static/successMessages';
 import RepliesSection from "../RepliesSection/RepliesSection";
 
-const TreePost = ({data, fetchTreePosts}) => {
+const TreePost = ({data, fetchTreePosts, treeId}) => {
     const [post, setPost] = useState(data);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const TreePost = ({data, fetchTreePosts}) => {
         response = await TreeService.getAuthorizedTreePostReactions(`?postId=${post.id}`, currUser.accessToken);
         post.reactions = response.data.data;
         setPost(post);
-        fetchTreePosts();
+        fetchTreePosts(treeId);
     }
 
     return (

@@ -61,7 +61,6 @@ const TreeDetailsPage = ({history, match}) => {
 
     const loadData = async () => {
         await fetchTreeInfo();
-        await fetchTreePosts();
     }
 
     const fetchTreeInfo = async () => {
@@ -81,10 +80,11 @@ const TreeDetailsPage = ({history, match}) => {
 
         await fetchTreeWaterings(treeInfo.id);
         await fetchTreeReactions(treeInfo.id);
+        await fetchTreePosts(treeInfo.id);
     }
 
-    const fetchTreePosts = async () => {
-        const response = await TreeService.getAuthorizedTreePosts(`?page=${currPostPage}&perPage=${postsLimitPerPage}`, currUser.accessToken);
+    const fetchTreePosts = async (treeId) => {
+        const response = await TreeService.getAuthorizedTreePosts(`?page=${currPostPage}&perPage=${postsLimitPerPage}&treeId=${treeId}`, currUser.accessToken);
         if (response.data.succeeded) {
             const postsWithReactions = await fetchTreePostReactions(response.data.data);
             setPosts(postsWithReactions);
@@ -123,7 +123,7 @@ const TreeDetailsPage = ({history, match}) => {
                 if (response.succeeded) {
                     AlertService.success(SuccessMessages.successAddedTreePost);
                     setCurrPost({id: ''});
-                    fetchTreePosts();
+                    fetchTreePosts(tree.id);
                     //Clear editor content
                     const newKey = editorKey * 43;
                     setEditorKey(newKey);
@@ -306,7 +306,8 @@ const TreeDetailsPage = ({history, match}) => {
                 {
                     posts.map((data, index) => <TreePost key={index}
                                                          data={data}
-                                                         fetchTreePosts={fetchTreePosts}/>)
+                                                         fetchTreePosts={fetchTreePosts}
+                                                         treeId={tree.id}/>)
                 }
             </div>
         </Layout>
