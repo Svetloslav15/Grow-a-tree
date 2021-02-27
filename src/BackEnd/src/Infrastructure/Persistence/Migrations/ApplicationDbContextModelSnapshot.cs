@@ -405,6 +405,25 @@ namespace GrowATree.Infrastructure.Persistence.Migrations
                     b.ToTable("TreeWaterings");
                 });
 
+            modelBuilder.Entity("GrowATree.Domain.Entities.UnknownTrees", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClosestResults")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TreeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Votes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UnknownTrees");
+                });
+
             modelBuilder.Entity("GrowATree.Domain.Entities.User", b =>
                 {
                     b.Property<string>("Id")
