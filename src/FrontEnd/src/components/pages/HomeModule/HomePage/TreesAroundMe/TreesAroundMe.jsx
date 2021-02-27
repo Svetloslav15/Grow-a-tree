@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
 import * as style from './TreesAroundMe.module.scss';
 import TreeService from '../../../../../services/treeService';
 import TreePartial from "../../../../common/TreePartial/TreePartial";

@@ -35,7 +35,7 @@
 
             if (request.TreeId != null)
             {
-                list = list.Where(x => x.Id == request.TreeId)
+                list = list.Where(x => x.TreeId == request.TreeId)
                            .ToList();
             }
 

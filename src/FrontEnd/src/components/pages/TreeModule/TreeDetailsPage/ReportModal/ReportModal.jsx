@@ -23,7 +23,6 @@ const ReportModal = ({closeModal, treeId}) => {
 
     const addReport = async () => {
         const formData = new FormData();
-        console.log(data.imageFile);
         formData.append('type', treeReportTypes[data.type]);
         formData.append('message', data.message);
         formData.append('imageFile', data.imageFile);

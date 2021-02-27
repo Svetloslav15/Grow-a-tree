@@ -83,8 +83,12 @@ const ListModal = ({data, closeModal, hasReaction, title}) => {
                         activeData.map(x => (
                             <li className={styles.wrapper__modal__items__item}>
                                 {
-                                    x.userProfilePictureUrl && <img src={x.userProfilePictureUrl} alt={x.userUserName}
-                                                                    className={styles.wrapper__modal__items__item__image}/>
+                                    x.userProfilePictureUrl ?
+                                        <img src={x.userProfilePictureUrl} alt={x.userUserName}
+                                             className={styles.wrapper__modal__items__item__image}/>
+                                             :
+                                        <img src={DefaultProfilePicture} alt={x.userUserName}
+                                             className={styles.wrapper__modal__items__item__image}/>
                                 }
 
                                 <p className={styles.wrapper__modal__items__item__name}>{x.userUserName}</p>

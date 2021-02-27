@@ -58,6 +58,7 @@
       top: 17%;
       display: flex;
       width: 39%;
+      z-index: 1;
     }
 
     .bgShapeImage:nth-child(3) {
@@ -88,6 +89,7 @@
       text-align: center;
       width: 78%;
       display: flex;
+      justify-content: center;
     }
   }
 }

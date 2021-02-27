@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import * as style from './Footer.module.scss';
 import SocialMediaIcon from "../SocialMediaIcon/SocialMediaIcon";
 import LinksSection from "./LinksSection/LinksSection";

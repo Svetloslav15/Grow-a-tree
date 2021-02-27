@@ -48,7 +48,6 @@ const TreeDetailsPage = ({history, match}) => {
     const [currWateringPage, setCurrWateringPage] = useState(1);
     const [treeWaterings, setTreeWaterings] = useState([]);
     const [treeReactions, setTreeReactions] = useState([]);
-    const [treePostReplies, setTreePostReplies] = useState([]);
     const [reactionTypes, setCurrReactionTypes] = useState([]);
 
     useEffect(() => {
@@ -61,13 +60,11 @@ const TreeDetailsPage = ({history, match}) => {
 
     const loadData = async () => {
         await fetchTreeInfo();
-        await fetchTreePosts();
     }
 
     const fetchTreeInfo = async () => {
         const data = await TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken);
         const treeInfo = data.data.data;
-
         setTree(treeInfo);
         document.title = `Grow A Tree - ${treeInfo.nickname}`
         setCurrPost({treeId: treeInfo.id, ...currPost});
@@ -81,10 +78,11 @@ const TreeDetailsPage = ({history, match}) => {
 
         await fetchTreeWaterings(treeInfo.id);
         await fetchTreeReactions(treeInfo.id);
+        await fetchTreePosts(treeInfo.id);
     }
 
-    const fetchTreePosts = async () => {
-        const response = await TreeService.getAuthorizedTreePosts(`?page=${currPostPage}&perPage=${postsLimitPerPage}`, currUser.accessToken);
+    const fetchTreePosts = async (treeId) => {
+        const response = await TreeService.getAuthorizedTreePosts(`?page=${currPostPage}&perPage=${postsLimitPerPage}&treeId=${treeId}`, currUser.accessToken);
         if (response.data.succeeded) {
             const postsWithReactions = await fetchTreePostReactions(response.data.data);
             setPosts(postsWithReactions);
@@ -105,7 +103,7 @@ const TreeDetailsPage = ({history, match}) => {
         if (response.data.succeeded) {
             setTreeWaterings(response.data.data);
         } else {
-            await AlertService.error(response.errors[0]);
+            await AlertService.error(response.data.errors[0]);
         }
     }
 
@@ -123,7 +121,7 @@ const TreeDetailsPage = ({history, match}) => {
                 if (response.succeeded) {
                     AlertService.success(SuccessMessages.successAddedTreePost);
                     setCurrPost({id: ''});
-                    fetchTreePosts();
+                    fetchTreePosts(tree.id);
                     //Clear editor content
                     const newKey = editorKey * 43;
                     setEditorKey(newKey);
@@ -159,7 +157,7 @@ const TreeDetailsPage = ({history, match}) => {
                     await fetchTreeWaterings();
                     toggleIsSuccessWateringModalOpen(true);
                 } else {
-                    await AlertService.error(response.errors[0]);
+                    await AlertService.error(response?.errors[0]);
                 }
                 setUndoIsOpen(false);
             }
@@ -204,7 +202,7 @@ const TreeDetailsPage = ({history, match}) => {
     }
 
     return (
-        <Layout>
+        <Layout customStyle='pb-details-p-m'>
             <section className={styles.infoSection}>
                 {tree.images && <Carousel images={tree.images}/>}
                 <section className={styles.infoSection__wrapper}>
@@ -275,11 +273,11 @@ const TreeDetailsPage = ({history, match}) => {
                 <Timer data={treeWaterings[0]}/>
                 <p className={styles.infoSection__map__locationText}>{treeLocation}</p>
                 <div className={styles.infoSection__mapWrapper}>
-                    <Map coordinates={{latitude: tree.latitude, longitude: tree.longitude}}
+                    {<Map
                          isStatic={true}
                          className={styles.mapContainerSection}
-                         markers={[]}
-                         canSetMarker={false}/>
+                         markers={[{latitude: tree.latitude, longitude: tree.longitude}]}
+                         canSetMarker={false}/>}
                 </div>
             </section>
             <div className={styles.infoSection__posts}>
@@ -306,7 +304,8 @@ const TreeDetailsPage = ({history, match}) => {
                 {
                     posts.map((data, index) => <TreePost key={index}
                                                          data={data}
-                                                         fetchTreePosts={fetchTreePosts}/>)
+                                                         fetchTreePosts={fetchTreePosts}
+                                                         treeId={tree.id}/>)
                 }
             </div>
         </Layout>

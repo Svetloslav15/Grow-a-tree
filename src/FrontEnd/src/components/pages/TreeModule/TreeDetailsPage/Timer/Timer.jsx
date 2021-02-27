@@ -7,7 +7,6 @@ const Timer = ({data}) => {
     const [isFirstFetched, setIsFirstFetched] = useState(false);
 
     useEffect(() => {
-
         let timeout;
         if (!isFirstFetched && data) {
             setIsFirstFetched(true);
@@ -26,24 +25,30 @@ const Timer = ({data}) => {
 
     return (
         <div className='timer'>
-            <h4 className='timer__title'>Време от последно поливане</h4>
-            <div className='timer__section'>
-                <div className='timer__section__item'>
-                    <span className='timer__section__value'>{formattedTime && formattedTime.hours}</span>
-                    <span className='timer__section__key'>часа</span>
-                </div>
-                <span className='timer__section__delimiter'>:</span>
-                <div className='timer__section__item'>
-                    <span className='timer__section__value'>{formattedTime && formattedTime.minutes}</span>
-                    <span className='timer__section__key'>минути</span>
-                </div>
-                <span className='timer__section__delimiter'>:</span>
-                <div className='timer__section__item'>
-                    <span className='timer__section__value'>{formattedTime && formattedTime.seconds}</span>
-                    <span className='timer__section__key'>секунди</span>
-                </div>
-            </div>
+            {
+                data ?
+                    <>
+                        <h4 className='timer__title'>Време от последно поливане</h4>
+                        <div className='timer__section'>
+                            <div className='timer__section__item'>
+                                <span className='timer__section__value'>{formattedTime && formattedTime.hours}</span>
+                                <span className='timer__section__key'>часа</span>
+                            </div>
+                            <span className='timer__section__delimiter'>:</span>
+                            <div className='timer__section__item'>
+                                <span className='timer__section__value'>{formattedTime && formattedTime.minutes}</span>
+                                <span className='timer__section__key'>минути</span>
+                            </div>
+                            <span className='timer__section__delimiter'>:</span>
+                            <div className='timer__section__item'>
+                                <span className='timer__section__value'>{formattedTime && formattedTime.seconds}</span>
+                                <span className='timer__section__key'>секунди</span>
+                            </div>
+                        </div>
+                    </>
+                    : <h4 className='timer__title'>Дървото все още не е поливано</h4>
 
+            }
         </div>
     );
 }
