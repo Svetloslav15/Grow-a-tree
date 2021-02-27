@@ -65,7 +65,6 @@ const TreeDetailsPage = ({history, match}) => {
     const fetchTreeInfo = async () => {
         const data = await TreeService.getAuthorizedTreeById(match.params.id, currUser.accessToken);
         const treeInfo = data.data.data;
-        console.log(treeInfo);
         setTree(treeInfo);
         document.title = `Grow A Tree - ${treeInfo.nickname}`
         setCurrPost({treeId: treeInfo.id, ...currPost});
@@ -104,7 +103,7 @@ const TreeDetailsPage = ({history, match}) => {
         if (response.data.succeeded) {
             setTreeWaterings(response.data.data);
         } else {
-            await AlertService.error(response.errors[0]);
+            await AlertService.error(response.data.errors[0]);
         }
     }
 
@@ -158,7 +157,7 @@ const TreeDetailsPage = ({history, match}) => {
                     await fetchTreeWaterings();
                     toggleIsSuccessWateringModalOpen(true);
                 } else {
-                    await AlertService.error(response.errors[0]);
+                    await AlertService.error(response?.errors[0]);
                 }
                 setUndoIsOpen(false);
             }
