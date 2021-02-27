@@ -1,0 +1,25 @@
+.tree-details-section {
+  &__image-slider {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+  }
+
+  .react-multi-carousel-track .react-multi-carousel-item--active:hover {
+    img {
+      width: 150px !important;
+      height: 150px !important;
+      transition: 1s;
+    }
+  }
+  .react-multi-carousel-item {
+    display: flex;
+    align-items: flex-end;
+
+    img {
+      width: 150px;
+      height: 150px;
+      transition: 1s;
+    }
+  }
+}

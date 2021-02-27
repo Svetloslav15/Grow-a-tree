@@ -37,7 +37,7 @@
             }
 
             var lastUserWatering = await this.context.TreeWaterings
-                .Where(x => x.UserId == request.WatererId)
+                .Where(x => x.UserId == request.WatererId && x.TreeId == request.TreeId)
                 .OrderByDescending(x => x.WateredOn)
                 .FirstOrDefaultAsync();
 

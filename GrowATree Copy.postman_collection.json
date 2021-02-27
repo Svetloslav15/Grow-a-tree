@@ -1,0 +1,2180 @@
+{
+	"info": {
+		"_postman_id": "c19b7190-96ec-48db-b3a6-040ee1630042",
+		"name": "GrowATree Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Stores",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"Store@email.com\",\r\n    \"password\": \"store123\",\r\n    \"name\": \"Test Store\",\r\n    \"latitude\": \"24.12341254125\",\r\n    \"longitute\": \"24.15623612361\",\r\n    \"city\": \"Petrich\",\r\n    \"workingHours\": \"Ot 8 do 5 chasa\",\r\n    \"description\": \"Nai dobrite dyrveta v petri4\",\r\n    \"phoneNumber\": \"0898700133\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/stores/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"stores",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"Bearer\", jsonData.data.accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidXNlcjMiLCJqdGkiOiIyMzk4ZDI4OS1iYTUxLTQ1NWEtYmFiOC05OWNkYTMwNTNhNDYiLCJleHAiOjE2MTAyOTI2NjcsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE4NDYiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ0MzEyIn0.IV_lzv-cybvG4YG79Bxh_bgzXaDhrqS7GarkXD9ZZTc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user3@trees.com\",\r\n    \"password\": \"user3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/login",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"krustytheclown947@abv.bg\",\r\n    \"password\": \"PlamenESieln3211\",\r\n    \"username\": \"PlamenGmail\",\r\n    \"city\": \"Petrich\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/register",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Token\": \"CfDJ8AzeSyxcYVVJm+2zwiSh6ZoDKx9tbZTM0R+bsMGwGcYhejHZgJfYrs9jdm7fuEJPjFVF0hLVxBKYl+umJkaOK98wAqxP3gNgD8PUil1YB1m6E4CCw5konG/M1DSKiKde3EZ5V8Bh5yGHsuD9qATN/urJLg5HjamzWbM4t3rEzAh8dErgQiJLvo4trTfHABcgmI9qyq3CjuYzD//DOyUS1m2CusAHeENH46NEdjgU1sEol/viNrbLh/72Z8+Z7qMv8g==\",\r\n    \"Email\": \"svetli@novoselski.net\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/confirm-email",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"confirm-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"storeUser1@trees.com\",\r\n    \"password\": \"storeUser1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/login",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Email Confirmation Link",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/auth/resend-link-confirm-email",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"resend-link-confirm-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accessToken\": \"\",\r\n    \"refreshToken\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/refresh-token",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgotten Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"michev10@abv.bg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/forgotten-password",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"forgotten-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ResetPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"michev10@abv.bg\",\r\n    \"token\": \"CfDJ8GhwiI0RHEpMnYwg8Kutss8tPIDULXqKzwoU+l/HUVfVSml+7KdSvLIjCPd2eJCzlnQDz3tB4sbLfzIb/iGD/3bkw5V7JYCXmwexGdvaIS1UWptd1iTGEBSX4KnvZ8RRqLrRkjZ8J+f1lWvjxIJbBtZ9vXUUzEo3rAtp7wALH6qpaGEb3XZnsybSxevceACS3+EOv6naE2JJeGQg1r2DiZoNlOeQz+nbO4wonZonkit2\",\r\n    \"password\": \"4325423\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/reset-password",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ExternalLogin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"providerKey\": \"266530738078781\",\r\n    \"providerName\": \"Facebook\",\r\n    \"email\": \"michev10@abv.bg\",\r\n    \"firstName\": \"Ivan\",\r\n    \"lastName\": \"Geroev\",\r\n    \"profilePictureUrl\": \"https://image.com/plamen\",\r\n    \"userId\": \"135135123512351235\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/auth/external-login",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"auth",
+								"external-login"
+							],
+							"query": [
+								{
+									"key": "FirstName",
+									"value": "Plamen",
+									"disabled": true
+								},
+								{
+									"key": "LastName",
+									"value": "Michev",
+									"disabled": true
+								},
+								{
+									"key": "Email",
+									"value": "asas@afad.com",
+									"disabled": true
+								},
+								{
+									"key": "UserId",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "GetById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/42619fbb-fb36-4c25-863f-1fed2d1e7843",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"42619fbb-fb36-4c25-863f-1fed2d1e7843"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users?perPage=3",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "perPage",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "City",
+									"value": "Velingrad20",
+									"type": "text"
+								},
+								{
+									"key": "FirstName",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "LastName",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "PhoneNumber",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "ProfilePictureFile",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "Id",
+									"value": "42619fbb-fb36-4c25-863f-1fed2d1e7843",
+									"type": "text"
+								},
+								{
+									"key": "Username",
+									"value": "user1123123",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/users/edit",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ChangeProfilePicture",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Id",
+									"value": "42619fbb-fb36-4c25-863f-1fed2d1e7843",
+									"type": "text"
+								},
+								{
+									"key": "ProfilePictureFile",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/121306493_3850763454953528_7204199188898699717_n.jpg"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/users/change-profile-picture",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"change-profile-picture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/short-info/4cb0ac37-0f71-43a3-954c-01d6af4ce2c6",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"short-info",
+								"4cb0ac37-0f71-43a3-954c-01d6af4ce2c6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetListShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/list-short-info?perPage=3",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"list-short-info"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetIsUserNearTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/is-user-near-tree?latitude=41.980118&longitude=23.080451&treeId=48e81e20-7e16-4550-92bd-c56b6b9dab49",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"is-user-near-tree"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "41.980118"
+								},
+								{
+									"key": "longitude",
+									"value": "23.080451"
+								},
+								{
+									"key": "treeId",
+									"value": "48e81e20-7e16-4550-92bd-c56b6b9dab49"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trees",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Nickname",
+									"value": "tree3",
+									"type": "text"
+								},
+								{
+									"key": "Type",
+									"value": "bor",
+									"type": "text"
+								},
+								{
+									"key": "Longitude",
+									"value": "41.980908",
+									"type": "text"
+								},
+								{
+									"key": "Latitude",
+									"value": "23.081503",
+									"type": "text"
+								},
+								{
+									"key": "City",
+									"value": "Blagoevgrad",
+									"type": "text"
+								},
+								{
+									"key": "Category",
+									"value": "Iglolistno",
+									"type": "text"
+								},
+								{
+									"key": "OwnerId",
+									"value": "a647531f-68ca-4a8f-8ce6-64d051feec25",
+									"type": "text"
+								},
+								{
+									"key": "ImageFiles",
+									"type": "file",
+									"src": [
+										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/fb-post-photos.jpg",
+										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/instagram_multiple_infographic.png",
+										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/tree-770x832.jpg"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditTreeImage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Id",
+									"value": "a0d26387-ac7b-49ac-b804-250b",
+									"type": "text"
+								},
+								{
+									"key": "NewImageFile",
+									"type": "file",
+									"src": []
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/update-tree-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"update-tree-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddTreeImage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "TreeId",
+									"value": "adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504",
+									"type": "text"
+								},
+								{
+									"key": "ImagesFiles",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/instagram_multiple_infographic.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/add-tree-images",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"add-tree-images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ImageId\": \"a0d26387-ac7b-49ac-b804-250bdfa948be\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/delete-tree-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"delete-tree-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RestoreTreeImage",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ImageId\": \"a0d26387-ac7b-49ac-b804-250bdfa948be\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/restore-tree-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"restore-tree-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/short-info/8f5a9c60-219d-49b9-a433-b2a5181606ee",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"short-info",
+								"8f5a9c60-219d-49b9-a433-b2a5181606ee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees?perPage=3",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetListShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/list-short-info?perPage=3",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"list-short-info"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDeletedImages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/deleted-images?perPage=3&id=f7f3ee60-4c33-4e1b-9aba-48d7efe7ea17",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"deleted-images"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								},
+								{
+									"key": "id",
+									"value": "f7f3ee60-4c33-4e1b-9aba-48d7efe7ea17"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserTrees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/user?perPage=3&id=a289799e-0247-4550-bfda-ce7222f95302",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"user"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								},
+								{
+									"key": "id",
+									"value": "a289799e-0247-4550-bfda-ce7222f95302"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserTreesShortInfo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/user/short-info?perPage=3&id=a289799e-0247-4550-bfda-ce7222f95302",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"user",
+								"short-info"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "3"
+								},
+								{
+									"key": "id",
+									"value": "a289799e-0247-4550-bfda-ce7222f95302"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetClosestTrees",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/trees/closest-trees-short-info?latitude=41.982750&longitude=23.087382",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"closest-trees-short-info"
+							],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "41.982750"
+								},
+								{
+									"key": "longitude",
+									"value": "23.087382"
+								},
+								{
+									"key": "perPage",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRandomImages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/trees/random-images",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"trees",
+								"random-images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRecentTrees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Waterings",
+			"item": [
+				{
+					"name": "WaterTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"treeId\": \"adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504\",\r\n    \"watererId\": \"a2a1cd08-ea19-4107-b1af-0c80b86e7a69\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/water-tree",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"water-tree"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TreesWaterings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/tree-waterings?treeId=adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504&perPage=20",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"tree-waterings"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504"
+								},
+								{
+									"key": "perPage",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TreeWateringsCount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/tree-waterings-count?treeId=ffe529ba-311f-4999-8f53-0a1a22dcfbac",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"tree-waterings-count"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "ffe529ba-311f-4999-8f53-0a1a22dcfbac"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CanUserWaterTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/waterings/can-user-water-tree?treeId=adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504&userId=a2a1cd08-ea19-4107-b1af-0c80b86e7a69",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"waterings",
+								"can-user-water-tree"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "adc9a1c1-b1a7-4c36-b7bc-a90ed8bf8504"
+								},
+								{
+									"key": "userId",
+									"value": "a2a1cd08-ea19-4107-b1af-0c80b86e7a69"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Images",
+			"item": [
+				{
+					"name": "UploadImage",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "ImageFile",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/fb-post-photos.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/images/upload-image",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"images",
+								"upload-image"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreeReports",
+			"item": [
+				{
+					"name": "ReportTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Message",
+									"value": "Tuka si4ko si e balo maikata",
+									"type": "text"
+								},
+								{
+									"key": "UserId",
+									"value": "92017285-4f7d-41bc-b314-09fc594f8b71",
+									"type": "text"
+								},
+								{
+									"key": "TreeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38",
+									"type": "text"
+								},
+								{
+									"key": "Type",
+									"value": "Missing",
+									"type": "text"
+								},
+								{
+									"key": "ImageFile",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/768x432.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/report-tree",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"report-tree"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MarkAsSpam",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"treeReportId\": \"7d8616ad-34a3-4528-86c4-162e0c69cd9a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/mark-as-spam",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"mark-as-spam"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ArchiveReport",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"treeId\": \"4d5b5aac-4aec-45ef-a4a4-51f48b790a38\",\r\n    \"reportType\": \"Broken\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/archive-report",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"archive-report"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetActiveReportTypes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/active-reports-types?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"active-reports-types"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetActiveReportsByType",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/active-reports?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38&reportType=Broken",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"active-reports"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								},
+								{
+									"key": "reportType",
+									"value": "Broken"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetArchivedReportTypes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/archived-reports-types?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"archived-reports-types"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetArchivedReportsByType",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReports/archived-reports?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38&reportType=Missing",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReports",
+								"archived-reports"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								},
+								{
+									"key": "reportType",
+									"value": "Missing"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreeReactions",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"92017285-4f7d-41bc-b314-09fc594f8b71\",\r\n    \"treeId\": \"4d5b5aac-4aec-45ef-a4a4-51f48b790a38\",\r\n    \"type\": \"Laugh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"1b05aa20-7047-4234-86f7-0df2420c6ffc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/delete",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTypesForTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/tree-reaction-types?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"tree-reaction-types"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTreeReactionsForTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/tree-reactions?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38&type=Heart",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"tree-reactions"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								},
+								{
+									"key": "type",
+									"value": "Heart"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreePosts",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"\",\r\n    \"content\": \"plamen samo testva\",\r\n    \"treeId\": \"4d5b5aac-4aec-45ef-a4a4-51f48b790a38\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePosts/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePosts",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"2686cc6d-1678-4273-bd36-8f221fe82af4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePosts/delete",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePosts",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePosts/list?page=1&perPage=5",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePosts",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreePostReactions",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"Laugh\",\r\n    \"treePostId\": \"2686cc6d-1678-4273-bd36-8f221fe82af4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReactions/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReactions",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTypesForTreePost",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReactions/types?postId=2686cc6d-1678-4273-bd36-8f221fe82af4",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReactions",
+								"types"
+							],
+							"query": [
+								{
+									"key": "postId",
+									"value": "2686cc6d-1678-4273-bd36-8f221fe82af4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetReactionsList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReactions/list?postId=2686cc6d-1678-4273-bd36-8f221fe82af4&type=Laugh",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReactions",
+								"list"
+							],
+							"query": [
+								{
+									"key": "postId",
+									"value": "2686cc6d-1678-4273-bd36-8f221fe82af4"
+								},
+								{
+									"key": "type",
+									"value": "Laugh"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreePostReplies",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"Samo testvam bratmi\",\r\n    \"treePostId\": \"2a05d220-664a-4ff1-9545-bab21be3bd89\",\r\n    \"id\": \"f1ebdae1-6c79-42e0-8a0f-7c70bfe32c0a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplies/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplies",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplies/list?page=1&perPage=5",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplies",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"f1ebdae1-6c79-42e0-8a0f-7c70bfe32c0a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplies/delete",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplies",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreePostReplyReactions",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"5fef4b6e-5749-4ffb-8615-bf3e789bf06e\",\r\n    \"type\": \"Heart\",\r\n    \"treePostReplyId\": \"f1ebdae32c0a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplyReactions/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplyReactions",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplyReactions/list?page=1&perPage=5",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplyReactions",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"5fef4b6e-5749-4ffb-8615-bf3e789bf06e\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplyReactions/delete",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplyReactions",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

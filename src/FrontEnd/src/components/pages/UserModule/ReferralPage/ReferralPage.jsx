@@ -16,7 +16,7 @@ const ReferralPage = () => {
     const [referralLink, setReferralLink] = useState('');
 
     useEffect(() => {
-        setReferralLink(`${process.env.REACT_APP_BASE_URL}/auth/register?referral=${currUser.id}`)
+        setReferralLink(`${process.env.REACT_APP_CLIENT_BASE_URL}auth/register?referral=${currUser.id}`)
     }, [currUser]);
 
     const copyToClipboard = () => {

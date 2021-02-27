@@ -1,0 +1,95 @@
+@keyframes fadeIn {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.wrapper {
+  .overlayBg {
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    opacity: 0.5;
+  }
+
+  &__modal {
+    position: fixed;
+    background-color: #B9DEF9;
+    z-index: 101;
+    width: 50%;
+    top: 20%;
+    left: 25%;
+    border: 2px solid #002F3E;
+    height: 400px;
+    animation: fadeIn 1s 0ms forwards;
+    display: flex;
+    justify-content: center;
+    .closeButton {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      cursor: pointer;
+      z-index: 2;
+      font-size: 20px;
+    }
+
+    .bgShapeImage {
+      width: 70%;
+    }
+
+    .bgShapeImage:nth-child(1) {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 88px;
+    }
+
+    .bgShapeImage:nth-child(2) {
+      position: absolute;
+      top: 17%;
+      display: flex;
+      width: 39%;
+      z-index: 1;
+    }
+
+    .bgShapeImage:nth-child(3) {
+      position: absolute;
+      bottom: 0;
+      display: flex;
+      width: 100%;
+    }
+
+    &__title {
+      color: #002F3E;
+      z-index: 30;
+      position: relative;
+      font-size: 24px;
+      padding: 10px 20px;
+      text-align: center;
+      font-weight: bold;
+      border-bottom: 1px solid #002F3E;
+      margin-bottom: 0;
+    }
+
+    &__description {
+      color: #002F3E;
+      font-weight: bold;
+      z-index: 1;
+      position: absolute;
+      bottom: 7%;
+      text-align: center;
+      width: 78%;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

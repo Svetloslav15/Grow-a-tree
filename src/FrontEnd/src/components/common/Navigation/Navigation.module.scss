@@ -2,9 +2,17 @@
   background-color: #B7DCC6;
   width: 100%;
   z-index: 100;
+  position: fixed;
+  top: 0;
 }
 .logo {
   width: 120px;
   margin: 0 2em;
   cursor: pointer;
+}
+
+.customNavWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }

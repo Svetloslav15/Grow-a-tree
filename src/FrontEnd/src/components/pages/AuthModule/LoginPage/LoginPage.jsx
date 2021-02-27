@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect } from 'react';
+import React, {useState } from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import Cookies from 'js-cookie';
@@ -47,13 +47,13 @@ const LoginPage = ({history}) => {
     };
 
     return (
-        <>
-            <img src={BgShape1} className='shape1'/>
-            <img src={BgShape2} className='shape2'/>
-            <img src={BgShape3} className='shape3'/>
+        <div className='pt-5 mt-5'>
+            <img src={BgShape1} className='shape1' alt='Background Green Shape'/>
+            <img src={BgShape2} className='shape2' alt='Background Green Shape'/>
+            <img src={BgShape3} className='shape3' alt='Background Green Shape'/>
             <div className='px-0 mx-0 my-5 row'>
                 <div className={`col-md-6`}>
-                    <img src={BgImage} className={style.imageBg}/>
+                    <img src={BgImage} className={style.imageBg} alt='Background Green Shape'/>
                 </div>
                 <div className='col-md-5'>
                     <h2 className={style.title}>Вход</h2>
@@ -84,7 +84,7 @@ const LoginPage = ({history}) => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 };
 

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2a4743f0-0d84-4d85-a95a-2f321201929c",
+		"_postman_id": "62a6714e-85f0-40ad-9208-a5347f5f1c5a",
 		"name": "GrowATree Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -35,8 +35,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Auth",
@@ -47,7 +46,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "6bff3b1d-5784-48cf-9ac3-e83af9f2b811",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", jsonData.data.accessToken);"
@@ -61,7 +59,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"user1@trees.com\",\r\n    \"password\": \"user1\"\r\n}",
+							"raw": "{\r\n    \"email\": \"user3@trees.com\",\r\n    \"password\": \"user3\",\r\n    \"deviceName\": \"Samsung Galaxy S7 Edge\",\r\n    \"ip\": \"192.201.101.101\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -141,7 +139,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "67d17b56-310d-49ee-ae84-e540ba2632e4",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -323,8 +320,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Users",
@@ -373,22 +369,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LocalUrl}}/users?perPage=3",
+							"raw": "{{LocalUrl}}/guessGame/get-questions",
 							"host": [
 								"{{LocalUrl}}"
 							],
 							"path": [
-								"users"
+								"guessGame",
+								"get-questions"
 							],
 							"query": [
 								{
 									"key": "page",
 									"value": "1",
 									"disabled": true
-								},
-								{
-									"key": "perPage",
-									"value": "3"
 								}
 							]
 						}
@@ -580,9 +573,88 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GetReferrals",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/referrals?id=64297ed8-cb49-497c-aed3-74e7ebcd502f&page=1&perPage=15",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"referrals"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "64297ed8-cb49-497c-aed3-74e7ebcd502f"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginHistory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/users/login-history?page=1&perPage=15",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"users",
+								"login-history"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "15"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Trees",
@@ -649,10 +721,7 @@
 										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/tree-770x832.jpg"
 									]
 								}
-							],
-							"options": {
-								"formdata": {}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{LocalUrl}}/trees/upsert",
@@ -1069,8 +1138,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Waterings",
@@ -1222,8 +1290,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Images",
@@ -1266,8 +1333,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "TreeReports",
@@ -1548,9 +1614,741 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
+		},
+		{
+			"name": "TreeReactions",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"92017285-4f7d-41bc-b314-09fc594f8b71\",\r\n    \"treeId\": \"4d5b5aac-4aec-45ef-a4a4-51f48b790a38\",\r\n    \"type\": \"Laugh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"1b05aa20-7047-4234-86f7-0df2420c6ffc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/delete",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTypesForTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/tree-reaction-types?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"tree-reaction-types"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTreeReactionsForTree",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treeReactions/tree-reactions?treeId=4d5b5aac-4aec-45ef-a4a4-51f48b790a38&type=Heart",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treeReactions",
+								"tree-reactions"
+							],
+							"query": [
+								{
+									"key": "treeId",
+									"value": "4d5b5aac-4aec-45ef-a4a4-51f48b790a38"
+								},
+								{
+									"key": "type",
+									"value": "Heart"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreePosts",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"\",\r\n    \"content\": \"plamen samo testva\",\r\n    \"treeId\": \"4d5b5aac-4aec-45ef-a4a4-51f48b790a38\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePosts/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePosts",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"2686cc6d-1678-4273-bd36-8f221fe82af4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePosts/delete",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePosts",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePosts/list?page=1&perPage=5",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePosts",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreePostReactions",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"Laugh\",\r\n    \"treePostId\": \"2686cc6d-1678-4273-bd36-8f221fe82af4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReactions/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReactions",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTypesForTreePost",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReactions/types?postId=2686cc6d-1678-4273-bd36-8f221fe82af4",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReactions",
+								"types"
+							],
+							"query": [
+								{
+									"key": "postId",
+									"value": "2686cc6d-1678-4273-bd36-8f221fe82af4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetReactionsList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReactions/list?postId=2686cc6d-1678-4273-bd36-8f221fe82af4&type=Laugh",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReactions",
+								"list"
+							],
+							"query": [
+								{
+									"key": "postId",
+									"value": "2686cc6d-1678-4273-bd36-8f221fe82af4"
+								},
+								{
+									"key": "type",
+									"value": "Laugh"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreePostReplies",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"Samo testvam bratmi\",\r\n    \"treePostId\": \"2a05d220-664a-4ff1-9545-bab21be3bd89\",\r\n    \"id\": \"f1ebdae1-6c79-42e0-8a0f-7c70bfe32c0a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplies/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplies",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplies/list?page=1&perPage=5",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplies",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"f1ebdae1-6c79-42e0-8a0f-7c70bfe32c0a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplies/delete",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplies",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TreePostReplyReactions",
+			"item": [
+				{
+					"name": "Upsert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"5fef4b6e-5749-4ffb-8615-bf3e789bf06e\",\r\n    \"type\": \"Heart\",\r\n    \"treePostReplyId\": \"f1ebdae32c0a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplyReactions/upsert",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplyReactions",
+								"upsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplyReactions/list?page=1&perPage=5",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplyReactions",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "perPage",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"5fef4b6e-5749-4ffb-8615-bf3e789bf06e\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/treePostReplyReactions/delete",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"treePostReplyReactions",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ML and Guess Game",
+			"item": [
+				{
+					"name": "{{LocalUrl}}/ml/predict-leaf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiUGxhbWVuVmVsaWthbmEiLCJqdGkiOiJlNWZmNjhjZC0zZjQ2LTQyNWQtOWE2NS0wYjdlYWNhZTU2ZTIiLCJleHAiOjE2NzMzNjg4ODUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE4NDYiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ0MzEyIn0.-UVQ0tbb2fAeTyvqbP6zFuUUkVNxQWoGjCJfIhwhTKM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Image",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/olx/126911285_747965342476609_8812380843982047806_n.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/ml/predict-leaf",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"ml",
+								"predict-leaf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/guessGame/get-questions",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"guessGame",
+								"get-questions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{LocalUrl}}/guessGame/answer-question",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiUGxhbWVuVmVsaWthbmEiLCJqdGkiOiJlNWZmNjhjZC0zZjQ2LTQyNWQtOWE2NS0wYjdlYWNhZTU2ZTIiLCJleHAiOjE2NzMzNjg4ODUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE4NDYiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ0MzEyIn0.-UVQ0tbb2fAeTyvqbP6zFuUUkVNxQWoGjCJfIhwhTKM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"questionId\": \"4423583f-cc6d-4e1e-b0f1-9de5d821af47.jpg\",\r\n    \"answer\": \"Ясен\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/guessGame/answer-question",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"guessGame",
+								"answer-question"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

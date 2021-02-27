@@ -3,6 +3,8 @@
     public enum ReactionType
     {
         Heart = 1,
-        Laugh
+        Laugh,
+        Like,
+        Sad
     }
 }

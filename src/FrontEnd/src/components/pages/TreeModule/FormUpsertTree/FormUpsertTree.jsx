@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+
 import * as style from './FormUpsertTree.module.scss';
 import InputField from '../../../common/InputField/InputField';
 import InputAutoComplete from '../../../common/InputAutoComplete/InputAutoComplete';
@@ -46,14 +47,16 @@ const FormUpsertTree = ({title, data, type, location, handleChange, handleFilesU
                                    values={TreeCategories}
                                    defaultValue={data.category}
                                    onChange={handleChange}/>
-                    <FileInput onChange={handleFilesUpload}/>
+                    <FileInput onChange={handleFilesUpload} isMultiple={true}/>
                     <div className='text-right mt-3'>
                         <Button type='DarkOutline' onClick={handleSubmit}>{type}</Button>
                     </div>
                 </div>
                 <div className={`${style.mapContainer} col-md-5`}>
                     <p>Местоположение: <span className='font-weight-bold'>{location}</span></p>
-                    <Map handleCoordinates={handleCoordinates}/>
+                    <Map handleCoordinates={handleCoordinates}
+                         markers={[]}
+                         canSetMarker={true}/>
                 </div>
             </div>
         </div>

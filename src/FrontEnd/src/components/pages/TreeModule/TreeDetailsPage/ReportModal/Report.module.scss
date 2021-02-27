@@ -1,0 +1,68 @@
+.wrapper {
+  &__bgOverlay {
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    opacity: 0.5;
+  }
+
+  &__modal {
+    position: fixed;
+    background-color: white;
+    z-index: 101;
+    width: 50%;
+    top: 4%;
+    left: 25%;
+    border: 2px solid #002F3E;
+    height: fit-content;
+    animation: fadeIn 1s 0ms forwards;
+    justify-content: center;
+
+    &__title {
+      color: #002F3E;
+      z-index: 1;
+      position: relative;
+      font-size: 24px;
+      padding: 10px 20px;
+      text-align: left;
+      font-weight: bold;
+      border-bottom: 1px solid #002F3E;
+      margin-bottom: 0;
+    }
+
+    &__form {
+      padding: 1rem 2rem;
+    }
+  }
+}
+
+.bgShapeImage {
+  width: 70%;
+}
+
+.bgShapeImage:nth-child(1) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+
+.bgShapeImage:nth-child(2) {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  z-index: 2;
+  font-size: 20px;
+}

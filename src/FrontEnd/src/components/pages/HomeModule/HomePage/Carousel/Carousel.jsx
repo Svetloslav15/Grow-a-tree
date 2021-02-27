@@ -26,7 +26,6 @@ const CarouselComponent = () => {
         TreeService.getTreesForCarousel('')
             .then((data) => {
                 setTrees(data.data.data);
-                console.log(data.data.data);
             })
     }, []);
 
@@ -34,8 +33,8 @@ const CarouselComponent = () => {
         <div className={`${style.wrapper} col-md-12`}>
             <Carousel responsive={responsive}>
                 {trees.length > 0 &&
-                (trees.map(x =>
-                    <Link to={`/trees/details/${x.treeId}`}>
+                (trees.map((x, index) =>
+                    <Link key={index} to={`/trees/details/${x.treeId}`}>
                         <img className={style.imageSlider}
                              src={x.url} alt={x.treeId}/>
                     </Link>)
@@ -44,5 +43,4 @@ const CarouselComponent = () => {
         </div>
     );
 };
-
 export default CarouselComponent;

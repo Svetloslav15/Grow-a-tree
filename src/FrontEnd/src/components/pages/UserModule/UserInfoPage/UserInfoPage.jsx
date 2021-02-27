@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
+import Skeleton from 'react-loading-skeleton';
 
 import * as style from './UserInfoPage.module.scss';
 import Icons from '../../../../static/icons';
@@ -39,8 +40,7 @@ const UserInfoPage = () => {
         const response = await UsersService.postAuthorizedEditUser(currUser, stateUserData.accessToken);
         if (response.succeeded) {
             AlertService.success(SuccessMessages.successEditYourInfo);
-        }
-        else {
+        } else {
             AlertService.error(response.data.errors[0]);
         }
     };
@@ -54,8 +54,8 @@ const UserInfoPage = () => {
                         <ChangeImage changeProfileImage={changeProfileImage}/>
                     </div>
                     <div className='col-md-7'>
-                        <p className={style.username}>@{currUser.userName}</p>
-                        <p className={style.name}>({currUser.firstName} {currUser.lastName})</p>
+                        {currUser.userName ? <p className={style.username}>@{currUser.userName}</p> : <Skeleton/>}
+                        {currUser.firstName ? <p className={style.name}>({currUser.firstName} {currUser.lastName})</p> : <Skeleton/>}
                         <div className='col-md-12 row'>
                             <InputField type='text'
                                         label={'Име'}

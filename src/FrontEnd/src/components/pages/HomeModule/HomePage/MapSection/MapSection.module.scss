@@ -1,0 +1,81 @@
+.wrapper {
+  min-height: 90vh;
+
+  &__mapSection {
+    &__info {
+      display: flex;
+      justify-content: space-around;
+
+      &__title {
+        font-weight: bold;
+        font-family: "Raleway", sans-serif;
+      }
+
+      a {
+        color: #002F3E;
+      }
+
+      a:hover {
+        color: white;
+      }
+    }
+
+    &__wrapper {
+      height: 80%;
+      position: relative;
+      width: 90%;
+      border: 5px solid #4CA772;
+      margin: 2rem 3rem;
+    }
+  }
+
+  &__treesSection {
+    font-family: "Raleway", sans-serif;
+    padding: 0 !important;
+
+    &__title {
+      border-bottom: 2px solid #002F3E;
+      padding: 1rem;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    &__items {
+      max-height: 100vh;
+      overflow-y: scroll;
+
+      &__item {
+        list-style: none;
+        display: flex;
+        padding: 1rem 0;
+        justify-content: space-around;
+        border-bottom: 2px solid #002F3E;
+        margin: 0 1rem;
+
+        &__userImage {
+          width: 50px;
+          height: 50px;
+        }
+
+        &__user {
+          &__name {
+            font-size: 18px;
+            font-weight: bold;
+          }
+
+          &__date {
+            font-size: 14px;
+          }
+
+          &__tree {
+            background: #A9CE4C;
+            height: fit-content;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+          }
+        }
+      }
+    }
+  }
+}

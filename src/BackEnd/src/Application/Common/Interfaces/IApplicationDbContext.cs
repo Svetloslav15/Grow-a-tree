@@ -13,9 +13,7 @@
 
         public DbSet<TreeImage> TreeImages { get; set; }
 
-        public DbSet<Reaction> Reactions { get; set; }
-
-        public DbSet<ReactionImage> ReactionImages { get; set; }
+        public DbSet<TreeReaction> TreeReactions { get; set; }
 
         public DbSet<Tree> Trees { get; set; }
 
@@ -32,6 +30,14 @@
         public DbSet<PromoCode> PromoCodes { get; set; }
 
         public DbSet<Store> Stores { get; set; }
+
+        public DbSet<TreePostReply> TreePostReplies { get; set; }
+
+        public DbSet<TreePostReplyReaction> TreePostReplyReactions { get; set; }
+
+        public DbSet<LoginHistory> LoginHistory { get; set; }
+
+        public DbSet<UnknownTrees> UnknownTrees { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

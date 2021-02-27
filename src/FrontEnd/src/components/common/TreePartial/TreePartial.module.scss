@@ -1,0 +1,36 @@
+.wrapper {
+  min-height: 100vh;
+  position: relative;
+
+  &__items {
+    justify-content: center;
+
+    &__item {
+      background-color: white;
+      border: 2px solid #4CA771;
+      padding: 2rem;
+      margin: 20px;
+      cursor: pointer;
+
+      &__image {
+        width: 50px;
+        height: 50px;
+      }
+
+      &__info {
+        &__name {
+          font-family: "Raleway", sans-serif;
+          font-weight: bold;
+          font-size: 25px;
+          padding-bottom: 10px;
+          border-bottom: 1px solid #002F3E;
+          color: #002F3E;
+        }
+
+        &__description {
+          color: #002F3E;
+        }
+      }
+    }
+  }
+}

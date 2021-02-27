@@ -3,7 +3,28 @@ import baseService from './baseService';
 const ROUTES = {
     postAuthorizedAddTree: '/trees/upsert',
     getAuthorizedTreeById: '/trees/',
-    getTreesForCarousel: '/trees/random-images'
+    getTreesForCarousel: '/trees/random-images',
+    postAuthorizedUpsertTreePost: '/treePosts/upsert',
+    getAuthorizedTreePosts: '/treePosts/list',
+    getAuthorizedTreePostReactions: '/treePostReactions/list',
+    postAuthorizedUpsertTreeReaction: '/treePostReactions/upsert',
+    postAuthorizedWaterTree: '/waterings/water-tree',
+    getAuthorizedTreeWaterings: '/waterings/tree-waterings',
+    getAuthorizedTreeReactons: '/treeReactions/tree-reactions',
+    postAuthorizedReactToTree: '/treeReactions/upsert',
+    postAuthorizedReportTree: '/treeReports/report-tree',
+    getAuthorizedTreePostReplies: '/treePostReplies/list',
+    postAuthorizedUpsertTreeReply: '/treePostReplies/upsert',
+    postAuthorizedUpsertTreeReplyReact: '/treePostReplyReactions/upsert',
+    getAuthorizedTreePostReplyReactions: '/treePostReplyReactions/list',
+    getNearestTrees: '/trees/closest-trees-short-info',
+    getAuthorizedActiveReportTypes: '/treeReports/active-reports-types',
+    getAuthorizedArchivedReportTypes: '/treeReports/archived-reports-types',
+    getAuthorizedActiveReports: '/treeReports/active-reports',
+    getAuthorizedArchivedReports: '/treeReports/archived-reports',
+    getAuthorizedTreesByUser: '/trees/user',
+    postAuthorizedArchiveReports: '/treeReports/archive-report',
+    postAuthorizedMakeSpamReport: '/treeReports/mark-as-spam'
 };
 
 export default new Proxy({}, {

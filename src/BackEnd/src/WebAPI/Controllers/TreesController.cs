@@ -20,6 +20,7 @@
     using GrowATree.Application.Trees.Queries.GetList;
     using GrowATree.Application.Trees.Queries.GetListShortInfo;
     using GrowATree.Application.Trees.Queries.GetRandomImages;
+    using GrowATree.Application.Trees.Queries.GetRecentTrees;
     using GrowATree.Application.Trees.Queries.GetShortInfoById;
     using GrowATree.Application.Trees.Queries.GetUserTreesShortInfo;
     using GrowATree.Application.Users.Queries.GetTrees;
@@ -445,6 +446,33 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("recent-trees")]
+        public async Task<ActionResult<TreeListModel>> GetRecentTrees([FromQuery] GetRecentTreesQuery query)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return TreeListModel.Failure<TreeListModel>(errorMessage);
+                }
+
+                return await this.Mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return TreeListModel.Failure<TreeListModel>(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }

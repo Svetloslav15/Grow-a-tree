@@ -15,25 +15,27 @@ const ExternalLoginSection = ({history}) => {
     const dispatch = useDispatch();
 
     const responseGoogle = async (response) => {
+        //TODO Check if response is valid
         const model = {
             "providerKey": process.env.REACT_APP_GOOGLE_PROVIDER_ID,
             "providerName": "Google",
-            "email": response.profileObj.email,
-            "userId": response.profileObj.googleId,
-            "firstName": response.profileObj.givenName,
-            "lastName": response.profileObj.familyName,
-            "profilePictureUrl": response.profileObj.imageUrl
+            "email": response?.profileObj?.email,
+            "userId": response?.profileObj?.googleId,
+            "firstName": response?.profileObj?.givenName,
+            "lastName": response?.profileObj?.familyName,
+            "profilePictureUrl": response?.profileObj?.imageUrl
         };
         await processData(model);
     };
     const responseFacebook = async (response) => {
+        //TODO Check if response is valid
         const model = {
             "providerKey": process.env.REACT_APP_FACEBOOK_ID,
             "providerName": "Facebook",
-            "email": response.email,
-            "userId": response.id,
-            "firstName": response.name.split(' ')[0],
-            "lastName": response.name.split(' ')[1],
+            "email": response?.email,
+            "userId": response?.id,
+            "firstName": response?.name?.split(' ')[0],
+            "lastName": response?.name?.split(' ')[1],
             "profilePictureUrl": `https://graph.facebook.com/${response.id}/picture?width=500&height=500&access_token=${response.accessToken}`
         };
         await processData(model);
