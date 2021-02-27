@@ -47,7 +47,7 @@ const App = () => (
             <PrivateRoute exact path='/users/referral' component={ReferralPage}/>
             <PrivateRoute exact path='/trees/add' component={AddTreePage}/>
             <PrivateRoute exact path='/trees/edit/:id' component={EditTreePage}/>
-            <Route exact path='/trees/details/:id' component={TreeDetailsPage}/>
+            <PrivateRoute exact path='/trees/details/:id' component={TreeDetailsPage}/>
             {
                 staticPagesData.map(page => <Route exact path={`/static/${page.route}`} component={StaticPage}/>)
             }
