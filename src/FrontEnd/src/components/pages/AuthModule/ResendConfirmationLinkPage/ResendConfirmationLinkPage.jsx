@@ -23,8 +23,8 @@ const ResendConfirmationLinkPage = () => {
     };
     return (
         <div className='pt-5 mt-5'>
-            <img src={BgShape3} className='shape3'/>
-            <img src={BgShape4} className='shape4'/>
+            <img src={BgShape3} className='shape3' alt='Background Green Shape'/>
+            <img src={BgShape4} className='shape4' alt='Background Green Shape'/>
             <div className={`col-md-12 ${style.sectionWrapper}`}>
                 <div className='col-md-5 my-5 mx-auto'>
                     <h2 className={style.title}># Успешно се регистрирахте</h2>

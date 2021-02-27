@@ -1,6 +1,5 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
-import * as style from './Map.module.scss';
 
 const MapContainer = ({handleCoordinates, coordinates, isStatic, className, markers, canSetMarker, onMarkerClick}) => {
     const [marker, setMarker] = useState({position: {lat: 0, lng: 0}});

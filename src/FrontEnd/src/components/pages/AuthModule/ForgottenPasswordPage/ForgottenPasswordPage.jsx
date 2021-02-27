@@ -23,8 +23,8 @@ const ForgottenPasswordPage = () => {
     };
     return (
         <>
-            <img src={BgShape3} className='shape3'/>
-            <img src={BgShape4} className='shape4'/>
+            <img src={BgShape3} className='shape3' alt='Background Green Shape'/>
+            <img src={BgShape4} className='shape4' alt='Background Green Shape'/>
             <div className={`col-md-12 ${style.sectionWrapper}`}>
                 <div className='col-md-4 my-5 mx-auto text-center'>
                     <h2 className={style.title}># Забравена парола</h2>

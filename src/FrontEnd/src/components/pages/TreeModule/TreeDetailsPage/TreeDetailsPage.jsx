@@ -48,7 +48,6 @@ const TreeDetailsPage = ({history, match}) => {
     const [currWateringPage, setCurrWateringPage] = useState(1);
     const [treeWaterings, setTreeWaterings] = useState([]);
     const [treeReactions, setTreeReactions] = useState([]);
-    const [treePostReplies, setTreePostReplies] = useState([]);
     const [reactionTypes, setCurrReactionTypes] = useState([]);
 
     useEffect(() => {

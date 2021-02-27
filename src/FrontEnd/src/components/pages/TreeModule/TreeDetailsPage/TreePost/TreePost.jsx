@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import parse from 'html-react-parser';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import './TreePost.scss';
 import ReactionButton from '../../../../common/ReactionButton/ReactionButton';

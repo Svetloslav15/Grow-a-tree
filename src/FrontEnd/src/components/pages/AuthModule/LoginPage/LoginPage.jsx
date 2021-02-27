@@ -48,12 +48,12 @@ const LoginPage = ({history}) => {
 
     return (
         <div className='pt-5 mt-5'>
-            <img src={BgShape1} className='shape1'/>
-            <img src={BgShape2} className='shape2'/>
-            <img src={BgShape3} className='shape3'/>
+            <img src={BgShape1} className='shape1' alt='Background Green Shape'/>
+            <img src={BgShape2} className='shape2' alt='Background Green Shape'/>
+            <img src={BgShape3} className='shape3' alt='Background Green Shape'/>
             <div className='px-0 mx-0 my-5 row'>
                 <div className={`col-md-6`}>
-                    <img src={BgImage} className={style.imageBg}/>
+                    <img src={BgImage} className={style.imageBg} alt='Background Green Shape'/>
                 </div>
                 <div className='col-md-5'>
                     <h2 className={style.title}>Вход</h2>
