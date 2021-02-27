@@ -47,6 +47,8 @@
 
         public DbSet<LoginHistory> LoginHistory { get; set; }
 
+        public DbSet<UnknownTrees> UnknownTrees { get; set; }
+
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions,

@@ -35,8 +35,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Auth",
@@ -47,7 +46,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "e773eb9a-e89d-413e-a260-617aae8dbc66",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", jsonData.data.accessToken);"
@@ -141,7 +139,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "a35110a6-45bf-470b-8fef-f9fab86249a4",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
 									"postman.setEnvironmentVariable(\"Bearer\", \"Bearer \" + jsonData.data.token);"
@@ -323,8 +320,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Users",
@@ -373,22 +369,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LocalUrl}}/users?perPage=3",
+							"raw": "{{LocalUrl}}/guessGame/get-questions",
 							"host": [
 								"{{LocalUrl}}"
 							],
 							"path": [
-								"users"
+								"guessGame",
+								"get-questions"
 							],
 							"query": [
 								{
 									"key": "page",
 									"value": "1",
 									"disabled": true
-								},
-								{
-									"key": "perPage",
-									"value": "3"
 								}
 							]
 						}
@@ -661,8 +654,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Trees",
@@ -729,10 +721,7 @@
 										"/C:/Users/miche/OneDrive/Работен плот/GrowATree Test Photos/tree-770x832.jpg"
 									]
 								}
-							],
-							"options": {
-								"formdata": {}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{LocalUrl}}/trees/upsert",
@@ -1149,8 +1138,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Waterings",
@@ -1302,8 +1290,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Images",
@@ -1346,8 +1333,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "TreeReports",
@@ -1628,8 +1614,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "TreeReactions",
@@ -1780,8 +1765,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "TreePosts",
@@ -1898,8 +1882,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "TreePostReactions",
@@ -2013,8 +1996,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "TreePostReplies",
@@ -2131,8 +2113,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "TreePostReplyReactions",
@@ -2249,9 +2230,125 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
+		},
+		{
+			"name": "ML and Guess Game",
+			"item": [
+				{
+					"name": "{{LocalUrl}}/ml/predict-leaf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiUGxhbWVuVmVsaWthbmEiLCJqdGkiOiJlNWZmNjhjZC0zZjQ2LTQyNWQtOWE2NS0wYjdlYWNhZTU2ZTIiLCJleHAiOjE2NzMzNjg4ODUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE4NDYiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ0MzEyIn0.-UVQ0tbb2fAeTyvqbP6zFuUUkVNxQWoGjCJfIhwhTKM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "Image",
+									"type": "file",
+									"src": "/C:/Users/miche/OneDrive/Работен плот/olx/126911285_747965342476609_8812380843982047806_n.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/ml/predict-leaf",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"ml",
+								"predict-leaf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Bearer}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LocalUrl}}/guessGame/get-questions",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"guessGame",
+								"get-questions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{LocalUrl}}/guessGame/answer-question",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiUGxhbWVuVmVsaWthbmEiLCJqdGkiOiJlNWZmNjhjZC0zZjQ2LTQyNWQtOWE2NS0wYjdlYWNhZTU2ZTIiLCJleHAiOjE2NzMzNjg4ODUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NjE4NDYiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ0MzEyIn0.-UVQ0tbb2fAeTyvqbP6zFuUUkVNxQWoGjCJfIhwhTKM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"questionId\": \"4423583f-cc6d-4e1e-b0f1-9de5d821af47.jpg\",\r\n    \"answer\": \"Ясен\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LocalUrl}}/guessGame/answer-question",
+							"host": [
+								"{{LocalUrl}}"
+							],
+							"path": [
+								"guessGame",
+								"answer-question"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

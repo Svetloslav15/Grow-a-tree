@@ -37,6 +37,8 @@
 
         public DbSet<LoginHistory> LoginHistory { get; set; }
 
+        public DbSet<UnknownTrees> UnknownTrees { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
