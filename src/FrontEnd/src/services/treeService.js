@@ -17,7 +17,14 @@ const ROUTES = {
     postAuthorizedUpsertTreeReply: '/treePostReplies/upsert',
     postAuthorizedUpsertTreeReplyReact: '/treePostReplyReactions/upsert',
     getAuthorizedTreePostReplyReactions: '/treePostReplyReactions/list',
-    getNearestTrees: '/trees/closest-trees-short-info'
+    getNearestTrees: '/trees/closest-trees-short-info',
+    getAuthorizedActiveReportTypes: '/treeReports/active-reports-types',
+    getAuthorizedArchivedReportTypes: '/treeReports/archived-reports-types',
+    getAuthorizedActiveReports: '/treeReports/active-reports',
+    getAuthorizedArchivedReports: '/treeReports/archived-reports',
+    getAuthorizedTreesByUser: '/trees/user',
+    postAuthorizedArchiveReports: '/treeReports/archive-report',
+    postAuthorizedMakeSpamReport: '/treeReports/mark-as-spam'
 };
 
 export default new Proxy({}, {

@@ -15,4 +15,6 @@ export default {
     successReportTree: 'Успешно докладвахте проблем!',
     successPostReply: 'Успешно добавихте коментар към поста!',
     successPostReplyReact: 'Успешно реагирахте на коментар към поста!',
+    successMarkReportSpam: 'Успешно маркирахте доклада като спам!',
+    successReportArchive: 'Успешно архивирахте докладите!'
 }

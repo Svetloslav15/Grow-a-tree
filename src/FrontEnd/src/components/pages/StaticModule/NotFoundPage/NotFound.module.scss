@@ -1,0 +1,34 @@
+.wrapper {
+  margin-top: 2em;
+  position: relative;
+  height: 80vh;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  h1 {
+    color: #002F3e;
+    font-size: 12em;
+  }
+
+  h3 {
+    color: #002F3e;
+  }
+
+  &__topImage {
+    position: absolute;
+    top: 1.5em;
+    width: 61%;
+    z-index: -1;
+    right: 0;
+  }
+
+  &__bottomImage {
+    position: absolute;
+    bottom: 0;
+    width: 61%;
+    z-index: -1;
+    left: 0;
+  }
+}

@@ -719,13 +719,22 @@
         "operationId": "TreePosts_List",
         "parameters": [
           {
+            "name": "TreeId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
             "name": "Page",
             "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 1
+            "x-position": 2
           },
           {
             "name": "PerPage",
@@ -734,7 +743,7 @@
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 2
+            "x-position": 3
           }
         ],
         "responses": {
@@ -1065,13 +1074,22 @@
             "x-position": 2
           },
           {
+            "name": "UserId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
             "name": "Page",
             "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 3
+            "x-position": 4
           },
           {
             "name": "PerPage",
@@ -1080,7 +1098,7 @@
               "type": "integer",
               "format": "int32"
             },
-            "x-position": 4
+            "x-position": 5
           }
         ],
         "responses": {
@@ -2076,6 +2094,51 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ResultOfString"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Trees/recent-trees": {
+      "get": {
+        "tags": [
+          "Trees"
+        ],
+        "operationId": "Trees_GetRecentTrees",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "PerPage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TreeListModel"
                 }
               }
             }
@@ -3560,6 +3623,10 @@
             "$ref": "#/components/schemas/ReactionType"
           },
           "userUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "userProfilePictureUrl": {
             "type": "string",
             "nullable": true
           },

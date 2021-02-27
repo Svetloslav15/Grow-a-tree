@@ -33,6 +33,12 @@
                    .ProjectTo<TreePostModel>(this.mapper.ConfigurationProvider)
                    .ToListAsync();
 
+            if (request.TreeId != null)
+            {
+                list = list.Where(x => x.Id == request.TreeId)
+                           .ToList();
+            }
+
             var totalTrees = list.Count;
             var meta = new Pagination
             {

@@ -1139,7 +1139,7 @@ export class TreePostReplyReactionsClient implements ITreePostReplyReactionsClie
 }
 
 export interface ITreePostsClient {
-    list(page: number | undefined, perPage: number | undefined): Observable<TreePostListModel>;
+    list(treeId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreePostListModel>;
     upsert(upsertCommand: UpsertTreePostCommand): Observable<ResultOfBoolean>;
     delete(deleteCommand: DeleteTreePostCommand): Observable<ResultOfBoolean>;
 }
@@ -1157,8 +1157,10 @@ export class TreePostsClient implements ITreePostsClient {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    list(page: number | undefined, perPage: number | undefined): Observable<TreePostListModel> {
+    list(treeId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreePostListModel> {
         let url_ = this.baseUrl + "/api/TreePosts/list?";
+        if (treeId !== undefined)
+            url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -1555,7 +1557,7 @@ export class TreeReactionsClient implements ITreeReactionsClient {
 
 export interface ITreeReportsClient {
     activeReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
-    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
+    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, userId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
     archivedReportsTypes(treeId: string | null | undefined): Observable<ResultOfICollectionOfTreeReportTypeModel>;
     archivedReports(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel>;
     reportTree(message: string | null | undefined, type: string | null | undefined, imageFile: FileParameter | null | undefined, userId: string | null | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
@@ -1626,12 +1628,14 @@ export class TreeReportsClient implements ITreeReportsClient {
         return _observableOf<ResultOfICollectionOfTreeReportTypeModel>(<any>null);
     }
 
-    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel> {
+    activeReportsForTypes(treeId: string | null | undefined, reportType: string | null | undefined, userId: string | null | undefined, page: number | undefined, perPage: number | undefined): Observable<TreeReportListModel> {
         let url_ = this.baseUrl + "/api/TreeReports/active-reports?";
         if (treeId !== undefined)
             url_ += "TreeId=" + encodeURIComponent("" + treeId) + "&"; 
         if (reportType !== undefined)
             url_ += "ReportType=" + encodeURIComponent("" + reportType) + "&"; 
+        if (userId !== undefined)
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&"; 
         if (page === null)
             throw new Error("The parameter 'page' cannot be null.");
         else if (page !== undefined)
@@ -1978,6 +1982,7 @@ export interface ITreesClient {
     addTreeImages(treeId: string | null | undefined, imagesFiles: string[] | null | undefined): Observable<ResultOfListOfString>;
     deleteTreeImages(deleteTreeImagesCommand: DeleteTreeImageCommand): Observable<ResultOfString>;
     restoreTreeImages(restoreTreeImagesCommand: RestoreTreeImageCommand): Observable<ResultOfString>;
+    getRecentTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel>;
 }
 
 @Injectable({
@@ -2826,6 +2831,62 @@ export class TreesClient implements ITreesClient {
             }));
         }
         return _observableOf<ResultOfString>(<any>null);
+    }
+
+    getRecentTrees(page: number | undefined, perPage: number | undefined): Observable<TreeListModel> {
+        let url_ = this.baseUrl + "/api/Trees/recent-trees?";
+        if (page === null)
+            throw new Error("The parameter 'page' cannot be null.");
+        else if (page !== undefined)
+            url_ += "Page=" + encodeURIComponent("" + page) + "&"; 
+        if (perPage === null)
+            throw new Error("The parameter 'perPage' cannot be null.");
+        else if (perPage !== undefined)
+            url_ += "PerPage=" + encodeURIComponent("" + perPage) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetRecentTrees(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetRecentTrees(<any>response_);
+                } catch (e) {
+                    return <Observable<TreeListModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TreeListModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetRecentTrees(response: HttpResponseBase): Observable<TreeListModel> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TreeListModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TreeListModel>(<any>null);
     }
 }
 
@@ -5527,6 +5588,7 @@ export class TreeReactionModel implements ITreeReactionModel {
     id?: string | undefined;
     type?: ReactionType;
     userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
     createdOn?: Date;
 
     constructor(data?: ITreeReactionModel) {
@@ -5543,6 +5605,7 @@ export class TreeReactionModel implements ITreeReactionModel {
             this.id = _data["id"];
             this.type = _data["type"];
             this.userUserName = _data["userUserName"];
+            this.userProfilePictureUrl = _data["userProfilePictureUrl"];
             this.createdOn = _data["createdOn"] ? new Date(_data["createdOn"].toString()) : <any>undefined;
         }
     }
@@ -5559,6 +5622,7 @@ export class TreeReactionModel implements ITreeReactionModel {
         data["id"] = this.id;
         data["type"] = this.type;
         data["userUserName"] = this.userUserName;
+        data["userProfilePictureUrl"] = this.userProfilePictureUrl;
         data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
         return data; 
     }
@@ -5568,6 +5632,7 @@ export interface ITreeReactionModel {
     id?: string | undefined;
     type?: ReactionType;
     userUserName?: string | undefined;
+    userProfilePictureUrl?: string | undefined;
     createdOn?: Date;
 }
 
