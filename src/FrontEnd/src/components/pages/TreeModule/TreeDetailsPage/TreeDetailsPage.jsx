@@ -204,7 +204,7 @@ const TreeDetailsPage = ({history, match}) => {
     }
 
     return (
-        <Layout>
+        <Layout customStyle='pb-details-p-m'>
             <section className={styles.infoSection}>
                 {tree.images && <Carousel images={tree.images}/>}
                 <section className={styles.infoSection__wrapper}>

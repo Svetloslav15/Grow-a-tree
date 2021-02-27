@@ -10,3 +10,9 @@
 .md-form .prefix {
   left: 0;
 }
+
+.pb-details-p-m {
+  @media all and (min-width: 860px) {
+      padding-bottom: 11em;
+  }
+}
