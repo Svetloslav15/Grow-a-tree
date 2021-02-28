@@ -28,7 +28,8 @@ const ROUTES = {
     getRecentTrees: '/trees/recent-trees',
     postAuthorizedDeletePost: '/treePosts/delete',
     postFormPredictTreeLeaf: '/ml/predict-leaf',
-    getAuthorizedGuessGameOptions: '/guessGame/get-questions'
+    getAuthorizedGuessGameOptions: '/guessGame/get-questions',
+    postAuthorizedGuessGameAnswer: '/guessGame/answer-question'
 };
 
 export default new Proxy({}, {

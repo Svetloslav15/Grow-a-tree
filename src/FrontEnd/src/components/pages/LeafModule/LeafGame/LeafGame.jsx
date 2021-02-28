@@ -5,6 +5,7 @@ import * as styles from './LeafGame.module.scss';
 import Layout from '../../../common/Layout/Layout';
 import Button from '../../../common/Button/Button';
 import TreeService from '../../../../services/treeService';
+import AlertService from '../../../../services/alertService';
 
 const LeafGame = () => {
     const [isGameStarted, setGameStarted] = useState(false);
@@ -14,23 +15,33 @@ const LeafGame = () => {
     const [activeOptions, setActiveOptions] = useState([]);
 
     useEffect(() => {
-        if (!isGameStarted || (activeItem % 5 === 0)) {
+        if (!isGameStarted || (activeItem % 4 === 0)) {
             fetchData();
         }
     }, [activeItem]);
 
     const fetchData = async () => {
         const response = await TreeService.getAuthorizedGuessGameOptions('', currUser.accessToken);
-        console.log(response);
         if (response.data.succeeded) {
-            setData(response.data.data);
-            setActiveOptions(response.data.data[activeItem - 1].options.split(','));
-            console.log(response.data.data);
+            setData(data.concat(response.data.data));
+            setActiveOptions(response.data.data[(activeItem - 1) % 4].options.split(','));
         }
     }
 
     const answerQuestion = async (element) => {
-        console.log(element.target.textContent);
+        const valueItem  = element.target.textContent;
+        const currentData = {
+            answer: valueItem,
+            questionId: data[activeItem - 1].id
+        };
+        const response = await TreeService.postAuthorizedGuessGameAnswer(currentData, currUser.accessToken);
+        if (response.succeeded) {
+            await AlertService.success(`Вие отговорихте, че това е листо на ${valueItem}.`);
+            setActiveItem(activeItem + 1);
+        }
+        else {
+            await AlertService.error(response.errors[0]);
+        }
     }
 
     return (
