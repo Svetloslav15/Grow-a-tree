@@ -51,8 +51,8 @@ const TreePost = ({data, fetchTreePosts, treeId}) => {
                 <p className='post__user-section__username'>{post.userUserName}</p>
                 {
                     post.userId === currUser.id && (
-                        <button onClick={() => deletePost(post.id)}>
-                            Изтрий
+                        <button className='btn btn-danger delete-button-p-sm' onClick={() => deletePost(post.id)}>
+                            <i className="fas fa-trash-alt"></i>
                         </button>
                     )
                 }
