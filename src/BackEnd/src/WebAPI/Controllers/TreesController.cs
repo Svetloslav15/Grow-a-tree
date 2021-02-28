@@ -449,7 +449,6 @@
             }
         }
 
-        [Authorize]
         [HttpGet("recent-trees")]
         public async Task<ActionResult<TreeListModel>> GetRecentTrees([FromQuery] GetRecentTreesQuery query)
         {
