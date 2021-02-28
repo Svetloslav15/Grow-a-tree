@@ -28,8 +28,8 @@ const Footer = () => (
           </div>
           <LinksSection/>
           <div className={`${style.iconsWrapper} col-md-4`}>
-              <SocialMediaIcon props={data.facebook}/>
-              <SocialMediaIcon props={data.instagram}/>
+             {/* <SocialMediaIcon props={data.facebook}/>
+              <SocialMediaIcon props={data.instagram}/>*/}
           </div>
       </div>
       <p className='text-center mt-sm-1'>Copyright © Grow A Tree 2020-{new Date().getFullYear()}</p>
