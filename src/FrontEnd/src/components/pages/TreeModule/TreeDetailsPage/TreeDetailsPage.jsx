@@ -120,7 +120,7 @@ const TreeDetailsPage = ({history, match}) => {
             .then((response) => {
                 if (response.succeeded) {
                     AlertService.success(SuccessMessages.successAddedTreePost);
-                    setCurrPost({id: ''});
+                    setCurrPost({id: '', treeId: tree.id});
                     fetchTreePosts(tree.id);
                     //Clear editor content
                     const newKey = editorKey * 43;
