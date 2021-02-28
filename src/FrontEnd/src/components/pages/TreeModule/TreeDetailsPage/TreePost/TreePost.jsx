@@ -41,7 +41,7 @@ const TreePost = ({data, fetchTreePosts, treeId}) => {
         const response = await TreeService.postAuthorizedDeletePost({id: postId}, currUser.accessToken);
         if (response.succeeded) {
             await AlertService.success(successMessages.successDeletePost);
-            await fetchTreePosts();
+            await fetchTreePosts(post.treeId);
         } else {
             await AlertService.error(response?.errors[0]);
         }
@@ -50,10 +50,9 @@ const TreePost = ({data, fetchTreePosts, treeId}) => {
     const editPost = async () => {
        if (isInEditMode) {
            const response = await TreeService.postAuthorizedUpsertTreePost(post, currUser.accessToken);
-           console.log(response);
            if (response.succeeded) {
                await AlertService.success(successMessages.successEditPost);
-               await fetchTreePosts();
+               await fetchTreePosts(post.treeId);
                toggleEditMode(false);
            } else {
                await AlertService.error(response?.errors[0]);
