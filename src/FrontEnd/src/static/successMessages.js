@@ -17,5 +17,6 @@ export default {
     successPostReplyReact: 'Успешно реагирахте на коментар към поста!',
     successMarkReportSpam: 'Успешно маркирахте доклада като спам!',
     successReportArchive: 'Успешно архивирахте докладите!',
-    successDeletePost: 'Успешно изтрихте поста!'
+    successDeletePost: 'Успешно изтрихте поста!',
+    successEditPost: 'Успешно редактирахте поста!'
 }

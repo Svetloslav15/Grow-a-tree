@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import parse from 'html-react-parser';
 import {useSelector} from 'react-redux';
+import {Editor} from '@tinymce/tinymce-react';
 
 import './TreePost.scss';
 import ReactionButton from '../../../../common/ReactionButton/ReactionButton';
@@ -12,6 +13,9 @@ import successMessages from "../../../../../static/successMessages";
 
 const TreePost = ({data, fetchTreePosts, treeId}) => {
     const [post, setPost] = useState(data);
+    const [isInEditMode, toggleEditMode] = useState(false);
+    const [editorKey, setEditorKey] = useState(4);
+
     const currUser = useSelector(state => state.auth);
 
     useEffect(() => {
@@ -38,10 +42,30 @@ const TreePost = ({data, fetchTreePosts, treeId}) => {
         if (response.succeeded) {
             await AlertService.success(successMessages.successDeletePost);
             await fetchTreePosts();
-        }
-        else {
+        } else {
             await AlertService.error(response?.errors[0]);
         }
+    }
+
+    const editPost = async () => {
+       if (isInEditMode) {
+           const response = await TreeService.postAuthorizedUpsertTreePost(post, currUser.accessToken);
+           console.log(response);
+           if (response.succeeded) {
+               await AlertService.success(successMessages.successEditPost);
+               await fetchTreePosts();
+               toggleEditMode(false);
+           } else {
+               await AlertService.error(response?.errors[0]);
+           }
+       }
+       else {
+           toggleEditMode(true);
+       }
+    }
+
+    const handleEditorChange = async (data) => {
+        setPost({...post, content: data});
     }
 
     return (
@@ -51,17 +75,47 @@ const TreePost = ({data, fetchTreePosts, treeId}) => {
                 <p className='post__user-section__username'>{post.userUserName}</p>
                 {
                     post.userId === currUser.id && (
-                        <button className='btn btn-danger delete-button-p-sm' onClick={() => deletePost(post.id)}>
-                            <i className="fas fa-trash-alt"></i>
-                        </button>
+                        <div className='ml-auto row mr-2'>
+                            <button className='btn btn-danger delete-button-p-sm mr-2'
+                                    onClick={() => deletePost(post.id)}>
+                                <i className="fas fa-trash-alt"></i>
+                            </button>
+                            <button className='btn btn-warning delete-button-p-sm'
+                                    onClick={() => editPost(post.id)}>
+                                <i className="far fa-edit"></i>
+                            </button>
+                        </div>
                     )
                 }
                 <div>
-
                 </div>
             </div>
             <div className='post__content'>
-                {parse(post.content)}
+                {
+                    !isInEditMode ?
+                        parse(post.content)
+                        :
+                        <Editor
+                            key={editorKey}
+                            apiKey={process.env.REACT_APP_TINYMCE_KEY}
+                            init={{
+                                height: 200,
+                                menubar: false,
+                                plugins: [
+                                    'advlist autolink lists link image charmap print preview anchor',
+                                    'searchreplace visualblocks code fullscreen',
+                                    'insertdatetime media table paste code help wordcount imagetools'
+                                ],
+                                toolbar:
+                                    'formatselect  | image link | bold italic backcolor | \
+                                    alignleft aligncenter alignright alignjustify',
+                                file_picker_types: 'file image',
+                            }}
+                            value={post.content}
+                            onEditorChange={handleEditorChange}
+                        />
+                }
+
             </div>
             <div>
                 <ReactionButton reactTo={reactToPost}

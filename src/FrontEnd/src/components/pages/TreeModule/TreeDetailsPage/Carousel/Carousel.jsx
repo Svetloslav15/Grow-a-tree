@@ -18,7 +18,7 @@ const responsive = {
     }
 };
 const CarouselComponent = ({images}) => (
-    <div className='tree-details-section col-md-6'>
+    <div className='tree-details-section col-md-6 center-vertical-crs'>
         <Carousel responsive={responsive}>
             {images && images.length > 0 &&
             (images.map(x =>

@@ -17,9 +17,15 @@
     align-items: flex-end;
 
     img {
-      width: 150px;
-      height: 150px;
+      width: 14em;
+      height: 14em;
       transition: 1s;
     }
   }
+
+}
+.center-vertical-crs {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
