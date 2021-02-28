@@ -415,7 +415,7 @@
       }
     },
     "/api/Ml/predict-leaf": {
-      "get": {
+      "post": {
         "tags": [
           "Ml"
         ],
@@ -444,12 +444,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/TreePostReactions/list": {
