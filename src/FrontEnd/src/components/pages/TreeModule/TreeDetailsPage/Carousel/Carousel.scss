@@ -7,8 +7,8 @@
 
   .react-multi-carousel-track .react-multi-carousel-item--active:hover {
     img {
-      width: 150px !important;
-      height: 150px !important;
+      width: 14em !important;
+      height: 14em !important;
       transition: 1s;
     }
   }
@@ -22,4 +22,8 @@
       transition: 1s;
     }
   }
+}
+.center-vertical-crs {
+  align-items: center;
+  height: 100%;
 }

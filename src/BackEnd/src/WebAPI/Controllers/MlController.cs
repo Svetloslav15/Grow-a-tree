@@ -13,8 +13,7 @@
 
     public class MlController : ApiController
     {
-        [HttpGet("predict-leaf")]
-        [Authorize]
+        [HttpPost("predict-leaf")]
         public async Task<ActionResult<Result<MlViewModel>>> GetList([FromForm] PredictLeafQuery query)
         {
             try
