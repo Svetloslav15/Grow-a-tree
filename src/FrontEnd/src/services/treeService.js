@@ -25,7 +25,8 @@ const ROUTES = {
     getAuthorizedTreesByUser: '/trees/user',
     postAuthorizedArchiveReports: '/treeReports/archive-report',
     postAuthorizedMakeSpamReport: '/treeReports/mark-as-spam',
-    getRecentTrees: '/trees/recent-trees'
+    getRecentTrees: '/trees/recent-trees',
+    postAuthorizedDeletePost: '/treePosts/delete'
 };
 
 export default new Proxy({}, {
