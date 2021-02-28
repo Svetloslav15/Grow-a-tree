@@ -35,7 +35,6 @@ const MapSection = ({history}) => {
     const getRecentTrees = async () => {
         const response = await TreeService.getRecentTrees('?perPage=10');
         setRecentTrees(response.data.data);
-        console.log(response.data.data);
     }
 
     const navigateToTreePage = (mark) => {
