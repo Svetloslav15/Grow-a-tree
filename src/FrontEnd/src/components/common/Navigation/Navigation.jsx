@@ -28,6 +28,7 @@ const Navigation = () => {
             <div className="collapse navbar-collapse" id="basicExampleNav">
                 <ul className={`navbar-nav mr-auto ${style.customNavWrapper}`}>
                     <NavItem link='/'>Карта</NavItem>
+                    <NavItem link='/leaves/game'>Познай дървото</NavItem>
                     <NavItem link='/leaves/scan'>Провери вида на дървото</NavItem>
                     <NavItem link='/about'>За платформата</NavItem>
                     <NavItemDropdown mainTitle='Информация' links={staticPagesData}/>
