@@ -27,7 +27,9 @@ const ROUTES = {
     postAuthorizedMakeSpamReport: '/treeReports/mark-as-spam',
     getRecentTrees: '/trees/recent-trees',
     postAuthorizedDeletePost: '/treePosts/delete',
-    postFormPredictTreeLeaf: '/ml/predict-leaf'
+    postFormPredictTreeLeaf: '/ml/predict-leaf',
+    getAuthorizedGuessGameOptions: '/guessGame/get-questions',
+    postAuthorizedGuessGameAnswer: '/guessGame/answer-question'
 };
 
 export default new Proxy({}, {

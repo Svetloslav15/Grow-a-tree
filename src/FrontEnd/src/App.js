@@ -28,7 +28,8 @@ import StaticPage from './components/pages/StaticModule/StaticPage/StaticPage';
 import NotFoundPage from './components/pages/StaticModule/NotFoundPage/NotFoundPage';
 
 import staticPagesData from './static/staticPagesData';
-import GuessLeaf from "./components/pages/LeafModule/GuessLeaf/GuessLeaf";
+import GuessLeaf from './components/pages/LeafModule/GuessLeaf/GuessLeaf';
+import LeafGame from './components/pages/LeafModule/LeafGame/LeafGame';
 
 const App = () => (
     <>
@@ -50,6 +51,7 @@ const App = () => (
             <PrivateRoute exact path='/trees/edit/:id' component={EditTreePage}/>
             <PrivateRoute exact path='/trees/details/:id' component={TreeDetailsPage}/>
             <Route exact path='/leaves/scan' component={GuessLeaf}/>
+            <PrivateRoute exact path='/leaves/game' component={LeafGame}/>
             {
                 staticPagesData.map(page => <Route exact path={`/static/${page.route}`} component={StaticPage}/>)
             }
