@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import Cookies from 'js-cookie';
 
 import UserNavigation from '../UserNavigation/UserNavigation';
 import NavItemDropdown from "../NavItemDropdown/NavItemDropdown";
@@ -10,8 +9,6 @@ import NavCollapseButton from './NavCollapseButton/NavCollapseButton';
 import * as style from './Navigation.module.scss';
 import Button from '../../common/Button/Button';
 import {CHANGE_IS_USER_NAV_OPENED} from "../../../store/actions/actionTypes";
-import CookieNames from "../../../static/cookieNames";
-import DropdownField from "../DropdownField/DropdownField";
 import staticPagesData from "../../../static/staticPagesData";
 const Logo = require('../../../assets/logo.png');
 
@@ -31,7 +28,11 @@ const Navigation = () => {
             <div className="collapse navbar-collapse" id="basicExampleNav">
                 <ul className={`navbar-nav mr-auto ${style.customNavWrapper}`}>
                     <NavItem link='/'>Карта</NavItem>
-                    <NavItem link='/about'>За платформата</NavItem>
+                    {
+                        currUser.accessToken && <NavItem link='/leaves/game'>Познай дървото</NavItem>
+                    }
+                    <NavItem link='/leaves/scan'>Провери вида на дървото</NavItem>
+                    {/*<NavItem link='/about'>За платформата</NavItem>*/}
                     <NavItemDropdown mainTitle='Информация' links={staticPagesData}/>
                     {
                         !currUser.accessToken ?
