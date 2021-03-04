@@ -8,7 +8,7 @@ namespace Common.UnitTests.Services
     public class ImageServiceTests
     {
         [Test]
-        public void PredictShouldReturnResult()
+        public void ReadImageFromUrlShouldReturnResult()
         {
             var service = new ImageService();
 
@@ -20,7 +20,7 @@ namespace Common.UnitTests.Services
         }
 
         [Test]
-        public void PredictShouldThrow()
+        public void ReadImageFromUrlShouldThrow()
         {
             var service = new ImageService();
 
