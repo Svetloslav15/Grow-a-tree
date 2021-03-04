@@ -21,6 +21,7 @@
                 MailMessage mail = new MailMessage();
                 SmtpClient smtpServer = new SmtpClient(Settings.GmailServerName);
 
+               // mail.From = new MailAddress(Settings.GmailEmail);
                 mail.From = new MailAddress(Settings.GmailEmail);
                 mail.To.Add(receiver.Email);
                 mail.Subject = subject;

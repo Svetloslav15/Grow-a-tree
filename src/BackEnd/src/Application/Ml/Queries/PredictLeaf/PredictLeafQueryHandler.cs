@@ -49,6 +49,7 @@
             if (maxScore < 0.85)
             {
                 var unknownFolderName = this.folderPath + @$"\unknown\{imageName}";
+                Directory.CreateDirectory(@"\unknown");
                 File.Move(filePath, unknownFolderName);
                 await this.context.UnknownTrees.AddAsync(new UnknownTrees
                 {

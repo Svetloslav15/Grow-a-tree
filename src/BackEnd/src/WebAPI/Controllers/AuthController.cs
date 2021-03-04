@@ -143,7 +143,6 @@
             }
         }
 
-        [Authorize]
         [HttpPost("reset-password")]
         public async Task<ActionResult<Result<bool>>> ResetPassword([FromBody] ResetPasswordCommand command)
         {

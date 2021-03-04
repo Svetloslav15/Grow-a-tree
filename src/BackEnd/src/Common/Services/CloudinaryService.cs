@@ -17,6 +17,7 @@
         {
             this.cloudinary = cloudinary;
         }
+
         public async Task<string> UploudAsync(IFormFile file)
         {
             byte[] fileBytes;

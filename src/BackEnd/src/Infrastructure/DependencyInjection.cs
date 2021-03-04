@@ -42,7 +42,11 @@
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<User, ApplicationDbContext>();
+                .AddAspNetIdentity<User>()
+                .AddOperationalStore<ApplicationDbContext>()
+                .AddIdentityResources()
+                .AddApiResources()
+                .AddClients();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();
