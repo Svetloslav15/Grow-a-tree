@@ -5,7 +5,7 @@ const BgShapeBlue = require('../../../../../assets/bg-shape-blue.png');
 const SunImage = require('../../../../../assets/sun-image.svg');
 const WateringImage = require('../../../../../assets/watering-image.png');
 
-const WateringModal = ({xp, closeModal}) => {
+const WateringModal = ({xp, treeName, closeModal}) => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.overlayBg} onClick={closeModal}></div>
@@ -15,7 +15,7 @@ const WateringModal = ({xp, closeModal}) => {
                 <img className={styles.bgShapeImage} src={BgShapeBlue} alt="Background Shape Image"/>
                 <i className={`fas fa-times ${styles.closeButton}`} onClick={closeModal}/>
                 <p className={styles.wrapper__modal__title}>Честито</p>
-                <p className={styles.wrapper__modal__description}>Успешно поляхте дървото Яворчо! Получавате {xp} XP!</p>
+                <p className={styles.wrapper__modal__description}>Успешно поляхте дървото {treeName}! Получавате {xp} XP!</p>
             </div>
         </div>
     )

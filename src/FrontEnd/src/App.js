@@ -29,6 +29,8 @@ import NotFoundPage from './components/pages/StaticModule/NotFoundPage/NotFoundP
 
 import staticPagesData from './static/staticPagesData';
 import PrivacyPolicyPage from "./components/pages/StaticModule/PrivacyPolicy/PrivacyPolicyPage";
+import GuessLeaf from './components/pages/LeafModule/GuessLeaf/GuessLeaf';
+import LeafGame from './components/pages/LeafModule/LeafGame/LeafGame';
 
 const App = () => (
     <>
@@ -50,6 +52,8 @@ const App = () => (
             <PrivateRoute exact path='/trees/edit/:id' component={EditTreePage}/>
             <PrivateRoute exact path='/trees/details/:id' component={TreeDetailsPage}/>
             <Route exact path='/general/privacy-policy' component={PrivacyPolicyPage}/>
+            <Route exact path='/leaves/scan' component={GuessLeaf}/>
+            <PrivateRoute exact path='/leaves/game' component={LeafGame}/>
             {
                 staticPagesData.map(page => <Route exact path={`/static/${page.route}`} component={StaticPage}/>)
             }
