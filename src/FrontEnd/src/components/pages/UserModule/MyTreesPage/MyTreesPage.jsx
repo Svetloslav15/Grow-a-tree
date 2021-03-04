@@ -5,6 +5,7 @@ import * as style from './MyTreesPage.module.scss';
 import Layout from '../UserLayout/UserLayout';
 import ReportsSection from './ReportsSection/ReportsSection';
 import TreeService from '../../../../services/treeService';
+import TreePartial from "../../../common/TreePartial/TreePartial";
 
 const MyTreesPage = () => {
     const stateUserData = useSelector(state => state.auth);
@@ -16,6 +17,7 @@ const MyTreesPage = () => {
         TreeService.getAuthorizedTreesByUser(`?id=${stateUserData.id}`, stateUserData.accessToken)
             .then((data) => {
                 data = data.data.data;
+                data.forEach(x => x.image = x.images[0]);
                 setUserTrees(data);
                 getActiveReportTypes(data);
                 getArchivedReportTypes(data);
@@ -52,11 +54,11 @@ const MyTreesPage = () => {
     return (
         <Layout>
             <div className={'col-md-9 row mt-5'}>
-                <div className={'col-md-8'}>
-                    <h3 className={style.pageTitle}># Моята виртуална горичка</h3>
-                </div>
-                <div className={'col-md-4'}>
-                    <h3 className={style.pageTitle}>Общо 56 дървета</h3>
+                <div className={'col-md-12'}>
+                    <h3 className={style.pageTitle}># Моите {userTrees.length} дървета</h3>
+                    <div className='row'>
+                        {userTrees && userTrees.map(x => <TreePartial tree={x}/>)}
+                    </div>
                 </div>
                 <ReportsSection
                     activeTypes={activeReportTypes}

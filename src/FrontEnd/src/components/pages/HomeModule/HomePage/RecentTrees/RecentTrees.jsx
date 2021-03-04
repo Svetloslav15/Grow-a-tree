@@ -16,7 +16,6 @@ const RecentTrees = () => {
 
     const getTrees = async () => {
         const response = await TreeService.getRecentTrees('?perPage=10');
-        console.log(response.data.data);
         setTrees(response.data.data);
     }
 
