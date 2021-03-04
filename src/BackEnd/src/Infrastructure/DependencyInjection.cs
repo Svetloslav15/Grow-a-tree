@@ -31,7 +31,7 @@
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(
-                        configuration.GetConnectionString("SvetliConnection"),
+                        configuration.GetConnectionString("Production"),
                         b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             }
 
@@ -42,7 +42,11 @@
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<User, ApplicationDbContext>();
+                .AddAspNetIdentity<User>()
+                .AddOperationalStore<ApplicationDbContext>()
+                .AddIdentityResources()
+                .AddApiResources()
+                .AddClients();
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IIdentityService, IdentityService>();

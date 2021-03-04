@@ -46,8 +46,8 @@
 
         public const string DefaultProfilePictureUrl = "https://res.cloudinary.com/dzivpr6fj/image/upload/v1602432685/GrowATree/avatar_dpskn1.png";
 
-        public const string ConfirmEmailLink = "http://localhost:3000/auth/confirm";
+        public const string ConfirmEmailLink = "http://localhost:3000/#/auth/confirm";
 
-        public const string ResetPasswordLink = "http://localhost:3000/auth/reset-password";
+        public const string ResetPasswordLink = "http://localhost:3000/#/auth/reset-password";
     }
 }

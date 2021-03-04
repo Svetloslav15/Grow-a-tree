@@ -28,6 +28,7 @@ import StaticPage from './components/pages/StaticModule/StaticPage/StaticPage';
 import NotFoundPage from './components/pages/StaticModule/NotFoundPage/NotFoundPage';
 
 import staticPagesData from './static/staticPagesData';
+import PrivacyPolicyPage from "./components/pages/StaticModule/PrivacyPolicy/PrivacyPolicyPage";
 
 const App = () => (
     <>
@@ -48,6 +49,7 @@ const App = () => (
             <PrivateRoute exact path='/trees/add' component={AddTreePage}/>
             <PrivateRoute exact path='/trees/edit/:id' component={EditTreePage}/>
             <PrivateRoute exact path='/trees/details/:id' component={TreeDetailsPage}/>
+            <Route exact path='/general/privacy-policy' component={PrivacyPolicyPage}/>
             {
                 staticPagesData.map(page => <Route exact path={`/static/${page.route}`} component={StaticPage}/>)
             }
