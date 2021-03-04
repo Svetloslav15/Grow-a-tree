@@ -24,13 +24,21 @@ const ROUTES = {
     getAuthorizedArchivedReports: '/treeReports/archived-reports',
     getAuthorizedTreesByUser: '/trees/user',
     postAuthorizedArchiveReports: '/treeReports/archive-report',
-    postAuthorizedMakeSpamReport: '/treeReports/mark-as-spam'
+    postAuthorizedMakeSpamReport: '/treeReports/mark-as-spam',
+    getRecentTrees: '/trees/recent-trees',
+    postAuthorizedDeletePost: '/treePosts/delete',
+    postFormPredictTreeLeaf: '/ml/predict-leaf',
+    getAuthorizedGuessGameOptions: '/guessGame/get-questions',
+    postAuthorizedGuessGameAnswer: '/guessGame/answer-question'
 };
 
 export default new Proxy({}, {
     get(target, propName) {
         if (propName.startsWith('postAuthorized')) {
             return async (data, token, contentType) => await baseService.postAuthorized(ROUTES[propName], data, token, contentType);
+        }
+        if (propName.startsWith('postForm')) {
+            return async (data, contentType) => await baseService.post(ROUTES[propName], data, contentType);
         }
         else if (propName.startsWith('post')) {
             return async (data) => await baseService.post(ROUTES[propName], data);

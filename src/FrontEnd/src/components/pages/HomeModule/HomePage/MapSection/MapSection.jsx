@@ -13,8 +13,14 @@ const MapSection = ({history}) => {
     const currUser = useSelector(state => state.auth);
     const [trees, setTrees] = useState([]);
     const [markers, setMarkers] = useState([]);
+    const [recentTrees, setRecentTrees] = useState([]);
 
     useEffect(() => {
+        getTrees();
+        getRecentTrees();
+    }, []);
+
+    const getTrees = () => {
         TreeService.getAuthorizedTreeById(`?&perPage=8000000`, currUser.accessToken)
             .then(data => {
                 setTrees(data.data.data);
@@ -23,8 +29,13 @@ const MapSection = ({history}) => {
                     currMarkers.push({latitude: x.latitude, longitude: x.longitude});
                 });
                 setMarkers(currMarkers);
-            })
-    }, []);
+            });
+    }
+
+    const getRecentTrees = async () => {
+        const response = await TreeService.getRecentTrees('?perPage=10');
+        setRecentTrees(response.data.data);
+    }
 
     const navigateToTreePage = (mark) => {
         const currTree = trees.filter(x => x.latitude === mark.latitude && x.longitude === mark.longitude)[0];
@@ -47,14 +58,22 @@ const MapSection = ({history}) => {
             <div className={`col-md-4 ${style.wrapper__treesSection}`}>
                 <h3 className={style.wrapper__treesSection__title}>Последно засадени</h3>
                 <ul className={style.wrapper__treesSection__items}>
-                    <li className={style.wrapper__treesSection__items__item}>
-                        <img className={style.wrapper__treesSection__items__item__userImage} src={UserImage} alt=""/>
-                        <div className={style.wrapper__treesSection__items__item__user}>
-                            <p className={style.wrapper__treesSection__items__item__user__name}>Svetloslav Novoselski</p>
-                            <p className={style.wrapper__treesSection__items__item__user__date}>10/10/2020, 1:49:39 PM</p>
-                        </div>
-                        <p className={style.wrapper__treesSection__items__item__user__tree}>1 дърво</p>
-                    </li>
+                    {
+                        recentTrees && recentTrees.map(x => <li className={style.wrapper__treesSection__items__item}>
+                            <img className={style.wrapper__treesSection__items__item__userImage}
+                                 src={x.owner.profilePictureUrl}
+                                 alt={x.owner.userName}/>
+                            <div className={style.wrapper__treesSection__items__item__user}>
+                                <p className={style.wrapper__treesSection__items__item__user__name}>
+                                    {x.owner.userName}
+                                </p>
+                                <p className={style.wrapper__treesSection__items__item__user__date}>
+                                    {new Date(x.plantedOn).toJSON().slice(0,10).split('-').reverse().join('/')}
+                                </p>
+                            </div>
+                            <p className={style.wrapper__treesSection__items__item__user__tree}>1 дърво</p>
+                        </li>)
+                    }
                 </ul>
             </div>
         </div>

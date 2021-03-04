@@ -120,7 +120,7 @@ const TreeDetailsPage = ({history, match}) => {
             .then((response) => {
                 if (response.succeeded) {
                     AlertService.success(SuccessMessages.successAddedTreePost);
-                    setCurrPost({id: ''});
+                    setCurrPost({id: '', treeId: tree.id});
                     fetchTreePosts(tree.id);
                     //Clear editor content
                     const newKey = editorKey * 43;
@@ -154,7 +154,7 @@ const TreeDetailsPage = ({history, match}) => {
                 const response = await TreeService.postAuthorizedWaterTree(waterTreeData, currUser.accessToken);
                 if (response.succeeded) {
                     await AlertService.success(SuccessMessages.successWaterTree);
-                    await fetchTreeWaterings();
+                    await fetchTreeWaterings(tree.id);
                     toggleIsSuccessWateringModalOpen(true);
                 } else {
                     await AlertService.error(response?.errors[0]);
@@ -257,6 +257,7 @@ const TreeDetailsPage = ({history, match}) => {
                                 isSuccessWateringModalOpen && (
                                     <WateringModal xp={45}
                                                    closeModal={() => toggleIsSuccessWateringModalOpen(false)}
+                                                   treeName={tree.nickname}
                                     />)
                             }
                         </div>
