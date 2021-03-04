@@ -56,7 +56,7 @@ const MyTreesPage = () => {
                     <h3 className={style.pageTitle}># Моята виртуална горичка</h3>
                 </div>
                 <div className={'col-md-4'}>
-                    <h3 className={style.pageTitle}>Общо 56 дървета</h3>
+                    <h3 className={style.pageTitle}>Общо {userTrees.length} дървета</h3>
                 </div>
                 <ReportsSection
                     activeTypes={activeReportTypes}
