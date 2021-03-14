@@ -5,12 +5,14 @@ const initialState = {
 };
 
 const usersReducer = (state = initialState, action) => {
-    switch (action) {
-        case ADD_USERS:
+    switch (action.type) {
+        case ADD_USERS:{
+            console.log(action);
             return Object.assign({}, state, {users: action.payload});
+        }
         default:
             return state;
     }
 };
 
-export default usersReducer();
+export default usersReducer;
