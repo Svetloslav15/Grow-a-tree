@@ -49,5 +49,7 @@
         public const string ConfirmEmailLink = "http://localhost:3000/auth/confirm";
 
         public const string ResetPasswordLink = "http://localhost:3000/auth/reset-password";
+
+        public const string AdminRoleName = "Administrator";
     }
 }
