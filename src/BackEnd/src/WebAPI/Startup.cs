@@ -44,9 +44,9 @@ namespace GrowATree.WebAPI
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsApi",
-                    builder => builder.WithOrigins("http://localhost:3000", "http://mywebsite.com")
-                .AllowAnyHeader()
-                .AllowAnyMethod());
+                    builder => builder.WithOrigins("http://localhost:3000", "http://growatree.eu", "https://growatree.eu")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod());
             });
 
             services.AddControllersWithViews(options =>

@@ -45,6 +45,7 @@
                 LockoutEnabled = false,
                 City = request.City,
                 ReferrerId = referrer != null ? referrer.Id : null,
+                ProfilePictureUrl = "https://res.cloudinary.com/dzivpr6fj/image/upload/v1602432685/GrowATree/avatar_dpskn1.png"
             };
 
             var identityResult = await this.userManager.CreateAsync(user, request.Password);
