@@ -16,11 +16,26 @@
             var defaultUser1 = new User { UserName = "user2", Email = "user2@trees.com", City = "Благоевград", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
             var defaultUser2 = new User { UserName = "user3", Email = "user3@trees.com", City = "Благоевград", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
 
+            var defaultAdmin = new User { UserName = "admin1", Email = "admin1@trees.com", City = "Благоевград", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
+            var defaultAdmin1 = new User { UserName = "admin2", Email = "admin2@trees.com", City = "Благоевград", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
+            var defaultAdmin2 = new User { UserName = "admin3", Email = "admin3@trees.com", City = "Благоевград", EmailConfirmed = true, ProfilePictureUrl = Constants.DefaultProfilePictureUrl };
+
+            await userManager.AddToRoleAsync(defaultAdmin, Constants.AdminRoleName);
+            await userManager.AddToRoleAsync(defaultAdmin, Constants.AdminRoleName);
+            await userManager.AddToRoleAsync(defaultAdmin, Constants.AdminRoleName);
+
             if (!userManager.Users.Any(x => x.UserName == "user1"))
             {
-                var result = await userManager.CreateAsync(defaultUser, "user1");
+                await userManager.CreateAsync(defaultUser, "user1");
                 await userManager.CreateAsync(defaultUser1, "user2");
                 await userManager.CreateAsync(defaultUser2, "user3");
+            }
+
+            if (!userManager.Users.Any(x => x.UserName == "admin1"))
+            {
+                await userManager.CreateAsync(defaultUser, "admin1");
+                await userManager.CreateAsync(defaultUser1, "admin2");
+                await userManager.CreateAsync(defaultUser2, "admin3");
             }
         }
 
@@ -30,10 +45,19 @@
             {
                 Name = Constants.StoreRoleName,
             };
+            var adminRole = new IdentityRole
+            {
+                Name = Constants.AdminRoleName,
+            };
 
             if (await roleManager.FindByNameAsync(Constants.StoreRoleName) == null)
             {
                 await roleManager.CreateAsync(storeRole);
+            }
+
+            if (await roleManager.FindByNameAsync(Constants.AdminRoleName) == null)
+            {
+                await roleManager.CreateAsync(adminRole);
             }
         }
 
