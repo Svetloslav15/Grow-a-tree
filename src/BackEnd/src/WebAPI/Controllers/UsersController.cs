@@ -10,6 +10,7 @@
     using GrowATree.Application.Models.Users;
     using GrowATree.Application.Users.Commands.ChangeProfilePicture;
     using GrowATree.Application.Users.Commands.Edit;
+    using GrowATree.Application.Users.Commands.ToggleLock;
     using GrowATree.Application.Users.Queries.GetAll;
     using GrowATree.Application.Users.Queries.GetAllShortInfo;
     using GrowATree.Application.Users.Queries.GetById;
@@ -203,6 +204,33 @@
                 Log.Logger.Error(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        [Authorize(Roles = Constants.AdminRoleName)]
+        [HttpPost("toggle-lockout")]
+        public async Task<ActionResult<Result<bool>>> ToggleLockout([FromBody] ToggleLockUserAccountCommand command)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<bool>.Failure(errorMessage);
+                }
+
+                return await this.Mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<bool>.Failure(ErrorMessages.GeneralSomethingWentWrong);
             }
         }
     }
