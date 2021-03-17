@@ -133,7 +133,8 @@
                 Expires = token.ValidTo,
                 Id = user.Id,
                 IsStore = isStore,
-                Username = user.UserName
+                Username = user.UserName,
+                IsAdmin = userRoles.Contains(Constants.AdminRoleName),
             };
 
             return result;
