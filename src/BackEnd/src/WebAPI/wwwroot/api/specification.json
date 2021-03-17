@@ -2637,6 +2637,45 @@
         ]
       }
     },
+    "/api/Users/toggle-lockout": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "Users_ToggleLockout",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToggleLockUserAccountCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultOfBoolean"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": [
+              "Administrator"
+            ]
+          }
+        ]
+      }
+    },
     "/api/Waterings/tree-waterings": {
       "get": {
         "tags": [
@@ -4724,6 +4763,16 @@
           "phoneNumber": {
             "type": "string",
             "pattern": "\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})",
+            "nullable": true
+          }
+        }
+      },
+      "ToggleLockUserAccountCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
             "nullable": true
           }
         }

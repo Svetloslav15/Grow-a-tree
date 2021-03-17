@@ -49,7 +49,6 @@ namespace GrowATree.WebAPI
                     await ApplicationDbContextSeed.SeedRolesAsync(roleManager);
                     await ApplicationDbContextSeed.SeedDefaultUsersAsync(userManager);
                     await ApplicationDbContextSeed.SeedDefaultStoresAsync(userManager, context);
-                    //await ApplicationDbContextSeed.SeedSampleDataAsync(context);
                 }
                 catch (Exception ex)
                 {
