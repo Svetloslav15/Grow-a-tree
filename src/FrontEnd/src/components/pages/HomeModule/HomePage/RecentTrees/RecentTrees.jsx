@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import style from './RecentTrees.module.scss';
 import TreeService from '../../../../../services/treeService';
+import {useSelector} from "react-redux";
 
 const BgImage = require('../../../../../assets/recent-trees-bg.png');
 const UserImage = require('../../../../../assets/user-profile.png');
