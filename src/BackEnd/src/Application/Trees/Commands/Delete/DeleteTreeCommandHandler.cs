@@ -3,7 +3,9 @@
     using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using MediatR;
+    using System;
     using System.Data.Entity;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -18,12 +20,19 @@
 
         public async Task<Result<string>> Handle(DeleteTreeCommand request, CancellationToken cancellationToken)
         {
-            var tree = await this.context.Trees.FirstOrDefaultAsync(x => x.Id == request.Id);
+            try
+            {
+                var tree = this.context.Trees.FirstOrDefault(x => x.Id == request.Id);
 
-            this.context.Trees.Remove(tree);
-            await this.context.SaveChangesAsync(CancellationToken.None);
+                tree.IsDeleted = true;
+                await this.context.SaveChangesAsync(cancellationToken);
 
-            return Result<string>.Success("success");
+                return Result<string>.Success("success");
+            }
+            catch (Exception exception)
+            {
+                return Result<string>.Failure(exception.Message);
+            }
         }
     }
 }

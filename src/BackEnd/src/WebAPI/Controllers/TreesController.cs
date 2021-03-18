@@ -323,13 +323,13 @@
         }
 
         /// <summary>
-        /// Creates a new Tree by the given data.
+        /// Deletes a tree by the given data.
         /// </summary>
-        /// <param name="upsertCommand">A tree data which.</param>
-        /// <returns>Returns created tree id.</returns>
+        /// <param name="deleteCommand">A tree data which.</param>
+        /// <returns>Returns deleted tree id.</returns>
         [Authorize]
         [HttpPost("delete")]
-        public async Task<ActionResult<Result<string>>> Delete([FromForm] DeleteTreeCommand deleteCommand)
+        public async Task<ActionResult<Result<string>>> Delete([FromBody] DeleteTreeCommand deleteCommand)
         {
             try
             {

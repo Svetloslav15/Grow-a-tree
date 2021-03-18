@@ -202,11 +202,15 @@ const TreeDetailsPage = ({history, match}) => {
     }
 
     const deleteTree = () => {
-        console.log(tree.id);
         TreeService.postAuthorizedDeleteTree({id: tree.id}, currUser.accessToken)
             .then(response => {
-                console.log(response);
-                history.push('/');
+                if (response.succeeded) {
+                    history.push('/');
+                    AlertService.success('Успешно изтрихте дърво!');
+                }
+                else {
+                    AlertService.error(response.errors[0]);
+                }
             })
     }
 
@@ -280,7 +284,7 @@ const TreeDetailsPage = ({history, match}) => {
                                                   closeModal={() => toggleIsReportModalOpen(false)}/> : ''}
                 {
                     (currUser.isAdmin || tree.ownerId === currUser.id) &&
-                    <button className='btn btn-danger delete-button-p-sm mr-2'
+                    <button className={`btn btn-danger delete-button-p-sm mr-2 ${styles.infoSection__deleteButton}`}
                             onClick={deleteTree}>
                         <i className="fas fa-trash-alt"></i>
                     </button>

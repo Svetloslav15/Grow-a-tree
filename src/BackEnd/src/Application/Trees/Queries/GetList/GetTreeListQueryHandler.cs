@@ -26,6 +26,7 @@
         public async Task<TreeListModel> Handle(GetTreeListQuery request, CancellationToken cancellationToken)
         {
             var list = await this.context.Trees
+                .Where(x => x.IsDeleted == false)
                 .Skip(request.PerPage * (request.Page - 1))
                 .Take(request.PerPage)
                 .ProjectTo<TreeModel>(this.mapper.ConfigurationProvider)
