@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import usersService from '../../../../services/usersService';
+import alertService from '../../../../services/alertService';
 import {ADD_USERS} from '../../../../store/actions/actionTypes';
 import Layout from "../../../common/Layout/Layout";
 import * as styles from './ListUsers.module.scss';
@@ -12,20 +13,40 @@ const ListUsers = () => {
     const saveUsersToStore = useDispatch();
 
     useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
         usersService.getAuthorizedUsers('?page=1&perPage=1000', currUser.accessToken)
             .then(data => {
-                console.log(data.data);
                 if (data.data.succeeded) {
                     saveUsersToStore({type: ADD_USERS, payload: data.data.data});
                 }
             });
-    }, []);
-    console.log(users);
-
-    const handleLockUser = () => {
-
     }
-    
+
+    const handleLockUser = (user) => {
+        usersService.postAuthorizedToggleLockoutUser({userId: user.id}, currUser.accessToken)
+            .then(data => {
+                if (data.succeeded) {
+                    fetchData();
+                } else {
+                    alertService.error(data.errors[0]);
+                }
+            });
+    }
+
+    const handleAdminRights = (user) => {
+        usersService.postAuthorizedToggleAdminRights({userId: user.id}, currUser.accessToken)
+            .then(data => {
+                if (data.succeeded) {
+                    fetchData();
+                } else {
+                    alertService.error(data.errors[0]);
+                }
+            });
+    }
+
     return (
         <Layout>
             <div className={styles.pageWrapper}>
@@ -49,11 +70,36 @@ const ListUsers = () => {
                                 <td>
                                     {
                                         user.lockoutEnabled ?
-                                            <Button type='OutlineGreen'>Отключи профил</Button>
+                                            <Button
+                                                type='OutlineGreen'
+                                                onClick={() => handleLockUser(user)}
+                                            >
+                                                Отключи профил
+                                            </Button>
                                             :
-                                            <Button type='Green'>Заключи профил</Button>
+                                            <Button
+                                                type='Green'
+                                                onClick={() => handleLockUser(user)}
+                                            >
+                                                Заключи профил
+                                            </Button>
                                     }
-
+                                    {
+                                        user.isAdmin ?
+                                            <Button
+                                                type='Green'
+                                                onClick={() => handleAdminRights(user)}
+                                            >
+                                                Премахни администраторски права
+                                            </Button>
+                                            :
+                                            <Button
+                                                type='OutlineGreen'
+                                                onClick={() => handleAdminRights(user)}
+                                            >
+                                                Направи администратор
+                                            </Button>
+                                    }
                                 </td>
                             </tr>)
                     }
