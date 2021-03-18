@@ -27,6 +27,7 @@ const Navigation = () => {
             <Link to="/"><img src={Logo} className={style.logo} alt="Grow A Tree Logo"/></Link>
             <div className="collapse navbar-collapse" id="basicExampleNav">
                 <ul className={`navbar-nav mr-auto ${style.customNavWrapper}`}>
+                    {currUser.isAdmin && <NavItem link='/admin/users'>Админ Панел</NavItem>}
                     <NavItem link='/'>Карта</NavItem>
                     {
                         currUser.accessToken && <NavItem link='/leaves/game'>Познай дървото</NavItem>

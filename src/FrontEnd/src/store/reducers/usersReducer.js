@@ -7,7 +7,6 @@ const initialState = {
 const usersReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_USERS:{
-            console.log(action);
             return Object.assign({}, state, {users: action.payload});
         }
         default:

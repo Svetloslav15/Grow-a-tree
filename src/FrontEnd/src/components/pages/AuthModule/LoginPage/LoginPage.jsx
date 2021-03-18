@@ -36,6 +36,7 @@ const LoginPage = ({history}) => {
         }
         const result = await AuthService.login(user);
         if (result.succeeded) {
+            console.log(result.data);
             AlertService.success(SuccessMessages.successLogin);
             Cookies.set(CookieNames.currentUser, result.data);
             saveUserData({ type:  SAVE_CURRENT_USER, data: result.data});

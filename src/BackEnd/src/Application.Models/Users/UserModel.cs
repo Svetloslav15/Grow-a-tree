@@ -20,5 +20,9 @@
         public string PhoneNumber { get; set; }
 
         public string ProfilePictureUrl { get; set; }
+
+        public bool LockoutEnabled { get; set; }
+
+        public bool IsAdmin { get; set; }
     }
 }
