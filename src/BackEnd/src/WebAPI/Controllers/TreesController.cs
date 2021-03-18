@@ -11,6 +11,7 @@
     using GrowATree.Application.Models.Trees;
     using GrowATree.Application.Stores.Queries.GetById;
     using GrowATree.Application.Trees.Commands.AddImage;
+    using GrowATree.Application.Trees.Commands.Delete;
     using GrowATree.Application.Trees.Commands.DeleteImage;
     using GrowATree.Application.Trees.Commands.EditImage;
     using GrowATree.Application.Trees.Commands.RestoreImage;
@@ -312,6 +313,38 @@
                 }
 
                 return await this.Mediator.Send(upsertCommand);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex.Message);
+                Debug.WriteLine(ex.Message);
+                return Result<string>.Failure(ErrorMessages.GeneralSomethingWentWrong);
+            }
+        }
+
+        /// <summary>
+        /// Creates a new Tree by the given data.
+        /// </summary>
+        /// <param name="upsertCommand">A tree data which.</param>
+        /// <returns>Returns created tree id.</returns>
+        [Authorize]
+        [HttpPost("delete")]
+        public async Task<ActionResult<Result<string>>> Delete([FromForm] DeleteTreeCommand deleteCommand)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    var errorMessage = this.ModelState.Values
+                        .Where(x => x.ValidationState == ModelValidationState.Invalid)
+                        .Select(x => x.Errors)
+                        .Select(x => x.FirstOrDefault()?.ErrorMessage)
+                        .FirstOrDefault();
+
+                    return Result<string>.Failure(errorMessage);
+                }
+
+                return await this.Mediator.Send(deleteCommand);
             }
             catch (Exception ex)
             {

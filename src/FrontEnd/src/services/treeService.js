@@ -29,7 +29,8 @@ const ROUTES = {
     postAuthorizedDeletePost: '/treePosts/delete',
     postFormPredictTreeLeaf: '/ml/predict-leaf',
     getAuthorizedGuessGameOptions: '/guessGame/get-questions',
-    postAuthorizedGuessGameAnswer: '/guessGame/answer-question'
+    postAuthorizedGuessGameAnswer: '/guessGame/answer-question',
+    postAuthorizedDeleteTree: '/trees/delete'
 };
 
 export default new Proxy({}, {
