@@ -5,6 +5,7 @@
     using System.Web;
     using global::Common.Constants;
     using global::Common.Interfaces;
+    using GrowATree.Application.Common.Interfaces;
     using GrowATree.Application.Common.Models;
     using GrowATree.Domain.Entities;
     using MediatR;
@@ -18,11 +19,13 @@
     {
         private readonly UserManager<User> userManager;
         private readonly IEmailSender emailSender;
+        private readonly IApplicationDbContext context;
 
-        public RegisterCommandHandler(UserManager<User> userManager, IEmailSender emailSender)
+        public RegisterCommandHandler(UserManager<User> userManager, IEmailSender emailSender, IApplicationDbContext context)
         {
             this.userManager = userManager;
             this.emailSender = emailSender;
+            this.context = context;
         }
 
         public async Task<Result<bool>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -49,9 +52,8 @@
                 ReferrerId = referrer != null ? referrer.Id : null,
                 ProfilePictureUrl = "https://res.cloudinary.com/dzivpr6fj/image/upload/v1602432685/GrowATree/avatar_dpskn1.png"
             };
-
             var identityResult = await this.userManager.CreateAsync(user, request.Password);
-
+            
             if (!identityResult.Succeeded)
             {
                 return Result<bool>.Failure(ErrorMessages.PasswordRequirmentsErrorMessage);
@@ -68,7 +70,8 @@
             {
                 return Result<bool>.Failure(ErrorMessages.EmailSendingErrorMessage);
             }
-
+            user.LockoutEnabled = false;
+            await this.context.SaveChangesAsync(cancellationToken);
             return Result<bool>.Success(true);
         }
     }
