@@ -50,6 +50,11 @@
             var user = await this.userManager.FindByEmailAsync(email);
             if (user != null && await this.userManager.CheckPasswordAsync(user, password))
             {
+                if (user.LockoutEnabled)
+                {
+                    return Result<TokenModel>.Failure("Акаунтът Ви е блокиран");
+                }
+
                 if (!user.EmailConfirmed)
                 {
                     return Result<TokenModel>.Failure(ErrorMessages.EmailNotConfirmedErrorMessage);
@@ -128,7 +133,8 @@
                 Expires = token.ValidTo,
                 Id = user.Id,
                 IsStore = isStore,
-                Username = user.UserName
+                Username = user.UserName,
+                IsAdmin = userRoles.Contains(Constants.AdminRoleName),
             };
 
             return result;

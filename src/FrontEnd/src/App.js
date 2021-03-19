@@ -31,6 +31,7 @@ import staticPagesData from './static/staticPagesData';
 import PrivacyPolicyPage from "./components/pages/StaticModule/PrivacyPolicy/PrivacyPolicyPage";
 import GuessLeaf from './components/pages/LeafModule/GuessLeaf/GuessLeaf';
 import LeafGame from './components/pages/LeafModule/LeafGame/LeafGame';
+import ListUsers from "./components/pages/AdminModule/ListUsers/ListUsers";
 
 const App = () => (
     <>
@@ -57,6 +58,8 @@ const App = () => (
             {
                 staticPagesData.map(page => <Route exact path={`/static/${page.route}`} component={StaticPage}/>)
             }
+            <Route exact path='/admin/users' component={ListUsers}/>
+
             <Route component={NotFoundPage}/>
         </Switch>
         <Footer/>

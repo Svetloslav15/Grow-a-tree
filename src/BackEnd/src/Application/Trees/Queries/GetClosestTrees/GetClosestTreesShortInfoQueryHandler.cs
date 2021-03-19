@@ -31,6 +31,7 @@
         {
             // OPTIMIZE THIS BULLSHIT!!!!
             var init = this.context.Trees
+                .Where(x => x.IsDeleted == false)
                 .ProjectTo<TreeShortInfoModel>(this.mapper.ConfigurationProvider);
 
             var list = init

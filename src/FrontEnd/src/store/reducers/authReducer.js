@@ -9,7 +9,8 @@ const emptyUser = {
     id: '',
     username: '',
     isStore: false,
-    refreshToken: ''
+    refreshToken: '',
+    isAdmin: false
 };
 
 let initialState = {

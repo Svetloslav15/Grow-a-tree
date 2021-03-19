@@ -3095,6 +3095,7 @@ export interface IUsersClient {
     isUserShortToTree(latitude: number | undefined, longitude: number | undefined, treeId: string | null | undefined): Observable<ResultOfBoolean>;
     edit(command: EditUserCommand): Observable<ResultOfUserModel>;
     changeProfilePicture(id: string | null | undefined, profilePictureFile: FileParameter | null | undefined): Observable<ResultOfString>;
+    toggleLockout(command: ToggleLockUserAccountCommand): Observable<ResultOfBoolean>;
 }
 
 @Injectable({
@@ -3601,6 +3602,58 @@ export class UsersClient implements IUsersClient {
             }));
         }
         return _observableOf<ResultOfString>(<any>null);
+    }
+
+    toggleLockout(command: ToggleLockUserAccountCommand): Observable<ResultOfBoolean> {
+        let url_ = this.baseUrl + "/api/Users/toggle-lockout";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processToggleLockout(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processToggleLockout(<any>response_);
+                } catch (e) {
+                    return <Observable<ResultOfBoolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ResultOfBoolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processToggleLockout(response: HttpResponseBase): Observable<ResultOfBoolean> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultOfBoolean.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ResultOfBoolean>(<any>null);
     }
 }
 
@@ -7902,6 +7955,42 @@ export interface IEditUserCommand {
     username: string;
     city: string;
     phoneNumber?: string | undefined;
+}
+
+export class ToggleLockUserAccountCommand implements IToggleLockUserAccountCommand {
+    userId?: string | undefined;
+
+    constructor(data?: IToggleLockUserAccountCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any): ToggleLockUserAccountCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ToggleLockUserAccountCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        return data; 
+    }
+}
+
+export interface IToggleLockUserAccountCommand {
+    userId?: string | undefined;
 }
 
 export class MetaResultOfIListOfWateringModelAndPaginationMeta implements IMetaResultOfIListOfWateringModelAndPaginationMeta {

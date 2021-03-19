@@ -26,6 +26,7 @@
         public async Task<TreeListModel> Handle(GetUserTreesQuery request, CancellationToken cancellationToken)
         {
             var list = await this.context.Trees
+                .Where(x => x.IsDeleted == false)
                 .Where(x => x.OwnerId == request.Id)
                 .Skip(request.PerPage * (request.Page - 1))
                 .Take(request.PerPage)

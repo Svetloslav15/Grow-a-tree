@@ -28,6 +28,7 @@
         public async Task<TreeImageListModel> Handle(GetRandomTreesImagesQuery request, CancellationToken cancellationToken)
         {
             var list = this.context.TreeImages
+                .Where(x => x.Tree.IsDeleted == false)
                 .OrderBy(x => Guid.NewGuid())
                 .Take(Constants.TreeImagesCount)
                 .ProjectTo<TreeImageModel>(this.mapper.ConfigurationProvider)
