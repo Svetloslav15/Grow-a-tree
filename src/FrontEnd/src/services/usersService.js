@@ -4,7 +4,10 @@ const ROUTES = {
     getAuthorizedUserById: '/users/',
     postAuthorizedEditUser: '/users/edit',
     getFacebookProfilePicture: 'https://graph.facebook.com',
-    postAuthorizedChangeProfilePicture: '/users/change-profile-picture'
+    postAuthorizedChangeProfilePicture: '/users/change-profile-picture',
+    getAuthorizedUsers: '/users/',
+    postAuthorizedToggleLockoutUser: '/users/toggle-lockout',
+    postAuthorizedToggleAdminRights: '/users/toggle-admin'
 };
 
 export default new Proxy({}, {

@@ -30,6 +30,8 @@
 
         public string OwnerId { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public UserModel Owner { get; set; }
 
         public IEnumerable<ImageModel> Images { get; set; } = new HashSet<ImageModel>();

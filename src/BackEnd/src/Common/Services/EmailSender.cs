@@ -8,6 +8,7 @@
     using Common.Constants;
     using Common.Interfaces;
     using GrowATree.Domain.Entities;
+    using Serilog;
 
     /// <summary>
     /// Class that process email sending.
@@ -18,10 +19,14 @@
         {
             try
             {
+                Log.Logger.Error("Email Sender user receiver: " + receiver.Email);
+
                 MailMessage mail = new MailMessage();
                 SmtpClient smtpServer = new SmtpClient(Settings.GmailServerName);
 
-               // mail.From = new MailAddress(Settings.GmailEmail);
+                // mail.From = new MailAddress(Settings.GmailEmail);
+                Log.Logger.Error("Email Sender our email: " + Settings.GmailEmail);
+
                 mail.From = new MailAddress(Settings.GmailEmail);
                 mail.To.Add(receiver.Email);
                 mail.Subject = subject;
@@ -37,6 +42,7 @@
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                Log.Logger.Error("Email Sender Catch " + ex.Message);
                 return false;
             }
         }

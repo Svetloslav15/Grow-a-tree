@@ -201,6 +201,19 @@ const TreeDetailsPage = ({history, match}) => {
         setCurrReactionTypes(currImages);
     }
 
+    const deleteTree = () => {
+        TreeService.postAuthorizedDeleteTree({id: tree.id}, currUser.accessToken)
+            .then(response => {
+                if (response.succeeded) {
+                    history.push('/');
+                    AlertService.success('Успешно изтрихте дърво!');
+                }
+                else {
+                    AlertService.error(response.errors[0]);
+                }
+            })
+    }
+
     return (
         <Layout customStyle='pb-details-p-m'>
             <section className={styles.infoSection}>
@@ -269,16 +282,24 @@ const TreeDetailsPage = ({history, match}) => {
                      onClick={() => toggleIsReportModalOpen(true)}/>
                 {isReportModalOpen ? <ReportModal treeId={tree.id}
                                                   closeModal={() => toggleIsReportModalOpen(false)}/> : ''}
+                {
+                    (currUser.isAdmin || tree.ownerId === currUser.id) &&
+                    <button className={`btn btn-danger delete-button-p-sm mr-2 ${styles.infoSection__deleteButton}`}
+                            onClick={deleteTree}>
+                        <i className="fas fa-trash-alt"></i>
+                    </button>
+                }
+
             </section>
             <section className={styles.infoSection__map}>
                 <Timer data={treeWaterings[0]}/>
                 <p className={styles.infoSection__map__locationText}>{treeLocation}</p>
                 <div className={styles.infoSection__mapWrapper}>
                     {<Map
-                         isStatic={true}
-                         className={styles.mapContainerSection}
-                         markers={[{latitude: tree.latitude, longitude: tree.longitude}]}
-                         canSetMarker={false}/>}
+                        isStatic={true}
+                        className={styles.mapContainerSection}
+                        markers={[{latitude: tree.latitude, longitude: tree.longitude}]}
+                        canSetMarker={false}/>}
                 </div>
             </section>
             <div className={styles.infoSection__posts}>

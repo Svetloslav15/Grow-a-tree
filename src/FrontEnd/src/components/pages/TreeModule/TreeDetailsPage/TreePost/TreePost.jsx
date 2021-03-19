@@ -48,19 +48,18 @@ const TreePost = ({data, fetchTreePosts, treeId}) => {
     }
 
     const editPost = async () => {
-       if (isInEditMode) {
-           const response = await TreeService.postAuthorizedUpsertTreePost(post, currUser.accessToken);
-           if (response.succeeded) {
-               await AlertService.success(successMessages.successEditPost);
-               await fetchTreePosts(post.treeId);
-               toggleEditMode(false);
-           } else {
-               await AlertService.error(response?.errors[0]);
-           }
-       }
-       else {
-           toggleEditMode(true);
-       }
+        if (isInEditMode) {
+            const response = await TreeService.postAuthorizedUpsertTreePost(post, currUser.accessToken);
+            if (response.succeeded) {
+                await AlertService.success(successMessages.successEditPost);
+                await fetchTreePosts(post.treeId);
+                toggleEditMode(false);
+            } else {
+                await AlertService.error(response?.errors[0]);
+            }
+        } else {
+            toggleEditMode(true);
+        }
     }
 
     const handleEditorChange = async (data) => {
@@ -73,18 +72,21 @@ const TreePost = ({data, fetchTreePosts, treeId}) => {
                 <img className='post__user-section__avatar' src={post.userProfilePictureUrl} alt={post.userUserName}/>
                 <p className='post__user-section__username'>{post.userUserName}</p>
                 {
-                    post.userId === currUser.id && (
-                        <div className='ml-auto row mr-2'>
-                            <button className='btn btn-danger delete-button-p-sm mr-2'
-                                    onClick={() => deletePost(post.id)}>
-                                <i className="fas fa-trash-alt"></i>
-                            </button>
-                            <button className='btn btn-warning delete-button-p-sm'
-                                    onClick={() => editPost(post.id)}>
-                                <i className="far fa-edit"></i>
-                            </button>
-                        </div>
-                    )
+
+                    <div className='ml-auto row mr-2'>
+                        {(post.userId === currUser.id || currUser.isAdmin) &&
+                        <button className='btn btn-danger delete-button-p-sm mr-2'
+                                onClick={() => deletePost(post.id)}>
+                            <i className="fas fa-trash-alt"></i>
+                        </button>}
+
+                        {post.userId === currUser.id &&
+                        <button className='btn btn-warning delete-button-p-sm'
+                                onClick={() => editPost(post.id)}>
+                            <i className="far fa-edit"></i>
+                        </button>
+                        }
+                    </div>
                 }
                 <div>
                 </div>
@@ -122,9 +124,12 @@ const TreePost = ({data, fetchTreePosts, treeId}) => {
                                 reactionsVisible={true}
                                 hasBorder={true}/>
             </div>
-            {post && <RepliesSection postId={post.id}/>}
+            {
+                post && <RepliesSection postId={post.id}/>
+            }
         </div>
-    );
+    )
+        ;
 }
 
 export default TreePost;

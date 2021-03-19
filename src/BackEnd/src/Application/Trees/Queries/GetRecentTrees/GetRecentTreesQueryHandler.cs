@@ -26,6 +26,7 @@
         public async Task<TreeListModel> Handle(GetRecentTreesQuery request, CancellationToken cancellationToken)
         {
             var list = await this.context.Trees
+                .Where(x => x.IsDeleted == false)
                 .OrderByDescending(tree => tree.PlantedOn)
                 .Skip(request.PerPage * (request.Page - 1))
                 .Take(request.PerPage)

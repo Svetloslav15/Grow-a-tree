@@ -27,7 +27,6 @@
 - [Technology Stack](#tech_stack)
 - [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
-- [Acknowledgments](#acknowledgments)
 
 ## 🧐 Problem Statement <a name = "problem_statement"></a>
 It is useful to design and follow a specific format when writing a problem statement. While there are several options
@@ -100,8 +99,3 @@ Add notes about how to use the system.
 ## ✍️ Authors <a name = "authors"></a>
 - [@Svetloslav Novoselski](https://github.com/Svetloslav15) - Idea & Front-End Development
 - [@Plamen Michev](https://github.com/PlamenMichev) - Idea & Back-End Development
-
-## 🎉 Acknowledgments <a name = "acknowledgments"></a>
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
