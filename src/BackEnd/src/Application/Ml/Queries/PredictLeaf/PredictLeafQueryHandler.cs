@@ -14,7 +14,7 @@
 
     public class PredictLeafQueryHandler : IRequestHandler<PredictLeafQuery, Result<MlViewModel>>
     {
-        private readonly string folderPath = Path.GetFullPath(@"..\..\") + @"\DataImages\";
+        private readonly string folderPath = Environment.CurrentDirectory + @"\DataImages\";
         private readonly IApplicationDbContext context;
 
         public PredictLeafQueryHandler(IApplicationDbContext context)
@@ -24,6 +24,11 @@
 
         public async Task<Result<MlViewModel>> Handle(PredictLeafQuery request, CancellationToken cancellationToken)
         {
+            if (!Directory.Exists(this.folderPath))
+            {
+                Directory.CreateDirectory(this.folderPath);
+            }
+
             var imageName = Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName);
             var filePath = this.folderPath + imageName;
 
@@ -48,8 +53,13 @@
 
             if (maxScore < 0.85)
             {
-                var unknownFolderName = this.folderPath + @$"\unknown\{imageName}";
-                Directory.CreateDirectory(@"\unknown");
+                var unknownFolderPath = this.folderPath + @$"\unknown\";
+                if (!Directory.Exists(unknownFolderPath))
+                {
+                    Directory.CreateDirectory(unknownFolderPath);
+                }
+
+                var unknownFolderName = unknownFolderPath + @$"\{imageName}";
                 File.Move(filePath, unknownFolderName);
                 await this.context.UnknownTrees.AddAsync(new UnknownTrees
                 {
@@ -62,8 +72,15 @@
                 return Result<MlViewModel>.Failure("Не можeм да определим вида на вашето дърво :(");
             }
 
-            var newFolderName = this.folderPath + @$"\{result.TreeName}\{imageName}";
+            var folderName = this.folderPath + @$"\{result.TreeName}";
+            if (!Directory.Exists(folderName))
+            {
+                Directory.CreateDirectory(folderName);
+            }
+
+            var newFolderName = folderName + @$"\{imageName}";
             File.Move(filePath, newFolderName);
+
             return Result<MlViewModel>.Success(result);
         }
     }

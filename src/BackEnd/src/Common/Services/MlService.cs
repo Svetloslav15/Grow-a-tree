@@ -12,7 +12,7 @@
     {
         private static Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictionEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(CreatePredictionEngine);
 
-        public static string MLNetModelPath = Path.GetFullPath(@"..\..\") + @"\MLModel.zip";
+        public static string MLNetModelPath = Environment.CurrentDirectory + @"\MLModel.zip";
 
         public static PredictionEngine<ModelInput, ModelOutput> CreatePredictionEngine()
         {
