@@ -53,13 +53,13 @@
 
             if (maxScore < 0.85)
             {
-                var unknownFolderPath = this.folderPath + @$"\unknown\";
+                var unknownFolderPath = this.folderPath + @$"unknown\";
                 if (!Directory.Exists(unknownFolderPath))
                 {
                     Directory.CreateDirectory(unknownFolderPath);
                 }
 
-                var unknownFolderName = unknownFolderPath + @$"\{imageName}";
+                var unknownFolderName = unknownFolderPath + @$"{imageName}";
                 File.Move(filePath, unknownFolderName);
                 await this.context.UnknownTrees.AddAsync(new UnknownTrees
                 {
@@ -72,13 +72,13 @@
                 return Result<MlViewModel>.Failure("Не можeм да определим вида на вашето дърво :(");
             }
 
-            var folderName = this.folderPath + @$"\{result.TreeName}";
+            var folderName = this.folderPath + @$"{result.TreeName}";
             if (!Directory.Exists(folderName))
             {
                 Directory.CreateDirectory(folderName);
             }
 
-            var newFolderName = folderName + @$"\{imageName}";
+            var newFolderName = folderName + @$"{imageName}";
             File.Move(filePath, newFolderName);
 
             return Result<MlViewModel>.Success(result);
