@@ -26,7 +26,7 @@ const Footer = () => (
           <div className={style.imageWrapper}>
               <img className={`p-3 w-100`} src={LogoImage} alt="Grow A Tree Logo"/>
           </div>
-          <LinksSection/>
+          {/*<LinksSection/>*/}
           <div className={`${style.iconsWrapper} col-md-4`}>
              {/* <SocialMediaIcon props={data.facebook}/>
               <SocialMediaIcon props={data.instagram}/>*/}
