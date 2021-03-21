@@ -13,7 +13,7 @@
     public class GetQuestionsQueryHandler : IRequestHandler<GetQuestionsQuery, QuestionListModel>
     {
         private readonly int questionsCount = 5;
-        private readonly string folderPath = Path.GetFullPath(@"..\..\") + @"\DataImages\Unknown\";
+        private readonly string folderPath = Environment.CurrentDirectory + @"\DataImages\unknown";
         private readonly IApplicationDbContext applicationDbContext;
 
         public GetQuestionsQueryHandler(IApplicationDbContext applicationDbContext)
@@ -23,6 +23,15 @@
 
         public async Task<QuestionListModel> Handle(GetQuestionsQuery request, CancellationToken cancellationToken)
         {
+            if (!Directory.Exists(this.folderPath))
+            {
+                return new QuestionListModel
+                {
+                    Data = new List<QuestionModel>(),
+                    Succeeded = true,
+                };
+            }
+
             var random = new Random();
             var files = Directory.GetFiles(this.folderPath, "*", SearchOption.AllDirectories);
             var filesCount = files.Length;
