@@ -24,7 +24,6 @@
                 MailMessage mail = new MailMessage();
                 SmtpClient smtpServer = new SmtpClient(Settings.GmailServerName);
 
-                // mail.From = new MailAddress(Settings.GmailEmail);
                 Log.Logger.Error("Email Sender our email: " + Settings.GmailEmail);
 
                 mail.From = new MailAddress(Settings.GmailEmail);

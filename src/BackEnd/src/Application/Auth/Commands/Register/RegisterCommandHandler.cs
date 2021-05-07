@@ -13,7 +13,7 @@
     using Serilog;
 
     /// <summary>
-    /// Hadler that implement register logic.
+    /// Handler that implement register logic.
     /// </summary>
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<bool>>
     {

@@ -13,7 +13,7 @@
     public class GetQuestionsQueryHandler : IRequestHandler<GetQuestionsQuery, QuestionListModel>
     {
         private readonly int questionsCount = 5;
-        private readonly string folderPath = Path.GetFullPath(@"..\..\") + @"\DataImages\Unknown\";
+        private readonly string folderPath = Path.GetFullPath(@"..\..\") + @"DataImages\Unknown\";
         private readonly IApplicationDbContext applicationDbContext;
 
         public GetQuestionsQueryHandler(IApplicationDbContext applicationDbContext)

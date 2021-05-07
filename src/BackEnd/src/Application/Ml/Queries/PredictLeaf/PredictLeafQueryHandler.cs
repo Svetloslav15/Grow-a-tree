@@ -14,7 +14,7 @@
 
     public class PredictLeafQueryHandler : IRequestHandler<PredictLeafQuery, Result<MlViewModel>>
     {
-        private readonly string folderPath = Path.GetFullPath(@"..\..\") + @"\DataImages\";
+        private readonly string folderPath = Path.GetFullPath(@"..\..\") + @"DataImages";
         private readonly IApplicationDbContext context;
 
         public PredictLeafQueryHandler(IApplicationDbContext context)
@@ -25,7 +25,7 @@
         public async Task<Result<MlViewModel>> Handle(PredictLeafQuery request, CancellationToken cancellationToken)
         {
             var imageName = Guid.NewGuid().ToString() + Path.GetExtension(request.Image.FileName);
-            var filePath = this.folderPath + imageName;
+            var filePath = this.folderPath + "\\" + imageName;
 
             using var fileStream = new FileStream(filePath, FileMode.Create);
             await request.Image.CopyToAsync(fileStream);
