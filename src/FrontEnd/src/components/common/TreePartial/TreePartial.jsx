@@ -9,8 +9,8 @@ const TreePartial = ({tree}) => {
                  alt={tree.nickName}/>
             <div className={`col-md-10 ${style.wrapper__items__item__info}`}>
                 <h3 className={style.wrapper__items__item__info__name}>{tree.nickname}</h3>
-                <p className={style.wrapper__items__item__info__description}>Намира се на <span
-                    className='font-weight-bold '><i>{tree.metresAway} метра</i></span> от теб</p>
+                {tree.metresAway && <p className={style.wrapper__items__item__info__description}>Намира се на <span
+                    className='font-weight-bold '><i>{tree.metresAway} метра</i></span> от теб</p>}
             </div>
         </Link>
     )
