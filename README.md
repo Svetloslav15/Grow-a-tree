@@ -14,3 +14,4 @@
 ## ✍️ Authors <a name = "authors"></a>
 - [@Svetloslav Novoselski](https://github.com/Svetloslav15) - Idea & Front-End Development
 - [@Plamen Michev](https://github.com/PlamenMichev) - Idea & Back-End Development
+- Video: https://www.youtube.com/watch?v=s-QuBMikZPI
